@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Long-term Dynamics and Peasant Autonomy in the Italian Countryside",
     "section": "",
-    "text": "Case studies\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLast update: July 20th 2022.↩︎\nPollen tbd.↩︎"
+    "text": "Case studies\nThe map below shows the distribution of the samples used for this project. Hover to the point of interest and click on the marker to see what data is available.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLast update: July 20th 2022.↩︎\nPollen tbd.↩︎"
   },
   {
     "objectID": "intro.html",
@@ -39,7 +39,7 @@
     "href": "methods.html",
     "title": "4  Methods",
     "section": "",
-    "text": "Add methods"
+    "text": "Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:\n\n[R] Roman: from the 1st century BCE to the 2nd century CE.\n[LR] Late Roman: from the 3rd to the 5th century CE.\n[EMA] Early Middle Ages: from the 6th to the 10th century CE.\n[Ma] Middle Ages: from the 11th century CE onwards.\n\nIn the database, the tables faunal_chronologies and plants_chronologies connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g. Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g. Sample 1 – 2nd to 3rd c. CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.\n\n\n\nPeriodization\n\n\n\n\nOne of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: \\[ W=\\frac{1}{(C_{end}-C_{start}+1)} \\] Where:\n\n\\(C\\_{end}\\) is the terminus ante quem.\n\\(C\\_{start}\\) is the terminus post quem.\n1 has been summed to the denominator to avoid 0 values.\n\nThe imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:\n\nzooarch_tables (custom)\nBot_mean_table (custom)\nBot_mean_fun (custom)\nweighted.median (from the package spatstat)\n\nThe weight can be used for weighted means and medians, with samples with larger chronolo- gies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations."
   },
   {
     "objectID": "materials.html",
@@ -53,7 +53,7 @@
     "href": "archaeobotany.html",
     "title": "5  Archaeobotany",
     "section": "",
-    "text": "Add"
+    "text": "The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right."
   },
   {
     "objectID": "zooarchaeology.html",
@@ -75,5 +75,19 @@
     "title": "8  Conclusions",
     "section": "",
     "text": "tbd"
+  },
+  {
+    "objectID": "methods.html#chronological-fuzziness",
+    "href": "methods.html#chronological-fuzziness",
+    "title": "4  Methods",
+    "section": "4.2 Chronological fuzziness",
+    "text": "4.2 Chronological fuzziness\nOne of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: \\[ W=\\frac{1}{(C_{end}-C_{start}+1)} \\] Where:\n\n\\(C\\_{end}\\) is the terminus ante quem.\n\\(C\\_{start}\\) is the terminus post quem.\n1 has been summed to the denominator to avoid 0 values.\n\nThe imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:\n\nzooarch_tables (custom)\nBot_mean_table (custom)\nBot_mean_fun (custom)\nweighted.median (from the package spatstat)\n\nThe weight can be used for weighted means and medians, with samples with larger chronolo- gies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations."
+  },
+  {
+    "objectID": "methods.html#archaeobotany",
+    "href": "methods.html#archaeobotany",
+    "title": "4  Methods",
+    "section": "4.2 Archaeobotany",
+    "text": "4.2 Archaeobotany\n\n4.2.1 Ubiquity\nUbiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered (Wright (2010), 51-52). It is calculated by dividing the number of sites where the plant is present by the total number of sites. Being based on presence/absence data, it is not biased by overrepresented taxa.\n[Insert here how the ubiquity has been calculated]\nIn addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an R function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into–Cereals, Pulses and Fruits/Nuts. The results are in Chapter 5.\n\n\n\n\nWright, Patti J. 2010. “Methodological Issues in Paleoethnobotany: A Consideration of Issues, Methods, and Cases.” In, edited by Amber M. VanDerwarker and Tanya M. Peres, 37–64. New York, NY: Springer New York. https://doi.org/10.1007/978-1-4419-0935-0_3."
   }
 ]

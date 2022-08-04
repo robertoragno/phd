@@ -15,6 +15,25 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -25,7 +44,7 @@ ul.task-list{list-style: none;}
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./archaeobotany.html" rel="next">
 <link href="./materials.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -56,6 +75,7 @@ ul.task-list{list-style: none;}
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -90,7 +110,7 @@ ul.task-list{list-style: none;}
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Abstract</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -115,6 +135,26 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -123,7 +163,20 @@ ul.task-list{list-style: none;}
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#periodization" id="toc-periodization" class="nav-link active" data-scroll-target="#periodization"> <span class="header-section-number">4.1</span> Periodization</a>
+  <ul class="collapse">
+  <li><a href="#chronological-fuzziness" id="toc-chronological-fuzziness" class="nav-link" data-scroll-target="#chronological-fuzziness"> <span class="header-section-number">4.1.1</span> Chronological fuzziness</a></li>
+  </ul></li>
+  <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany"> <span class="header-section-number">4.2</span> Archaeobotany</a>
+  <ul class="collapse">
+  <li><a href="#ubiquity" id="toc-ubiquity" class="nav-link" data-scroll-target="#ubiquity"> <span class="header-section-number">4.2.1</span> Ubiquity</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -144,9 +197,56 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<p>Add methods</p>
+<section id="periodization" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="periodization"><span class="header-section-number">4.1</span> Periodization</h2>
+<p>Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:</p>
+<ul>
+<li><p><strong>[R] Roman</strong>: from the 1<sup>st</sup> century BCE to the 2<sup>nd</sup> century CE.</p></li>
+<li><p><strong>[LR] Late Roman</strong>: from the 3<sup>rd</sup> to the 5<sup>th</sup> century CE.</p></li>
+<li><p><strong>[EMA] Early Middle Ages</strong>: from the 6<sup>th</sup> to the 10<sup>th</sup> century CE.</p></li>
+<li><p><strong>[Ma] Middle Ages:</strong> from the 11<sup>th</sup> century CE onwards.</p></li>
+</ul>
+<p>In the database, the tables <code>faunal_chronologies</code> and <code>plants_chronologies</code> connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g.&nbsp;Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g.&nbsp;Sample 1 – 2<sup>nd</sup> to 3<sup>rd</sup> c.&nbsp;CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Periodization.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Periodization</figcaption><p></p>
+</figure>
+</div>
+<section id="chronological-fuzziness" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="chronological-fuzziness"><span class="header-section-number">4.1.1</span> Chronological fuzziness</h3>
+<p>One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: <span class="math display">\[ W=\frac{1}{(C_{end}-C_{start}+1)} \]</span> Where:</p>
+<ul>
+<li><p><span class="math inline">\(C\_{end}\)</span> is the terminus ante quem.</p></li>
+<li><p><span class="math inline">\(C\_{start}\)</span> is the terminus post quem.</p></li>
+<li><p>1 has been summed to the denominator to avoid 0 values.</p></li>
+</ul>
+<p>The imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:</p>
+<ul>
+<li><code>zooarch_tables</code> (custom)</li>
+<li><code>Bot_mean_table</code> (custom)</li>
+<li><code>Bot_mean_fun</code> (custom)</li>
+<li><code>weighted.median</code> (from the package <code>spatstat</code>)</li>
+</ul>
+<p>The weight can be used for weighted means and medians, with samples with larger chronolo- gies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.</p>
+</section>
+</section>
+<section id="archaeobotany" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="archaeobotany"><span class="header-section-number">4.2</span> Archaeobotany</h2>
+<section id="ubiquity" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">4.2.1</span> Ubiquity</h3>
+<p>Ubiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g.&nbsp;wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered (<span class="citation" data-cites="wright2010">Wright (<a href="references.html#ref-wright2010" role="doc-biblioref">2010</a>)</span>, 51-52). It is calculated by dividing the number of sites where the plant is present by the total number of sites. Being based on presence/absence data, it is not biased by overrepresented taxa.</p>
+<p>[Insert here how the ubiquity has been calculated]</p>
+<p>In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an <code>R</code> function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into–<code>Cereals</code>, <code>Pulses</code> and <code>Fruits/Nuts</code>. The results are in <a href="archaeobotany.html"><span>Chapter&nbsp;5</span></a>.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-wright2010" class="csl-entry" role="doc-biblioentry">
+Wright, Patti J. 2010. <span>“Methodological Issues in Paleoethnobotany: A Consideration of Issues, Methods, and Cases.”</span> In, edited by Amber M. VanDerwarker and Tanya M. Peres, 37–64. New York, NY: Springer New York. <a href="https://doi.org/10.1007/978-1-4419-0935-0_3">https://doi.org/10.1007/978-1-4419-0935-0_3</a>.
+</div>
+</div>
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -253,12 +353,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./archaeobotany.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+  </div>
+</footer>
 
 
 
