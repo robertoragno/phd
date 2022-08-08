@@ -224,12 +224,28 @@ Page under construction
 <p>The chapter is still in progress</p>
 </div>
 </div>
-<section id="database" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="database"><span class="header-section-number">4.1</span> Database</h2>
+<p>This chapter presents the methodology employed to carry out this study. The first section outlines the construction of the database used for the research. The second section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and an attempt to respond to the problem of chronological fuzziness of samples.</p>
+<section id="database" class="level2" style="text-align:justify;" data-number="4.1">
+<h2 style="text-align:justify;" data-number="4.1" class="anchored" data-anchor-id="database"><span class="header-section-number">4.1</span> Database</h2>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Section in progress
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Write about the creation of the database and its structure.</p>
+</div>
+</div>
+<p>Archaeologists are increasingly using databases to archive and collect data digitally. There are mainly two types of databases—relational and non-relational. A <strong>relational database</strong> is more appropriate for well-defined data structures which can be linked through a mutual attribute. It is built and maintained with Structured Query Language (SQL), which allows the user to interrogate the database through queries (<span class="citation" data-cites="gattiglia2018">Gattiglia (<a href="references.html#ref-gattiglia2018" role="doc-biblioref">2018</a>)</span>). A SQL database consists of several tables containing information in columns (variables) and rows (entries). Each row is defined by an unique key. Examples of relational database management systems include—MySQL, PostgreSQL, MariaDB, Microsoft SQL Server and Oracle Database. A <strong>non-relational database</strong> (NoSQL) is advantageous in the case of unstructured data, as data is archived as a single document rather than in a table. This structure allows much more flexibility, although NoSQL databases can be harder to use by non-specialists. Among the NoSQL database management systems, MongoDB is the most widely used.</p>
+<p>Most of the archaeological databases are based on SQL, as the visual relationships between different data structures are easier to understand. This project uses a relational database based on MariaDB, a fast and stable fork of MySQL. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1<sup>st</sup> millennium CE) where environmental analyses were undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised.</p>
+<p>Maybe insert a small graph of the bibliography to see where most of the materials came from (Books, journals etc)</p>
 </section>
-<section id="periodization" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="periodization"><span class="header-section-number">4.2</span> Periodization</h2>
+<section id="periodization" class="level2" style="text-align:justify;" data-number="4.2">
+<h2 style="text-align:justify;" data-number="4.2" class="anchored" data-anchor-id="periodization"><span class="header-section-number">4.2</span> Periodization</h2>
 <p>Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:</p>
 <ul>
 <li><p><strong>[R] Roman</strong>: from the 1<sup>st</sup> century BCE to the 2<sup>nd</sup> century CE.</p></li>
@@ -244,8 +260,8 @@ Page under construction
 <p></p><figcaption class="figure-caption">Periodization</figcaption><p></p>
 </figure>
 </div>
-<section id="chronological-fuzziness" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="chronological-fuzziness"><span class="header-section-number">4.2.1</span> Chronological fuzziness</h3>
+<section id="chronological-fuzziness" class="level3" style="text-align:justify;" data-number="4.2.1">
+<h3 style="text-align:justify;" data-number="4.2.1" class="anchored" data-anchor-id="chronological-fuzziness"><span class="header-section-number">4.2.1</span> Chronological fuzziness</h3>
 <p>One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: <span class="math display">\[ W=\frac{1}{(C_{end}-C_{start}+1)} \]</span> Where:</p>
 <ul>
 <li><p><span class="math inline">\(C\_{end}\)</span> is the terminus ante quem.</p></li>
@@ -259,15 +275,15 @@ Page under construction
 <li><code>Bot_mean_fun</code> (custom)</li>
 <li><code>weighted.median</code> (from the package <code>spatstat</code>)</li>
 </ul>
-<p>The weight can be used for weighted means and medians, with samples with larger chronolo- gies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.</p>
+<p>The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.</p>
 </section>
 </section>
-<section id="archaeobotany" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="archaeobotany"><span class="header-section-number">4.3</span> Archaeobotany</h2>
+<section id="archaeobotany" class="level2" style="text-align:justify;" data-number="4.3">
+<h2 style="text-align:justify;" data-number="4.3" class="anchored" data-anchor-id="archaeobotany"><span class="header-section-number">4.3</span> Archaeobotany</h2>
 <p>Introduce the topic and methodological issues</p>
 <p>BIASES: Talk about the biases and dataset problems here or do it in the Materials chapter?</p>
-<section id="ubiquity" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">4.3.1</span> Ubiquity</h3>
+<section id="ubiquity" class="level3" style="text-align:justify;" data-number="4.3.1">
+<h3 style="text-align:justify;" data-number="4.3.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">4.3.1</span> Ubiquity</h3>
 <p>Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward-the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:</p>
 <p><span class="math display">\[
 U_x = (\frac{N_p}{N_{tot}}) \cdot 100
@@ -283,8 +299,8 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 <p>In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an <code>R</code> function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into–<code>Cereals</code>, <code>Pulses</code> and <code>Fruits/Nuts</code>. The results are in <a href="archaeobotany.html"><span>Chapter&nbsp;5</span></a>.</p>
 </section>
 </section>
-<section id="species-richness-diversity-evenness-of-samples" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="species-richness-diversity-evenness-of-samples"><span class="header-section-number">4.4</span> Species richness, diversity, evenness of samples</h2>
+<section id="species-richness-diversity-evenness-of-samples" class="level2" style="text-align:justify;" data-number="4.4">
+<h2 style="text-align:justify;" data-number="4.4" class="anchored" data-anchor-id="species-richness-diversity-evenness-of-samples"><span class="header-section-number">4.4</span> Species richness, diversity, evenness of samples</h2>
 <div class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -316,6 +332,9 @@ Notes on terminology:
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-gattiglia2018" class="csl-entry" role="doc-biblioentry">
+Gattiglia, Gabriele. 2018. <span>“Databases in Archaeology.”</span> In, edited by Sandra L. López Varela, 1–4. Hoboken, NJ, USA: John Wiley &amp; Sons, Inc. <a href="https://doi.org/10.1002/9781119188230.saseas0147">https://doi.org/10.1002/9781119188230.saseas0147</a>.
+</div>
 <div id="ref-pearsall2015" class="csl-entry" role="doc-biblioentry">
 Pearsall, D. M. 2015. <em>Paleoethnobotany: a handbook of procedures</em>. Third edition. Walnut Creek, California: Left Coast Press.
 </div>
