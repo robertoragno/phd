@@ -1,0 +1,36 @@
+project:
+  type: book
+
+book:
+  favicon: favicon.png
+  title: "Long-term Dynamics and Peasant Autonomy in the Italian Countryside"
+  author: "Roberto Ragno"
+  email: roberto.ragno@uniba.it
+  affiliation: Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro
+  page-footer: 
+    center: "Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - literature_review.qmd
+    - materials.qmd
+    - methods.qmd
+    - archaeobotany.qmd
+    - zooarchaeology.qmd
+    - discussion.qmd
+    - conclusions.qmd
+    - functions.qmd
+    - references.qmd
+
+bibliography: references.bib
+csl: elsevier-harvard2.csl
+
+format:
+  html:
+    theme: cosmo
+    callout-appearance: simple
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

@@ -1,0 +1,149 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Long-term Dynamics and Peasant Autonomy in the Italian Countryside",
+    "section": "",
+    "text": "Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro, Bari, Italy\n\nEMAIL\n\nroberto.ragno@uniba.it\n\n\nOverview\nThis research aims to diachronically trace the patterns of subsistence, economy, and environmental change in relation to regional patterns of Italian peasantry in the 1st millennium CE. Scholarly debate on the dynamics of human-nature interaction in Italy during the transition from Late Antiquity to the early Middle Ages still leaves today some open questions. Were the former Roman economic structures and farming practices completely abandoned or did they find continuity during this turbulent time? Which agricultural strategies did peasants develop to cope with political, demographic and climatic change? Past work on agricultural production has been based upon literary sources and field surveys which identify boundaries; a multi-source archaeological study is absent from the discourse. Drawing on environmental proxies, such as animal, seed, and pollen remains, this project uses data from >261 sites 1 (172 botanical and 379 faunal samples2) and statistical/dimensionality reduction methods (CA, NCA, nMDS). Specific emphasis is placed on evaluating agricultural strategies during the shift from the Roman Empire to the politically fragmented landscape of early medieval Italy, to assess the role of political organization, economy, culture, and environment in the configuration of agricultural regimes and animal/plant husbandry selection. The integration of different sources is fundamental to casting new light on peasants’ lifeways, which may be obscured in the textual records, privileging elite contexts and high-status transactions. The Early Middle Ages mark a period of fundamental change when different geographical regions (and potentially micro-regions) developed their own political and economic frameworks for agricultural production. Bioarchaeological evidence can help visualise the landscape in which these changes were taking place, as archive collections of samples are subjected to new analyses in a holistic context, through the database I have constructed. For example, one can analyse differences in diet and production between elite, religious, urban and rural sites, and conduct regional pattern analysis. Preliminary results show indeed higher degrees of regionalization in agricultural strategies during the EMA. My dissertation will contextualize these findings against textual sources to assess how people used the Italian agricultural landscape, and suggest which agents were responsible for changes. I argue that the discourse on Northern Italian/French early Medieval production has heavily influenced interpretations of the agrarian economies of the rest of the peninsula.\n\n\nCase studies\nThe map below shows the distribution of the samples used for this project. Hover to the point of interest and click on the marker to see what data is available.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLast update: July 20th 2022.↩︎\nPollen tbd.↩︎"
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "See Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Boscato, P., Fronza, V., Salvadori, F., 2007. 3° convegno nazionale di\narcheozoologia. In: Fiore, I., Malerba, G., Chilardi, S. (Eds.),.\nIstituto Poligrafico e Zecca dello Stato, Roma, p. 114.\n\n\nFiguera, M., 2018. Database\nmanagement e dati archeologici: standardizzazione e applicazione della\nlogica fuzzy alla gestione delle fonti e delle attribuzioni\ntipologiche. Archeologia e Calcolatori 29, 143–160.\n\n\nGattiglia, G., 2018. Databases in\nArchaeology. In: López Varela, S.L. (Ed.),. John Wiley & Sons,\nInc., Hoboken, NJ, USA, pp. 1–4.\n\n\nMercuri, A.M., Allevato, E., Arobba, D., Bandini Mazzanti, M., Bosi, G.,\nCaramiello, R., Castiglioni, E., Carra, M.L., Celant, A., Costantini,\nL., Di Pasquale, G., Fiorentino, G., Florenzano, A., Guido, M.,\nMarchesini, M., Mariotti Lippi, M., Marvelli, S., Miola, A., Montanari,\nC., Nisbet, R., Peña-Chocarro, L., Perego, R., Ravazzi, C., Rottoli, M.,\nSadori, L., Ucchesu, M., Rinaldi, R., 2015. Pollen and macroremains from\nHolocene archaeological sites: A dataset for the understanding of the\nbio-cultural diversity of the Italian landscape. Review of Palaeobotany\nand Palynology 218, 250–266.\n\n\nPearsall, D.M., 2015. Paleoethnobotany: a handbook of procedures, Third\nedition. ed. Left Coast Press, Walnut Creek, California.\n\n\nWright, P.J., 2010. Methodological issues\nin paleoethnobotany: A consideration of issues, methods, and cases.\nIn: VanDerwarker, A.M., Peres, T.M. (Eds.),. Springer New York, New\nYork, NY, pp. 37–64."
+  },
+  {
+    "objectID": "literature_review.html",
+    "href": "literature_review.html",
+    "title": "2  Literature Review",
+    "section": "",
+    "text": "Add literature review"
+  },
+  {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "4  Methods",
+    "section": "",
+    "text": "Page under construction\nThis chapter presents the methodology employed to carry out this study. The first section outlines the construction of the database used for the research. The second section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and an attempt to respond to the problem of chronological fuzziness of samples."
+  },
+  {
+    "objectID": "materials.html",
+    "href": "materials.html",
+    "title": "3  Materials",
+    "section": "",
+    "text": "Add materials"
+  },
+  {
+    "objectID": "archaeobotany.html",
+    "href": "archaeobotany.html",
+    "title": "5  Archaeobotany",
+    "section": "",
+    "text": "In this chapter, I will present the macrobotanical data from X case studies used to carry on this research [reference to the Materials chapter], along with the quantifications performed on the absolute counts. The data will be first presented temporally, and a discussion of the diachronic trends will follow at the end of the chapter."
+  },
+  {
+    "objectID": "zooarchaeology.html",
+    "href": "zooarchaeology.html",
+    "title": "6  Zooarchaeology",
+    "section": "",
+    "text": "Add"
+  },
+  {
+    "objectID": "discussion.html",
+    "href": "discussion.html",
+    "title": "7  Discussion",
+    "section": "",
+    "text": "Add"
+  },
+  {
+    "objectID": "conclusions.html",
+    "href": "conclusions.html",
+    "title": "8  Conclusions",
+    "section": "",
+    "text": "tbd"
+  },
+  {
+    "objectID": "methods.html#chronological-fuzziness",
+    "href": "methods.html#chronological-fuzziness",
+    "title": "4  Methods",
+    "section": "4.2 Chronological fuzziness",
+    "text": "4.2 Chronological fuzziness\nOne of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: \\[ W=\\frac{1}{(C_{end}-C_{start}+1)} \\] Where:\n\n\\(C\\_{end}\\) is the terminus ante quem.\n\\(C\\_{start}\\) is the terminus post quem.\n1 has been summed to the denominator to avoid 0 values.\n\nThe imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:\n\nzooarch_tables (custom)\nBot_mean_table (custom)\nBot_mean_fun (custom)\nweighted.median (from the package spatstat)\n\nThe weight can be used for weighted means and medians, with samples with larger chronolo- gies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations."
+  },
+  {
+    "objectID": "methods.html#archaeobotany",
+    "href": "methods.html#archaeobotany",
+    "title": "4  Methods",
+    "section": "4.3 Archaeobotany",
+    "text": "4.3 Archaeobotany\nIntroduce the topic and methodological issues\nBIASES: Talk about the biases and dataset problems here or do it in the Materials chapter?\n\n4.3.1 Ubiquity\nUbiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward-the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:\n\\[\nU_x = (\\frac{N_p}{N_{tot}}) \\cdot 100\n\\] where \\(N_p\\) is the number of presences, and \\(N_{tot}\\) is the total number of contexts. The result can be multiplied by 100 to obtain a score in %.\nThis approach has both advantages and drawbacks. Presence analysis minimizes the impact of outliers (overrepresented plant species) on calculations (Wright (2010), 51-52), but the relative importance of a plant in a particular context is lost. It is also important to keep in mind that taxa richness is influenced by factors including sample size, deposition and preservation modes, and sampling strategies (e.g. sieving methodologies) (Pearsall (2015), 161-2).\n\nWrite about sample size problems and include a graph\nWrite about deposition and preservation\nWrite about sampling strategies\nWrite about the problems of this dataset that led to the choice of ubiquity as parameter\n\nUbiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered.\nIn addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an R function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into–Cereals, Pulses and Fruits/Nuts. The results are in Chapter 5."
+  },
+  {
+    "objectID": "methods.html#species-richness",
+    "href": "methods.html#species-richness",
+    "title": "4  Methods",
+    "section": "4.3 Species richness",
+    "text": "4.3 Species richness\n\n\n\n\n\n\nNotes on terminology:\n\n\n\nSpecies richness is the number of species found in a community or ecosystem. Species diversity is a measurement of species richness combined with evenness, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.\n\n\n\n\n\n\nWright, Patti J. 2010. “Methodological Issues in Paleoethnobotany: A Consideration of Issues, Methods, and Cases.” In, edited by Amber M. VanDerwarker and Tanya M. Peres, 37–64. New York, NY: Springer New York. https://doi.org/10.1007/978-1-4419-0935-0_3."
+  },
+  {
+    "objectID": "methods.html#species-richness-diversity-evenness-of-samples",
+    "href": "methods.html#species-richness-diversity-evenness-of-samples",
+    "title": "4  Methods",
+    "section": "4.4 Species richness, diversity, evenness of samples",
+    "text": "4.4 Species richness, diversity, evenness of samples\n\n\n\n\n\n\nNotes on terminology:\n\n\n\nSpecies richness is the number of species found in a community or ecosystem. Species diversity is a measurement of species richness combined with evenness, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.\n\n\n\n4.4.1 Richness and diversity in the Italian macroregions\nLorem ipsum\n\n\n4.4.2 Cereals regionality: testing the results\nDescribe the PERMANOVA etc\n\n\n4.4.3 Network Analysis of cereals in EMA sites\nLorem ipsum"
+  },
+  {
+    "objectID": "methods.html#zooarchaeology",
+    "href": "methods.html#zooarchaeology",
+    "title": "4  Methods",
+    "section": "4.5 Zooarchaeology",
+    "text": "4.5 Zooarchaeology\n\n\n\n\nBoscato, P., Fronza, V., Salvadori, F., 2007. 3° convegno nazionale di archeozoologia. In: Fiore, I., Malerba, G., Chilardi, S. (Eds.),. Istituto Poligrafico e Zecca dello Stato, Roma, p. 114.\n\n\nFiguera, M., 2018. Database management e dati archeologici: standardizzazione e applicazione della logica fuzzy alla gestione delle fonti e delle attribuzioni tipologiche. Archeologia e Calcolatori 29, 143–160.\n\n\nGattiglia, G., 2018. Databases in Archaeology. In: López Varela, S.L. (Ed.),. John Wiley & Sons, Inc., Hoboken, NJ, USA, pp. 1–4.\n\n\nMercuri, A.M., Allevato, E., Arobba, D., Bandini Mazzanti, M., Bosi, G., Caramiello, R., Castiglioni, E., Carra, M.L., Celant, A., Costantini, L., Di Pasquale, G., Fiorentino, G., Florenzano, A., Guido, M., Marchesini, M., Mariotti Lippi, M., Marvelli, S., Miola, A., Montanari, C., Nisbet, R., Peña-Chocarro, L., Perego, R., Ravazzi, C., Rottoli, M., Sadori, L., Ucchesu, M., Rinaldi, R., 2015. Pollen and macroremains from Holocene archaeological sites: A dataset for the understanding of the bio-cultural diversity of the Italian landscape. Review of Palaeobotany and Palynology 218, 250–266.\n\n\nNiccolucci, F., 2020. ARIADNEplus: L’avventura continua. DigItalia 2, 8895.\n\n\nPearsall, D.M., 2015. Paleoethnobotany: a handbook of procedures, Third edition. ed. Left Coast Press, Walnut Creek, California.\n\n\nRichards, J.D., 2021. Archiving archaeological data in the united kingdom. Internet Archaeology 58.\n\n\nWright, P.J., 2010. Methodological issues in paleoethnobotany: A consideration of issues, methods, and cases. In: VanDerwarker, A.M., Peres, T.M. (Eds.),. Springer New York, New York, NY, pp. 37–64."
+  },
+  {
+    "objectID": "archaeobotany.html#case-studies",
+    "href": "archaeobotany.html#case-studies",
+    "title": "5  Archaeobotany",
+    "section": "5.1 Case studies",
+    "text": "5.1 Case studies\nThe following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right."
+  },
+  {
+    "objectID": "archaeobotany.html#ubiquity",
+    "href": "archaeobotany.html#ubiquity",
+    "title": "5  Archaeobotany",
+    "section": "5.2 Ubiquity",
+    "text": "5.2 Ubiquity\nIn Chapter 4 ubiquity has been described as the best way to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (Figure 5.1) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.\n\n\n\n\n\nShow the code\n# Load the libraries\n# Note: these libraries are used for the data visualizations in this page.\nlibrary(RColorBrewer)\nlibrary(reshape2)\nlibrary(ggplot2)\nlibrary(hrbrthemes)\nlibrary(plotly)\nlibrary(patchwork)\n\n## UBIQUITY\n\n## Creating a dataframe that contains the ubiquity of each century under examination. \nUbiquity_table <- data.frame(\n  \"I BCE\" = archaeobotany_tables(plants_export, -1)$Ubiquity_exp,  \n  \"I CE\" = archaeobotany_tables(plants_export, 1)$Ubiquity_exp,\n  \"II CE\" = archaeobotany_tables(plants_export, 2)$Ubiquity_exp,\n  \"III CE\" = archaeobotany_tables(plants_export, 3)$Ubiquity_exp,\n  \"IV CE\" = archaeobotany_tables(plants_export, 4)$Ubiquity_exp,\n  \"V CE\" = archaeobotany_tables(plants_export, 5)$Ubiquity_exp,\n  \"VI CE\" = archaeobotany_tables(plants_export, 6)$Ubiquity_exp,\n  \"VII CE\" = archaeobotany_tables(plants_export, 7)$Ubiquity_exp,\n  \"VIII CE\" = archaeobotany_tables(plants_export, 8)$Ubiquity_exp,\n  \"IX CE\" = archaeobotany_tables(plants_export, 9)$Ubiquity_exp,\n  \"X CE\" = archaeobotany_tables(plants_export, 10)$Ubiquity_exp,\n  \"XI CE\" = archaeobotany_tables(plants_export, 11)$Ubiquity_exp\n  )\n\n# Transform the ubiquity table into a matrix\nUbiquity_mat <- as.matrix(Ubiquity_table) \n\n# Rename the centuries\ncolnames(Ubiquity_mat) <- c(\"1st c. BCE\", \"1st c. CE\", \"2nd c. CE\",\n                            \"3rd c. CE\", \"4th c. CE\", \"5th c. CE\",\n                            \"6th c. CE\", \"7th c. CE\", \"8th c. CE\",\n                            \"9th c. CE\", \"10th c. CE\", \"11th c. CE\") \n\n# The data has to be molten to use it with ggplot2\n# (package: reshape2)\nUbiquity_melt <- melt(Ubiquity_mat)\n\n# Let's now rename the columns \ncolnames(Ubiquity_melt) <- c(\"Taxon\", \"Century\", \"Ubiquity\")\n\n# Add a column for the text tooltip\nUbiquity_melt <- Ubiquity_melt %>%\n  mutate(text = paste0(\"Taxon: \", Taxon, \"\\n\", \"Century: \", Century, \"\\n\", \"Value: \",round(Ubiquity,2)))\n\n# Create the heatmap with ggplot2\nUbiquity_HM <- ggplot(Ubiquity_melt, aes(Century, Taxon, fill=Ubiquity, text=text)) + \n  geom_tile(colour=\"white\") +\n  scale_alpha(range=c(0,1)) +\n  scale_x_discrete(\"\", expand = c(0, 0)) + \n  scale_y_discrete(\"\", expand = c(0, 0)) + \n  theme_grey(base_size = 9) + \n  theme(legend.position = \"right\",\n        axis.ticks = element_blank(), \n        axis.text.x = element_text(angle = 90, hjust = 0)\n        ) +\n  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+\n  labs(\n    title=\"Ubiquity\",\n    subtitle=\"Diachronical heatmap of recorded plant species\"\n  ) +\n  scale_fill_gradient(low = \"white\", high = \"black\")\n\n\n\n\n\n\n\nFigure 5.1: Diachronical heatmap of recorded plant species"
+  },
+  {
+    "objectID": "functions.html",
+    "href": "functions.html",
+    "title": "Custom functions",
+    "section": "",
+    "text": "Show the code\n##FUNCTION FOR GENERATING CENTURY BASED\n# - UBIQUITY\n# - RELATIVE PROPORTIONS\n# - A PRINT OF THE TABLE\n\narchaeobotany_tables <- function(x, century) {\n  # Load the tidyverse library if it hasn't been loaded in the page before\n  library(tidyverse)\n  \n  # Remove NAs\n  x[is.na(x)] <-0 \n  \n  # Filter the table for the chosen century\n  # package: tidyverse\n  x <- filter(x, data_valid_start <= century & data_valid_end >= century)\n  \n  # The total of each row is needed to calculate the relative proportions\n  # Note: Calculation starts from column 14 because it is the first column with numerical data. If the table exported from the database changes, this number must be adjusted.\n  Total <- rowSums(x[,14:ncol(x)])\n  \n  # Subsetting the given dataframe by creating a new dataframe with fewer columns \n  plants <- data.frame(x$site_name, x$type_name, \n                       x$data_valid_start, x$data_valid_end,\n                       x$culture_type, x[14:ncol(x)], \n                       Total\n  )\n  \n  # Calculating the relative proportions and rounding the results to 2 digits.\n  Rel_Prop <- round(((x[14:ncol(x)]/Total)*100), digits=2)\n  \n  # Ubiquity: \n  #Note: It is given by the no. of sites where the plant is present divided by the total of sites\n  # Note: Total of sites: (No. of rows - header row)\n  \n  # Creating a new dataframe from the Relative Proportions one (Rel_Prop). \n  # Note: This can be done also from the original dataframe, it is not important since it is just a calculation based on presence/absence. I chose this dataframe as it has already the columns I need.\n  Pres_Abs <- Rel_Prop\n  \n  # If the value is > 0 it means that the plant is present: this line replaces this value with a 1 (indicating presence)\n  Pres_Abs[Pres_Abs > 0] <- 1\n  \n  # In how many sites is this plant present?\n  Tot_sites_present <- colSums(Pres_Abs)\n\n  # Finally calculate ubiquity\n  # Note: The score is multiplied by 100 to obtain results in %\n  Ubiquity <- (Tot_sites_present / nrow(Pres_Abs))*100\n  \n  return(list(\n    Ubiquity_exp = Ubiquity,\n    Rel_Prop_exp = Rel_Prop,\n    Raw_Counts = plants\n    ))\n}"
+  },
+  {
+    "objectID": "methods.html#database",
+    "href": "methods.html#database",
+    "title": "4  Methods",
+    "section": "4.1 Database",
+    "text": "4.1 Database\n\n\n\n\n\n\nSection in progress\n\n\n\n\n\n\n\n4.1.1 What is a database?\nDatabases are increasingly being used in archaeology to archive and collect data digitally. There are mainly two types of databases—relational and non-relational. A relational database is more appropriate for well-defined data structures which can be linked through a mutual attribute. It is built and maintained with Structured Query Language (SQL), which allows the user to interrogate the database through queries (Gattiglia (2018)). A SQL database consists of several tables containing information in columns (variables) and rows (entries). Each row is defined by an unique key. Examples of relational database management systems include—MySQL, PostgreSQL, MariaDB, Microsoft SQL Server and Oracle Database. A non-relational database (NoSQL) is advantageous in the case of unstructured data, as data is archived as a single document rather than in a table. This structure allows much more flexibility, although NoSQL databases can be harder to use by non-specialists. Among the NoSQL database management systems, MongoDB is the most widely used.\n\n\n4.1.2 Databases in archaeology\nDatabases are used in archaeology primarily for two reasons—data management and data sharing. Most excavations are now working with databases, where the information concerning each stratigraphic unit and finds is recorded. Databases can also be linked and interact with Geographical Information Systems (GIS), that allow researchers to work with a spatial component. In many cases, this data remains private, even after the publication of the excavation results, although increasingly more teams are also making their data available to the public. The growing popularity of open data has also created the need for standardisation. Since the 1970s, researchers started working on thesauri (Figuera (2018)), dictionaries and guides for the correct archival of archaeological information (e.g. pottery classes, context types, chronologies, etc.). A shared system of naming practices is essential for sharing, integrating and analysing data. Recently, more standardised databases and repositories are being created and openly published:\n\nArchaeological Data Service (ADS). A non-profit organisation, based at the University of York. The website provides a large repository of downloadable archaeological data (mostly from the British isles) (Richards (2021)).\nARIADNEplus, a Horizon 2020 project funded by the European Commission aiming to build an integrated european archaeological data structure. Over 2 million datasets are part of this project, with the original data still managed by the original creators (Niccolucci (2020)).\n\nMost of the archaeological databases are based on SQL, as the visual relationships between different data structures are easier to understand.\n\n\n4.1.3 Creating an Environmental Archaeology database\nAn integrated database with environmental archaeology data is still missing in Italy. A first step towards botanical data digitalisation has been the BRAIN project (Botanical Records of Archaeobotany Italian Network), a census of the Italian excavations that reported archaeobotanical data (Mercuri et al. (2015)). The website, although not providing raw data, has been useful to the bibliographical research for this project. For what concerns faunal remains, a database is missing, although a pilot project was started at the University of Siena by Boscato et al. (2007). The database was created using FileMaker Pro and was likely never published.\nFor the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses MariaDB, a fast and stable fork of MySQL.\n\nInsert here database structure\n\nThe data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1st millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in Figure 4.1.\n\n\n\n\n\n\n\n\nFigure 4.1: Count of the publication types in the database."
+  },
+  {
+    "objectID": "methods.html#periodization",
+    "href": "methods.html#periodization",
+    "title": "4  Methods",
+    "section": "4.2 Periodization",
+    "text": "4.2 Periodization\nSome of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:\n\n[R] Roman: from the 1st century BCE to the 2nd century CE.\n[LR] Late Roman: from the 3rd to the 5th century CE.\n[EMA] Early Middle Ages: from the 6th to the 10th century CE.\n[Ma] Middle Ages: from the 11th century CE onwards.\n\nIn the database, the tables faunal_chronologies and plants_chronologies connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g. Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g. Sample 1 – 2nd to 3rd c. CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.\n\n\n\nPeriodization\n\n\n\n4.2.1 Chronological fuzziness\nOne of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: \\[ W=\\frac{1}{(C_{end}-C_{start}+1)} \\] Where:\n\n\\(C\\_{end}\\) is the terminus ante quem.\n\\(C\\_{start}\\) is the terminus post quem.\n1 has been summed to the denominator to avoid 0 values.\n\nThe imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:\n\nzooarch_tables (custom)\nBot_mean_table (custom)\nBot_mean_fun (custom)\nweighted.median (from the package spatstat)\n\nThe weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations."
+  }
+]
