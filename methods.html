@@ -179,7 +179,7 @@ div.csl-indent {
   <li><a href="#databases-in-archaeology" id="toc-databases-in-archaeology" class="nav-link" data-scroll-target="#databases-in-archaeology"> <span class="header-section-number">4.1.2</span> Databases in archaeology</a></li>
   <li><a href="#creating-an-environmental-archaeology-database" id="toc-creating-an-environmental-archaeology-database" class="nav-link" data-scroll-target="#creating-an-environmental-archaeology-database"> <span class="header-section-number">4.1.3</span> Creating an Environmental Archaeology database</a></li>
   </ul></li>
-  <li><a href="#periodization" id="toc-periodization" class="nav-link" data-scroll-target="#periodization"> <span class="header-section-number">4.2</span> Periodization</a>
+  <li><a href="#sec-periodization" id="toc-sec-periodization" class="nav-link" data-scroll-target="#sec-periodization"> <span class="header-section-number">4.2</span> Periodization</a>
   <ul class="collapse">
   <li><a href="#chronological-fuzziness" id="toc-chronological-fuzziness" class="nav-link" data-scroll-target="#chronological-fuzziness"> <span class="header-section-number">4.2.1</span> Chronological fuzziness</a></li>
   </ul></li>
@@ -261,10 +261,33 @@ Section in progress
 <section id="creating-an-environmental-archaeology-database" class="level3" style="text-align:justify" data-number="4.1.3">
 <h3 style="text-align:justify" data-number="4.1.3" class="anchored" data-anchor-id="creating-an-environmental-archaeology-database"><span class="header-section-number">4.1.3</span> Creating an Environmental Archaeology database</h3>
 <p>An integrated database with environmental archaeology data is still missing in Italy. A first step towards botanical data digitalisation has been the <a href="https://brainplants.successoterra.net">BRAIN project</a> (Botanical Records of Archaeobotany Italian Network), a census of the Italian excavations that reported archaeobotanical data (<span class="citation" data-cites="mercuri2015">Mercuri et al. (<a href="references.html#ref-mercuri2015" role="doc-biblioref">2015</a>)</span>). The website, although not providing raw data, has been useful to the bibliographical research for this project. For what concerns faunal remains, a database is missing, although a pilot project was started at the University of Siena by <span class="citation" data-cites="boscato2007">Boscato et al. (<a href="references.html#ref-boscato2007" role="doc-biblioref">2007</a>)</span>. The database was created using FileMaker Pro and was likely never published.</p>
-<p>For the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses MariaDB, a fast and stable fork of MySQL.</p>
+<p>For the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses <a href="https://mariadb.com">MariaDB</a>, a fast and stable fork of MySQL.</p>
+<p>The database was structured with the creation of 21 tables. The table <code>site_list</code> is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the macroperiod<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and by the centuries, with two columns: <code>startcentury</code> and <code>endcentury</code>. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Context</th>
+<th>Sample #ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Imola, villa Clelia, 6th c.</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>Imola, villa Clelia, 10th-11th c.</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. In addition to the reference to the samples table, the table <code>site_list</code> also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The samples are organized in three tables, depending on the type of remain that has to be recorded in the database:</p>
 <ul>
-<li>Insert here database structure</li>
+<li><p><code>plant_remains</code></p></li>
+<li><p><code>pollen_remains</code></p></li>
+<li><p><code>faunal_remains</code></p></li>
 </ul>
+<p><strong><em>Continue here…</em></strong></p>
 <p>The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1<sup>st</sup> millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in <a href="#fig-publication-type-counts">Figure&nbsp;<span>4.1</span></a>.</p>
 <div class="cell">
 
@@ -281,8 +304,8 @@ Section in progress
 </div>
 </section>
 </section>
-<section id="periodization" class="level2" style="text-align:justify;" data-number="4.2">
-<h2 style="text-align:justify;" data-number="4.2" class="anchored" data-anchor-id="periodization"><span class="header-section-number">4.2</span> Periodization</h2>
+<section id="sec-periodization" class="level2" style="text-align:justify;" data-number="4.2">
+<h2 style="text-align:justify;" data-number="4.2" class="anchored" data-anchor-id="sec-periodization"><span class="header-section-number">4.2</span> Periodization</h2>
 <p>Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:</p>
 <ul>
 <li><p><strong>[R] Roman</strong>: from the 1<sup>st</sup> century BCE to the 2<sup>nd</sup> century CE.</p></li>
@@ -394,6 +417,13 @@ Richards, J.D., 2021. Archiving archaeological data in the united kingdom. Inter
 Wright, P.J., 2010. <a href="https://doi.org/10.1007/978-1-4419-0935-0_3">Methodological issues in paleoethnobotany: A consideration of issues, methods, and cases</a>. In: VanDerwarker, A.M., Peres, T.M. (Eds.),. Springer New York, New York, NY, pp. 37–64.
 </div>
 </div>
+</section>
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>See <a href="#sec-periodization"><span>Section&nbsp;4.2</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
