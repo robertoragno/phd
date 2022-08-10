@@ -181,7 +181,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#sec-periodization" id="toc-sec-periodization" class="nav-link" data-scroll-target="#sec-periodization"> <span class="header-section-number">4.2</span> Periodization</a>
   <ul class="collapse">
-  <li><a href="#chronological-fuzziness" id="toc-chronological-fuzziness" class="nav-link" data-scroll-target="#chronological-fuzziness"> <span class="header-section-number">4.2.1</span> Chronological fuzziness</a></li>
+  <li><a href="#sec-chrono-fuzziness" id="toc-sec-chrono-fuzziness" class="nav-link" data-scroll-target="#sec-chrono-fuzziness"> <span class="header-section-number">4.2.1</span> Chronological fuzziness</a></li>
   </ul></li>
   <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany"> <span class="header-section-number">4.3</span> Archaeobotany</a>
   <ul class="collapse">
@@ -287,8 +287,14 @@ Section in progress
 <li><p><code>pollen_remains</code></p></li>
 <li><p><code>faunal_remains</code></p></li>
 </ul>
-<p><strong><em>Continue here…</em></strong></p>
-<p>The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1<sup>st</sup> millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in <a href="#fig-publication-type-counts">Figure&nbsp;<span>4.1</span></a>.</p>
+<p>Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The tables <code>faunal_chrono_weights</code> and <code>plants_chrono_weights</code> contain the automated calculation of the samples weights (refer to <a href="#sec-chrono-fuzziness"><span>Section&nbsp;4.2.1</span></a>). The <a href="#fig-db-schema">Figure&nbsp;<span>4.1</span></a> shows the schema with the complete list of tables in the database.</p>
+<div id="fig-db-schema" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/DB_Structure.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 4.1: Schema of the database, with the table <code>site_list</code> at the core.</figcaption><p></p>
+</figure>
+</div>
+<p>The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1<sup>st</sup> millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in <a href="#fig-publication-type-counts">Figure&nbsp;<span>4.2</span></a>.</p>
 <div class="cell">
 
 </div>
@@ -297,7 +303,7 @@ Section in progress
 <div id="fig-publication-type-counts" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-publication-type-counts-1.png" class="img-fluid figure-img" width="480"></p>
-<p></p><figcaption class="figure-caption">Figure 4.1: Count of the publication types in the database.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure 4.2: Count of the publication types in the database.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -320,8 +326,8 @@ Section in progress
 <p></p><figcaption class="figure-caption">Periodization</figcaption><p></p>
 </figure>
 </div>
-<section id="chronological-fuzziness" class="level3" style="text-align:justify;" data-number="4.2.1">
-<h3 style="text-align:justify;" data-number="4.2.1" class="anchored" data-anchor-id="chronological-fuzziness"><span class="header-section-number">4.2.1</span> Chronological fuzziness</h3>
+<section id="sec-chrono-fuzziness" class="level3" style="text-align:justify;" data-number="4.2.1">
+<h3 style="text-align:justify;" data-number="4.2.1" class="anchored" data-anchor-id="sec-chrono-fuzziness"><span class="header-section-number">4.2.1</span> Chronological fuzziness</h3>
 <p>One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: <span class="math display">\[ W=\frac{1}{(C_{end}-C_{start}+1)} \]</span> Where:</p>
 <ul>
 <li><p><span class="math inline">\(C\_{end}\)</span> is the terminus ante quem.</p></li>
@@ -361,7 +367,7 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 </section>
 <section id="species-richness-diversity-evenness-of-samples" class="level2" style="text-align:justify;" data-number="4.4">
 <h2 style="text-align:justify;" data-number="4.4" class="anchored" data-anchor-id="species-richness-diversity-evenness-of-samples"><span class="header-section-number">4.4</span> Species richness, diversity, evenness of samples</h2>
-<div class="callout-note callout callout-style-simple callout-captioned">
+<div id="species-richness-notes" class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -370,7 +376,7 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 Notes on terminology:
 </div>
 </div>
-<div class="callout-body-container callout-body">
+<div id="species-richness-notes" class="callout-body-container callout-body">
 <p><strong>Species richness</strong> is the number of species found in a community or ecosystem. <strong>Species diversity</strong> is a measurement of species richness combined with <strong>evenness</strong>, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.</p>
 </div>
 </div>
