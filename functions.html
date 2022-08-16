@@ -212,7 +212,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link active" data-scroll-target="#archaeobotany">Archaeobotany</a>
+  <ul class="collapse">
+  <li><a href="#archaeobotany_tables" id="toc-archaeobotany_tables" class="nav-link" data-scroll-target="#archaeobotany_tables">archaeobotany_tables()</a></li>
+  <li><a href="#rel_prop_per_century" id="toc-rel_prop_per_century" class="nav-link" data-scroll-target="#rel_prop_per_century">Rel_Prop_per_Century()</a></li>
+  </ul></li>
+  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology">Zooarchaeology</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -234,67 +245,156 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <p>This section contains the list of custom functions that have been written to prepare, handle and visualize the data exported from the database.</p>
+<section id="archaeobotany" class="level2">
+<h2 class="anchored" data-anchor-id="archaeobotany">Archaeobotany</h2>
+<section id="archaeobotany_tables" class="level3">
+<h3 class="anchored" data-anchor-id="archaeobotany_tables">archaeobotany_tables()</h3>
+<p>This function has two arguments:</p>
+<ul>
+<li><p>a dataframe of the exported table of plants from the database (<code>view_archaeobot.csv</code>).</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "site_code"               "site_name"              
+ [3] "type_name"               "region_name"            
+ [5] "data_valid_start"        "data_valid_end"         
+ [7] "weight"                  "sampling_notes"         
+ [9] "extra_notes"             "short_ref"              
+[11] "culture_type"            "x"                      
+[13] "y"                       "Triticum.aestivum.durum"
+[15] "Triticum.dicoccum"       "Triticum.monococcum"    
+[17] "Avena.sp"                "Hordeum.vulgare"        
+[19] "Panicum.milliaceum"      "Secale.cereale"         
+[21] "Setaria.italica"         "Sorghum.bicolor"        
+[23] "Cerealia.ind"            "Leguminosae"            
+[25] "Lens.culinaris"          "Pisum.sativum"          
+[27] "Vicia.faba"              "Vicia.sativa"           
+[29] "Vicia.sp"                "Lathyrus.cicera.sativus"
+[31] "Cicer.aretinum"          "Cornus.mas"             
+[33] "Corylus.avellana"        "Ficus.carica"           
+[35] "Fragaria.vesca"          "Juglans.regia"          
+[37] "Castanea.sativa"         "Malus.domestica"        
+[39] "Olea.europaea.L"         "Prunus.cerasus"         
+[41] "Prunus.avium"            "Prunus.sp"              
+[43] "Prunus.persica"          "Prunus.domestica"       
+[45] "Prunus.spinosa"          "Rubus.fruticosus"       
+[47] "Pyrus.communis"          "Sambucus.nigra"         
+[49] "Cucumis.melo"            "Vitis.vinifera"         
+[51] "Linum.usatissimus"       "Sorbus.sp"              </code></pre>
+</div>
+</div></li>
+<li><p>the century of interest.</p></li>
+</ul>
+<p>The function <code>archaeobotany_tables()</code> can be used to return the ubiquity, relative proportions or a print of the table with the sites from the chosen century. The comments in the code below explain the process.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">##FUNCTION FOR GENERATING CENTURY BASED</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># - UBIQUITY</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - RELATIVE PROPORTIONS</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - A PRINT OF THE TABLE</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>archaeobotany_tables <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span><span class="dv">0</span> </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen century</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, data_valid_start <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> data_valid_end <span class="sc">&gt;=</span> century)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The total of each row is needed to calculate the relative proportions</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Calculation starts from column 14 because it is the first column with numerical data. If the table exported from the database changes, this number must be adjusted.</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subsetting the given dataframe by creating a new dataframe with fewer columns </span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  plants <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x<span class="sc">$</span>site_name, x<span class="sc">$</span>type_name, </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>data_valid_start, x<span class="sc">$</span>data_valid_end,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>culture_type, x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)], </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                       Total</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating the relative proportions and rounding the results to 2 digits.</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ubiquity: </span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Note: It is given by the no. of sites where the plant is present divided by the total of sites</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Total of sites: (No. of rows - header row)</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating a new dataframe from the Relative Proportions one (Rel_Prop). </span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: This can be done also from the original dataframe, it is not important since it is just a calculation based on presence/absence. I chose this dataframe as it has already the columns I need.</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  Pres_Abs <span class="ot">&lt;-</span> Rel_Prop</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the value is &gt; 0 it means that the plant is present: this line replaces this value with a 1 (indicating presence)</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  Pres_Abs[Pres_Abs <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># In how many sites is this plant present?</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  Tot_sites_present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(Pres_Abs)</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Finally calculate ubiquity</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: The score is multiplied by 100 to obtain results in %</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (Tot_sites_present <span class="sc">/</span> <span class="fu">nrow</span>(Pres_Abs))<span class="sc">*</span><span class="dv">100</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ubiquity_exp =</span> Ubiquity,</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rel_Prop_exp =</span> Rel_Prop,</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">Raw_Counts =</span> plants</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">##FUNCTION FOR GENERATING CENTURY BASED</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># - UBIQUITY</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - RELATIVE PROPORTIONS</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - A PRINT OF THE TABLE</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>archaeobotany_tables <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span><span class="dv">0</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen century</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, data_valid_start <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> data_valid_end <span class="sc">&gt;=</span> century)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The total of each row is needed to calculate the relative proportions</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Calculation starts from column 14 because it is the first column with numerical data. If the table exported from the database changes, this number must be adjusted.</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subsetting the given dataframe by creating a new dataframe with fewer columns </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  plants <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x<span class="sc">$</span>site_name, x<span class="sc">$</span>type_name, </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>data_valid_start, x<span class="sc">$</span>data_valid_end,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>culture_type, x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)], </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                       Total</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating the relative proportions and rounding the results to 2 digits.</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ubiquity: </span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Note: It is given by the no. of sites where the plant is present divided by the total of sites</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Total of sites: (No. of rows - header row)</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating a new dataframe from the Relative Proportions one (Rel_Prop). </span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: This can be done also from the original dataframe, it is not important since it is just a calculation based on presence/absence. I chose this dataframe as it has already the columns I need.</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  Pres_Abs <span class="ot">&lt;-</span> Rel_Prop</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the value is &gt; 0 it means that the plant is present: this line replaces this value with a 1 (indicating presence)</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  Pres_Abs[Pres_Abs <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># In how many sites is this plant present?</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  Tot_sites_present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(Pres_Abs)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Finally calculate ubiquity</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: The score is multiplied by 100 to obtain results in %</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (Tot_sites_present <span class="sc">/</span> <span class="fu">nrow</span>(Pres_Abs))<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ubiquity_exp =</span> Ubiquity,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rel_Prop_exp =</span> Rel_Prop,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">Raw_Counts =</span> plants</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="rel_prop_per_century" class="level3">
+<h3 class="anchored" data-anchor-id="rel_prop_per_century">Rel_Prop_per_Century()</h3>
+<p>This function has two arguments: - a dataframe of the exported table of plants from the database (<code>view_archaeobot.csv</code>).</p>
+<ul>
+<li>the century of interest. The function <code>Rel_Prop_per_Century()</code> can be used to return the relative proportions of each site from the chosen century. The comments in the code below explain the process.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert each site raw data into relative proportions</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Rel_Prop_per_Century <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span><span class="dv">0</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen century</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, data_valid_start <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> data_valid_end <span class="sc">&gt;=</span> century)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the total of the row and divide each value by the total to get proportions</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># round() is used to get two decimal values</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  Total_per_site <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  Rel_Prop_per_site <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total_per_site)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create new dataframe with the information we need</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  plants_rel_prop <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Site"</span> <span class="ot">=</span> x<span class="sc">$</span>site_name, </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Type"</span> <span class="ot">=</span> x<span class="sc">$</span>type_name, </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"From.Century"</span> <span class="ot">=</span> x<span class="sc">$</span>data_valid_start, </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"To.Century"</span><span class="ot">=</span> x<span class="sc">$</span>data_valid_end,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Weight"</span><span class="ot">=</span>x<span class="sc">$</span>weight,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Culture"</span><span class="ot">=</span>x<span class="sc">$</span>culture_type, </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span><span class="ot">=</span>x<span class="sc">$</span>x, </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"y"</span><span class="ot">=</span>x<span class="sc">$</span>y,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    Rel_Prop_per_site</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(plants_rel_prop)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="zooarchaeology" class="level2">
+<h2 class="anchored" data-anchor-id="zooarchaeology">Zooarchaeology</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
