@@ -134,16 +134,26 @@ div.csl-indent {
   <a href="./methods.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Methods</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Results</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discussion</span></a>
@@ -156,14 +166,24 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -174,12 +194,12 @@ div.csl-indent {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">4.1</span> Introduction</a></li>
-  <li><a href="#statpacks" id="toc-statpacks" class="nav-link" data-scroll-target="#statpacks"> <span class="header-section-number">4.2</span> Statpacks</a>
+  <li><a href="#statistical-computing" id="toc-statistical-computing" class="nav-link" data-scroll-target="#statistical-computing"> <span class="header-section-number">4.2</span> Statistical computing</a>
   <ul class="collapse">
-  <li><a href="#the-r-environment" id="toc-the-r-environment" class="nav-link" data-scroll-target="#the-r-environment"> <span class="header-section-number">4.2.1</span> The <em>R</em> environment</a></li>
-  <li><a href="#the-python-environment" id="toc-the-python-environment" class="nav-link" data-scroll-target="#the-python-environment"> <span class="header-section-number">4.2.2</span> The <em>Python</em> environment</a></li>
+  <li><a href="#the-r-programming-language" id="toc-the-r-programming-language" class="nav-link" data-scroll-target="#the-r-programming-language"> <span class="header-section-number">4.2.1</span> The <em>R</em> programming language</a></li>
+  <li><a href="#the-python-programming-language" id="toc-the-python-programming-language" class="nav-link" data-scroll-target="#the-python-programming-language"> <span class="header-section-number">4.2.2</span> The <em>Python</em> programming language</a></li>
   </ul></li>
-  <li><a href="#hosting-the-data-on-github" id="toc-hosting-the-data-on-github" class="nav-link" data-scroll-target="#hosting-the-data-on-github"> <span class="header-section-number">4.3</span> Hosting the data on GitHub</a></li>
+  <li><a href="#github-hosting-the-project" id="toc-github-hosting-the-project" class="nav-link" data-scroll-target="#github-hosting-the-project"> <span class="header-section-number">4.3</span> GitHub: hosting the project</a></li>
   <li><a href="#database" id="toc-database" class="nav-link" data-scroll-target="#database"> <span class="header-section-number">4.4</span> Database</a>
   <ul class="collapse">
   <li><a href="#what-is-a-database" id="toc-what-is-a-database" class="nav-link" data-scroll-target="#what-is-a-database"> <span class="header-section-number">4.4.1</span> What is a database?</a></li>
@@ -238,12 +258,10 @@ Page under construction
 </div>
 <section id="introduction" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
-<p>This chapter presents the methodology employed to carry out this study. The first section discusses databases and their employment in archaeology, then outlines the construction of the database used for this research. The second section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.</p>
+<p>This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R and Python. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section 3. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.</p>
 </section>
-<section id="statpacks" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="statpacks"><span class="header-section-number">4.2</span> Statpacks</h2>
-<section id="the-r-environment" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="the-r-environment"><span class="header-section-number">4.2.1</span> The <em>R</em> environment</h3>
+<section id="statistical-computing" class="level2" style="text-align:justify;" data-number="4.2">
+<h2 style="text-align:justify;" data-number="4.2" class="anchored" data-anchor-id="statistical-computing"><span class="header-section-number">4.2</span> Statistical computing</h2>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -254,17 +272,36 @@ Section under construction
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This section will include:</p>
-<ul>
-<li><p>a general introduction to the R environment</p></li>
-<li><p>the most important packages for statistics and data viz with R</p></li>
-<li><p>Comparison with Python?</p></li>
-</ul>
+<p>Add comparison between Python and R. Diachronic packages dev.</p>
 </div>
 </div>
+<p>Statistical computing, often referred to as computational statistics, is a branch of statistics that uses computational approaches to solving statistical problems. Traditionally, the term <em>statistical computing</em> places more emphasis on numerical methods, while <em>computational statistics</em> refer to topics such as resampling methods, exploratory data analysis, neural networks, etc.(<span class="citation" data-cites="rizzoStatisticalComputing2019">Rizzo (<a href="references.html#ref-rizzoStatisticalComputing2019" role="doc-biblioref">2019</a>)</span>).</p>
+<section id="the-r-programming-language" class="level3" style="text-align:justify;" data-number="4.2.1">
+<h3 style="text-align:justify;" data-number="4.2.1" class="anchored" data-anchor-id="the-r-programming-language"><span class="header-section-number">4.2.1</span> The <em>R</em> programming language</h3>
+<p>R, as described on the <a href="https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f">R-Project FAQs</a> is a “system for statistical computation and graphics. It consists of a language plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files”. Increasingly popular for data scientists, R is based on S and provides its own IDE (the R GUI), although <a href="https://www.rstudio.com">RStudio</a> is the most popular IDE for computing the R language. For this project, RStudio was the standard IDE.</p>
+<section id="r-packages" class="level4" data-number="4.2.1.1">
+<h4 data-number="4.2.1.1" class="anchored" data-anchor-id="r-packages"><span class="header-section-number">4.2.1.1</span> R Packages</h4>
+<p>In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official <a href="https://cran.r-project.org/web/packages/">CRAN repository</a>, which counts more than 18,452 packages<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<section id="tidyverse" class="level5" data-number="4.2.1.1.1">
+<h5 data-number="4.2.1.1.1" class="anchored" data-anchor-id="tidyverse"><span class="header-section-number">4.2.1.1.1</span> Tidyverse</h5>
+<p>The <strong>tidyverse</strong> ecosystem is a core set of packages for R, maintained by Hadley Wickham for importing, tidying, transforming and visualising data (<span class="citation" data-cites="wickhamDataScienceImport2016">Wickham and Grolemund (<a href="references.html#ref-wickhamDataScienceImport2016" role="doc-biblioref">2016</a>)</span>) which includes packages such as—ggplot2, dplyr, tidyr, stringr, tibble, forcats, purr, readr.</p>
 </section>
-<section id="the-python-environment" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="the-python-environment"><span class="header-section-number">4.2.2</span> The <em>Python</em> environment</h3>
+<section id="ggplot2" class="level5" data-number="4.2.1.1.2">
+<h5 data-number="4.2.1.1.2" class="anchored" data-anchor-id="ggplot2"><span class="header-section-number">4.2.1.1.2</span> ggplot2</h5>
+<p><strong>ggplot2</strong> is the most common data visualisation package for R, included in the tidyverse environment. The package substitutes the R base graphics and allows visualisation of single and multiple components (<span class="citation" data-cites="wickhamProgrammingGgplot22016">Wickham (<a href="references.html#ref-wickhamProgrammingGgplot22016" role="doc-biblioref">2016</a>)</span>).</p>
+</section>
+<section id="knitr" class="level5" data-number="4.2.1.1.3">
+<h5 data-number="4.2.1.1.3" class="anchored" data-anchor-id="knitr"><span class="header-section-number">4.2.1.1.3</span> knitr</h5>
+<p>The <strong>knitr</strong> engine enables the integration of R with HTML, Markdown and LaTeX. The package allows reproducible research (<span class="citation" data-cites="xieKnitrComprehensiveTool2014">Xie (<a href="references.html#ref-xieKnitrComprehensiveTool2014" role="doc-biblioref">2014</a>)</span>) and was used for generating dynamic reports and documentation for this thesis.</p>
+</section>
+<section id="vegan" class="level5" data-number="4.2.1.1.4">
+<h5 data-number="4.2.1.1.4" class="anchored" data-anchor-id="vegan"><span class="header-section-number">4.2.1.1.4</span> vegan</h5>
+<p>The <strong>vegan</strong> package (<span class="citation" data-cites="oksanenVeganCommunityEcology2022">Oksanen et al. (<a href="references.html#ref-oksanenVeganCommunityEcology2022" role="doc-biblioref">2022</a>)</span>) is designed for ordination methods, diversity analysis and multivariate analysis in ecology.</p>
+</section>
+</section>
+</section>
+<section id="the-python-programming-language" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="the-python-programming-language"><span class="header-section-number">4.2.2</span> The <em>Python</em> programming language</h3>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -282,10 +319,16 @@ Section under construction
 </ul>
 </div>
 </div>
+<p>Intro here</p>
+<p>This project uses Python in addition to R as its environment offers well-designed and intuitive packages for some of the data-reduction methods used on the datasets.</p>
+<section id="python-packages" class="level4" data-number="4.2.2.1">
+<h4 data-number="4.2.2.1" class="anchored" data-anchor-id="python-packages"><span class="header-section-number">4.2.2.1</span> Python packages</h4>
+<p>List here</p>
 </section>
 </section>
-<section id="hosting-the-data-on-github" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="hosting-the-data-on-github"><span class="header-section-number">4.3</span> Hosting the data on GitHub</h2>
+</section>
+<section id="github-hosting-the-project" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="github-hosting-the-project"><span class="header-section-number">4.3</span> GitHub: hosting the project</h2>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -319,7 +362,7 @@ Section under construction
 <h3 style="text-align:justify" data-number="4.4.3" class="anchored" data-anchor-id="creating-an-environmental-archaeology-database"><span class="header-section-number">4.4.3</span> Creating an Environmental Archaeology database</h3>
 <p>An integrated database with environmental archaeology data is still missing in Italy. A first step towards botanical data digitalisation has been the <a href="https://brainplants.successoterra.net">BRAIN project</a> (Botanical Records of Archaeobotany Italian Network), a census of the Italian excavations that reported archaeobotanical data (<span class="citation" data-cites="mercuriPollenMacroremainsHolocene2015">Mercuri et al. (<a href="references.html#ref-mercuriPollenMacroremainsHolocene2015" role="doc-biblioref">2015</a>)</span>). The website, although not providing raw data, has been useful to the bibliographical research for this project. For what concerns faunal remains, a database is missing, although a pilot project was started at the University of Siena by <span class="citation" data-cites="boscatoPropostaDiDatabase2007">Boscato et al. (<a href="references.html#ref-boscatoPropostaDiDatabase2007" role="doc-biblioref">2007</a>)</span>. The database was created using FileMaker Pro and was likely never published.</p>
 <p>For the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses <a href="https://mariadb.com">MariaDB</a>, a fast and stable fork of MySQL.</p>
-<p>The database was structured with the creation of 21 tables. The table <code>site_list</code> is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the macroperiod<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and by the centuries, with two columns: <code>startcentury</code> and <code>endcentury</code>. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).</p>
+<p>The database was structured with the creation of 21 tables. The table <code>site_list</code> is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the macroperiod<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and by the centuries, with two columns: <code>startcentury</code> and <code>endcentury</code>. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -338,7 +381,7 @@ Section under construction
 </tr>
 </tbody>
 </table>
-<p>Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. In addition to the reference to the samples table, the table <code>site_list</code> also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The samples are organized in three tables, depending on the type of remain that has to be recorded in the database:</p>
+<p>Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In addition to the reference to the samples table, the table <code>site_list</code> also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The samples are organized in three tables, depending on the type of remain that has to be recorded in the database:</p>
 <ul>
 <li><p><code>plant_remains</code></p></li>
 <li><p><code>pollen_remains</code></p></li>
@@ -579,22 +622,38 @@ Moore, J.C., 2013. <a href="https://doi.org/10.1016/B978-0-12-384719-5.00036-8">
 <div id="ref-niccolucciARIADNEplusAvventuraContinua2020" class="csl-entry" role="doc-biblioentry">
 Niccolucci, F., 2020. <span>ARIADNEplus</span>: <span>L</span>’avventura continua. DigItalia 2, 88–95.
 </div>
+<div id="ref-oksanenVeganCommunityEcology2022" class="csl-entry" role="doc-biblioentry">
+Oksanen, J., Simpson, G.L., Blanchet, F.G., Kindt, R., Legendre, P., Minchin, P.R., O’Hara, R.B., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., Barbour, M., Bedward, M., Bolker, B., Borcard, D., Carvalho, G., Chirico, M., Caceres, M.D., Durand, S., Evangelista, H.B.A., FitzJohn, R., Friendly, M., Furneaux, B., Hannigan, G., Hill, M.O., Lahti, L., McGlinn, D., Ouellette, M.-H., Cunha, E.R., Smith, T., Stier, A., Braak, C.J.F.T., Weedon, J., 2022. <a href="https://CRAN.R-project.org/package=vegan">Vegan: Community ecology package</a>.
+</div>
 <div id="ref-pearsallPaleoethnobotanyHandbookProcedures2015a" class="csl-entry" role="doc-biblioentry">
 Pearsall, D.M., 2015. Paleoethnobotany: A handbook of procedures, Third edition. ed. <span>Left Coast Press Inc</span>, <span>Walnut Creek, California</span>.
 </div>
 <div id="ref-richardsArchivingArchaeologicalData2021" class="csl-entry" role="doc-biblioentry">
 Richards, J.D., 2021. Archiving <span>Archaeological Data</span> in the <span>United Kingdom</span>. Internet Archaeology 58.
 </div>
+<div id="ref-rizzoStatisticalComputing2019" class="csl-entry" role="doc-biblioentry">
+Rizzo, M.L., 2019. <a href="https://doi.org/10.1201/9780429192760">Statistical <span>Computing</span> with <span>R</span></a>, Second. ed. <span>Chapman and Hall/CRC</span>, <span>New York</span>.
+</div>
+<div id="ref-wickhamProgrammingGgplot22016" class="csl-entry" role="doc-biblioentry">
+Wickham, H., 2016. <a href="https://doi.org/10.1007/978-3-319-24277-4_12">Programming with Ggplot2</a>. In: Wickham, H. (Ed.), Ggplot2: <span>Elegant Graphics</span> for <span>Data Analysis</span>, Use <span>R</span>! <span>Springer International Publishing</span>, <span>Cham</span>, pp. 241–253.
+</div>
+<div id="ref-wickhamDataScienceImport2016" class="csl-entry" role="doc-biblioentry">
+Wickham, H., Grolemund, G., 2016. R for data science: Import, tidy, transform, visualize, and model data, First edition. ed. <span>O’Reilly</span>, <span>Sebastopol, CA</span>.
+</div>
 <div id="ref-wrightMethodologicalIssuesPaleoethnobotany2010" class="csl-entry" role="doc-biblioentry">
 Wright, P.J., 2010. <a href="https://doi.org/10.1007/978-1-4419-0935-0_3">Methodological <span>Issues</span> in <span>Paleoethnobotany</span>: <span>A</span> consideration of <span>Issues</span>, <span>Methods</span>, and <span>Cases</span></a>. In: VanDerwarker, A.M., Peres, T.M. (Eds.), Integrating <span>Zooarchaeology</span> and <span>Paleoethnobotany</span>: <span>A Consideration</span> of <span>Issues</span>, <span>Methods</span>, and <span>Cases</span>. <span>Springer New York</span>, <span>New York, NY</span>, pp. 37–64.
+</div>
+<div id="ref-xieKnitrComprehensiveTool2014" class="csl-entry" role="doc-biblioentry">
+Xie, Y., 2014. Knitr: <span>A Comprehensive Tool</span> for <span>Reproducible Research</span> in <span>R</span>. In: Implementing <span>Reproducible Research</span>. <span>Chapman and Hall/CRC</span>.
 </div>
 </div>
 </section>
 <section class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1" role="doc-endnote"><p>See <a href="#sec-periodization"><span>Section&nbsp;4.5</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Updated on August 16th, 2022.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>See <a href="#sec-periodization"><span>Section&nbsp;4.5</span></a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
