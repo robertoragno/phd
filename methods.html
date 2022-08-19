@@ -57,10 +57,10 @@ div.csl-indent {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
+  "panel-placement": "end",
   "type": "textbox",
   "limit": 20,
   "language": {
@@ -258,7 +258,7 @@ Page under construction
 </div>
 <section id="introduction" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
-<p>This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R and Python. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section 3. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.</p>
+<p>This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R and Python. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section three. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.</p>
 </section>
 <section id="statistical-computing" class="level2" style="text-align:justify;" data-number="4.2">
 <h2 style="text-align:justify;" data-number="4.2" class="anchored" data-anchor-id="statistical-computing"><span class="header-section-number">4.2</span> Statistical computing</h2>
@@ -422,7 +422,7 @@ Section under construction
 <div class="quarto-figure quarto-figure-center" style="text-align:center;">
 <figure class="figure">
 <p><img src="images/Periodization.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Periodization schema</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Periodization schema.</figcaption><p></p>
 </figure>
 </div>
 <section id="sec-chrono-fuzziness" class="level3" style="text-align:justify;" data-number="4.5.1">
@@ -483,20 +483,38 @@ Section in progress
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
-</div>
-</div>
 <p>Introduce the topic</p>
+</div>
+</div>
 <section id="methodological-issues" class="level3" data-number="4.7.1">
 <h3 data-number="4.7.1" class="anchored" data-anchor-id="methodological-issues"><span class="header-section-number">4.7.1</span> Methodological issues</h3>
-<p>Issues: problems with the data and general problems in sampling</p>
-<p>BIASES: Talk about the biases and dataset problems here or do it in the Materials chapter?</p>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Section in progress
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Issues</strong>: problems with the data and general problems in sampling</p>
+<p><strong>BIASES</strong>: Talk about the biases and dataset problems here or do it in the Materials chapter?</p>
+</div>
+</div>
+<p>The data collection process did not present major problems in taxa comparability, since the names of plant were matching. In some cases, it was only possible for the archaeobotanist to specify the name of the species (e.g.&nbsp;<em>Avena sp.</em>), or it was not possible to properly identify the taxa. In the latter case, I reported all the names that can possibly identify the seed (e.g.&nbsp;<em>Triticum aestivum/durum</em>). Quantifications on the archaeobotanical dataset were affected by several biases. The samples in the database have been collected using different variations of visual strategies. Visual sampling occurs when archaeologists can visually see or expect macroremains in the feature they are excavating. Common features from which samples are usually collected include—pits, hearths, filled anforae, etc. But “how can one argue that the contents of a pit reflect activities involving food specific to that context, if one has not examined samples from floor deposits into which the pit was dug, or the deposits overlying it?” (<span class="citation" data-cites="pearsallPaleoethnobotanyHandbookProcedures2015a">Pearsall (<a href="references.html#ref-pearsallPaleoethnobotanyHandbookProcedures2015a" role="doc-biblioref">2015, p. 75</a>)</span>). <span class="citation" data-cites="lennstromInterpretationContextSampling1995">Lennstrom and Hastorf (<a href="references.html#ref-lennstromInterpretationContextSampling1995" role="doc-biblioref">1995</a>)</span> lament “feature biases” in many archaeological excavations, as paleobotanists are often called after archaeologists have already recovered materials from specific site features. The authors call for a general misconception in the goal of archaeobotany—to collect as many macroremains as possible. This strategy is, in fact, not very informative about the relationships between plant remains and stratigraphic units, and the general deposition patterns in the site. For instance, <span class="citation" data-cites="jonesCropStorageAssiros1986">Jones et al. (<a href="references.html#ref-jonesCropStorageAssiros1986" role="doc-biblioref">1986</a>)</span> were able to reconstruct the functions of structures and the methods of crop storage at Assiros, northern Greece, through a thorough extensive sampling. <span class="citation" data-cites="pearsallPaleoethnobotanyHandbookProcedures2015a">Pearsall (<a href="references.html#ref-pearsallPaleoethnobotanyHandbookProcedures2015a" role="doc-biblioref">2015, p. 74</a>)</span> reccommends a “blanket sampling” strategy, which consists in collecting samples for flotation from each stratigraphical unit. The advantages of blanket sampling are manifold:</p>
+<ul>
+<li><p>If in theory sampling from strategical features (e.g.&nbsp;hearths) maximizes the chances of recovering more macrobotanical remains, in practice this is not always the case. For instance, if a hearth was used on a regular basis, it could possibly have been cleaned of ashes frequently, and the excavator might have more luck sampling around it.</p></li>
+<li><p>Including the collection of samples from each layer in the excavation leads an uniform and standardised procedure, reducing the variation across samples.</p></li>
+<li><p>Blanket sampling allows an easier reconstruction of deposition patterns and of stratigraphic units relations as stated above. For instance, one can analyse differences in macroremains densities across samples.</p></li>
+</ul>
+<p>While archaeobotanists have advocated for more specific sampling strategies for over 40 years, none of the Italian excavations in this dataset applied blanket sampling, and sampling from features is still the most common practice.</p>
 </section>
 <section id="quantifications" class="level3" data-number="4.7.2">
 <h3 data-number="4.7.2" class="anchored" data-anchor-id="quantifications"><span class="header-section-number">4.7.2</span> Quantifications</h3>
 <section id="ubiquity" class="level4" style="text-align:justify;" data-number="4.7.2.1">
 <h4 style="text-align:justify;" data-number="4.7.2.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">4.7.2.1</span> Ubiquity</h4>
-<p>Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward-the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:</p>
+<p>Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward—the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:</p>
 <p><span class="math display">\[
 U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 \]</span> where <span class="math inline">\(N_p\)</span> is the number of presences, and <span class="math inline">\(N_{tot}\)</span> is the total number of contexts. The result can be multiplied by 100 to obtain a score in %.</p>
@@ -618,8 +636,14 @@ Harris, C.R., Millman, K.J., van der Walt, S.J., Gommers, R., Virtanen, P., Cour
 <div id="ref-hunterMatplotlib2DGraphics2007" class="csl-entry" role="doc-biblioentry">
 Hunter, J.D., 2007. Matplotlib: <span>A 2D</span> graphics environment. Computing in science &amp; engineering 9, 90–95.
 </div>
+<div id="ref-jonesCropStorageAssiros1986" class="csl-entry" role="doc-biblioentry">
+Jones, G., Wardle, K., Halstead, P., Wardle, D., 1986. <a href="https://doi.org/10.1038/scientificamerican0386-96">Crop <span>Storage</span> at <span>Assiros</span></a>. Scientific American 254, 96–103.
+</div>
 <div id="ref-lauroComputationalStatisticsStatistical1996" class="csl-entry" role="doc-biblioentry">
 Lauro, C., 1996. <a href="https://doi.org/10.1016/0167-9473(96)88920-1">Computational statistics or statistical computing, is that the question?</a> Computational Statistics &amp; Data Analysis, Classification 23, 191–193.
+</div>
+<div id="ref-lennstromInterpretationContextSampling1995" class="csl-entry" role="doc-biblioentry">
+Lennstrom, H.A., Hastorf, C.A., 1995. <a href="https://doi.org/10.2307/282054">Interpretation in context: Sampling and analysis in paleoethnobotany</a>. American Antiquity 60, 701–721.
 </div>
 <div id="ref-mercuriPollenMacroremainsHolocene2015" class="csl-entry" role="doc-biblioentry">
 Mercuri, A.M., Allevato, E., Arobba, D., Bandini Mazzanti, M., Bosi, G., Caramiello, R., Castiglioni, E., Carra, M.L., Celant, A., Costantini, L., Di Pasquale, G., Fiorentino, G., Florenzano, A., Guido, M., Marchesini, M., Mariotti Lippi, M., Marvelli, S., Miola, A., Montanari, C., Nisbet, R., Peña-Chocarro, L., Perego, R., Ravazzi, C., Rottoli, M., Sadori, L., Ucchesu, M., Rinaldi, R., 2015. Pollen and macroremains from <span>Holocene</span> archaeological sites: <span>A</span> dataset for the understanding of the bio-cultural diversity of the <span>Italian</span> landscape. Review of Palaeobotany and Palynology 218, 250–266.
