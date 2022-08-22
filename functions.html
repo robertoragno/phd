@@ -239,6 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#archaeobotany_tables" id="toc-archaeobotany_tables" class="nav-link" data-scroll-target="#archaeobotany_tables">archaeobotany_tables()</a></li>
   <li><a href="#rel_prop_per_century" id="toc-rel_prop_per_century" class="nav-link" data-scroll-target="#rel_prop_per_century">Rel_Prop_per_Century()</a></li>
+  <li><a href="#sec-Ubiquity-macroreg-chrono" id="toc-sec-Ubiquity-macroreg-chrono" class="nav-link" data-scroll-target="#sec-Ubiquity-macroreg-chrono">Ubiquity_macroreg_chrono()</a></li>
   </ul></li>
   <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology">Zooarchaeology</a></li>
   </ul>
@@ -405,6 +406,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(plants_rel_prop)</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="sec-Ubiquity-macroreg-chrono" class="level3">
+<h3 class="anchored" data-anchor-id="sec-Ubiquity-macroreg-chrono">Ubiquity_macroreg_chrono()</h3>
+<p>This function has three arguments:</p>
+<ul>
+<li><p>a dataframe of the exported condensed table of plants from the database (<code>Archaeobot_Condensed.csv</code>). It is a table of plants exported with their common English name and with a column of totals for each type of plant (Cereals, Fruit/Nuts, …).</p></li>
+<li><p>the macroregion of interest: <code>Southern Italy</code>, <code>Central Italy</code>, <code>Northern Italy</code>.</p></li>
+<li><p>the chronology of interest: <code>R</code>, <code>LR</code>, <code>EMA</code>, <code>Ma</code>.</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Ubiquity_macroreg_chrono <span class="ot">&lt;-</span> <span class="cf">function</span>(df, macroregion, chronology) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  df[<span class="fu">is.na</span>(df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen chronology and macroregion</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  df.chronology <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, Chronology <span class="sc">==</span> chronology <span class="sc">&amp;</span> Macroregion <span class="sc">==</span> macroregion)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Remove useless columns: Tots, unsp.cols</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  df.chronology <span class="ot">&lt;-</span> df.chronology[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">23</span>,<span class="dv">24</span>,<span class="dv">32</span>,<span class="dv">33</span>,<span class="dv">56</span>)] </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a counts dataframe where the taxa that are present will be stored as 1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  df.counts <span class="ot">&lt;-</span> df.chronology[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(df.chronology)]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  df.counts[df.counts<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a dataframe with a sum of presences</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  df.sites.present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(df.counts)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate ubiquity and round the value to 2 decimals</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (df.sites.present <span class="sc">/</span> <span class="fu">nrow</span>(df.chronology))<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">round</span>(Ubiquity, <span class="dv">2</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a category that explains what type of plant is it (useful for visualisation)</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  Plants_Type <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Type=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">38</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="st">"Cereals"</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">10</span><span class="sc">:</span><span class="dv">16</span>] <span class="ot">&lt;-</span> <span class="st">"Pulses"</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">17</span><span class="sc">:</span><span class="dv">38</span>] <span class="ot">&lt;-</span> <span class="st">"Fruits/Nuts"</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final dataframe that the function will return</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(<span class="st">"Chronology"</span> <span class="ot">=</span> chronology, </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Macroregion"</span> <span class="ot">=</span> macroregion, </span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Plant"</span><span class="ot">=</span><span class="fu">names</span>(Ubiquity), </span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Plant.Type"</span><span class="ot">=</span>Plants_Type<span class="sc">$</span>Type, </span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Ubiquity"</span><span class="ot">=</span> Ubiquity)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Ubiquity, <span class="at">row.names =</span> <span class="cn">NULL</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(Ubiquity)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
