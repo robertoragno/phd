@@ -459,13 +459,13 @@ Section in progress
 
 </div>
 </div>
-<p>This research uses multivariate analysis to explore possible relationships within the sets of environmental data under investigation. Univariate analyses can be easily plotted and visualized with bar charts, histograms and density curves. A scatterplot (or scattergram) shows the relationship between two variables by plotting their values on the axes of a diagram using Cartesian coordinates. This relationship can also be mathematically measured by calculating a distance between two points in the graph. However, the relationship between more than two variables is much harder to read on a scatterplot, as it would require as many axes as the number of variables. If our analysis is exploratory, we might not know yet where to look for correlations. A possible solution is analysing each combination of two variables in the dataset and measure their correlation. This would require too much computation time if the dataset had a large number of variables, that is to say if we are dealing with big data. In addition, we would only gather information about the relationship between two variables, when there might be another factor influencing a trend or phenomenon. Multivariate statistics has a wide range of applications, including grouping and multidimensional scaling, as well as in machine learning and predictive analysis (<span class="citation" data-cites="fletcherDiggingNumbersElementary2005">Fletcher and Lock (<a href="references.html#ref-fletcherDiggingNumbersElementary2005" role="doc-biblioref">2005</a>)</span>). In this research, multivariate methods have been applied both to the botanical and faunal datasets, mainly with the objective of <em>(i)</em> testing hypotheses and <em>(ii)</em> reducing the dimensionality of data to assess which variables are the main drivers of change in the datasets.</p>
+<p>This research uses multivariate analysis to explore possible relationships within the sets of environmental data under investigation. Univariate analyses can be easily plotted and visualized with bar charts, histograms and density curves. A scatterplot (or scattergram) shows the relationship between two variables by plotting their values on the axes of a diagram using Cartesian coordinates. This relationship can also be mathematically measured by calculating a distance between two points in the graph. However, the relationship between more than two variables is much harder to read on a scatterplot, as it would require as many axes as the number of variables. If our analysis is exploratory, we might not know yet where to look for correlations. A possible solution is analysing each combination of two variables in the dataset and measure their correlation. This would require too much computation time if the dataset had a large number of variables, that is to say if we are dealing with big data. In addition, we would only gather information about the relationship between two variables, when there might be another factor influencing a trend or phenomenon. Multivariate statistics has a wide range of applications, including grouping and multidimensional scaling, as well as in machine learning and predictive analysis (<span class="citation" data-cites="fletcherDiggingNumbersElementary2005">Fletcher and Lock (<a href="references.html#ref-fletcherDiggingNumbersElementary2005" role="doc-biblioref">2005</a>)</span>). In this research, multivariate methods have been applied both to the botanical and faunal datasets, mainly with the objective of <em>(i)</em> testing hypotheses between multiple variables and <em>(ii)</em> reducing the dimensionality of data to—assess which variables are the main drivers of change in the datasets and examine relationships between these variables.</p>
 <section id="statistical-hypothesis-testing" class="level3" style="text-align:justify;" data-number="4.6.1">
 <h3 style="text-align:justify;" data-number="4.6.1" class="anchored" data-anchor-id="statistical-hypothesis-testing"><span class="header-section-number">4.6.1</span> Statistical hypothesis testing</h3>
 <p>Explain what is hypothesis testing</p>
-<section id="permutational-multivariate-analysis-of-variance" class="level4" data-number="4.6.1.1">
-<h4 data-number="4.6.1.1" class="anchored" data-anchor-id="permutational-multivariate-analysis-of-variance"><span class="header-section-number">4.6.1.1</span> Permutational multivariate analysis of variance</h4>
-<p>Permutational multivariate analysis of variance (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. (<span class="citation" data-cites="andersonPermutationalMultivariateAnalysis2017">Anderson (<a href="references.html#ref-andersonPermutationalMultivariateAnalysis2017" role="doc-biblioref">2017</a>)</span>).</p>
+<section id="permanova" class="level4" data-number="4.6.1.1">
+<h4 data-number="4.6.1.1" class="anchored" data-anchor-id="permanova"><span class="header-section-number">4.6.1.1</span> PERMANOVA</h4>
+<p><strong>Permutational multivariate analysis of variance</strong> (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. (<span class="citation" data-cites="andersonPermutationalMultivariateAnalysis2017">Anderson (<a href="references.html#ref-andersonPermutationalMultivariateAnalysis2017" role="doc-biblioref">2017</a>)</span>).</p>
 </section>
 </section>
 <section id="dimensionality-reduction-algorithms" class="level3" style="text-align:justify;" data-number="4.6.2">
@@ -478,21 +478,72 @@ Section in progress
 </section>
 <section id="ca" class="level4" data-number="4.6.2.2">
 <h4 data-number="4.6.2.2" class="anchored" data-anchor-id="ca"><span class="header-section-number">4.6.2.2</span> CA</h4>
-<p>Correspondence Analysis (CA) is a dimensionality reduction technique that can be applied to contingency tables. Similarly to PCA, …</p>
+<p><strong>Correspondence analysis</strong> (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data with two variables shown at the same time. As for PCA, it is an indirect gradient analysis. CA is appropriate for exploring non-negative data (e.g.&nbsp;relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship (<span class="citation" data-cites="baxterExploratoryMultivariateAnalysis2015">Baxter (<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">2015, p. 101</a>)</span>).</p>
+<p>eigenvalues are different from pca eigenvalues</p>
+<p>Sensitive to outliers and rare species</p>
+<p>CA is used widely in this research.</p>
+<p>Write: How to correctly interpret a correspondence analysis graph?</p>
 </section>
 <section id="nmds" class="level4" data-number="4.6.2.3">
 <h4 data-number="4.6.2.3" class="anchored" data-anchor-id="nmds"><span class="header-section-number">4.6.2.3</span> nMDS</h4>
-<p>This is an indirect gradient analysis approach that produces an ordination based on a distance or dissimilarity matrix. Unlike methods that attempt to maximise the variance or correspondence between objects in an ordination, nMDS attempts to represent, as closely as possible, the pairwise dissimilarity between objects in a low-dimensional space. It is a rank-based approach.</p>
+<p>Multidimensional scaling (MDS) is a technique to visualise the level of similarity of individual observations (e.g.&nbsp;sites/cases) in a dataset. MDS works with matrices containing Euclidean distances between each pair of observations. Conversely, <strong>non-metric multidimensional scaling</strong> (nMDS) is a rank-based approach that finds both:</p>
+<ul>
+<li><p>A non-parametric monotonic relationship between the items in the dissimilarity matrix and the Euclidean distances.</p></li>
+<li><p>The location of items in the low-dimensional space.</p></li>
+</ul>
+<p>The goal of nMDS is to represent the pairwise dissimilarity between items in the matrix as closely as possible. For this reason, it is considered as a good technique for multivariate data visualisation. nMDS can be used on quantitative, qualitative and mixed data. For this project, it has been applied to a subset of the early medieval archaeobotanical dataset that included presence/absence values of cereals. The full breakdown of the process is reported in <a href="archaeobotany.html#sec-nMDS-Cereals"><span>Section&nbsp;5.4.2</span></a>. The <code>R</code> function <a href="https://rdrr.io/rforge/vegan/man/metaMDS.html"><code>metaMDS</code></a> from the package <code>vegan</code> allows users to select the distance metric most appropriate to their data (e.g.&nbsp;Bray-Curtis, Jaccard, etc.). As nMDS is an iterative approach, meaning that the the computations are run until the best solution is found, it can be quite computationally demanding for larger datasets. Although the nMDS algorithm tries to minimize the ordination stress, it is a good practice to compute the <strong>ordination stress</strong> value to judge the reliability of the solution found (goodness-of-fit). Ordination stress indicates how much distorted are the fitted data when compared to the original observed samples. Stress values can also be visualised with the function <code>stressplot()</code> (<code>vegan</code> package), which produces a Shepard stressplot (<a href="#fig-shepard-plot-nmds">Figure&nbsp;<span>4.3</span></a>).</p>
+<div id="fig-shepard-plot-nmds" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/ShepardPlot.png" class="img-fluid figure-img" width="1000"></p>
+<p></p><figcaption class="figure-caption">Figure 4.3: A Shepard plot, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+</figure>
+</div>
+<p>The Shepard plot displays the ordination distance against the observed distance. Ideally, the higher the points should fall on a monotonic line, where an increased observed distance is related to an increased ordination distance. Moreover, the higher the number of dimensions, the lower the stress value. If interested in choosing the appropriate number of dimensions, it is possible to use a scree plot which shows the number of dimensions against the stress level. Generally, it is possible to interpret stress values following these guidelines (<span class="citation" data-cites="dexterTroubleStressFlexible2018">Dexter et al. (<a href="references.html#ref-dexterTroubleStressFlexible2018" role="doc-biblioref">2018</a>)</span>):</p>
+<div id="tbl-stress-nmds" class="anchored">
+<table class="table">
+<caption>Table 4.1: Ordination stress for the interpretation of nMDS</caption>
+<thead>
+<tr class="header">
+<th>Interpretation</th>
+<th>Stress level</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Excellent</td>
+<td>&lt; 0.05</td>
+</tr>
+<tr class="even">
+<td>Good</td>
+<td>&lt; 0.1</td>
+</tr>
+<tr class="odd">
+<td>Usable (but caution is required)</td>
+<td>&gt; 0.2</td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td>&gt; 0.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If the solution has produced a good stress level for the number of dimensions required, it is possible to plot the nMDS and interpret the results. Points that plot closer together are more similar, while points that are distant one to each other are more different. The nMDS plot can also be useful in recognizing groups (points grouping together and plotting further from other points). An example is provided in <a href="#fig-nmds-rpubs">Figure&nbsp;<span>4.4</span></a>.</p>
+<div id="fig-nmds-rpubs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/NMDS_RPub.png" class="img-fluid figure-img" width="1000"></p>
+<p></p><figcaption class="figure-caption">Figure 4.4: A nMDS plot with clusters, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+</figure>
+</div>
 </section>
 <section id="sec-NCA-methods" class="level4" data-number="4.6.2.4">
 <h4 data-number="4.6.2.4" class="anchored" data-anchor-id="sec-NCA-methods"><span class="header-section-number">4.6.2.4</span> NCA</h4>
-<p>The <em>Neighborhood Component Analysis</em> (<span class="citation" data-cites="goldbergerNeighbourhoodComponentsAnalysis2004">Goldberger et al. (<a href="references.html#ref-goldbergerNeighbourhoodComponentsAnalysis2004" role="doc-biblioref">2004</a>)</span>) is a supervised machine learning algorithm for metric learning. The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NeighborhoodComponentsAnalysis.html">documentation</a> for the <code>Python</code> package (<code>sklearn.neighbors</code>) reports that:</p>
+<p>The <strong>Neighborhood Component Analysis</strong> is a supervised machine learning algorithm for metric learning, developed by <span class="citation" data-cites="goldbergerNeighbourhoodComponentsAnalysis2005">Goldberger et al. (<a href="references.html#ref-goldbergerNeighbourhoodComponentsAnalysis2005" role="doc-biblioref">2005</a>)</span> at the University of Toronto. The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NeighborhoodComponentsAnalysis.html">documentation</a> for the <code>Python</code> implementation (package <code>sklearn.neighbors</code>) reports that:</p>
 <blockquote class="blockquote">
-<p>It learns a linear transformation in a supervised fashion to improve the classification accuracy of a stochastic nearest neighbours rule in the transformed space</p>
+<p>It learns a linear transformation in a supervised fashion to improve the classification accuracy of a stochastic nearest neighbours rule in the transformed space.</p>
 </blockquote>
-<p>The algorithm optimizes the overall classification accuracy, and it works in a similar fashion to the K-Nearest Neighbours. It is mostly used for distance metric learning, although it can be used as a dimensionality reduction technique. NCA can be applied to uneven (non-normal) distributions, as it is a non-parametric method (<span class="citation" data-cites="cardarelliDeepVariationalConvolutional2022">Cardarelli (<a href="references.html#ref-cardarelliDeepVariationalConvolutional2022" role="doc-biblioref">2022</a>)</span>).</p>
-<p>Add more…</p>
-<p>NCA takes PCA a step further and clusters data based on the results of dimensionality reduction on the matrix. It uses the component variance to estimate the number of clusters (kind of like an automatic, standardized k-means algorithm).</p>
+<p>The algorithm optimizes the overall classification accuracy of multivariate data, and it works in a similar way to the <span class="math inline">\(k\)</span>-Nearest Neighbours (<span class="math inline">\(k\)</span>-NN). NCA is mostly used for distance metric learning, although it can be used as a linear dimensionality reduction technique. Both <span class="math inline">\(k\)</span>-NN and NCA can be applied to non-normal distributions, as they are non-parametric methods (<span class="citation" data-cites="cardarelliDeepVariationalConvolutional2022">Cardarelli (<a href="references.html#ref-cardarelliDeepVariationalConvolutional2022" role="doc-biblioref">2022</a>)</span>).</p>
+<p>In this project, NCA has been applied to the same subset used for the nMDS (which included presence/absence values of cereals), with the scope of dimensionality reduction. The dataset has been reduced to one dimension to show a greater degree of separation between Northern and Southern Italy in the early Middle Ages. The entire process of data preparation and processing is described in <a href="archaeobotany.html#sec-NCA-Cereals"><span>Section&nbsp;5.4.3</span></a>.</p>
 </section>
 </section>
 </section>
@@ -595,11 +646,17 @@ Section in progress
 <div id="ref-andersonPermutationalMultivariateAnalysis2017" class="csl-entry" role="doc-biblioentry">
 Anderson, M.J., 2017. <a href="https://doi.org/10.1002/9781118445112.stat07841">Permutational <span>Multivariate Analysis</span> of <span>Variance</span> (<span>PERMANOVA</span>)</a>. In: Wiley <span>StatsRef</span>: <span>Statistics Reference Online</span>. <span>John Wiley &amp; Sons, Ltd</span>, pp. 1–15.
 </div>
+<div id="ref-baxterExploratoryMultivariateAnalysis2015" class="csl-entry" role="doc-biblioentry">
+Baxter, M.J., 2015. Exploratory multivariate analysis in archaeology, Foundations of archaeology. <span>Percheron Press, a division of Eliot Werner Publications, Inc</span>, <span>Clinton Corners, New York</span>.
+</div>
 <div id="ref-boscatoPropostaDiDatabase2007" class="csl-entry" role="doc-biblioentry">
 Boscato, P., Fronza, V., Salvadori, F., 2007. Proposta di un database per i reperti faunistici. In: Fiore, I., Malerba, G., Chilardi, S. (Eds.), Atti Del 3 <span>Convegno Nazionale</span> Di <span>Archeozoologia</span>. <span>Siracusa</span> 3-5 <span>Novembre</span> 2000. <span>Istituto Poligrafico e Zecca dello Stato</span>, <span>Roma</span>, pp. 1–14.
 </div>
 <div id="ref-cardarelliDeepVariationalConvolutional2022" class="csl-entry" role="doc-biblioentry">
 Cardarelli, L., 2022. <a href="https://doi.org/10.1016/j.jas.2022.105640">A deep variational convolutional <span>Autoencoder</span> for unsupervised features extraction of ceramic profiles. <span>A</span> case study from central <span>Italy</span></a>. Journal of Archaeological Science 144, 105640.
+</div>
+<div id="ref-dexterTroubleStressFlexible2018" class="csl-entry" role="doc-biblioentry">
+Dexter, E., Rollwagen-Bollens, G., Bollens, S.M., 2018. <a href="https://doi.org/10.1002/lom3.10257">The trouble with stress: <span>A</span> flexible method for the evaluation of nonmetric multidimensional scaling: <span><em>The</em></span><span> <em>Trouble with Stress</em></span></a>. Limnology and Oceanography: Methods 16, 434–443.
 </div>
 <div id="ref-figueraDatabaseManagementDati2018" class="csl-entry" role="doc-biblioentry">
 Figuera, M., 2018. <span>Database management e dati archeologici: standardizzazione e applicazione della logica fuzzy alla gestione delle fonti e delle attribuzioni tipologiche</span>. Archeologia e Calcolatori 29, 143–160.
@@ -610,8 +667,8 @@ Fletcher, M., Lock, G.R., 2005. Digging numbers: Elementary statistics for archa
 <div id="ref-gattigliaDatabasesArchaeology2018" class="csl-entry" role="doc-biblioentry">
 Gattiglia, G., 2018. <a href="https://doi.org/10.1002/9781119188230.saseas0147">Databases in <span>Archaeology</span></a>. In: López Varela, S.L. (Ed.), The <span>Encyclopedia</span> of <span>Archaeological Sciences</span>. <span>John Wiley &amp; Sons, Inc.</span>, <span>Hoboken, NJ, USA</span>, pp. 1–4.
 </div>
-<div id="ref-goldbergerNeighbourhoodComponentsAnalysis2004" class="csl-entry" role="doc-biblioentry">
-Goldberger, J., Hinton, G.E., Roweis, S., Salakhutdinov, R.R., 2004. Neighbourhood components analysis. Advances in neural information processing systems 17.
+<div id="ref-goldbergerNeighbourhoodComponentsAnalysis2005" class="csl-entry" role="doc-biblioentry">
+Goldberger, J., Hinton, G.E., Roweis, S., Salakhutdinov, R.R., 2005. Neighbourhood components analysis. In: Saul, L.K., Weiss, Y., Bottou, L. (Eds.), Advances in <span>Neural Information Processing Systems</span>. <span>Bradford Books</span>, <span>Vancouver</span>, pp. 513–520.
 </div>
 <div id="ref-harrisArrayProgrammingNumPy2020" class="csl-entry" role="doc-biblioentry">
 Harris, C.R., Millman, K.J., van der Walt, S.J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, E., Taylor, J., Berg, S., Smith, N.J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M.H., Brett, M., Haldane, A., del Río, J.F., Wiebe, M., Peterson, P., Gérard-Marchant, P., Sheppard, K., Reddy, T., Weckesser, W., Abbasi, H., Gohlke, C., Oliphant, T.E., 2020. <a href="https://doi.org/10.1038/s41586-020-2649-2">Array programming with <span>NumPy</span></a>. Nature 585, 357–362.
