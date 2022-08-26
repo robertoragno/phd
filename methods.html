@@ -210,10 +210,10 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#sec-chrono-fuzziness" id="toc-sec-chrono-fuzziness" class="nav-link" data-scroll-target="#sec-chrono-fuzziness"> <span class="header-section-number">4.5.1</span> Chronological fuzziness</a></li>
   </ul></li>
-  <li><a href="#multivariate-statistics" id="toc-multivariate-statistics" class="nav-link" data-scroll-target="#multivariate-statistics"> <span class="header-section-number">4.6</span> Multivariate statistics</a>
+  <li><a href="#sec-met-multivariate-statistics" id="toc-sec-met-multivariate-statistics" class="nav-link" data-scroll-target="#sec-met-multivariate-statistics"> <span class="header-section-number">4.6</span> Multivariate statistics</a>
   <ul class="collapse">
   <li><a href="#statistical-hypothesis-testing" id="toc-statistical-hypothesis-testing" class="nav-link" data-scroll-target="#statistical-hypothesis-testing"> <span class="header-section-number">4.6.1</span> Statistical hypothesis testing</a></li>
-  <li><a href="#dimensionality-reduction-algorithms" id="toc-dimensionality-reduction-algorithms" class="nav-link" data-scroll-target="#dimensionality-reduction-algorithms"> <span class="header-section-number">4.6.2</span> Dimensionality reduction algorithms</a></li>
+  <li><a href="#dimensionality-reduction-and-ordination" id="toc-dimensionality-reduction-and-ordination" class="nav-link" data-scroll-target="#dimensionality-reduction-and-ordination"> <span class="header-section-number">4.6.2</span> Dimensionality reduction and ordination</a></li>
   </ul></li>
   <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany"> <span class="header-section-number">4.7</span> Archaeobotany</a>
   <ul class="collapse">
@@ -444,8 +444,8 @@ Section under construction
 <p>The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.</p>
 </section>
 </section>
-<section id="multivariate-statistics" class="level2" style="text-align:justify;" data-number="4.6">
-<h2 style="text-align:justify;" data-number="4.6" class="anchored" data-anchor-id="multivariate-statistics"><span class="header-section-number">4.6</span> Multivariate statistics</h2>
+<section id="sec-met-multivariate-statistics" class="level2" style="text-align:justify;" data-number="4.6">
+<h2 style="text-align:justify;" data-number="4.6" class="anchored" data-anchor-id="sec-met-multivariate-statistics"><span class="header-section-number">4.6</span> Multivariate statistics</h2>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -468,21 +468,58 @@ Section in progress
 <p><strong>Permutational multivariate analysis of variance</strong> (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. (<span class="citation" data-cites="andersonPermutationalMultivariateAnalysis2017">Anderson (<a href="references.html#ref-andersonPermutationalMultivariateAnalysis2017" role="doc-biblioref">2017</a>)</span>).</p>
 </section>
 </section>
-<section id="dimensionality-reduction-algorithms" class="level3" style="text-align:justify;" data-number="4.6.2">
-<h3 style="text-align:justify;" data-number="4.6.2" class="anchored" data-anchor-id="dimensionality-reduction-algorithms"><span class="header-section-number">4.6.2</span> Dimensionality reduction algorithms</h3>
-<p>Dimensionality reduction techniques transform datasets with a large number of dimensions (variables) into a new dataset with a lower number of variables, with the attempt of maintaining the geometry as close as possible to the original dataset. The new reduced set of variables can be grouped so to observe differences between groups.</p>
-<p>Supervised vs unsupervised approaches: Two different types of Machine Learning approaches</p>
-<section id="pca" class="level4" data-number="4.6.2.1">
-<h4 data-number="4.6.2.1" class="anchored" data-anchor-id="pca"><span class="header-section-number">4.6.2.1</span> PCA</h4>
+<section id="dimensionality-reduction-and-ordination" class="level3" style="text-align:justify;" data-number="4.6.2">
+<h3 style="text-align:justify;" data-number="4.6.2" class="anchored" data-anchor-id="dimensionality-reduction-and-ordination"><span class="header-section-number">4.6.2</span> Dimensionality reduction and ordination</h3>
+<p>Dimensionality reduction techniques transform high-dimension datasets into a low-dimension ordination space, with the intention of maintaining the geometry and data structure as close as possible to the original dataset. The <strong>dimension</strong> of a dataset is given by the number of variables (<em>i.e.</em> the columns in the table). As anticipated in <a href="#sec-met-multivariate-statistics"><span>Section&nbsp;4.6</span></a>, as each variable is graphically represented by an ax, it would be virtually impossible to represent more than three axes in a graph. Ordination allows to reduce data dimensionality to usually one to three (at most) dimensions. Moreover, focusing on a reduced number of dimensions reduces the amount of “noise” that can mislead the interpretation (<span class="citation" data-cites="gauchMultivariateAnalysisCommunity1982">Gauch (<a href="references.html#ref-gauchMultivariateAnalysisCommunity1982" role="doc-biblioref">1982</a>)</span>). The points generated through ordination techniques (the objects in our dataset) can eventually be plotted in a scatterplot. In most of the ordination methods, points plotting closer together in graph are more similar, whereas points far apart from each other are more dissimilar (<span class="citation" data-cites="shennanQuantifyingArchaeology1997">Shennan (<a href="references.html#ref-shennanQuantifyingArchaeology1997" role="doc-biblioref">1997, p. 197</a>)</span>). For instance, one could perform an ordination on a group of burials in a cemetery where each point represents a single burial assemblage. After the ordination it is also possible to group the new reduced set of variables, to observe differences between groups and facilitate the interpretation. In the previous example, a group might be represented by burials of the same ethnic group, status, etc.</p>
+<p>Many of the ordination techniques described in this chapter developed in fields outside archaeology, and are thus borrowed from disciplines as community ecology. Ecologists regularly apply ordination methods for the study of environmental gradients, so that the term “gradient analysis” is often used interchangeably with “ordination”. An environmental gradient refers to variations in site characteristics (<em>e.g.</em> time, elevation, temperature, vegetation, etc.), which in turn can affect biotic factors (<em>e.g.</em> species abundance, diversity, etc.) (<span class="citation" data-cites="grebnerForestDynamics2013">Grebner et al. (<a href="references.html#ref-grebnerForestDynamics2013" role="doc-biblioref">2013</a>)</span>). The purpose of ordination is then to identify the cause of ecological processes in the dataset. Generally, it is possible to apply ordination on datasets in which the variables have a cause-and-effect (<em>e.g.</em> climate vs.&nbsp;plant species) or mutual influences on each other. There are two main types of ordination, or gradient analysis, techniques (see <a href="#tbl-gradient-analysis">Table&nbsp;<span>4.1</span></a>): <strong>direct</strong> (constrained) or <strong>indirect</strong> (unconstrained). The objective of indirect (unconstrained) gradient analysis is to identify patterns between samples of ‘dependent variables’ (<em>e.g.</em> which sites are more similar according to their species composition). Conversely, direct gradient (or constrained) analysis includes more information (or tables) in a single analysis—the dependent variables are now constrained to be a function of other sets of ‘independent variables’ (usually environmental proxies). In short, a constrained analysis uses both datasets to find the best possible mathematical relationship between the dependent and independent variables. In this sense, direct gradient analysis can be considered as an extension of unconstrained analysis (<span class="citation" data-cites="symsOrdination2008">Syms (<a href="references.html#ref-symsOrdination2008" role="doc-biblioref">2008</a>)</span>). The choice between using constrained or unconstrained methods for ordination strictly depends on the research questions and on the researcher’s dataset.</p>
+<div id="tbl-gradient-analysis" class="anchored">
+<table class="table">
+<caption>Table 4.1: Ordination methods used in gradient analysis. Table after <span class="citation" data-cites="cuffneyAquaticEcosystemsIndicators2014">Cuffney et al. (<a href="references.html#ref-cuffneyAquaticEcosystemsIndicators2014" role="doc-biblioref">2014, p. 149</a>)</span></caption>
+<colgroup>
+<col style="width: 17%">
+<col style="width: 42%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Response model</th>
+<th>Indirect gradient analysis</th>
+<th>Direct gradient analysis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><em>Linear</em></strong></td>
+<td>Principal component analysis (PCA)</td>
+<td>Redundancy analysis (RDA)</td>
+</tr>
+<tr class="even">
+<td><strong><em>Unimodal</em></strong></td>
+<td><p>Correspondence analysis (CA)</p>
+<p>Detrended CA (DCA)</p></td>
+<td><p>Canonical correspondence analysis (CCA)</p>
+<p>Detrended CCA</p></td>
+</tr>
+<tr class="odd">
+<td><strong><em>Monotonic</em></strong></td>
+<td>non-metric multidimensional scaling (nMDS)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Supervised vs unsupervised approaches: Two different types of Machine Learning approaches</strong></p>
+<section id="pca" class="level4" style="text-align:justify;" data-number="4.6.2.1">
+<h4 style="text-align:justify;" data-number="4.6.2.1" class="anchored" data-anchor-id="pca"><span class="header-section-number">4.6.2.1</span> PCA</h4>
 <p>PCA: unsupervised. optimizes the loss of variance while trying to preserve the global structure: finding a space in which dimensions can be reduced giving up the least information. PCA projects the matrix into a linear space of lower dimensionality.</p>
 </section>
 <section id="ca" class="level4" data-number="4.6.2.2">
 <h4 data-number="4.6.2.2" class="anchored" data-anchor-id="ca"><span class="header-section-number">4.6.2.2</span> CA</h4>
-<p><strong>Correspondence analysis</strong> (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data with two variables shown at the same time. As for PCA, it is an indirect gradient analysis. CA is appropriate for exploring non-negative data (e.g.&nbsp;relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship (<span class="citation" data-cites="baxterExploratoryMultivariateAnalysis2015">Baxter (<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">2015, p. 101</a>)</span>).</p>
+<p><strong>Correspondence analysis</strong> (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. As for PCA, it is an indirect gradient analysis<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. CA is appropriate for exploring non-negative data (e.g.&nbsp;relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship (<span class="citation" data-cites="baxterExploratoryMultivariateAnalysis2015">Baxter (<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">2015, p. 101</a>)</span>). Moreover, CA is suited for categorical or qualitative data.</p>
 <p>eigenvalues are different from pca eigenvalues</p>
 <p>Sensitive to outliers and rare species</p>
-<p>CA is used widely in this research.</p>
-<p>Write: How to correctly interpret a correspondence analysis graph?</p>
+<p>In <code>R</code>, common implementations of this algorithm are included in the packages <code>MASS</code>, <code>FactoMineR</code> and <code>vegan</code>. Correspondence analysis has been used several times in this research using the function <code>cca()</code> from the <code>vegan</code> package, which was applied to the presence/absence archaeobotanical dataset (**add where else**<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>). The function <code>cca()</code> performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.</p>
+<p>Write: How to correctly interpret a correspondence analysis graph? unsupervised learning</p>
 </section>
 <section id="nmds" class="level4" data-number="4.6.2.3">
 <h4 data-number="4.6.2.3" class="anchored" data-anchor-id="nmds"><span class="header-section-number">4.6.2.3</span> nMDS</h4>
@@ -501,7 +538,7 @@ Section in progress
 <p>The Shepard plot displays the ordination distance against the observed distance. Ideally, the higher the points should fall on a monotonic line, where an increased observed distance is related to an increased ordination distance. Moreover, the higher the number of dimensions, the lower the stress value. If interested in choosing the appropriate number of dimensions, it is possible to use a scree plot which shows the number of dimensions against the stress level. Generally, it is possible to interpret stress values following these guidelines (<span class="citation" data-cites="dexterTroubleStressFlexible2018">Dexter et al. (<a href="references.html#ref-dexterTroubleStressFlexible2018" role="doc-biblioref">2018</a>)</span>):</p>
 <div id="tbl-stress-nmds" class="anchored">
 <table class="table">
-<caption>Table 4.1: Ordination stress for the interpretation of nMDS</caption>
+<caption>Table 4.2: Ordination stress for the interpretation of nMDS</caption>
 <thead>
 <tr class="header">
 <th>Interpretation</th>
@@ -655,6 +692,9 @@ Boscato, P., Fronza, V., Salvadori, F., 2007. Proposta di un database per i repe
 <div id="ref-cardarelliDeepVariationalConvolutional2022" class="csl-entry" role="doc-biblioentry">
 Cardarelli, L., 2022. <a href="https://doi.org/10.1016/j.jas.2022.105640">A deep variational convolutional <span>Autoencoder</span> for unsupervised features extraction of ceramic profiles. <span>A</span> case study from central <span>Italy</span></a>. Journal of Archaeological Science 144, 105640.
 </div>
+<div id="ref-cuffneyAquaticEcosystemsIndicators2014" class="csl-entry" role="doc-biblioentry">
+Cuffney, T.F., Kennen, J.G., Waite, I.R., 2014. <a href="https://doi.org/10.1016/B978-0-12-382182-9.00008-6">Aquatic <span>Ecosystems</span> as <span>Indicators</span> of <span>Status</span> and <span>Trends</span> in <span>Water Quality</span></a>. In: Comprehensive <span>Water Quality</span> and <span>Purification</span>. <span>Elsevier</span>, pp. 122–156.
+</div>
 <div id="ref-dexterTroubleStressFlexible2018" class="csl-entry" role="doc-biblioentry">
 Dexter, E., Rollwagen-Bollens, G., Bollens, S.M., 2018. <a href="https://doi.org/10.1002/lom3.10257">The trouble with stress: <span>A</span> flexible method for the evaluation of nonmetric multidimensional scaling: <span><em>The</em></span><span> <em>Trouble with Stress</em></span></a>. Limnology and Oceanography: Methods 16, 434–443.
 </div>
@@ -667,8 +707,14 @@ Fletcher, M., Lock, G.R., 2005. Digging numbers: Elementary statistics for archa
 <div id="ref-gattigliaDatabasesArchaeology2018" class="csl-entry" role="doc-biblioentry">
 Gattiglia, G., 2018. <a href="https://doi.org/10.1002/9781119188230.saseas0147">Databases in <span>Archaeology</span></a>. In: López Varela, S.L. (Ed.), The <span>Encyclopedia</span> of <span>Archaeological Sciences</span>. <span>John Wiley &amp; Sons, Inc.</span>, <span>Hoboken, NJ, USA</span>, pp. 1–4.
 </div>
+<div id="ref-gauchMultivariateAnalysisCommunity1982" class="csl-entry" role="doc-biblioentry">
+Gauch, H.G., 1982. <a href="https://doi.org/10.1017/CBO9780511623332">Multivariate <span>Analysis</span> in <span>Community Ecology</span></a>, First. ed. <span>Cambridge University Press</span>.
+</div>
 <div id="ref-goldbergerNeighbourhoodComponentsAnalysis2005" class="csl-entry" role="doc-biblioentry">
 Goldberger, J., Hinton, G.E., Roweis, S., Salakhutdinov, R.R., 2005. Neighbourhood components analysis. In: Saul, L.K., Weiss, Y., Bottou, L. (Eds.), Advances in <span>Neural Information Processing Systems</span>. <span>Bradford Books</span>, <span>Vancouver</span>, pp. 513–520.
+</div>
+<div id="ref-grebnerForestDynamics2013" class="csl-entry" role="doc-biblioentry">
+Grebner, D.L., Bettinger, P., Siry, J.P., 2013. <a href="https://doi.org/10.1016/B978-0-12-386901-2.00010-5">Forest <span>Dynamics</span></a>. In: Introduction to <span>Forestry</span> and <span>Natural Resources</span>. <span>Elsevier</span>, pp. 243–254.
 </div>
 <div id="ref-harrisArrayProgrammingNumPy2020" class="csl-entry" role="doc-biblioentry">
 Harris, C.R., Millman, K.J., van der Walt, S.J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, E., Taylor, J., Berg, S., Smith, N.J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M.H., Brett, M., Haldane, A., del Río, J.F., Wiebe, M., Peterson, P., Gérard-Marchant, P., Sheppard, K., Reddy, T., Weckesser, W., Abbasi, H., Gohlke, C., Oliphant, T.E., 2020. <a href="https://doi.org/10.1038/s41586-020-2649-2">Array programming with <span>NumPy</span></a>. Nature 585, 357–362.
@@ -712,6 +758,12 @@ Richards, J.D., 2021. Archiving <span>Archaeological Data</span> in the <span>Un
 <div id="ref-rizzoStatisticalComputing2019" class="csl-entry" role="doc-biblioentry">
 Rizzo, M.L., 2019. <a href="https://doi.org/10.1201/9780429192760">Statistical <span>Computing</span> with <span>R</span></a>, Second. ed. <span>Chapman and Hall/CRC</span>, <span>New York</span>.
 </div>
+<div id="ref-shennanQuantifyingArchaeology1997" class="csl-entry" role="doc-biblioentry">
+Shennan, S., 1997. Quantifying archaeology, 2nd ed. ed. <span>Edinburgh University Press</span>, <span>Edinburgh</span>.
+</div>
+<div id="ref-symsOrdination2008" class="csl-entry" role="doc-biblioentry">
+Syms, C., 2008. <a href="https://doi.org/10.1016/B978-008045405-4.00524-3">Ordination</a>. In: Encyclopedia of <span>Ecology</span>. <span>Elsevier</span>, pp. 2572–2581.
+</div>
 <div id="ref-virtanenSciPyFundamentalAlgorithms2020" class="csl-entry" role="doc-biblioentry">
 Virtanen, P., Gommers, R., Oliphant, T.E., Haberland, M., Reddy, T., Cournapeau, D., Burovski, E., Peterson, P., Weckesser, W., Bright, J., 2020. <span>SciPy</span> 1.0: Fundamental algorithms for scientific computing in <span>Python</span>. Nature methods 17, 261–272.
 </div>
@@ -739,6 +791,8 @@ Xie, Y., 2021. <a href="https://yihui.org/knitr/">Knitr: A general-purpose packa
 <li id="fn2" role="doc-endnote"><p>Updated on August 16th, 2022.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3" role="doc-endnote"><p>See <a href="#sec-periodization"><span>Section&nbsp;4.5</span></a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>It is important not to confuse correspondence analysis (CA) with canonical correspondence analysis (CCA), which is a direct gradient analysis method.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>remember to change this<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
