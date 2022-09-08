@@ -556,13 +556,71 @@ Eigenvalues and eigenvectors
 </section>
 <section id="ca" class="level4" data-number="4.6.2.2">
 <h4 data-number="4.6.2.2" class="anchored" data-anchor-id="ca"><span class="header-section-number">4.6.2.2</span> CA</h4>
-<p><strong>Correspondence analysis</strong> (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. In some ways, correspondence analysis is similar to PCA—it is an indirect gradient analysis<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> used to summarize categorical variables. However, instead of maximizing the variance, CA maximizes the degree of correspondence between rows and columns (<em>i.e.</em> observations and variables). The matrix is obtained from the chi-square distance between the profiles of rows and columns (a modification of the chi-square statistic for hypothesis testing). A more technical breakdown of this technique is beyond the scope of this text, and readers can refer to <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021</a>)</span>. As in PCA, the analysis generates eigenvalues, row coordinates (scores) and column coordinates (loadings). It is important to state that eigenvalues in CA do not refer to the ‘variation explained’ as in PCA, but to the correlation coefficient between rows and columns (<em>i.e.</em> how well does the row correspond to the column?).</p>
-<p>This technique is appropriate for exploring non-negative data (<em>e.g.</em> relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship (<span class="citation" data-cites="baxterExploratoryMultivariateAnalysis2015">Baxter (<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">2015</a>)</span> [p.&nbsp;101]). On a practical level, CA can be used to compare assemblages from different sites, to answer questions such as “Which sites do certain finds correspond to?” or “Which sites are more similar according to their assemblages?”. This technique is extremely useful for archaeologists, even though its reception by the archaeological community has been slow. CA has been used by archaeologists since the mid-70s in France, although the technique was only introduced to the English-speaking audience in the 80s with a paper by <span class="citation" data-cites="bolvikenCorrespondenceAnalysisAlternative1982">Bølviken et al. (<a href="references.html#ref-bolvikenCorrespondenceAnalysisAlternative1982" role="doc-biblioref">1982</a>)</span>, and became more popular in the 90s <span class="citation" data-cites="baxterCorrespondenceAnalysisArchaeologists2010 baxterExploratoryMultivariateAnalysis2015">(<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">Baxter, 2015</a>; <a href="references.html#ref-baxterCorrespondenceAnalysisArchaeologists2010" role="doc-biblioref">Baxter and Cool, 2010</a>)</span>.</p>
-<p>One of the biggest drawbacks of CA is its sensitivity to outliers (numbers that are much bigger or much smaller when compared to the others in the table). Some of the samples used in this project suffer from this problem, and the causes of outliers will be discussed in more detail later in this text (<strong>Where?</strong>). For CA, outliers represent a major problem as their presence will determine the scale of the biplot and will cause the other points to cluster more together, perhaps obscuring some of the patterns we are interested in finding. The sensible thing to do would then be to remove these outliers from our table and to study them separately. A practical example of an outlier are rare species, which should not be studied with CA (unless the table contains only rare species, with comparable values). As <span class="citation" data-cites="baxterCorrespondenceAnalysisArchaeologists2010">Baxter and Cool (<a href="references.html#ref-baxterCorrespondenceAnalysisArchaeologists2010" role="doc-biblioref">2010, p. 225</a>)</span> note, we should not regard this omission as “subjective and unjustified data manipulation”—there are other ways to visualise outliers along with the rest of our data, for instance boxplots.</p>
-<p>In <code>R</code>, common implementations of correspondence analysis are included in the packages <code>MASS</code>, <code>FactoMineR</code> and <code>vegan</code>. CA has been used several times in this research using the function <code>cca()</code> from the <code>vegan</code> package, which was applied to the presence/absence archaeobotanical dataset (**add where else**<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>). The function <code>cca()</code> performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.</p>
+<p><strong>Correspondence analysis</strong> (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. In some ways, correspondence analysis is similar to PCA, being an indirect gradient analysis<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> used to summarize categorical variables. As opposed to maximising the variance, CA maximises the degree of correspondence between rows and columns (<em>i.e.</em> observations and variables). The distance matrix used to perform the analysis is obtained from the chi-square distance between the rows and columns profiles. This is a modification of the chi-square statistic for hypothesis testing (<span class="citation" data-cites="tallaridaChiSquareTest1987">Tallarida and Murray (<a href="references.html#ref-tallaridaChiSquareTest1987" role="doc-biblioref">1987</a>)</span>). An in-depth technical and methodological breakdown of correspondence analysis is beyond the scope of this text, and readers can refer to <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021</a>)</span>. As in PCA, the analysis generates—eigenvalues, row coordinates (scores), and column coordinates (loadings). An important distinction must be made with PCA with regard to eigenvalues. In PCA, eigenvalues refer to the ‘variation explained’. Conversely, in CA eigenvalues represent the <strong>inertia</strong>, the correlation coefficient between rows and columns (<em>i.e.</em> how well does the row correspond to the column?).</p>
+<p>Correspondence analysis is appropriate for exploring non-negative data (<em>e.g.</em> relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship (<span class="citation" data-cites="baxterExploratoryMultivariateAnalysis2015">Baxter (<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">2015</a>)</span> [p.&nbsp;101]). On a practical level, CA can be used to compare assemblages from different sites, to answer questions such as “which sites do certain finds correspond to?” or “which sites are more similar according to their assemblages?”. This technique is extremely useful for archaeologists, even though its reception by the archaeological community has been slow. CA has been used by archaeologists since the mid-70s in France, although the technique was only introduced to the English-speaking audience in the 80s with a paper by <span class="citation" data-cites="bolvikenCorrespondenceAnalysisAlternative1982">Bølviken et al. (<a href="references.html#ref-bolvikenCorrespondenceAnalysisAlternative1982" role="doc-biblioref">1982</a>)</span>, and became more popular in the 90s <span class="citation" data-cites="baxterCorrespondenceAnalysisArchaeologists2010 baxterExploratoryMultivariateAnalysis2015">(<a href="references.html#ref-baxterExploratoryMultivariateAnalysis2015" role="doc-biblioref">Baxter, 2015</a>; <a href="references.html#ref-baxterCorrespondenceAnalysisArchaeologists2010" role="doc-biblioref">Baxter and Cool, 2010</a>)</span>. One of the biggest drawbacks of CA is its sensitivity to outliers (values that are either much bigger or much smaller when compared to the others in the table). Some of the samples used in this project suffer from this problem, and the causes of outliers will be discussed in more detail later in this text<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. The algorithm tends to place larger abundances towards the centre of the diagonal, and small or zero values away from the diagonal—it is indeed a bad idea to use CA with tables containing outliers. Outliers represent a major problem in CA, as their presence will determine the scale of the biplot, thus clustering the other points closer together, and perhaps obscuring some of the patterns we are interested in finding. In this eventuality, these points might be poorly ordinated. A possible way to overcome this issue would be to check whether the other dimensions are more appropriate for the representation, even though the sensible thing to do would be to remove these outliers from the original contingency table and to study them separately. Practical examples of outliers are rare species, for instance rows with a few non-zero values. Rare species should not be studied with CA, unless the table only contains rare species, with comparable values. As <span class="citation" data-cites="baxterCorrespondenceAnalysisArchaeologists2010">Baxter and Cool (<a href="references.html#ref-baxterCorrespondenceAnalysisArchaeologists2010" role="doc-biblioref">2010, p. 225</a>)</span> note, we should not regard this omission as “subjective and unjustified data manipulation”—there are other ways to visualise outliers along with the rest of our data, for instance boxplots.</p>
+<p>In <code>R</code>, common implementations of correspondence analysis are included in the packages <code>MASS</code>, <code>FactoMineR</code> and <code>vegan</code>. CA has been used several times in this research using the function <code>cca()</code> from the <code>vegan</code> package, which was applied to the presence/absence archaeobotanical dataset (**add where else**<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>). The function <code>cca()</code> performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.</p>
 <section id="interpreting-a-ca" class="level5" data-number="4.6.2.2.1">
 <h5 data-number="4.6.2.2.1" class="anchored" data-anchor-id="interpreting-a-ca"><span class="header-section-number">4.6.2.2.1</span> Interpreting a CA</h5>
-<p>CA can also visualised through biplots as for PCA.</p>
+<p>Correspondence analyses are also visualised through biplots. As in PCA, the horizontal axis represents most of the variance, and the vertical axis is the second most representative dimension. A classic example for understanding and interpreting CA comes from a survey on the smoking habits of 193 employees in a fictitious company (<a href="#tbl-ca-smoking-example">Table&nbsp;<span>4.2</span></a>). The staff members are categorised according to their position in the company (rows) and smoking habits (columns).</p>
+<div id="tbl-ca-smoking-example" class="anchored">
+<table class="table">
+<caption>Table 4.2: Smoking habits of staff groups, example after <span class="citation" data-cites="greenacreTheoryApplicationsCorrespondence1984">Greenacre (<a href="references.html#ref-greenacreTheoryApplicationsCorrespondence1984" role="doc-biblioref">1984</a>)</span>.</caption>
+<thead>
+<tr class="header">
+<th>Staff</th>
+<th>None</th>
+<th>Light</th>
+<th>Medium</th>
+<th>Heavy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Senior Manager (SM)</td>
+<td>4</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Junior Manager (JM)</td>
+<td>4</td>
+<td>3</td>
+<td>7</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>Senior Employee (SE)</td>
+<td>25</td>
+<td>10</td>
+<td>12</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>Junior Employee (JE)</td>
+<td>18</td>
+<td>24</td>
+<td>33</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>Secretaries (SC)</td>
+<td>10</td>
+<td>6</td>
+<td>7</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The technical details of how the algorithm computes scores for this dataset are described in <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021, pp. 65–72</a>)</span> After computing the CA, it is possible to visualise the biplot. In FIGURE, the x-axis explains 87.8% of the variance, and the y-axis 11.8%. Together, they explain 99.6% of the total variance in the dataset, an optimal representation of the dataset. A scree plot can be helpful to evaluate the number of dimensions to choose, representing eigenvalues (or variances) from the largest to the smallest. The number of dimensions should be chosen by looking at where the scree plot starts to bend and the eigenvalues start to become small. The biplot contains points both for rows and columns. As the distances between points are chi-squared distances, for the interpretation of the results row points closer together are more similar, and the same logic applies to column points. However, one should be careful when interpreting distances between row and column points. The way to interpret their correlation is similar to the PCA:</p>
+<ul>
+<li><p>If angle formed by the lines connecting the row and column labels to the origin is small, the association is strong.</p></li>
+<li><p>If the angle is 90°, there is no association.</p></li>
+<li><p>If the angle is near 180°, the association is negative.</p></li>
+</ul>
+<p>[Insert figure of the angle]</p>
+<p>In addition to what already mentioned, it is important to remember that points away from the origin and the edges are the most informative, as they might represent a better ordination.</p>
 </section>
 </section>
 <section id="nmds" class="level4" data-number="4.6.2.3">
@@ -582,7 +640,7 @@ Eigenvalues and eigenvectors
 <p>The Shepard plot displays the ordination distance against the observed distance. Ideally, the higher the points should fall on a monotonic line, where an increased observed distance is related to an increased ordination distance. Moreover, the higher the number of dimensions, the lower the stress value. If interested in choosing the appropriate number of dimensions, it is possible to use a scree plot which shows the number of dimensions against the stress level. Generally, it is possible to interpret stress values following these guidelines (<span class="citation" data-cites="dexterTroubleStressFlexible2018">Dexter et al. (<a href="references.html#ref-dexterTroubleStressFlexible2018" role="doc-biblioref">2018</a>)</span>):</p>
 <div id="tbl-stress-nmds" class="anchored">
 <table class="table">
-<caption>Table 4.2: Ordination stress for the interpretation of nMDS</caption>
+<caption>Table 4.3: Ordination stress for the interpretation of nMDS</caption>
 <thead>
 <tr class="header">
 <th>Interpretation</th>
@@ -772,6 +830,9 @@ Grebner, D.L., Bettinger, P., Siry, J.P., 2013. <a href="https://doi.org/10.1016
 <div id="ref-greenacreCorrespondenceAnalysisPractice2021" class="csl-entry" role="doc-biblioentry">
 Greenacre, M., 2021. Correspondence <span>Analysis</span> in <span>Practice</span>, Interdisciplinary <span>Statistics Series</span>. <span>Chapman and Hall/CRC</span>, <span>Boca Raton</span>.
 </div>
+<div id="ref-greenacreTheoryApplicationsCorrespondence1984" class="csl-entry" role="doc-biblioentry">
+Greenacre, M.J., 1984. Theory and applications of correspondence analysis. <span>Academic Press</span>, <span>London ; Orlando, Fla</span>.
+</div>
 <div id="ref-harrisArrayProgrammingNumPy2020" class="csl-entry" role="doc-biblioentry">
 Harris, C.R., Millman, K.J., van der Walt, S.J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, E., Taylor, J., Berg, S., Smith, N.J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M.H., Brett, M., Haldane, A., del Río, J.F., Wiebe, M., Peterson, P., Gérard-Marchant, P., Sheppard, K., Reddy, T., Weckesser, W., Abbasi, H., Gohlke, C., Oliphant, T.E., 2020. <a href="https://doi.org/10.1038/s41586-020-2649-2">Array programming with <span>NumPy</span></a>. Nature 585, 357–362.
 </div>
@@ -820,6 +881,9 @@ Shennan, S., 1997. Quantifying archaeology, 2nd ed. ed. <span>Edinburgh Universi
 <div id="ref-symsOrdination2008" class="csl-entry" role="doc-biblioentry">
 Syms, C., 2008. <a href="https://doi.org/10.1016/B978-008045405-4.00524-3">Ordination</a>. In: Encyclopedia of <span>Ecology</span>. <span>Elsevier</span>, pp. 2572–2581.
 </div>
+<div id="ref-tallaridaChiSquareTest1987" class="csl-entry" role="doc-biblioentry">
+Tallarida, R.J., Murray, R.B., 1987. <a href="https://doi.org/10.1007/978-1-4612-4974-0_43">Chi-<span>Square Test</span></a>. In: Tallarida, R.J., Murray, R.B. (Eds.), Manual of <span>Pharmacologic Calculations</span>: <span>With Computer Programs</span>. <span>Springer</span>, <span>New York, NY</span>, pp. 140–142.
+</div>
 <div id="ref-virtanenSciPyFundamentalAlgorithms2020" class="csl-entry" role="doc-biblioentry">
 Virtanen, P., Gommers, R., Oliphant, T.E., Haberland, M., Reddy, T., Cournapeau, D., Burovski, E., Peterson, P., Weckesser, W., Bright, J., 2020. <span>SciPy</span> 1.0: Fundamental algorithms for scientific computing in <span>Python</span>. Nature methods 17, 261–272.
 </div>
@@ -848,7 +912,8 @@ Xie, Y., 2021. <a href="https://yihui.org/knitr/">Knitr: A general-purpose packa
 <li id="fn3" role="doc-endnote"><p>See <a href="#sec-periodization"><span>Section&nbsp;4.5</span></a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5" role="doc-endnote"><p>It is important not to confuse correspondence analysis (CA) with canonical correspondence analysis (CCA), which is a direct gradient analysis method.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6" role="doc-endnote"><p>remember to change this<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Insert here link to BOT bias and ZOO bias<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>remember to change this<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
