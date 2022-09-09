@@ -439,7 +439,7 @@ Section under construction
 <li><code>zooarch_tables</code> (custom)</li>
 <li><code>Bot_mean_table</code> (custom)</li>
 <li><code>Bot_mean_fun</code> (custom)</li>
-<li><code>weighted.median</code> (from the package <code>spatstat</code>)</li>
+<li><code>weightedMedian</code> (from the package <code>matrixStats</code>)</li>
 </ul>
 <p>The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.</p>
 </section>
@@ -613,14 +613,21 @@ Eigenvalues and eigenvectors
 </tbody>
 </table>
 </div>
-<p>The technical details of how the algorithm computes scores for this dataset are described in <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021, pp. 65–72</a>)</span> After computing the CA, it is possible to visualise the biplot. In FIGURE, the x-axis explains 87.8% of the variance, and the y-axis 11.8%. Together, they explain 99.6% of the total variance in the dataset, an optimal representation of the dataset. A scree plot can be helpful to evaluate the number of dimensions to choose, representing eigenvalues (or variances) from the largest to the smallest. The number of dimensions should be chosen by looking at where the scree plot starts to bend and the eigenvalues start to become small. The biplot contains points both for rows and columns. As the distances between points are chi-squared distances, for the interpretation of the results row points closer together are more similar, and the same logic applies to column points. However, one should be careful when interpreting distances between row and column points. The way to interpret their correlation is similar to the PCA:</p>
+<p>The technical details of how the algorithm computes scores for this dataset are described in <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021, pp. 65–72</a>)</span>. After computing the CA, it is possible to visualise the biplot. In <a href="#fig-ca-example-smokers">Figure&nbsp;<span>4.5</span></a>, the x-axis explains 87.8% of the variance, and the y-axis 11.8%. Together, they explain 99.6% of the total variance in the dataset, an optimal representation of the dataset. Much of the variance is explained by the first component (x-axis), and the horizontal distance between points is thus much more important than the vertical distance (on the y-axis).</p>
+<div id="fig-ca-example-smokers" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/Greenacre%202007%20figure%20p%2067.png" class="img-fluid figure-img" width="400"></p>
+<p></p><figcaption class="figure-caption">Figure 4.5: Correspondence analysis performed on <a href="#tbl-ca-smoking-example">Table&nbsp;<span>4.2</span></a>, image after <span class="citation" data-cites="greenacreCorrespondenceAnalysisPractice2021">Greenacre (<a href="references.html#ref-greenacreCorrespondenceAnalysisPractice2021" role="doc-biblioref">2021, p. 67</a>)</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>A scree plot can be helpful to evaluate the number of dimensions to choose, representing eigenvalues (or variances) from the largest to the smallest. The number of dimensions should be chosen by looking at where the scree plot starts to bend and the eigenvalues start to become small. An example of a scree plot has already been provided in <a href="#fig-screeplot-pca-carlson2017">Figure&nbsp;<span>4.3</span></a>. The biplot contains points both for rows and columns. As the distances between points are chi-squared distances, for the interpretation of the results row points closer together are more similar, and the same logic applies to column points. However, one should be careful when interpreting distances between row and column points. The way to interpret their correlation is similar to the PCA:</p>
 <ul>
 <li><p>If angle formed by the lines connecting the row and column labels to the origin is small, the association is strong.</p></li>
 <li><p>If the angle is 90°, there is no association.</p></li>
 <li><p>If the angle is near 180°, the association is negative.</p></li>
 </ul>
-<p>[Insert figure of the angle]</p>
 <p>In addition to what already mentioned, it is important to remember that points away from the origin and the edges are the most informative, as they might represent a better ordination.</p>
+<p>Returning to the interpretation of the CA in <a href="#fig-ca-example-smokers">Figure&nbsp;<span>4.5</span></a>, from the example concerning the smoking habits of the staff members in a company, it is easy to see how the smoking categories (on the left) are separated from the non-smokers (on the right). The groups that display the biggest separation are Junior Employee-Junior Manager, against Senior Employee. Secretaries are closer to Senior Employees. On the vertical axis, it is possible to see how Junior Employees are relatively more light smokers when compared to Junior Managers.</p>
 </section>
 </section>
 <section id="nmds" class="level4" data-number="4.6.2.3">
@@ -630,11 +637,11 @@ Eigenvalues and eigenvectors
 <li><p>A non-parametric monotonic relationship between the items in the dissimilarity matrix and the Euclidean distances.</p></li>
 <li><p>The location of items in the low-dimensional space.</p></li>
 </ul>
-<p>The goal of nMDS is to represent the pairwise dissimilarity between items in the matrix as closely as possible. For this reason, it is considered as a good technique for multivariate data visualisation. nMDS can be used on quantitative, qualitative and mixed data. For this project, it has been applied to a subset of the early medieval archaeobotanical dataset that included presence/absence values of cereals. The full breakdown of the process is reported in <a href="archaeobotany.html#sec-nMDS-Cereals"><span>Section&nbsp;5.4.2</span></a>. The <code>R</code> function <a href="https://rdrr.io/rforge/vegan/man/metaMDS.html"><code>metaMDS</code></a> from the package <code>vegan</code> allows users to select the distance metric most appropriate to their data (e.g.&nbsp;Bray-Curtis, Jaccard, etc.). As nMDS is an iterative approach, meaning that the the computations are run until the best solution is found, it can be quite computationally demanding for larger datasets. Although the nMDS algorithm tries to minimize the ordination stress, it is a good practice to compute the <strong>ordination stress</strong> value to judge the reliability of the solution found (goodness-of-fit). Ordination stress indicates how much distorted are the fitted data when compared to the original observed samples. Stress values can also be visualised with the function <code>stressplot()</code> (<code>vegan</code> package), which produces a Shepard stressplot (<a href="#fig-shepard-plot-nmds">Figure&nbsp;<span>4.5</span></a>).</p>
+<p>The goal of nMDS is to represent the pairwise dissimilarity between items in the matrix as closely as possible. For this reason, it is considered as a good technique for multivariate data visualisation. nMDS can be used on quantitative, qualitative and mixed data. For this project, it has been applied to a subset of the early medieval archaeobotanical dataset that included presence/absence values of cereals. The full breakdown of the process is reported in <a href="archaeobotany.html#sec-nMDS-Cereals"><span>Section&nbsp;5.4.2</span></a>. The <code>R</code> function <a href="https://rdrr.io/rforge/vegan/man/metaMDS.html"><code>metaMDS</code></a> from the package <code>vegan</code> allows users to select the distance metric most appropriate to their data (e.g.&nbsp;Bray-Curtis, Jaccard, etc.). As nMDS is an iterative approach, meaning that the the computations are run until the best solution is found, it can be quite computationally demanding for larger datasets. Although the nMDS algorithm tries to minimize the ordination stress, it is a good practice to compute the <strong>ordination stress</strong> value to judge the reliability of the solution found (goodness-of-fit). Ordination stress indicates how much distorted are the fitted data when compared to the original observed samples. Stress values can also be visualised with the function <code>stressplot()</code> (<code>vegan</code> package), which produces a Shepard stressplot (<a href="#fig-shepard-plot-nmds">Figure&nbsp;<span>4.6</span></a>).</p>
 <div id="fig-shepard-plot-nmds" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/ShepardPlot.png" class="img-fluid figure-img" width="600"></p>
-<p></p><figcaption class="figure-caption">Figure 4.5: A Shepard plot, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure 4.6: A Shepard plot, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
 </figure>
 </div>
 <p>The Shepard plot displays the ordination distance against the observed distance. Ideally, the higher the points should fall on a monotonic line, where an increased observed distance is related to an increased ordination distance. Moreover, the higher the number of dimensions, the lower the stress value. If interested in choosing the appropriate number of dimensions, it is possible to use a scree plot which shows the number of dimensions against the stress level. Generally, it is possible to interpret stress values following these guidelines (<span class="citation" data-cites="dexterTroubleStressFlexible2018">Dexter et al. (<a href="references.html#ref-dexterTroubleStressFlexible2018" role="doc-biblioref">2018</a>)</span>):</p>
@@ -667,11 +674,11 @@ Eigenvalues and eigenvectors
 </tbody>
 </table>
 </div>
-<p>If the solution has produced a good stress level for the number of dimensions required, it is possible to plot the nMDS and interpret the results. Points that plot closer together are more similar, while points that are distant one to each other are more different. The nMDS plot can also be useful in recognizing groups (points grouping together and plotting further from other points). An example is provided in <a href="#fig-nmds-rpubs">Figure&nbsp;<span>4.6</span></a>.</p>
+<p>If the solution has produced a good stress level for the number of dimensions required, it is possible to plot the nMDS and interpret the results. Points that plot closer together are more similar, while points that are distant one to each other are more different. The nMDS plot can also be useful in recognizing groups (points grouping together and plotting further from other points). An example is provided in <a href="#fig-nmds-rpubs">Figure&nbsp;<span>4.7</span></a>.</p>
 <div id="fig-nmds-rpubs" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/NMDS_RPub.png" class="img-fluid figure-img" width="600"></p>
-<p></p><figcaption class="figure-caption">Figure 4.6: A nMDS plot with clusters, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure 4.7: A nMDS plot with clusters, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
 </figure>
 </div>
 </section>
