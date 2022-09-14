@@ -243,7 +243,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology">Zooarchaeology</a>
   <ul class="collapse">
-  <li><a href="#sec-fun-Medians-Chrono_Zoo" id="toc-sec-fun-Medians-Chrono_Zoo" class="nav-link" data-scroll-target="#sec-fun-Medians-Chrono_Zoo">Medians_Chrono_Zoo()</a></li>
+  <li><a href="#sec-fun-Medians-Chrono-Zoo" id="toc-sec-fun-Medians-Chrono-Zoo" class="nav-link" data-scroll-target="#sec-fun-Medians-Chrono-Zoo">Medians_Chrono_Zoo()</a></li>
+  <li><a href="#sec-fun-zooarch-tables-general" id="toc-sec-fun-zooarch-tables-general" class="nav-link" data-scroll-target="#sec-fun-zooarch-tables-general">zooarch_tables_general()</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -472,8 +473,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="zooarchaeology" class="level2">
 <h2 class="anchored" data-anchor-id="zooarchaeology">Zooarchaeology</h2>
-<section id="sec-fun-Medians-Chrono_Zoo" class="level3">
-<h3 class="anchored" data-anchor-id="sec-fun-Medians-Chrono_Zoo">Medians_Chrono_Zoo()</h3>
+<section id="sec-fun-Medians-Chrono-Zoo" class="level3">
+<h3 class="anchored" data-anchor-id="sec-fun-Medians-Chrono-Zoo">Medians_Chrono_Zoo()</h3>
+</section>
+<section id="sec-fun-zooarch-tables-general" class="level3">
+<h3 class="anchored" data-anchor-id="sec-fun-zooarch-tables-general">zooarch_tables_general()</h3>
+<p>This function has one argument: - a dataframe of the exported condensed table of faunal remains from the database (<code>Zooarch_Condensed.csv</code>). It is a table of animals exported with their common English name, columns with context information. Some of the columns are the sum of different columns, with the <code>SQL</code> function <code>COALESCE()</code>. For instance, the column <code>Edible Wild Mammals</code> is the sum of values for red deer, roe deer, hare, wild boar.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>zooarch_tables_general <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(matrixStats)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The total of each row is needed to calculate the relative proportions</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Calculation starts from column 15 because it is the first column </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># with numerical data. </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the table exported from the database changes, this number must be adjusted.</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  zoo_subset <span class="ot">&lt;-</span> x[,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(x))]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  Rel_prop_with_sites <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], Rel_Prop)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  Rel_prop_xy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>], Rel_Prop)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">Rel_Prop_exp =</span> Rel_prop_with_sites, <span class="co">#Rel Prop by century</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">Rel_Prop_exp_XY =</span> Rel_prop_xy, <span class="co"># Rel props with coordinates</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">Means =</span> <span class="fu">colMeans</span>(Rel_Prop), <span class="co">#Column means, by century</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">Medians =</span> <span class="fu">apply</span>(Rel_Prop, <span class="dv">2</span>, weightedMedian, <span class="at">w=</span>x[,<span class="dv">7</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>), </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">RawCounts =</span> zoo_subset <span class="co">#Original table, by century</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 </section>
