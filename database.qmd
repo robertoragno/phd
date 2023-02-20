@@ -1,0 +1,477 @@
+# The database {#sec-database style="text-align:justify;"}
+
+::: callout-important
+## Page under construction
+:::
+
+## Introduction {style="text-align:justify;"}
+
+Databases are increasingly being used in archaeology to archive and collect data digitally. There are mainly two types of databases---relational and non-relational. A **relational database** is more appropriate for well-defined data structures which can be linked through a mutual attribute. It is built and maintained with Structured Query Language (SQL), which allows the user to interrogate the database through queries [@gattigliaDatabasesArchaeology2018]. A SQL database consists of several tables containing information in columns (variables) and rows (entries). Each row is defined by an unique key. Examples of relational database management systems include---MySQL, PostgreSQL, MariaDB, Microsoft SQL Server and Oracle Database. A **non-relational database** (NoSQL) is advantageous in the case of unstructured data, as data is archived as a single document rather than in a table. This structure allows much more flexibility, although NoSQL databases can be harder to use by non-specialists. Among the NoSQL database management systems, MongoDB is the most widely used.
+
+## Databases in archaeology {style="text-align:justify;"}
+
+Databases are used in archaeology primarily for two reasons---data management and data sharing. Most excavations are now working with databases, where the information concerning each stratigraphic unit and finds is recorded. Databases can also be linked and interact with Geographical Information Systems (GIS), that allow researchers to work with a spatial component. In many cases, this data remains private, even after the publication of the excavation results, although increasingly more teams are also making their data available to the public. The growing popularity of open data has also created the need for standardisation. Since the 1970s, researchers started working on *thesauri* [@figueraDatabaseManagementDati2018], dictionaries and guides for the correct archival of archaeological information (e.g. pottery classes, context types, chronologies, etc.). A shared system of naming practices is essential for sharing, integrating and analysing data. Recently, more standardised databases and repositories are being created and openly published:
+
+-   [Archaeological Data Service](https://archaeologydataservice.ac.uk) (ADS). A non-profit organisation, based at the University of York. The website provides a large repository of downloadable archaeological data (mostly from the British isles) [@richardsArchivingArchaeologicalData2021].
+
+-   [ARIADNEplus](https://ariadne-infrastructure.eu), a Horizon 2020 project funded by the European Commission aiming to build an integrated european archaeological data structure. Over 2 million datasets are part of this project, with the original data still managed by the original creators [@niccolucciARIADNEplusAvventuraContinua2020].
+
+Most of the archaeological databases are based on SQL, as the visual relationships between different data structures are easier to understand.
+
+## Creating an Environmental Archaeology database {#sec-environm-db style="text-align:justify"}
+
+An integrated database with environmental archaeology data is still missing in Italy. A first step towards botanical data digitalisation has been the [BRAIN project](https://brainplants.successoterra.net) (Botanical Records of Archaeobotany Italian Network), a census of the Italian excavations that reported archaeobotanical data [@mercuriPollenMacroremainsHolocene2015]. The website, although not providing raw data, has been useful to the bibliographical research for this project. For what concerns faunal remains, a database is missing, although a pilot project was started at the University of Siena by @boscatoPropostaDiDatabase2007. The database was created using FileMaker Pro and was likely never published.
+
+For the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses [MariaDB](https://mariadb.com), a fast and stable fork of MySQL.
+
+The database was structured with the creation of 21 tables. The table `site_list` is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the macroperiod[^database-1] and by the centuries, with two columns: `startcentury` and `endcentury`. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).
+
+[^database-1]: See @sec-periodization
+
+| Context                           | Sample #ID |
+|-----------------------------------|------------|
+| Imola, villa Clelia, 6th c.       | 15         |
+| Imola, villa Clelia, 10th-11th c. | 16         |
+
+Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID[^database-2]. In addition to the reference to the samples table, the table `site_list` also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The samples are organized in three tables, depending on the type of remain that has to be recorded in the database:
+
+[^database-2]: If the site is very large and the samples were numerous (e.g. Pompeii, Rome), the sites were recorded with different IDs.
+
+-   `plant_remains`
+
+-   `pollen_remains`
+
+-   `faunal_remains`
+
+Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The tables `faunal_chrono_weights` and `plants_chrono_weights` contain the automated calculation of the samples weights (refer to @sec-chrono-fuzziness). The @fig-db-schema shows the schema with the complete list of tables in the database.
+
+![Schema of the database, with the table `site_list` at the core.](images/DB_Structure.png){#fig-db-schema style="text-align:center;" fig-align="center"}
+
+The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1^st^ millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in @fig-publication-type-counts.
+
+```{r}
+#| echo: false
+
+library(ggplot2)
+
+pub_type_count <- data.frame(
+  Type=c("Book", "Book section", "Conference paper", 
+         "Email", "Journal", "Webpage", 
+         "Report", "PhD Thesis", "MA Thesis"),
+  Count=c(5,120,32,1,81,1,2,2,2)
+)
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-publication-type-counts
+#| fig-cap: "Count of the publication types in the database." 
+#| fig-width: 5
+#| fig-height: 4
+
+ggplot(pub_type_count, aes(x = Count, y = Type)) +
+  geom_bar(stat = "identity", width = .8, fill="steelblue") + 
+  geom_text(aes(label=Count), hjust=-0.6, size=3.5)+
+  theme_minimal()
+
+```
+
+## Database storing procedures {style="text-align:justify"}
+
+This sub chapter reports the breakthrough of all the tables stored inside the database. The database consists of several tables, most of which are linked together as typical for a relational database. Each table will be explained in detail, along with its fields, to allow future full reproducibility of the code.
+
+### General tables
+
+#### Site features
+
+The tables listed below were created to store information concerning site features including the site main attributes, geographical features, etc.
+
+##### Table: `site_list`
+
+The sites/contexts details have been stored in the master table `site_list`. This is the main table that contains the main details for each context and it is linked to other tables, that will be introduced below. The fields included in the table are:
+
+-   `site_id`: a unique id for the entry, incremental and auto generated.
+
+-   `site_code`: an integer of the type `int(11)` referring to the site where the sample has been collected. If a site was sampled in more locations, the site will be referred by this value, but the `site_id` will be different. Note that for larger sites (*e.g.* Pompeii, Ostia, etc.) for convenience the code was attributed to each house.
+
+-   `site_name`: text field of the type `varchar(255)`, containing the name of the site. Given that the table is structured around the chronology of each sample, if a site was sampled in different locations or more chronologies are provided, the site name will include these pieces of information (see @sec-environm-db for an example).
+
+-   `site_type`: foreign key (linked to the table `site_type`), referring to the typology of the site where the sample has been collected. See @sec-site-type-db for details of the input values.
+
+-   `site_altitude`: an integer value reporting the altitude (in meters) of the site.
+
+-   `geo_feature`: foreign key (linked to the table `geo_type`), referring to the geography of the site where the sample has been collected. See @sec-geo-type-db for details of the input values.
+
+-   `culture`: foreign key (linked to the table `culture_list`), referring to the culture of the site where the sample has been collected. See @sec-culture-list-db for details of the input values.
+
+-   `region_id`: foreign key (linked to the table `regions`), referring to the current Italian region in which the site is located. See @sec-regions-db for details of the input values.
+
+-   `x`: a numeric value of the type `double` indicating the longitude at which the site is located.
+
+-   `y`: a numeric value of the type `double` indicating the latitude at which the site is located.
+
+-   `available_data`: text field of the type `varchar(255)`, describing the type of data available for the site. The values that can be entered are: `bot` = Archaeobotanical remains, `zoo` = Zooarchaeological remains, `poll` = Pollen remains. If the codes are combined, more than one type of data is available for the same context and chronology.
+
+-   `startcentury`: an integer indicating the first century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `-2`.
+
+-   `endcentury`: an integer indicating the last century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `1`.
+
+-   `bot`: foreign key (linked to the table `plant_remains`). The input value is the `uuid` (unique id) of the archaeobotanical sample.
+
+-   `zoo`: foreign key (linked to the table `faunal_remains`). The input value is the `uuid` (unique id) of the zooarchaeological sample.
+
+-   `poll`: foreign key (linked to the table `pollen_remains`). The input value is the `uuid` (unique id) of the palynological sample.
+
+##### Table: `site_type` {#sec-site-type-db}
+
+The table `site_type` is linked to the `site_list` table and consists of two fields:
+
+-   `type_id`: a unique id for the site type, incremental and auto generated.
+
+-   `type_name`: text field describing the site type.
+
+| type_id | type_name            |
+|---------|----------------------|
+| 1       | Rural                |
+| 2       | Urban                |
+| 3       | Castrum              |
+| 4       | Castle               |
+| 5       | Necropolis           |
+| 6       | Rural site, *villa*  |
+| 7       | Religious            |
+| 8       | Rural site, *mansio* |
+| 9       | Religious, monastery |
+| 10      | Shipwreck            |
+| 11      | Urban, amphitheater  |
+
+: The table `site_type`. The values in the field `type_id` are inserted in the `site_list` table to indicate the site typology from which the sample has been collected. {#tbl-site-type-db}
+
+##### Table: `regions` {#sec-regions-db}
+
+The table `regions` is linked to the `site_list` table and consists of two fields:
+
+-   `region_id`: a unique id for the region, incremental and auto generated.
+
+-   `region_name`: text field describing the region name.
+
+| region_id | region_name                  |
+|-----------|------------------------------|
+| 1         | Abruzzo                      |
+| 2         | Basilicata                   |
+| 3         | Calabria                     |
+| 4         | Campania                     |
+| 5         | Emilia-Romagna               |
+| 6         | Friuli-Venezia Giulia        |
+| 7         | Lazio                        |
+| 8         | Liguria                      |
+| 9         | Lombardia                    |
+| 10        | Marche                       |
+| 11        | Molise                       |
+| 12        | Piemonte                     |
+| 13        | Puglia                       |
+| 14        | Toscana                      |
+| 15        | Trentino-Alto Adige/Südtirol |
+| 16        | Umbria                       |
+| 17        | Valle d'Aosta                |
+| 18        | Veneto                       |
+| 19        | San Marino                   |
+
+: The table `regions`. The values in the field `region_id` are inserted in the `site_list` table to indicate the current administrative region in which the site is located. Although outside the territorial boundaries of Italy, one of the sites in the database is located in the country of San Marino and the country has been added to this table. {#tbl-regions-db}
+
+##### Table: `culture_list` {#sec-culture-list-db}
+
+The table `culture_list` is linked to the `site_list` table and consists of two fields:
+
+-   `id_culture`: a unique id for the culture type, incremental and auto generated.
+
+-   `culture_type`: text field describing the culture of the site.
+
+| id_culture | culture_type   |
+|------------|----------------|
+| 1          | Roman          |
+| 2          | Late Roman     |
+| 3          | Lombard        |
+| 4          | Byzantine      |
+| 5          | Medieval       |
+| 6          | Goth           |
+| 7          | Early Medieval |
+| 8          | Frankish       |
+| 9          | Norman         |
+| 10         | Rethian        |
+
+: The table `culture_list`. The values in the field `id_culture` are inserted in the `site_list` table to indicate the culture of the context. Whenever there was uncertainty around the methodology and terminology for defining a 'culture,' chronological indications have been used as an alternative. {#tbl-cultures-db}
+
+##### Table: `geo_type` {#sec-geo-type-db}
+
+The table `geo_type` is linked to the `site_list` table and consists of two fields:
+
+-   `geo_id`: a unique id for the geography type, incremental and auto generated.
+
+-   `geo_name`: text field describing the site geography.
+
+| geo_id | geo_name |
+|--------|----------|
+| 1      | Plain    |
+| 2      | Coast    |
+| 3      | Hill     |
+| 4      | Mountain |
+| 5      | Hilltop  |
+
+: The table `geo_type`. The values in the field `geo_id` are inserted in the `site_list` table to indicate the geography of the site. {#tbl-geo-db}
+
+##### Table: `macroregions_list`
+
+The table `macroregions_list` consists of two fields:
+
+-   `id_macroreg`: a unique id for the macroregion, incremental and auto generated.
+
+-   `name_macroreg`: text field describing the macroregion.
+
+This table is not connected to the `site_list` table, as the macroregion is assigned automatically when querying the database.
+
+| id_macroreg | name_macroreg  |
+|-------------|----------------|
+| 1           | Northern Italy |
+| 2           | Central Italy  |
+| 3           | Southern Italy |
+
+: The table `macroregions_list`. The values in the field `id_macroreg` are inserted in the `macroregions_join` table to assign each region to a macroregion. {#tbl-geo-db}
+
+##### Table: `macroregions_join`
+
+The table macroregions_join is a joining table of the tables regions and macroregions_list. It consists of two fields:
+
+-   `id_macroregion`: foreign key linked to the table `macroregions_list` through the `id_macroreg` field.
+
+-   `id_region`: foreign key linked to the table `regions` through the `region_id` field.
+
+The macroregions have been divided as in @tbl-macroregions-db-join.
+
+| Macroregion name | Regions                                                                                                                                                                         |
+|-------------|-----------------------------------------------------------|
+| Northern Italy   | \(5\) Emilia-Romagna, (6) Friuli-Venezia Giulia, (8) Liguria, (9) Lombardia, (12) Piemonte, (15) Trentino-Alto Adige/Südtirol, (17) Valle d'Aosta, (18) Veneto, (19) San Marino |
+| Central Italy    | \(7\) Lazio, (10) Marche, (14) Toscana, (16) Umbria                                                                                                                             |
+| Southern Italy   | \(1\) Abruzzo, (2) Basilicata, (3) Campania, (4) Calabria, (11) Molise, (13) Puglia                                                                                             |
+
+: Macroregions of Italy. {#tbl-macroregions-db-join}
+
+#### Bibliographical tables {#sec-bibliography-db}
+
+Each sample stored in the database was recorded along with its reference, in two tables.
+
+##### Table: `bibliography`
+
+The table `bibliography` is the table where the references for the samples in the database are stored. It consists of 7 fields:
+
+-   `uuid_refs`: a unique id for the bibliographical element, incremental and auto generated.
+
+-   `short_ref`: text field of the type `varchar(255)`, which includes the short in-text reference formatted in Harvard style.
+
+-   `complete_ref`: text field of the type `longtext`, which includes the complete reference formatted in Harvard style.
+
+-   `author`: text field of the type `varchar(255)`, with the name(s) of the author(s) of the publication. The last name is provided in full, while the first name is only indicated by the first letter. For instance, Jane Doe is formatted as "Doe, J.".
+
+-   `year`: numerical field of the type `int(11)`, which provides the year of the publication.
+
+-   `site_code`: numerical field of the type `int(11)`, which provides the code of the site, from the field `site_code` in the table `site_list`.
+
+-   `publication_type`: foreign key, linked to the table `bibliography_publ_type` (See @tbl-publ-type).
+
+##### Table: `bibliography_publ_type`
+
+The table `bibliography_publ_type` is linked to the `bibliography` table and consists of two fields:
+
+-   `uuid`: a unique id for the publication type, incremental and auto generated.
+
+-   `Type`: text field describing the publication type.
+
+| uuid | Type             |
+|------|------------------|
+| 1    | Book             |
+| 2    | Book section     |
+| 3    | Conference paper |
+| 4    | e-mail           |
+| 5    | Journal article  |
+| 6    | Webpage          |
+| 7    | Report           |
+| 8    | PhD Thesis       |
+| 9    | MA Thesis        |
+
+: The table `bibliography_publ_type`. The values in the field `uuid` are inserted in the `bibliography` table (field `publication_type`) to assign a publication type to a publication. {#tbl-publ-type}
+
+#### Table: `Periodization`
+
+The table `Periodization` consists of two fields:
+
+-   `id`: a unique id for the chronological period, incremental and auto generated.
+
+-   `period`: text field, of the type `varchar(255)` describing the publication type.
+
+| id  | Period |
+|-----|--------|
+| 1   | R      |
+| 2   | LR     |
+| 3   | EMA    |
+| 4   | Ma     |
+
+: The table `Periodization`. The values in the field `id` are inserted in the tables `plant_chronologies` and `faunal_chronologies` (field `sample_period`) to assign a chronology to the sample. {#tbl-periodization-codes}
+
+For further information concerning the division of the dataset into larger chronologies, see @sec-periodization.
+
+### Archaeobotany
+
+#### Macroremains
+
+The process of data collection from edited publications (see @fig-publication-type-counts for the publication types) did not present major problems in taxa comparability. The names of the plants were in fact matching across publications. However, in some cases authors could only identify the seeds' species (*e.g. Avena sp.*), or it was not possible to properly identify the taxa (*e.g. Cerealia und.*). Specific taxa are indeed hard to identify without other elements of the plants; for this reason some taxa have been merged together in one column of the database. For instance, *Triticum aestivum* and *Triticum durum* are recorded together. Seed counts have been reported in the species column when an author reported a taxon rarely reported in other publications, rather than creating a new column for that taxon. For instance, *Prunus armeniaca* is reported in the column *Prunus sp.* In this case, the name of the identified taxon can be accessed through the `extra_notes` field.
+
+##### Table: `plant_remains`
+
+The plant remains have been stored in the master table `plant_remains`. This is the main table that contains the absolute counts for each sample and it is linked to other tables, to locate the sample at site and chronological level. The fields included in the table are:
+
+-   `uuid`: a unique id for the sample, incremental and auto generated.
+
+-   `site_code`: foreign key (linked to the table `site_list`) referring to the site where the sample has been collected. The input value is an integer of the type `int(11)`.
+
+-   `site_type`: foreign key (linked to the table `site_type`), referring to the typology of the site where the sample has been collected. See @sec-site-type-db for details of the input values.
+
+-   `data_valid_start`: an integer indicating the first century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `-2`.
+
+-   `data_valid_end`: an integer indicating the last century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `1`.
+
+-   `sampling_notes`: a text field, of the type `longtext`, that can be filled with information concerning sampling methodologies, precise location of sampling (*e.g.* a kiln, a kitchen, a wastepit, etc.), a more precise chronological range (if the author provided a datation in years rather than centuries), preservation mode (*e.g.* charred, waterlogged, etc.) and further notes that might be useful.
+
+-   `extra_notes`: a multipurpose text field, of the type `longtext`, that can be filled with information concerning first interpretation of the layer or the data from which the sample has been collected. The field also reports if the excavation provided other archaeobotanical material not included in this database (*e.g.* anthracological analyses), or plants that are not part of this table (*e.g.* ruderals, weeds, etc.). Finally, the field also contains the breakdown of counts that have been summarised under one column. For instance, the field `Cerealia` at times summarises cereal types that are not recorded in separate fields; cereals as *Triticum compactum* are rarely mentioned in Italian archaeobotanical reports, and if reported on a separate field it would be underrepresented.
+
+-   `data_usable`: boolean field. The value is `0` if the sample is not reliable (e.g. data too scarce, chronology too vague, etc.), but was recorded in the database as it might be useful for qualitative studies. If the value is `0` and the sample is hence not usable, the reason is reported in the field `extra_notes`. The value is `1` if the sample is reliable and it can be used quantitatively or for presence/absence analysis. Note that if the value is 0 the site will not appear in the map.
+
+-   `overrepresented_data`: a text field, of the type `longtext`, that can be filled with information regarding overrepresented taxa. This is a common occurrence in contexts as wine/olive processing areas or stocking deposits.
+
+-   `reference_id`: foreign key (linked to the table `bibliography`), referring to the bibliographical source that contained information about the sample. See @sec-bibliography-db for details of the input values.
+
+-   `volume`: an integer value reporting the volume (in litres) of the sample. Whenever more samples from the same location and with the same chronology have been reported by the author, they have been merged together and the volume represents the total of each sample. The volumes of the individual samples are reported in the field `extra_notes`.
+
+-   `sampling_type`: foreign key (linked to the table `bot_sampling_type`), referring to the sampling methodology used by the author. See @tbl-bot-sampling-type for details of the input values.
+
+-   `no_of_samples`: an integer indicating the number of samples collected from the context recorded in the entry. As for the `volume` field, whenever more samples from the same location and with the same chronology have been reported by the author, they have been merged together.
+
+-   Fields for the absolute counts of the taxa: `Triticum aestivum/durum`, `Triticum dicoccum`, `Triticum monococcum`, `Avena sp`, `Hordeum vulgare`, `Panicum milliaceum`, `Secale cereale`, `Setaria italica`, `Sorghum bicolor`, `Cerealia ind`, `Leguminosae`, `Lens culinaris`, `Pisum sativum`,`Vicia faba`, `Vicia sativa`, `Vicia sp`, `Lathyrus cicera/sativus`, `Cicer aretinum`, `Cornus mas`, `Corylus avellana`, `Ficus carica`, `Fragaria vesca`, `Juglans regia`, `Castanea sativa`, `Malus domestica`, `Olea europaea L`, `Prunus cerasus`, `Prunus avium`, `Prunus sp`, `Prunus persica`, `Prunus domestica`, `Prunus spinosa`, `Rubus fruticosus`, `Pyrus communis`, `Sambucus nigra`, `Cucumis melo`, `Vitis vinifera`, `Linum usatissimus`, `Sorbus sp`. The fields are of the type `int(11)` and are filled with the absolute count copied from the author's report.
+
+##### Table: `bot_sampling_type`
+
+The table `bot_sampling_type` is linked to the `plant_remains` table and consists of two fields:
+
+-   `sampl_id`: a unique id for the sampling typology, incremental and auto generated.
+
+-   `sampl_type`: text field describing the sampling methods. Other sampling types that are commonly used in archaeobotany (e.g. total sampling, probabilistic sampling, etc.) are not part of this table as no excavation reported using them.
+
+| sampl_id | sampl_type                  |
+|----------|-----------------------------|
+| 1        | visual sampling             |
+| 2        | vs + specified quantity     |
+| 3        | specified quantity          |
+| 4        | not specified               |
+| 5        | specified variable quantity |
+
+: The table `bot_sampling_type` and its values. The values in the field `sampl_id` are inserted in the `plant_remains` table to indicate the sampling method used for the collection of the recorded sample (whether this was reported by the author). {#tbl-bot-sampling-type}
+
+##### Table: `plants_chronologies`
+
+The table `plants_chronologies` consists of two fields:
+
+-   `sample_id`: foreign key (linked to the table `plant_remains`), where the `sample_id` is the field `uuid`.
+
+-   `sample_period`: foreign key (linked to the table `Periodization`), where the `sample_period` is the field `id`.
+
+Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (@sec-periodization).
+
+##### Table: `plants_chrono_weights`
+
+The table `plants_chrono_weights` consists of two fields:
+
+-   `uuid`: a foreign key connected to the table `plant_remains`, where the `uuid` is the `uuid` of the sample.
+
+-   `weight`: a numerical field `decimal(5,4)` that indicates the weight (reliability) of the sample.
+
+Information concerning the way the weight is calculated can be found in the methodology chapter.
+
+#### Pollen
+
+::: callout-important
+## MISSING
+
+Pollen has not been stored in the database yet. Methodology is missing.
+:::
+
+### Zooarchaeology
+
+The process of data collection from edited publications did not present major issues in species comparability. In most cases, animal names were matching across publications. Whenever this was not the case, the scientific name of the species was provided, which was helpful in case of uncertainties (*e.g.* 'Hen' vs 'Chicken'). Given the size of this project, not every species has been recorded in the database. Species that were not useful to the reconstruction of agricultural practices (for instance, tortoises) have been recorded in the field `extra_notes` of the table `faunal_remains`. Other species were merged together into a single column. This is the case of *Mollusca*. When authors were not certain about the classification of certain bones to the *species* level, they have been reported at the *genus* or family level. The most common occurrence is for sheep and goats, mostly reported under the *Caprinae* family, or for donkeys and horses, reported under the *Equus sp*.
+
+#### Table: `faunal_remains`
+
+The animal remains have been recorded in the master table `faunal_remains`. This is the main table that contains the NISP counts from each sample and it is linked to other tables, to locate the sample at site and chronological level. The fields included in the table are:
+
+-   `uuid`: a unique id for the sample, incremental and auto generated.
+
+-   `site_code`: foreign key (linked to the table `site_list`) referring to the site where the sample has been collected. The input value is an integer of the type `int(11)`.
+
+-   `site_type`: foreign key (linked to the table `site_type`), referring to the typology of the site where the sample has been collected. See @sec-site-type-db for details of the input values.
+
+-   `data_valid_start`: an integer indicating the first century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `-2`.
+
+-   `data_valid_end`: an integer indicating the last century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2^nd^ c. BCE to the 1^st^ c. CE, the field will be filled with the value `1`.
+
+-   `sampling_notes`: a text field, of the type `longtext`, that can be filled with information concerning sampling methodologies, precise location of sampling (*e.g.* a kiln, a kitchen, a wastepit, etc.), a more precise chronological range (if the author provided a datation in years rather than centuries), and further notes that might be useful.
+
+-   `extra_notes`: a multipurpose text field, of the type `longtext`, that can be filled with information concerning first interpretation of the layer or the data from which the sample has been collected. The field also reports if the excavation provided other information that are not included in this database, namely---age, sex, MNI counts, etc. Finally, the field also contains the breakdown of counts that have been summarised under one column. For instance, the field `Mollusca` or 'Unsp. birds'; some types of birds are rarely mentioned in other publications, and if reported on a separate field they would be underrepresented.
+
+-   `data_usable`: boolean field. The value is `0` if the sample is not reliable (e.g. data too scarce, chronology too vague, etc.), but was recorded in the database as it might be useful for qualitative studies. If the value is `0` and the sample is hence not usable, the reason is reported in the field `extra_notes`. The value is `1` if the sample is reliable and it can be used quantitatively. Note that if the value is 0 the site will not appear in the map.
+
+-   `reference_id`: foreign key (linked to the table `bibliography`), referring to the bibliographical source that contained information about the sample. See @sec-bibliography-db for details of the input values.
+
+-   `MNI_provided`: text field of the type `varchar(255)`. The value is `No` if the publication did not report MNI (minimum number of individuals) counts and `Yes` if MNI was provided.
+
+-   `data_type`: foreign key (linked to the table `zoo_data_type`) used to record which type of data the authors reported in the publication. See @tbl-zoo-data-type-codes for details of the input values.
+
+-   `tot_id`: an integer (of the type `int(11)`) that reports the number of identified bones in the sample.
+
+-   `tot_unid`: an integer (of the type `int(11)`) that reports the number of unidentified bones in the sample.
+
+-   Fields for the NISP values of the species, reported with the scientific name: `Sus scrofa domesticus`, `Bos taurus`, `Ovis aries`, `Capra hircus`, `Ovis/Capra`, `Canis familiaris`, `Equus caballus`, `Equus asinus`, `Equidae`, `Sus scrofa ferus`, `Cervus elaphus`, `Dama Dama L`, `Capreolus c`, `Cervidae`, `Lepus`, `Ursus actor`, `Glis Glis`, `Vulpes vulpes L`, `Unsp birds`, `Gallus g`, `Anser a`, `Unsp fish`, `Esox lucius`, `Salmo trutta`, `Salvelinus umbla`, `Tinca Tinca`, `Mollusca`. The fields are of the type `int(11)` and are filled with the NISP count copied from the author's report.
+
+#### Table: `zoo_data_type`
+
+The table `zoo_data_type` consists of two fields:
+
+-   `uuid`: a unique id for the entry, incremental and auto generated.
+
+-   `type`: text field, of the type `varchar(255)` describing the data type reported in the publication.
+
+| uuid | type     |
+|------|----------|
+| 1    | NISP     |
+| 2    | NISP+BIO |
+
+: The table `zoo_data_type`. The values in the field `uuid` are inserted in the table `faunal_remains` (field `data_type`) to assign a type to the sample. {#tbl-zoo-data-type-codes}
+
+#### Table: `faunal_chronologies`
+
+The table `plants_chronologies` consists of three fields:
+
+-   `sample_id`: foreign key (linked to the table `faunal_remains`), where the `sample_id` is the field `uuid`.
+
+-   `sample_period`: foreign key (linked to the table `Periodization`), where the `sample_period` is the field `id`.
+
+-   `chrono_unique_id`: an incremental unique primary key. It was necessary to have a distinct unique key as samples can range between two chronologies.
+
+Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (@sec-periodization).
+
+#### Table: `faunal_chrono_weights`
+
+The table `faunal_chrono_weights` consists of two fields:
+
+-   `uuid`: a foreign key connected to the table `faunal_remains`, where the `uuid` is the `uuid` of the sample.
+
+-   `weight`: a numerical field `decimal(5,4)` that indicates the weight (reliability) of the sample.
+
+Information concerning the way the weight is calculated can be found in the methodology chapter.

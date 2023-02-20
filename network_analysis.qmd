@@ -1,0 +1,169 @@
+
+# Archaeobotanical Network
+## Early Middle Ages
+```{r}
+
+#Load libraries
+library(sf)
+library(vegan)
+library(tidyverse)
+library(igraph)
+
+# Load Archaeobot_viz + Coordinates
+bot_data <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Archaeobot_viz_with_coordinates.csv", header=TRUE, sep=";")
+
+# Chronological subset: EMA
+bot_data.EMA <- filter(bot_data, Chronology=="EMA")
+
+library(stringr)
+bot_data.EMA$Type <- str_replace(bot_data.EMA$Type, "Castle", "Elite")
+bot_data.EMA$Type <- str_replace(bot_data.EMA$Type, "Castrum", "Elite")
+bot_data.EMA$Type <- str_replace(bot_data.EMA$Type, "Religious, monastery", "Elite")
+bot_data.EMA$Type <- str_replace(bot_data.EMA$Type, "Rural site, villa", "Elite")
+
+
+# Transform raw counts into presence/absence 
+bot_data.EMA.pa <- decostand(bot_data.EMA[,c(13:ncol(bot_data.EMA))], method="pa")
+
+# Read Italian peninsula shapefile
+italy <- st_read('ITA_Peninsula.shp')
+
+# Link the shapefile to the coordinates of the sites
+bot_data.sf <- st_as_sf(bot_data.EMA, crs=st_crs(italy), coords = c("x","y"))
+
+# Convert NA to 0s
+bot_data.EMA.pa[is.na(bot_data.EMA.pa)] <- 0
+
+# Creating the dissimilarity distance and convert it to a matrix
+bot_data.distance <- vegdist(bot_data.EMA.pa, method = "jaccard")
+bot_data.distance <- 1 - as.matrix(bot_data.distance)
+
+# Creating the undirected graph object
+bot_data.graph <- graph_from_adjacency_matrix(bot_data.distance, weighted = TRUE, mode="undirected", diag=F)
+
+# Assign the coordinates (from the original file to the graph)
+bot_data.graph<-set_graph_attr(bot_data.graph,"layout",st_coordinates(bot_data.sf))
+
+# choose size of nodes
+V(bot_data.graph)$size=25
+
+# Assign weight to edges and select only those > 0.5
+E(bot_data.graph)$width=E(bot_data.graph)$weight 
+E(bot_data.graph)$width[E(bot_data.graph)$weight < .5] = 0
+
+
+V(bot_data.graph)$label= rep("", length(V(bot_data.graph))) # Removes colors from nodes
+
+# Clustering
+bot_data.clust <- cluster_leiden(bot_data.graph, objective_function="modularity")
+V(bot_data.graph)$color <- bot_data.clust$membership
+
+#plot(st_geometry(italy), reset=F)
+#plot(bot_data.graph,add=T,rescale=F)
+
+coords <- st_coordinates(bot_data.sf)
+colnames(coords) <- c("x", "y")
+g_filtered <- delete.edges(bot_data.graph, which(E(bot_data.graph)$weight < 0.5))
+
+
+library(ggraph)
+library(ggspatial)
+# Plot the graph using ggraph
+ggraph(g_filtered, layout = coords) +
+  geom_sf(data = italy, fill = "#EEE9DA", color = "#BDCDD6") +
+  geom_edge_link(aes(edge_alpha = sqrt(width)), color="#AA5656", show.legend = FALSE) +
+  geom_node_point(aes(color = factor(color), shape=factor(bot_data.EMA$Type)), size = 4, show.legend = T)+
+  annotation_scale(location = "bl", width_hint = 0.5) +
+  annotation_north_arrow(
+    location = "bl", 
+    which_north = "true", 
+    pad_x = unit(0.55, "in"), 
+    pad_y = unit(0.25, "in"),
+    style = north_arrow_fancy_orienteering) +
+  scale_color_manual(values = c("#EB455F", "#2B3467", "#88A47C"), name = "Clusters") +
+  labs(
+    title="Early Medieval Botanical dataset",
+    edge_alpha="Edges width",
+    shape="Site Type"
+  ) +
+  theme(plot.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill = "#BDCDD6", color = "gray60"))
+
+
+```
+
+
+
+# Zooarchaeological network
+## Early Middle Ages
+```{r}
+
+#Load libraries
+library(sf)
+library(vegan)
+library(tidyverse)
+library(igraph)
+
+# Load Zooarch Condensed
+zoo_df <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed.csv", header=TRUE, sep=";")
+
+# Chronological subset: EMA
+zoo_df.EMA <- filter(zoo_df, Chronology=="EMA")
+
+# Read Italian peninsula shapefile
+#italy <- st_read('ITA_Peninsula.shp')
+
+# Link the shapefile to the coordinates of the sites
+zoo_data.sf <- st_as_sf(zoo_df.EMA, crs=st_crs(italy), coords = c("X","Y"))
+
+# Creating the dissimilarity distance and convert it to a matrix
+zoo_data.distance <- vegdist(zoo_df.EMA[15:21], method = "bray", na.rm=T)
+zoo_data.distance <- 1 - as.matrix(zoo_data.distance)
+
+# Creating the undirected graph object
+zoo_data.graph <- graph_from_adjacency_matrix(zoo_data.distance, weighted = TRUE, mode="undirected", diag=F)
+
+# Assign the coordinates (from the original file to the graph)
+zoo_data.graph<-set_graph_attr(zoo_data.graph,"layout",st_coordinates(zoo_data.sf))
+
+# choose size of nodes
+V(zoo_data.graph)$size=25
+
+# Assign weight to edges and select only those > 0.5
+E(zoo_data.graph)$width=E(zoo_data.graph)$weight
+E(zoo_data.graph)$width[E(zoo_data.graph)$weight < .8] = 0
+
+V(zoo_data.graph)$label= rep("", length(V(zoo_data.graph))) # Removes colors from nodes
+
+# Clustering
+zoo_data.clust <- cluster_leiden(zoo_data.graph)
+V(zoo_data.graph)$color <- zoo_data.clust$membership
+#V(zoo_data.graph)$color <- as.factor(zoo_df.EMA$Type)
+
+plot(st_geometry(italy), reset=F)
+plot(zoo_data.graph,add=T,rescale=F)
+
+#########################
+# Customization tests
+#########################
+
+# Extract node coordinates as a data frame
+coords <- st_coordinates(zoo_data.sf)
+colnames(coords) <- c("x", "y")
+library(ggraph)
+library(ggspatial)
+# Plot the graph using ggraph
+ggraph(zoo_data.graph, layout = coords) +
+  geom_sf(data = italy, fill = "gray50", color = "white") +
+  geom_edge_link(aes(edge_alpha = width), show.legend = FALSE) +
+  geom_node_point(aes(color = factor(color)), size = 1, show.legend = FALSE)+
+    annotation_scale(location = "bl", width_hint = 0.5) +
+    annotation_north_arrow(
+      location = "bl", 
+      which_north = "true", 
+      pad_x = unit(0.55, "in"), 
+      pad_y = unit(0.25, "in"),
+      style = north_arrow_fancy_orienteering)
+
+```
+

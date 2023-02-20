@@ -1,0 +1,28 @@
+# Zooarchaeology {#sec-materials-zoo}
+
+## Introduction {style="text-align:justify"}
+
+This chapter provides an overview of the zooarchaeological materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. The storing procedures are described in @sec-database.
+
+::: callout-important
+## Section in progress {style="text-align:justify;"}
+
+Should the maps be here?
+:::
+
+The objective of zooarchaeology is to recover, identify, and document animal remains from excavated archaeological sites to reconstruct the relationship between humans and other animals, as well as farming practices and food patterns. The name of the discipline has been debated since its origins, with the first reference to its practitioners being "zoologico-archaeologists". Mirroring the anthropological perspective of studying animal remains to gain insights into human behaviour, the discipline is widely referred as "zooarchaeology" especially in the Americas. The term "archaeozoology" is preferred by practitioners who emphasise the biological nature of faunal remains; especially in Africa and Eurasia. Italian scholars refer to the discipline as *archeozoologia*, reflecting this tradition. More alternatives are also available, including "ethnozoology", "paleoethnozoology" and "osteoarchaeology" [@clutton-brockArchaeozoology2017; @reitzZooarchaeology2008, pp. 4-5]. Because this thesis deals with humans' relationship with animals for economic and historical purposes, the term "zooarchaeology" will be used throughout this volume. The importance of archaeology in making inferences about historical environmental questions has already been emphasized in @sec-materials-bot; as with archaeobotany, although textual sources can be useful in answering historical questions, zooarchaeology is essential for verifying and complicating our understanding of the past. Zooarchaeology studies both vertebrate and invertebrate remains. Depending on the research questions, a zooarchaeologist may focus on domestic/wild animals, on a single species, on a specimen (*i.e.*, a single bone) at different scales ranging from a stratigraphic unit to an entire region [@lymanRelativeAbundancesSkeletal1994].
+
+
+-   What types of remains can we find? Bones, mollusca, etc.
+
+-   This thesis deals with NISP data because...
+
+## Sampling
+
+## Counting bones
+
+### NISP
+
+### MNI
+
+## Preservation
