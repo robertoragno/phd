@@ -1,0 +1,2120 @@
+---
+always_allow_html: true
+---
+
+# Archaeobotany {#sec-archaeobotany style="text-align:justify;"}
+
+```{r}
+#| echo: false
+
+# Load functions
+source('functions_bot.R')
+```
+
+::: callout-important
+## Page under construction {style="text-align:justify;"}
+
+The results presented here are preliminary and the chapter has yet to be written.
+:::
+
+In this chapter, I will present the macrobotanical data from 190 case studies used to carry on this research (@sec-materials-bot), along with the statistics performed on the data. The results will be first presented temporally, and a discussion of the diachronic trends will follow at the end of the chapter.
+
+## Case studies {style="text-align:justify;"}
+
+The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend at the top-right of the map.
+
+```{r}
+#| echo: false
+#| output: false
+
+# Load libraries
+library(sp)
+library(rgdal)
+library(leaflet)
+library(leaflet.extras)
+library(htmltools)
+library(tidyverse)
+library(fontawesome) 
+
+# Get an Italy shapefile
+#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
+            #  destfile = 'italy.zip')
+#unzip(zipfile = 'italy.zip')
+
+italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
+bot_map <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/plants.csv", header=TRUE, sep=";")
+
+# Grouping
+bot_map_R <- filter(bot_map, Chronology=="R")
+bot_map_LR<- filter(bot_map, Chronology=="LR")
+bot_map_EMA<- filter(bot_map, Chronology=="EMA")
+bot_map_Ma<- filter(bot_map, Chronology=="Ma")
+
+#Icon for the map
+
+Icon_red <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'yellow',
+  library = 'fa',
+  markerColor = "red"
+)
+
+Icon_lightred <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'yellow',
+  library = 'glyphicon',
+  markerColor = "lightred"
+)
+
+Icon_lightgray <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'black',
+  library = 'glyphicon',
+  markerColor = "lightgray"
+)
+
+Icon_green <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'darkgreen',
+  library = 'glyphicon',
+  markerColor = "lightgreen"
+)
+
+# Build the map
+italy_bot_map <- leaflet(data=italy) %>%
+  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(weight = 1, 
+              smoothFactor = 0.5,
+              opacity = 0.2, 
+              fillOpacity = 0.5,
+              fillColor = "#F9F5EB",
+              color="#D7A86E"
+              ) %>%
+  addAwesomeMarkers(data=bot_map_R, lng = bot_map_R$x, lat = bot_map_R$y,
+                    group="R", 
+                    icon = Icon_red,
+                    popup = paste(
+                      "<b>", bot_map_R$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_R$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_R$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_R$data_valid_start,
+                           "-", bot_map_R$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_R$Chronology, "<br>",
+                           "<b>Reference:</b><i>", bot_map_R$short_ref, "</i>"
+                           ), 
+             label=~htmlEscape(bot_map_R$site_name)
+ ) %>%
+    addAwesomeMarkers(data=bot_map_LR, lng = bot_map_LR$x, lat = bot_map_LR$y,
+                    group="LR",
+                    icon = Icon_lightred,
+                    popup = paste(
+                      "<b>", bot_map_LR$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_LR$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_LR$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_LR$data_valid_start,
+                           "-", bot_map_LR$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_LR$Chronology, "<br>",
+                           "<b>Reference:</b><i>", bot_map_LR$short_ref, "</i>"
+                           ), 
+             label=~htmlEscape(bot_map_LR$site_name)
+ ) %>%
+      addAwesomeMarkers(data=bot_map_EMA, lng = bot_map_EMA$x, lat = bot_map_EMA$y,
+                    group="EMA",
+                    icon = Icon_lightgray,
+                    popup = paste(
+                      "<b>", bot_map_EMA$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_EMA$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_EMA$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_EMA$data_valid_start,
+                           "-", bot_map_EMA$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_EMA$Chronology, "<br>",
+                           "<b>Reference:</b><i>", bot_map_EMA$short_ref, "</i>"
+                           ), 
+             label=~htmlEscape(bot_map_EMA$site_name)
+ ) %>%
+        addAwesomeMarkers(data=bot_map_Ma, lng = bot_map_Ma$x, lat = bot_map_Ma$y,
+                    group="Ma",
+                    icon = Icon_green,
+                    popup = paste(
+                      "<b>", bot_map_Ma$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_Ma$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_Ma$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_Ma$data_valid_start,
+                           "-", bot_map_Ma$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_Ma$Chronology, "<br>",
+                           "<b>Reference:</b><i>", bot_map_Ma$short_ref, "</i>"
+                           ), 
+             label=~htmlEscape(bot_map_Ma$site_name)
+ ) %>%
+  addLayersControl(
+    overlayGroups = c("R", "LR", "EMA", "Ma"),
+    baseGroups = c("Political", "Physical"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  hideGroup(c("LR", "EMA", "Ma")) %>%
+  addResetMapButton() %>%
+  addFullscreenControl() %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }")
+
+```
+
+```{r}
+#| echo: false
+#| output: false
+#| eval: false
+
+# If I want a general map
+
+map_pal2 <- leaflet::colorFactor(palette = c("R" = "#283618", 
+                                           "LR" = "#3e9b1c", 
+                                           "EMA" = "#bc4749",
+                                           "Ma" = "goldenrod"
+                                           ), 
+                               domain = bot_map$Chronology)
+
+italy_bot_map2 <- leaflet(data=italy) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(weight = 1, 
+              smoothFactor = 0.5,
+              opacity = 0.2, 
+              fillOpacity = 0.5,
+              fillColor = "#F9F5EB",
+              color="#D7A86E"
+              ) %>%
+  addCircleMarkers(
+    lng=bot_map$x, lat=bot_map$y,
+    label = ~htmlEscape(bot_map$site_name),
+    color=map_pal2(bot_map$Chronology),
+    fillOpacity = 0.5,
+    stroke = F,
+    radius=4,
+     popup = paste("ID:", bot_map$site_code, "<br>",
+                           "<b>Site:</b>", bot_map$site_name, "<br>",
+                           "Type:", bot_map$type_name, "<br>",
+                           "Chronology (c.):", bot_map$startcentury,
+                           "-", bot_map$endcentury, "<br>",
+                           "Data:", bot_map$available_data, "<br>",
+                           "ID BOT:", bot_map$bot, "<br>",
+                           "ID ZOO:", bot_map$zoo, "<br>",
+                           "ID POLL:", bot_map$poll
+                           )
+  ) %>% 
+  addLegend(position = "bottomright",
+            values = bot_map$Chronology, # data frame column for legend
+            opacity = .7, # alpha of the legend
+            pal = map_pal2, # palette declared earlier
+            title = "Data") %>%
+  addResetMapButton()
+```
+
+::: {.content-visible when-format="html"}
+```{r}
+#| echo: false
+#| label: fig-archaeobot-map
+#| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
+
+italy_bot_map
+
+```
+:::
+
+## Ubiquity {style="text-align:justify;"}
+
+::: {.content-visible when-format="html"}
+In @sec-methods, ubiquity has been described as the best solution to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (@fig-heatmap-ubiquity) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.
+:::
+
+::: {.content-visible when-format="pdf"}
+In @sec-methods, ubiquity has been described as the best solution to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (@fig-heatmap-ubiquity-for-PDF) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.
+:::
+
+```{r}
+#| echo: false
+
+# SQL file name: view_archaeobot without the Chronology column
+#plants_export <- read.csv("/Users/robertoragno/Desktop/Learn #R/PhdTests/PhdTests/DATA/Archaeobotany/PlantsExport14July.csv", header=TRUE, sep=";")
+plants_export <- bot_map[-5]
+
+# SQL file name: Archaeobot_Condensed
+# Import the file: the function Ubiquity_macroreg_chrono() requires the condensed plant table exported from the database. For more info, look at the Custom functions section.
+Archaeobot_Condensed <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Archaeobot_Condensed.csv", header=TRUE, sep=";")
+
+# SQL file name: Archaeobot_viz
+# It is the condensed table from the database, but without totals/plant type
+Df_Cond_Plants <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Archaeobot_Viz.csv", header=TRUE, sep=";")
+
+```
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code"
+#| code-overflow: wrap
+
+# Load the libraries
+# Note: these libraries are used for the data visualizations in this page.
+library(RColorBrewer)
+library(reshape2)
+library(ggplot2)
+library(hrbrthemes)
+library(plotly)
+library(patchwork)
+
+## UBIQUITY
+
+## Creating a dataframe that contains the ubiquity of each century under examination. 
+Ubiquity_table <- data.frame(
+  "I BCE" = archaeobotany_tables(plants_export, -1)$Ubiquity_exp,  
+  "I CE" = archaeobotany_tables(plants_export, 1)$Ubiquity_exp,
+  "II CE" = archaeobotany_tables(plants_export, 2)$Ubiquity_exp,
+  "III CE" = archaeobotany_tables(plants_export, 3)$Ubiquity_exp,
+  "IV CE" = archaeobotany_tables(plants_export, 4)$Ubiquity_exp,
+  "V CE" = archaeobotany_tables(plants_export, 5)$Ubiquity_exp,
+  "VI CE" = archaeobotany_tables(plants_export, 6)$Ubiquity_exp,
+  "VII CE" = archaeobotany_tables(plants_export, 7)$Ubiquity_exp,
+  "VIII CE" = archaeobotany_tables(plants_export, 8)$Ubiquity_exp,
+  "IX CE" = archaeobotany_tables(plants_export, 9)$Ubiquity_exp,
+  "X CE" = archaeobotany_tables(plants_export, 10)$Ubiquity_exp,
+  "XI CE" = archaeobotany_tables(plants_export, 11)$Ubiquity_exp
+  )
+
+# Transform the ubiquity table into a matrix
+Ubiquity_mat <- as.matrix(Ubiquity_table) 
+
+# Rename the centuries
+colnames(Ubiquity_mat) <- c("1st c. BCE", "1st c. CE", "2nd c. CE",
+                            "3rd c. CE", "4th c. CE", "5th c. CE",
+                            "6th c. CE", "7th c. CE", "8th c. CE",
+                            "9th c. CE", "10th c. CE", "11th c. CE") 
+
+# The data has to be molten to use it with ggplot2
+# (package: reshape2)
+Ubiquity_melt <- melt(Ubiquity_mat)
+
+# Let's now rename the columns 
+colnames(Ubiquity_melt) <- c("Taxon", "Century", "Ubiquity")
+
+# Add a column for the text tooltip
+Ubiquity_melt <- Ubiquity_melt %>%
+  mutate(text = paste0("Taxon: ", Taxon, "\n", "Century: ", Century, "\n", "Value: ",round(Ubiquity,2)))
+
+# Create the heatmap with ggplot2
+Ubiquity_HM <- ggplot(Ubiquity_melt, aes(Century, Taxon, fill=Ubiquity, text=text)) + 
+  geom_tile(colour="white") +
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "right",
+        axis.ticks = element_blank(), 
+        axis.text.x = element_text(angle = 90, hjust = 0)
+        ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Ubiquity",
+    subtitle="Diachronical heatmap of recorded plant species"
+  ) +
+  scale_fill_gradient(low = "white", high = "black")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-heatmap-ubiquity
+#| fig-cap: "Diachronical heatmap of recorded plant species" 
+#| fig-width: 5
+#| fig-height: 6
+
+ggplotly(Ubiquity_HM, tooltip="text")
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r}
+#| echo: false
+#| label: fig-heatmap-ubiquity-for-PDF
+#| fig-cap: "Diachronical heatmap of recorded plant species" 
+#| fig-width: 5
+#| fig-height: 6
+
+Ubiquity_HM
+```
+:::
+
+### Macroregional differences {#sec-macroregional-differences-ubiquity}
+
+::: {.content-visible when-format="html"}
+The heatmap (@fig-heatmap-ubiquity) shows the diachronical ubiquity values of the Italian mainland. It is possible however to compare plants' ubiquity values in different areas of the peninsula. The R function `Ubiquity_macroreg_chrono()` (@sec-Ubiquity-macroreg-chrono) was created to subset data from Northern, Central and Southern Italian regions, using modern boundaries. Archaeobotanical data from Italy is scarce, and subsetting the dataset required a larger chronological division to have enough sites for a valid statistical interpretation of the results. For this reason, the ubiquity values are presented using the variable `Chronology` rather than subsetting the individual centuries. For a clearer reading of the plot, the taxa have been divided into--Cereals, Pulses and Fruits/Nuts. Some taxa have been omitted from the plot.
+:::
+
+::: {.content-visible when-format="pdf"}
+The heatmap (@fig-heatmap-ubiquity-for-PDF) shows the diachronical ubiquity values of the Italian mainland. It is possible however to compare plants' ubiquity values in different areas of the peninsula. The R function `Ubiquity_macroreg_chrono()` (@sec-custom-functions) was created to subset data from Northern, Central and Southern Italian regions, using modern boundaries. Archaeobotanical data from Italy is scarce, and subsetting the dataset required a larger chronological division to have enough sites for a valid statistical interpretation of the results. For this reason, the ubiquity values are presented using the variable `Chronology` rather than subsetting the individual centuries. For a clearer reading of the plot, the taxa have been divided into--Cereals, Pulses and Fruits/Nuts. Some taxa have been omitted from the plot.
+:::
+
+::: {.content-visible when-format="html"}
+**Source code:**
+
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: data preparation"
+#| code-overflow: wrap
+
+# Ubiquity by Italian Macro regions: Northern, Central and Southern Italy
+
+# Load the libraries
+library(vegan)
+library(matrixStats)
+library(patchwork)
+
+# Creating a dataframe with the ubiquities of all macroregions and chronologies
+bot_macroreg <- rbind(
+  Ubiquity_R_NI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Northern Italy", "R"),
+  Ubiquity_R_CI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Central Italy", "R"),
+  Ubiquity_R_SI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Southern Italy", "R"),
+  Ubiquity_LR_NI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Northern Italy", "LR"),
+  Ubiquity_LR_CI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Central Italy", "LR"),
+  Ubiquity_LR_SI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Southern Italy", "LR"),
+  Ubiquity_EMA_NI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Northern Italy", "EMA"),
+  Ubiquity_EMA_CI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Central Italy", "EMA"),
+  Ubiquity_EMA_SI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Southern Italy", "EMA"),
+  Ubiquity_Ma_NI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Northern Italy", "Ma"),
+  Ubiquity_Ma_CI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Central Italy", "Ma"),
+  Ubiquity_Ma_SI <- Ubiquity_macroreg_chrono(Archaeobot_Condensed,"Southern Italy", "Ma")
+)
+
+# Re-arranging the cereals/macroregions for visualisation on the Y axis
+level_macroreg_order <- c("Southern Italy", "Central Italy", "Northern Italy")
+
+level_cereals_order <- c("Common.Wheat", "Barley", "Rye", 
+                         "Einkorn", "Emmer", "Proso.millet", 
+                         "Foxtail.millet", "Oats", "Sorghum")
+
+# Cereals
+cer_ubiquity_macroreg.R <- filter(bot_macroreg, Chronology=="R" & Plant.Type=="Cereals")
+cer_ubiquity_macroreg.R <- filter(cer_ubiquity_macroreg.R, Macroregion!="Central Italy")
+cer_ubiquity_macroreg.LR <- filter(bot_macroreg, Chronology=="LR" & Plant.Type=="Cereals")
+cer_ubiquity_macroreg.EMA <- filter(bot_macroreg, Chronology=="EMA" & Plant.Type=="Cereals")
+cer_ubiquity_macroreg.Ma <- filter(bot_macroreg, (Chronology=="Ma" & Plant.Type=="Cereals"))
+cer_ubiquity_macroreg.Ma <- filter(cer_ubiquity_macroreg.Ma, Macroregion!="Southern Italy")
+
+#Pulses
+puls_ubiquity_macroreg.R <- filter(bot_macroreg, Chronology=="R" & Plant.Type=="Pulses")
+puls_ubiquity_macroreg.R <- filter(puls_ubiquity_macroreg.R, Macroregion!="Central Italy")
+puls_ubiquity_macroreg.R <- filter(puls_ubiquity_macroreg.R, Plant!="Chickpea")
+puls_ubiquity_macroreg.LR <- filter(bot_macroreg, Chronology=="LR" & Plant.Type=="Pulses")
+puls_ubiquity_macroreg.LR <- filter(puls_ubiquity_macroreg.LR, 
+                                    Macroregion!="Southern Italy")
+puls_ubiquity_macroreg.LR <- filter(puls_ubiquity_macroreg.LR, Plant!="Chickpea")
+puls_ubiquity_macroreg.EMA <- filter(bot_macroreg, Chronology=="EMA" & Plant.Type=="Pulses")
+puls_ubiquity_macroreg.Ma <- filter(bot_macroreg, Chronology=="Ma"  & Plant.Type=="Pulses")
+puls_ubiquity_macroreg.Ma <- filter(puls_ubiquity_macroreg.Ma, 
+                                    Macroregion!="Southern Italy")
+
+#Fruits (+ Subset)
+fnuts_ubiquity_macroreg.R <- filter(bot_macroreg, Chronology=="R" & Plant.Type=="Fruits/Nuts")
+fnuts_ubiquity_macroreg.R <- subset(fnuts_ubiquity_macroreg.R, (Plant == "Wild.Cherry" | Plant == "Walnut" | Plant == "Peach" | Plant == "Olive" |Plant == "Grape" | Plant =="Fig" | Plant =="Apple"))
+fnuts_ubiquity_macroreg.R <- filter(fnuts_ubiquity_macroreg.R, Macroregion!="Central Italy")
+fnuts_ubiquity_macroreg.LR <- filter(bot_macroreg, Chronology=="LR" & Plant.Type=="Fruits/Nuts")
+fnuts_ubiquity_macroreg.LR <- subset(fnuts_ubiquity_macroreg.LR, (Plant == "Wild.Cherry" | Plant == "Walnut" | Plant == "Peach" | Plant == "Olive" |Plant == "Grape" | Plant =="Fig" | Plant =="Apple"))
+fnuts_ubiquity_macroreg.EMA <- filter(bot_macroreg, Chronology=="EMA" & Plant.Type=="Fruits/Nuts")
+fnuts_ubiquity_macroreg.EMA <- subset(fnuts_ubiquity_macroreg.EMA, (Plant == "Wild.Cherry" | Plant == "Walnut" | Plant == "Peach" | Plant == "Olive" |Plant == "Grape" | Plant =="Fig" | Plant =="Apple"))
+fnuts_ubiquity_macroreg.Ma <- filter(bot_macroreg, Chronology=="Ma"  & Plant.Type=="Fruits/Nuts")
+fnuts_ubiquity_macroreg.Ma <- subset(fnuts_ubiquity_macroreg.Ma, (Plant == "Wild.Cherry" | Plant == "Walnut" | Plant == "Peach" | Plant == "Olive" |Plant == "Grape" | Plant =="Fig" | Plant =="Apple"))
+fnuts_ubiquity_macroreg.Ma <- filter(fnuts_ubiquity_macroreg.Ma, Macroregion!="Southern Italy")
+
+```
+
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: plots"
+#| code-overflow: wrap
+
+# Cereals plots ubiquity
+cer_ubiquity_macroreg_R.HM <- ggplot(cer_ubiquity_macroreg.R, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  factor(Plant, levels=rev(level_cereals_order)),
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+cer_ubiquity_macroreg_LR.HM <- ggplot(cer_ubiquity_macroreg.LR, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  factor(Plant, levels=rev(level_cereals_order)),
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Late Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+cer_ubiquity_macroreg_EMA.HM <- ggplot(cer_ubiquity_macroreg.EMA, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  factor(Plant, levels=rev(level_cereals_order)),
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Early Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+cer_ubiquity_macroreg_Ma.HM <- ggplot(cer_ubiquity_macroreg.Ma, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  factor(Plant, levels=rev(level_cereals_order)),
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+Cereals_Ubiquity_MacroReg_Patchwork <- (cer_ubiquity_macroreg_R.HM|cer_ubiquity_macroreg_LR.HM)/(cer_ubiquity_macroreg_EMA.HM|cer_ubiquity_macroreg_Ma.HM)
+Cereals_Ubiquity_MacroReg_Patchwork + plot_annotation(
+  title = 'Cereals',
+  subtitle = 'Ubiquity (%), plotted by macroregion and chronology.',
+  caption='Note: Data was too scarce for Roman Central Italy and Medieval Southern Italy.'
+  )
+
+
+# Pulses plots ubiquity
+puls_ubiquity_macroreg_R.HM <- ggplot(puls_ubiquity_macroreg.R, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="#cfcfcf", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+puls_ubiquity_macroreg_LR.HM <- ggplot(puls_ubiquity_macroreg.LR, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="#ffffff", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Late Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+puls_ubiquity_macroreg_EMA.HM <- ggplot(puls_ubiquity_macroreg.EMA, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Early Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+puls_ubiquity_macroreg_Ma.HM <- ggplot(puls_ubiquity_macroreg.Ma, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+Pulses_Ubiquity_MacroReg_Patchwork <- (puls_ubiquity_macroreg_R.HM|puls_ubiquity_macroreg_LR.HM)/(puls_ubiquity_macroreg_EMA.HM|puls_ubiquity_macroreg_Ma.HM)
+Pulses_Ubiquity_MacroReg_Patchwork + plot_annotation(
+  title = 'Pulses',
+  subtitle = 'Ubiquity (%), plotted by macroregion and chronology.',
+  caption='Note: Data was too scarce for Roman Central Italy and Late Roman/Medieval Southern Italy.'
+)
+
+# Fruits nuts plots
+
+fnuts_ubiquity_macroreg_R.HM <- ggplot(fnuts_ubiquity_macroreg.R, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+fnuts_ubiquity_macroreg_LR.HM <- ggplot(fnuts_ubiquity_macroreg.LR, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Late Roman"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+fnuts_ubiquity_macroreg_EMA.HM <- ggplot(fnuts_ubiquity_macroreg.EMA, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Early Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+fnuts_ubiquity_macroreg_Ma.HM <- ggplot(fnuts_ubiquity_macroreg.Ma, aes(
+  factor(Macroregion, levels=(level_macroreg_order)),
+  Plant,
+  fill=(Ubiquity)
+)) + 
+  geom_tile(colour="white") +
+  geom_text(aes(label = Ubiquity), colour="white", size=3)+ 
+  scale_alpha(range=c(0,1)) +
+  scale_x_discrete("", expand = c(0, 0)) + 
+  scale_y_discrete("", expand = c(0, 0)) + 
+  theme_grey(base_size = 9) + 
+  theme(legend.position = "none",
+        axis.ticks = element_blank()
+  ) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(
+    title="Medieval"
+  ) +  scale_fill_gradient(low = "white", high = "black")
+
+
+FrNuts_Ubiquity_MacroReg_Patchwork <- (fnuts_ubiquity_macroreg_R.HM|fnuts_ubiquity_macroreg_LR.HM)/(fnuts_ubiquity_macroreg_EMA.HM|fnuts_ubiquity_macroreg_Ma.HM)
+FrNuts_Ubiquity_MacroReg_Patchwork + plot_annotation(
+  title = 'Fruits/Nuts',
+  subtitle = 'Ubiquity (%), plotted by macroregion and chronology.',
+  caption='Note: Data was too scarce for Roman Central Italy and Medieval Southern Italy.'
+)
+
+
+```
+:::
+
+#### Cereals
+
+It is interesting to notice how in the **Roman age**, cereals are similarly ubiquitous in Southern and Northern Italy, although there are some exceptions (*i.e.* einkorn, rye, oats, and proso millet) that can derive from the randomness of sampling. Unfortunately, only three sites provided botanical samples for Roman Central Italy and their values have then been omitted from the plot. These sites (all from Tuscany) were studied by the Roman Peasant Project [@bowesRomanPeasantProject2020a] and only reported three kinds of cereal: common wheat, emmer, and barley. Similar ubiquity values from Northern and Southern Italy in the Roman age may suggest similar production patterns in the whole Italian mainland, even though more data is required. In the **Late Roman age**, ubiquity data has been calculated for the three macroregions, with Southern Italy being the least trustworthy (five sites in total). Three crops are found on 62.5-75% of the Central Italian sites: common wheat, barley and emmer. Other cereals are present, but less ubiquitously. The cereal triad aforementioned seems to be diffused in the south as well. Conversely, in Northern Italy common wheat and barley were indeed important cultivations but had to compete with other cereals including millet, sorghum, and rye. The latter had a significant increase, being present on almost 30% of the Northern sites (as opposed to the Roman 15%). The **Early Medieval age** seems to mark a shift in Italian agricultural practices, as cereal ubiquities are much more variable regionally. In Southern Italy, the triad of common wheat, barley and emmer were still the predominant cereals. These cereals are ubiquitous in Central and Northern Italy as well, although these regions adopt polyculture with a diversified number of cereals. The samples from the **Medieval age** are fewer in number since the upper boundary of this project's chronology is the 11^th^ c. Despite the short chronology, it is possible to make some considerations. Medieval Centraly Italy relied heavily on common wheat, barley and emmer, with other cereals increasingly important. Barley is the most ubiquitous cereal in Northern Italy in this period, followed by common wheat, millets and sorghum.
+
+```{r}
+#| echo: false
+#| label: fig-heatmap-ubiquity-cereals-macroreg
+#| fig-cap: "Diachronical heatmap of cereals in the Italian macroregions"
+#| fig-dpi: 300 
+
+Cereals_Ubiquity_MacroReg_Patchwork
+
+```
+
+#### Pulses
+
+In the **Roman Age**, pulses are an important part of the diet and are cultivated both in Northern and Southern Italy. In the latter, vetch/broad beans are present in 22-32% of the samples, and lentils are present in 38% of the sites. In the **Late Roman Age**, broad beans are equally important in Central and Northern Italy, and peas are present in 50% of the Central Italian sites. In the **Early Medieval Age**, pulses are present in many Central Italian sites, especially blue/red peas, broad beans and other Fabaceae. Lentils and broad beans are also cultivated in almost half of the Northern Italian sites. The importance of pulses in Central Italy is confirmed by the **11^th^ c.** samples, where every specie is present in over 66% of the sites and Fabaceae and blue/red peas are found in every sample. Conversely, in Northern Italy broad bean is found in 66% of the sites.
+
+```{r}
+#| echo: false
+#| label: fig-heatmap-ubiquity-pulses-macroreg
+#| fig-cap: "Diachronical heatmap of pulses in the Italian macroregions" 
+
+Pulses_Ubiquity_MacroReg_Patchwork
+
+```
+
+#### Fruits and nuts
+
+Olive and grape are two essential cultivations in the Italian peninsula. Olive pits, as can be expected, are more ubiquitous in Southern Italy, where in Roman times are present in \>87% of the sites and in over 58% of the sites in the following chronologies[^archaeobotany-1]. Conversely, grape is important in Central and Northern Italy in the Late Roman, Early Medieval and Medieval ages.
+
+[^archaeobotany-1]: The Late Roman values for Southern Italy are only based on 5 samples (3 of which are from the same site, Salapia) so the values are not very trustworthy.
+
+```{r}
+#| echo: false
+#| label: fig-heatmap-ubiquity-fruit-macroreg
+#| fig-cap: "Diachronical heatmap of fruits/nuts in the Italian macroregions" 
+
+FrNuts_Ubiquity_MacroReg_Patchwork
+
+```
+
+## Richness and diversity {style="text-align:justify;"}
+
+::: callout-important
+## Section in progress {style="text-align:justify;"}
+:::
+
+### Richness and diversity in the Italian macroregions {#sec-richness-diversity-macroregions style="text-align:justify;"}
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: data preparation"
+#| code-overflow: wrap
+# Species richness based on geographical features
+# RELATIVE PROPORTIONS OF ARCHAEOBOT_VIZ QUERY EXPORT FROM THE DB
+# (Condensed, without totals)
+
+# Remove NAs
+Df_Cond_Plants[is.na(Df_Cond_Plants)] <-0 
+
+# Generate a dataframe with the relative proportions and round the results
+Df_Cond_Plants_Rel <- decostand(Df_Cond_Plants[11:50], method = "total")
+Df_Cond_Plants_Rel <- round(Df_Cond_Plants_Rel, digits=2)
+
+# Add more info to the dataframe
+Df_Cond_Plants_Rel_Richness_Diversity <- data.frame(
+                                 "Geo" = Df_Cond_Plants$Geo,
+                                 "Chronology" = Df_Cond_Plants$Chronology, 
+                                 "Type"= Df_Cond_Plants$Type, 
+                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel),
+                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
+                                 Df_Cond_Plants_Rel
+)
+
+Df_Cond_Plants_Rel_withMacroregion <- data.frame("Geo" = Df_Cond_Plants$Geo,
+                                                 "Chronology" = Df_Cond_Plants$Chronology,
+                                                 "Type"= Df_Cond_Plants$Type, 
+                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
+                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel[1:10]), #Only cereals
+                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel[1:10]),
+                                                 Df_Cond_Plants_Rel[1:10]
+)
+
+# Let's plot the diversity by macroregion
+
+# Creating the dataframes for R and EMA age 
+# I know it's called "Plants" but it's actually just cereals
+Df_Cond_Plants_Rel_withMacroregion.R <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "R")
+Df_Cond_Plants_Rel_withMacroregion.LR <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "LR")
+Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "EMA")
+
+```
+
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: plots"
+#| code-overflow: wrap
+
+pal_RichnessvsGeo <- c("cadetblue3", "gold1",  "bisque4", "palegreen4")
+
+plot_RichnessMacroReg.R <- ggplot(Df_Cond_Plants_Rel_withMacroregion.R, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  scale_fill_manual(values = pal_RichnessvsGeo) +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Central Italy \n (n = 5)", "Northern Italy \n (n = 41)", "Southern Italy \n (n=34)")) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 12, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Macroregion",
+       y = "Number of species per site",
+       title = "R - Cereal richness")
+
+plot_RichnessMacroReg.EMA <- ggplot(Df_Cond_Plants_Rel_withMacroregion.EMA, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  scale_fill_manual(values = pal_RichnessvsGeo) +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Central Italy \n (n = 11)", "Northern Italy \n (n = 36)", "Southern Italy \n (n=17)")) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 12, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Macroregion",
+       y = "Number of species per site",
+       title = "EMA - Cereal richness")
+
+# Check median of cereal richness per macroregion
+
+# ROMAN NORTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Northern Italy"))$Specnumber)
+#ROMAN SOUTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Southern Italy"))$Specnumber)
+# EMA NORTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Northern Italy"))$Specnumber)
+#EMA SOUTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Southern Italy"))$Specnumber)
+
+```
+:::
+
+Cereals share similar presence values in Roman Northern and Southern Italian sites (@fig-cereal-richness-RvsEMA). Central Italy reports higher values, although this is based only on three sites and hence it is not reliable. During the Early Middle Ages, Central Italy again is the richest in cereals, closely followed by Northern Italy. Interestingly, Southern Italy still reports values very close to the Roman age. A full list of the Southern Italian EMA sites is reported in @tbl-southern-ema-sites.
+
+```{r}
+#| echo: false
+#| layout: "[[100,100], [1]]"
+#| label: fig-cereal-richness-RvsEMA
+#| fig-cap: "Violin plots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| fig-subcap: 
+#|   - "Roman age." 
+#|   - "Early Medieval age."
+#| fig-height: 4
+#| fig-width: 6
+#| fig-dpi: 600
+
+plot_RichnessMacroReg.R
+plot_RichnessMacroReg.EMA
+
+```
+
+| ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
+|-----|----------------------------------------|------------|--------------|--------------|-------------------|
+| 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
+| 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
+| 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
+| 198 | Salapia, area botteghe, US 2475        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 198 | Salapia, area botteghe, US 2437        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, US 2054        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, US 2211-2217   | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, 8th-9th c.     | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 196 | Faragola, wastepit 61                  | Puglia     | Plain        | Rural, villa | Lombard           |
+| 196 | Faragola, wastepit 66                  | Puglia     | Plain        | Rural, villa | Lombard           |
+| 234 | Colle Castellano, Phase 3-4            | Molise     | Hill         | Urban        | Lombard           |
+| 177 | San Vincenzo al Volturno, kitchen area | Molise     | Hill         | Monastery    | Lombard           |
+| 101 | Supersano, loc. Scorpo                 | Puglia     | Plain        | Rural        | Byzantine         |
+| 250 | Apigliano, 9th-10th c., pits           | Puglia     | Plain        | Rural        | Byzantine         |
+| 250 | Apigliano, 10th-11th c., pits          | Puglia     | Plain        | Rural        | Byzantine         |
+| 196 | Faragola, granary A7                   | Puglia     | Plain        | Rural, villa | Lombard           |
+| 196 | Faragola, granary A8                   | Puglia     | Plain        | Rural, villa | Lombard           |
+
+: List of Southern Italian sites with chronology EMA {#tbl-southern-ema-sites}
+
+## Cereals regionality {style="text-align: justify;"}
+
+### PERMANOVA {#sec-permanova-cereals}
+
+::: callout-note
+## Notes on terminology: PERMANOVA {style="text-align:justify;"}
+
+Permutational multivariate analysis of variance (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not[^archaeobotany-2] [@andersonPermutationalMultivariateAnalysis2017]. In this context, the *null hypothesis* is that there is no regional difference in the cereals dataset, with cereals being evenly distributed across macroregions and chronologies.
+:::
+
+[^archaeobotany-2]: Source: Wikipedia. Change the source later
+
+The suggestion of an Early Medieval shift in cereal farming stated in @sec-macroregional-differences-ubiquity and @sec-richness-diversity-macroregions needs statistical support. Considering that data is not unimodal and that we are dealing with presence/absence analysis, the best choice is to use a non-parametric test as PERMANOVA on the early medieval botanical dataset. Prior to performing the test, it was necessary to pre-process data by:
+
+-   Selecting all the cereals columns of the plant remains table, keeping the categorical variables: `Macroregion`.
+
+-   Removing empty rows (samples that only reported seeds/fruits, but not cereals).
+
+-   Transforming the raw counts into presence/absence, using the function `decostand()` (`method=pa`) in the `R` package `vegan` [@vegan].
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: Pre-processing"
+#| code-overflow: wrap
+# Testing the results: Regionality in the dataset? 
+library(vegan)
+
+set.seed(29)
+
+# Pre processing: remove empty rows
+
+# Note: The input table is the CONDENSED table without totals
+
+# Selecting all the cereals columns of the plant remains table, keeping some categorical variables 
+cer_macroreg_ubiquity_transp.tot <- Df_Cond_Plants[c(4,5,6,7,11:19)]
+
+# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
+cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer_macroreg_ubiquity_transp.tot[5:13])>0,]
+
+# Assigning a column name "Macroregion"
+colnames(cer_macroreg_ubiquity_transp.tot)[1] = "Macroregion"
+
+# Selecting the Chronology of interest (EMA) and excluding Central Italy
+cer_macroreg_ubiquity_transp.tot<- filter(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
+
+# dividing categorical and numerical columns
+cer_macroreg_ubiquity_transp.categ <- cer_macroreg_ubiquity_transp.tot[1:4]
+cer_macroreg_ubiquity_transp.data <- cer_macroreg_ubiquity_transp.tot[5:13]
+
+# Converting the numerical columns into a presence/absence matrix (using method=pa)
+cer_macroreg_ubiquity_transp.dist <- decostand(cer_macroreg_ubiquity_transp.data, method="pa", na.rm=TRUE)
+
+
+```
+:::
+
+After the pre-processing, it was possible to run the PERMANOVA using the function `adonis2()` in the package `vegan`. The function creates a distance matrix and computes an analysis of variance on the matrix. The method chosen to calculate the distance matrix is the `jaccard` distance. The Jaccard distance, based on the Jaccard similarity index, is a value of dissimilarity between sample sets [@kosubNoteTriangleInequality2019]. When compared to other dissimilarity indices, it is more appropriate for presence/absence analyses as it is not based on Euclidean distance.
+
+**Results of `adonis2()`**.
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: adonis2() "
+#| code-overflow: wrap
+
+cer_macroreg_ubiquity_transp.div <- adonis2(
+  cer_macroreg_ubiquity_transp.dist ~ Macroregion, 
+  data = cer_macroreg_ubiquity_transp.categ,
+  permutations = 10000, method="jaccard"
+  )
+
+```
+:::
+
+```{r}
+#| echo: false
+
+cer_macroreg_ubiquity_transp.div
+
+```
+
+The calculation of PERMANOVA on the Roman dataset using the variable `Macroregion` reported a not statistically significant p-value, suggesting a degree of homogeneity. On the other hand, when applied to the early Medieval dataset, the results were highly significant (0\<p\<0.001) with a 99.99% confidence. PERMANOVA has not been calculated on the Late Roman dataset as samples from Southern Italy were too scarce. To confirm the significance of the results of PERMANOVA applied to the EMA dataset, it is necessary to check that its assumptions are met (especially since we are dealing with small groups of data). Firstly, we check the homogeneity of variances. The function `betadisper()` from the package `vegan` provides the distances of group samples from centroids. If the variation is even, the null hypothesis of no difference in dispersion between groups is accepted. To test the variation, it is possible to use the analysis of variance (ANOVA).
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: betadisper()"
+#| code-overflow: wrap
+
+# We do not need to calculate the distance separately, but it will be useful later for the betadisper() function
+
+# Distance dissimilarity matrix with the Jaccard method
+cer_macroreg_ubiquity_transp.dist2 <- vegdist(cer_macroreg_ubiquity_transp.dist, method="jaccard", na.rm=TRUE)
+
+# Betadisper: distances of group samples from centroids
+cer_macroreg_ubiquity_transp.betadisper <- betadisper(cer_macroreg_ubiquity_transp.dist2, cer_macroreg_ubiquity_transp.categ$Macroregion)
+```
+:::
+
+**Results of `anova()` on the betadisper.**
+
+```{r}
+#| code-fold: true
+#| output: true
+#| code-summary: "Show the code: ANOVA on betadisper()"
+#| code-overflow: wrap
+
+# We will see that the ANOVA's p-value is not significant meaning that group dispersions are homogenous 
+#("Null hypothesis of no difference in dispersion between groups"; https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/betadisper).
+
+anova(cer_macroreg_ubiquity_transp.betadisper) # This should not be significant!
+```
+
+```{r}
+#| echo: false
+#| layout: "[[100,100], [1]]"
+#| label: fig-betadisper
+#| fig-cap: "Results of the betadisper() (groups dispersions) on the distance matrix calculated with the Jaccard method." 
+#| fig-subcap: 
+#|   - "Groups dispersions plot with confidence ellipses." 
+#|   - "Boxplot showing equal distances from centroid."
+#| fig-height: 4
+#| fig-width: 5
+#| fid-dpi: 300
+
+# Now we can plot and see that group dispersions (distances from centroids) are very similar, but compositions seem to be very different. Let's go to adonis to test that.
+plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot")
+boxplot(cer_macroreg_ubiquity_transp.betadisper)
+
+```
+
+The `betadisper()` graphs (@fig-betadisper) show similar distances from the centroids for the categories `Northern Italy` and `Southern Italy`. In addition, the ANOVA on the `betadisper()` shows that the separation is not significant (p-value over the significance threshold), meaning that the groups dispersions are homogeneous. We can thus be confident in the PERMANOVA results and accept the difference between the two groups of sites under investigation. In other words, the Southern and Northern Italian group of sites are different during the Early Middle Ages for what concerns cereal farming.
+
+Running the same tests on the Roman sites failed to separate the two groups of sites, confirming that there was not a significant difference in the types of cereals cultivated during the Roman age between Northern and Southern Italy.
+
+### nMDS {#sec-nMDS-Cereals style="text-align:justify"}
+
+::: callout-note
+## Notes on terminology: Wasserstein metric {style="text-align:justify;"}
+
+The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distance) (or earth's mover distance) is a measure of distance between two probability distributions on a metric space.
+:::
+
+In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-boxplot-nMDS-R-EMA.
+
+::: {.content-visible when-format="html"}
+**Source code:**
+
+```{r}
+#| code-summary: "Show the code: Data preparation"
+#| code-overflow: wrap
+#| code-fold: true
+
+# DATA PREPARATION #
+
+# Creating a simple dataframe just for the purpose of the NCA
+Df_Cond_Plants_simplified <- data.frame(
+  "Chronology" = Df_Cond_Plants$Chronology, 
+  "Type" = Df_Cond_Plants$Type,
+  "Macroregion" = Df_Cond_Plants$name_macroreg,
+  "Weight" = Df_Cond_Plants$weight,
+  Df_Cond_Plants[11:ncol(Df_Cond_Plants)]
+  )
+
+# Joining site typology categories to simplify the output, using library stringr
+library(vegan)
+library(stringr)
+
+Df_Cond_Plants_simplified$Type <- str_replace_all(
+  Df_Cond_Plants_simplified$Type, c(
+    "Rural site, villa" = "Rural", 
+    "Rural site, mansio" = "Rural",
+    "Religious, monastery" = "Religious",
+    "Castle" = "Fortified",
+    "Castrum" = "Fortified")
+  )
+
+# Convert to Presence (1) / Absence (0) using library vegan
+Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)] <- decostand(Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)], method="pa")
+
+# Creating dataframes for the chronologies R and EMA
+Df_Cereals_R <- filter(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
+Df_Cereals_EMA <- filter(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
+
+# Selecting only cereals from both dataframes
+Df_Cereals_R <- Df_Cereals_R[1:14]
+Df_Cereals_R[is.na(Df_Cereals_R)] <- 0
+Df_Cereals_R <- Df_Cereals_R[rowSums(Df_Cereals_R[,5:14] != 0) > 0, ] # Removing empty rows
+
+Df_Cereals_EMA <- Df_Cereals_EMA[1:14]
+Df_Cereals_EMA[is.na(Df_Cereals_EMA)] <- 0
+Df_Cereals_EMA <- Df_Cereals_EMA[rowSums(Df_Cereals_EMA[,5:14] != 0) > 0, ]
+
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+
+library(ggpubr)
+set.seed(7)
+
+# Perform the metaMDS to 1D for Df_Cereals_R and Df_Cereals_EMA 
+mds_R <- metaMDS(Df_Cereals_R[, c(5:14)], k=1, distance = "jaccard")
+mds_EMA <- metaMDS(Df_Cereals_EMA[, c(5:14)], k=1, distance = "jaccard")
+
+# Add the Macroregion data to the metaMDS results for both dataframes
+mds_df_R <- data.frame(mds_R$points, Macroregion = Df_Cereals_R$Macroregion)
+mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Df_Cereals_EMA$Macroregion)
+
+# Create dataframes to calculate wasserstein distance
+library(transport)
+
+MDS_Scores_R_SI <- (filter(mds_df_R, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_R_NI <- (filter(mds_df_R, Macroregion=="Northern Italy"))$MDS1
+
+MDS_Scores_EMA_SI <- (filter(mds_df_EMA, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_EMA_NI <- (filter(mds_df_EMA, Macroregion=="Northern Italy"))$MDS1
+
+       
+# Create the plots
+mds_R.plot <- ggplot(
+  data=mds_df_R, 
+  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)) +
+    geom_density(adjust=1.5, alpha=.2) +
+      geom_vline(aes(xintercept=mean(MDS_Scores_R_SI)),
+            color="#90a955", linetype="dashed", size=.8)+ #South
+      geom_vline(aes(xintercept=mean(MDS_Scores_R_NI)),
+            color="#212529", linetype="dashed", size=.8)+ #North
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+  theme(legend.position = "none")+
+    labs(
+      title="Roman age",
+      caption = paste0(
+      "PERMANOVA: p > 0.05 \n",
+      "Wasserstein distance: ", round(
+      wasserstein1d(MDS_Scores_R_SI,MDS_Scores_R_NI),2
+      )))
+
+mds_EMA.plot <- ggplot(
+  data=mds_df_EMA, 
+  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)
+  ) +
+  scale_alpha(guide = 'none')+
+  geom_density(adjust=1.5, alpha=.2) +
+  geom_vline(
+    aes(xintercept=mean(MDS_Scores_EMA_SI), color="mean"),
+    color="#90a955", linetype="dashed", size=.8)+ #South
+  geom_vline(
+    aes(xintercept=mean(MDS_Scores_EMA_NI)),
+    color="#212529", linetype="dashed", size=.8)+ #North
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="EMA",
+      caption = paste0(
+      "PERMANOVA: p < 0.0001 \n",
+      "Wasserstein distance: ", round(
+      wasserstein1d(MDS_Scores_EMA_SI,MDS_Scores_EMA_NI),2
+      )))+
+  theme(legend.position = "right")
+
+
+mds_R.boxplot <- ggplot(mds_df_R, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
+    geom_boxplot(alpha=.2)+
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="Roman Age")+
+  theme(legend.position = "none")
+
+mds_EMA.boxplot <- ggplot(mds_df_EMA, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
+    geom_boxplot(alpha=.2)+
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="EMA")+
+  theme(legend.position = "right")
+
+```
+
+```{r}
+#| label: fig-nMDS-1D-macroregion
+#| fig-cap: "nMDS reduction to one dimension performed on the Roman and early Medieval cereal datasets. The dashed colored lines indicate the mean of the distribution."
+#| fig-subcap: 
+#|  - "Roman age."
+#|  - "Early Medieval Age."
+#| layout-nrow: 1
+#| layout-ncol: 2
+#| echo: false
+
+
+# Plot the two plots side by side
+mds_R.plot 
+mds_EMA.plot
+```
+
+```{r}
+#| echo: false
+#| label: fig-boxplot-nMDS-R-EMA
+#| fig-cap: "Boxplots showing the nMDS scores for Northern and Southern Roman Italy."
+#| fig-subcap: 
+#|  - "Roman age."
+#|  - "Early Medieval age."
+#| layout-nrow: 1
+#| layout-ncol: 2
+
+mds_R.boxplot
+mds_EMA.boxplot
+
+```
+
+*Old Python code for the NCA to delete:*
+
+```{python}
+#| code-summary: "Show the code: Libraries"
+#| code-overflow: wrap
+#| code-fold: true
+#| eval: false
+# Load Python libraries
+#!pip install pandas
+import pandas as pd
+import os
+
+#!pip install scikit-hubness
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.neighbors import (KNeighborsClassifier,
+                                 NeighborhoodComponentsAnalysis)
+
+from scipy.stats import wasserstein_distance
+
+import seaborn as sns
+
+# Set seed
+random.seed(10)
+
+```
+
+```{python}
+#| echo: false
+#| eval: true
+#| code-fold: true
+
+## The r. before the dataframe is used for Python to evaluate r dataframes.
+
+# Import the files
+df_EMA = r.Df_Cereals_EMA
+
+df_R = r.Df_Cereals_R
+
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code: Selecting random samples, with replacement"
+#| code-overflow: wrap
+#| eval: false
+
+#R
+df_R_SI = df_R[df_R["Macroregion"]=="Southern Italy"].sample(20, random_state=21, replace="TRUE")
+df_R_NI = df_R[df_R["Macroregion"]=="Northern Italy"].sample(20, random_state=21, replace="TRUE")
+# Create a dataset with northern and southern Italy
+df_R_merge = pd.concat([df_R_SI, df_R_NI], ignore_index=True)
+
+data_R_byPlantGroup = df_R_merge.drop(['Chronology','Type', 'Macroregion', 'Weight'], axis=1)
+labels_R_byPlantGroup = df_R_merge.iloc[:,2] # nrow, 0 for Chronology - nrow, 1 for Type - nrow,2 for Macroregion
+
+#EMA
+df_EMA_SI = df_EMA[df_EMA["Macroregion"]=="Southern Italy"].sample(20, random_state=21, replace="TRUE")
+df_EMA_NI = df_EMA[df_EMA["Macroregion"]=="Northern Italy"].sample(20, random_state=21, replace="TRUE")
+df_EMA_merge = pd.concat([df_EMA_SI, df_EMA_NI], ignore_index=True)
+ 
+data_EMA_byPlantGroup = df_EMA_merge.drop(['Chronology','Type', 'Macroregion', 'Weight'], axis=1)
+labels_EMA_byPlantGroup = df_EMA_merge.iloc[:,2] # nrow, 0 for Chronology - nrow, 1 for Type - nrow,2 for Macroregion
+
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code: Performing the NCA"
+#| code-overflow: wrap
+#| eval: false
+
+#R
+nca_for_KDE_R_PlantGroup = NeighborhoodComponentsAnalysis(n_components =1, init="lda").fit(data_R_byPlantGroup, labels_R_byPlantGroup)
+reduction_for_KDE_R_PlantGroup = nca_for_KDE_R_PlantGroup.transform(data_R_byPlantGroup)
+df_R_merge["value"] = reduction_for_KDE_R_PlantGroup
+     
+#EMA
+nca_for_KDE_EMA_PlantGroup = NeighborhoodComponentsAnalysis(n_components =1, init="lda").fit(data_EMA_byPlantGroup, labels_EMA_byPlantGroup)
+reduction_for_KDE_EMA_PlantGroup = nca_for_KDE_EMA_PlantGroup.transform(data_EMA_byPlantGroup)
+df_EMA_merge["value"] = reduction_for_KDE_EMA_PlantGroup
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code: Wasserstein distance"
+#| code-overflow: wrap
+#| eval: false
+
+# R
+df_R_North = df_R_merge[df_R_merge["Macroregion"] == "Northern Italy"]
+df_R_South = df_R_merge[df_R_merge["Macroregion"] == "Southern Italy"]
+
+print('Roman age - Wasserstein Distance')
+wasserstein_distance(df_R_South["value"], df_R_North["value"], u_weights=df_R_North["Weight"], v_weights=df_R_South["Weight"])
+
+
+#EMA
+print('EMA - Wasserstein Distance')
+df_EMA_North = df_EMA_merge[df_EMA_merge["Macroregion"] == "Northern Italy"]
+df_EMA_South = df_EMA_merge[df_EMA_merge["Macroregion"] == "Southern Italy"]
+
+wasserstein_distance(df_EMA_South["value"], df_EMA_North["value"], u_weights=df_EMA_North["Weight"], v_weights=df_EMA_South["Weight"])
+
+
+
+```
+:::
+
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code: Plotting the NCA"
+#| code-overflow: wrap
+#| label: fig-KDE-NCA-RvsEMA
+#| fig-cap: "One-Dimension NCA on the Presence/Absence Cereals Dataset"
+#| fig-dpi: 300
+#| eval: false
+
+NCA_KDE_1D, ax = plt.subplots(1, 2, figsize=(10, 5), sharey=True, sharex=True)
+
+sns.kdeplot(data=df_R_merge, x="value", ax=ax[0], hue="Macroregion", fill=True, alpha=.1, palette="colorblind", linewidth=1, legend=None).set(xlabel='NCA', title="(a) Roman age")
+
+sns.kdeplot(data=df_EMA_merge, x="value", ax=ax[1], hue="Macroregion", fill=True, alpha=.1, palette="colorblind", linewidth=1).set(xlabel='NCA', title="(b) early Middle ages")
+
+NCA_KDE_1D.text(0.08, 0.03, 'Weighted Wasserstein Distance: W = 20.67 \nPERMANOVA test: p>0.05', fontsize=10)
+NCA_KDE_1D.text(0.68, 0.03, 'Weighted Wasserstein Distance: W = 88.32\nPERMANOVA test: p<0.001', fontsize=10)
+plt.tight_layout()
+plt.subplots_adjust(bottom=0.19)
+plt.show()
+
+```
+
+```{python}
+#| echo: false
+#| label: fig-boxplot-NCA-R
+#| fig-cap: "Boxplots showing the NCA value for Northern and Southern Roman Italy."
+#| eval: false
+
+Boxplot_R_NCA_Fig = plt.figure(figsize = (4.5,3))
+sns.boxplot(x="Macroregion", y="value", data=df_R_merge)
+plt.tight_layout()
+plt.show()
+```
+
+
+```{python}
+#| echo: false
+#| label: fig-boxplot-NCA-EMA
+#| fig-cap: "Boxplots showing the NCA value for Northern and Southern Early Medieval Italy."
+#| eval: false
+
+Boxplot_EMA_NCA_Fig = plt.figure(figsize = (4.5,3))
+sns.boxplot(x="Macroregion", y="value", data=df_EMA_merge)
+plt.tight_layout()
+plt.show()
+
+```
+
+
+### Network Analysis of cereals in EMA sites
+
+::: callout-important
+## Section in progress {style="text-align:justify;"}
+:::
+
+In this section I would like to perform a Network Analysis based on the Jaccard similarity of sites, and then georeference the points on a map to create a network of sites that share similarities. Is it redundant as the point has already been made or can it be used elsewhere?
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show the code"
+#| code-overflow: wrap
+
+library(vegan)
+
+cereals_EMA <- bot_map_EMA[c(1,2,5, 13:23)]
+cereals_EMA[6:ncol(cereals_EMA)] <- decostand(cereals_EMA[6:ncol(cereals_EMA)], method = "pa", na.rm=TRUE)
+cereals_EMA[6:ncol(cereals_EMA)][is.na(cereals_EMA[6:ncol(cereals_EMA)])] <-0 
+
+# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
+cereals_EMA <- cereals_EMA[rowSums(cereals_EMA[6:ncol(cereals_EMA)])>0,]
+
+cereals_EMA.pa <- cereals_EMA[6:ncol(cereals_EMA)]
+cereals_EMA.sites <- cereals_EMA$site_code
+# Deal with duplicate site names or codes? How?
+# Opt 1: Combine them?
+# Opt 2: 
+cereals_EMA.pa <- as.data.frame(cereals_EMA.pa)
+rownames(cereals_EMA.pa) <- make.names(cereals_EMA.sites, unique=TRUE)
+
+cereals_EMA.jaccard <- vegdist(cereals_EMA.pa, method="jaccard", na.rm=TRUE)
+
+
+```
+
+## Distribution of plants in different site types {style="text-align:justify"}
+
+::: callout-note
+I might merge all the fruits (excluding grape and olive) into one graph.
+:::
+
+It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
+
+```{r}
+#| echo: false
+                                                                
+# Store a copy of the original dataframe
+Plants_Df_for_Ubiquity <- Df_Cond_Plants 
+
+# Simplify categories
+#table(Plants_Df_for_Ubiquity$Type)
+Plants_Df_for_Ubiquity$Type <- str_replace(Plants_Df_for_Ubiquity$Type, "Religious, monastery", "Religious")    
+Plants_Df_for_Ubiquity$Type <- str_replace(Plants_Df_for_Ubiquity$Type, "Castle", "Fortified")    
+Plants_Df_for_Ubiquity$Type <- str_replace(Plants_Df_for_Ubiquity$Type, "Castrum", "Fortified")  
+
+# Remove unsp.. columns
+Plants_Df_for_Ubiquity <- Plants_Df_for_Ubiquity %>% select(-"Unsp..cereals", -"Unsp..Pulses")
+
+# Define types and chrono
+Roman_Site_types <- c("Necropolis", "Religious", "Rural", "Rural site, villa", "Urban")
+LateRoman_Site_types <- c("Fortified", "Necropolis", "Rural", "Rural site, villa", "Urban")
+EMA_Site_types <- c("Fortified", "Necropolis", "Religious", "Rural", "Rural site, villa", "Urban")
+Ma_Site_types <- c("Fortified", "Religious", "Rural", "Urban")
+
+# Define a list of column groups
+plants_groups <- list(
+  Noble.Grains = c("Common.Wheat", "Barley"),
+  Minor.Grains = c("Emmer", "Einkorn", "Oats", "Rye", "Proso.millet", "Foxtail.millet", "Sorghum"),
+  Legumes= c("Lentil","Pea","Faba.bean","Vetch","Unsp..Vicia","Blue.Red.Pea","Chickpea"),
+  Nuts = c("Walnut", "Hazelnut", "Chestnut"),
+  Pome.fruits = c("Apple", "Pear"),
+  Stone.fruits = c("Peach", "Plum", "Sour.Cherry", "Unsp..Prunus"),
+  Berries = c("Blackberry", "Elderberry", "Blackthorn", "Wild.Cherry", "Corn..Cherry", "Sorbus.sp.", "Strawberry"),
+  Other.fruits = c("Date", "Melon", "Fig")
+)
+
+# Chronology: Roman (R)
+Ubiquity_typology_chronology.Roman <- Roman_Site_types %>% 
+  map_df(~create_ubiquity_df(Plants_Df_for_Ubiquity, .x, "R"))
+
+# Iterate over the column groups
+for (name in names(plants_groups)) {
+  
+  # Calculate the mean of the columns in the group
+  Ubiquity_typology_chronology.Roman <- Ubiquity_typology_chronology.Roman %>%
+    mutate(!!name := rowMeans(select(., !!plants_groups[[name]]))) %>% 
+                      select(-!!plants_groups[[name]])
+}
+
+Ubiquity_typology_chronology.Roman$Chronology <- "R"
+Ubiquity_typology_chronology.Roman$Type <- rownames(Ubiquity_typology_chronology.Roman)
+rownames(Ubiquity_typology_chronology.Roman) <- NULL
+
+# Chronology: Late Roman (LR)
+Ubiquity_typology_chronology.LateRoman <- LateRoman_Site_types %>% 
+  map_df(~create_ubiquity_df(Plants_Df_for_Ubiquity, .x, "LR"))
+
+# Iterate over the column groups
+for (name in names(plants_groups)) {
+  
+  # Calculate the mean of the columns in the group
+  Ubiquity_typology_chronology.LateRoman <- Ubiquity_typology_chronology.LateRoman %>%
+    mutate(!!name := rowMeans(select(., !!plants_groups[[name]]))) %>% 
+                      select(-!!plants_groups[[name]])
+}
+
+Ubiquity_typology_chronology.LateRoman$Chronology <- "LR"
+Ubiquity_typology_chronology.LateRoman$Type <- rownames(Ubiquity_typology_chronology.LateRoman)
+rownames(Ubiquity_typology_chronology.LateRoman) <- NULL
+
+# Chronology: Early Medieval (EMA)
+Ubiquity_typology_chronology.EMA <- EMA_Site_types %>% 
+  map_df(~create_ubiquity_df(Plants_Df_for_Ubiquity, .x, "EMA"))
+
+# Iterate over the column groups
+for (name in names(plants_groups)) {
+  
+  # Calculate the mean of the columns in the group
+  Ubiquity_typology_chronology.EMA <- Ubiquity_typology_chronology.EMA %>%
+    mutate(!!name := rowMeans(select(., !!plants_groups[[name]]))) %>% 
+                      select(-!!plants_groups[[name]])
+}
+
+Ubiquity_typology_chronology.EMA$Chronology <- "EMA"
+Ubiquity_typology_chronology.EMA$Type <- rownames(Ubiquity_typology_chronology.EMA)
+rownames(Ubiquity_typology_chronology.EMA) <- NULL
+
+# Chronology: Medieval (Ma)
+Ubiquity_typology_chronology.Ma <- Ma_Site_types %>% 
+  map_df(~create_ubiquity_df(Plants_Df_for_Ubiquity, .x, "Ma"))
+
+# Iterate over the column groups
+for (name in names(plants_groups)) {
+  
+  # Calculate the mean of the columns in the group
+  Ubiquity_typology_chronology.Ma <- Ubiquity_typology_chronology.Ma %>%
+    mutate(!!name := rowMeans(select(., !!plants_groups[[name]]))) %>% 
+                      select(-!!plants_groups[[name]])
+}
+
+Ubiquity_typology_chronology.Ma$Chronology <- "Ma"
+Ubiquity_typology_chronology.Ma$Type <- rownames(Ubiquity_typology_chronology.Ma)
+rownames(Ubiquity_typology_chronology.Ma) <- NULL
+
+
+Ubiquity_All_Chrono_Type <- rbind(
+  Ubiquity_typology_chronology.Roman,
+  Ubiquity_typology_chronology.LateRoman,
+  Ubiquity_typology_chronology.EMA,
+  Ubiquity_typology_chronology.Ma
+)
+
+# Reorder columns
+Ubiquity_All_Chrono_Type <- Ubiquity_All_Chrono_Type %>%
+  select("Chronology", "Type", "Noble.Grains","Minor.Grains","Legumes","Nuts","Pome.fruits","Stone.fruits","Berries","Other.fruits","Flax","Grape","Olive")
+
+# PLOTS
+level_order <- c("R", "LR", "EMA", "Ma") 
+library(ggpubr)
+
+noblegrains_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Noble.Grains, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="top") +
+        scale_fill_grey() +
+        labs(
+          title = "Noble Grains",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+minorgrains_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Minor.Grains, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Minor Grains",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+legumes_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Legumes, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Legumes",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+grape_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Grape, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Grape",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+olive_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Olive, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Olives",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+nuts_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Nuts, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Nuts",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+pomefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Pome.fruits, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="bottom") +
+        scale_fill_grey() +
+        labs(
+          title = "Pome Fruits",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+stonefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type, 
+       aes(
+         fill=factor(Chronology, levels=level_order),
+         x=Type,
+         y=Stone.fruits, 
+         ), 
+       ) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Stone Fruits",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| label: fig-ubiquity-site-type
+#| fig-cap: "Ubiquity (%) of plants, divided by site type and chronology."
+#| fig-subcap: 
+#|  - "Noble grains (wheat and barley)."
+#|  - "Minor grains."
+#|  - "Legumes."
+#|  - "Grape."
+#|  - "Olive."
+#| layout-nrow: 7
+#| layout-ncol: 1
+#| fig-height: 2.5
+#| fig-asp: 0.3
+
+noblegrains_by_type
+minorgrains_by_type
+legumes_by_type
+grape_by_type
+olive_by_type
+nuts_by_type
+stonefruits_by_type
+```
+
+#### GLM: Minor grains
+
+::: {.callout-alert}
+This can't work because by calculating the ubiquity (or the presence) for each site I am just producing a dataframe with 5 variables, meaning that no p-value will be significant and the glm will be weak anyway because I am losing the individuality of the site. 
+:::
+
+
+```{r}
+# Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
+# For the moment, I will start from scratch
+
+Minor_Grains <- with(
+  Df_Cond_Plants,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum
+  )
+)
+
+library(dplyr)
+#Simplify categories
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monastery", "Religious")    
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
+
+# calculate the required statistics for each Site_Type
+Minor_Grains_Ubiquity_SiteType <- Minor_Grains %>%
+  group_by(Site_Type) %>%
+  summarise(
+    Tot_Sites=n(),
+    Presences=count(Grain_Count>0),
+    Proportion=Presences/Tot_Sites
+  )
+
+m_st <- glm(Proportion ~ Site_Type, weights = Tot_Sites, family="binomial", data=Minor_Grains_Ubiquity_SiteType)
+
+summary(m_st)
+
+```
+
+
+
+### Richness and diversity in the sites
+
+```{r}
+#| echo: false
+
+Df_Cond_Plants_RichnDiv <- data.frame("Geo" = Df_Cond_Plants$Geo,
+                                                 "Chronology" = Df_Cond_Plants$Chronology,
+                                                 "Type"= Df_Cond_Plants$Type, 
+                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
+                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel), #All plants
+                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
+                                                 Df_Cond_Plants_Rel
+)
+
+#Simplify categories
+Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Religious, monastery", "Religious")    
+Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Castle", "Fortified")    
+Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Castrum", "Fortified")  
+
+# Let's plot the diversity by type
+
+# Creating the dataframes for R and EMA age 
+Df_Cond_Plants_RichnDiv.R <- filter(Df_Cond_Plants_RichnDiv, Chronology == "R")
+Df_Cond_Plants_RichnDiv.LR <- filter(Df_Cond_Plants_RichnDiv, Chronology == "LR")
+Df_Cond_Plants_RichnDiv.EMA <- filter(Df_Cond_Plants_RichnDiv, Chronology == "EMA")
+Df_Cond_Plants_RichnDiv.Ma <- filter(Df_Cond_Plants_RichnDiv, Chronology == "Ma")
+
+
+##########################################
+## CORRECTION FOR INCOMPLETE SAMPLES
+##########################################
+
+#ROMAN 
+# Need to filter out sites that did not provide legumes or fruits at all
+# Need to compare these rows to see if there are some indexes in common 
+CompleteSamples.R <- data.frame(
+Cereals = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(7:16)]) > 0),
+Legumes = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(17:30)]) > 0),
+Fruits = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(31:46)]) > 0)
+)
+
+IncompleteSamplesIndexes.R <- which(rowSums(CompleteSamples.R) < 3)
+
+# LR 
+CompleteSamples.LR <- data.frame(
+Cereals = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(7:16)]) > 0),
+Legumes = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(17:30)]) > 0),
+Fruits = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(31:46)]) > 0)
+)
+
+IncompleteSamplesIndexes.LR <- which(rowSums(CompleteSamples.LR) < 3)
+
+# EMA 
+CompleteSamples.EMA <- data.frame(
+Cereals = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(7:16)]) > 0),
+Legumes = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(17:30)]) > 0),
+Fruits = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(31:46)]) > 0)
+)
+
+IncompleteSamplesIndexes.EMA <- which(rowSums(CompleteSamples.EMA) < 3)
+
+# Ma 
+CompleteSamples.Ma <- data.frame(
+Cereals = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(7:16)]) > 0),
+Legumes = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(17:30)]) > 0),
+Fruits = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(31:46)]) > 0)
+)
+
+IncompleteSamplesIndexes.Ma <- which(rowSums(CompleteSamples.Ma) < 3)
+
+
+##########################################
+## END OF CORRECTION
+##########################################
+
+plot_RichnessType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, aes(x = Type, y = Specnumber, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n=12)", "Villa \n (n=4)", "Urban \n (n=44)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Number of species per site",
+       title = "R - Plant richness")
+
+plot_DiversityType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, aes(x = Type, y = Shannon.Div, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n=12)", "Villa \n (n=4)", "Urban \n (n=44)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Site diversity",
+       title = "R - Shannon diversity")
+
+plot_RichnessType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Specnumber, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Number of species per site",
+       title = "LR - Plant richness")
+
+plot_DiversityType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Shannon.Div, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Site diversity",
+       title = "LR - Shannon diversity")
+
+plot_RichnessType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Specnumber, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Number of species per site",
+       title = "EMA - Plant richness")
+
+plot_DiversityType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Shannon.Div, fill = Type)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 11, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Site type",
+       y = "Site diversity",
+       title = "EMA - Shannon Diversity")
+
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+# Check mean of plant richness
+# [RICHNESS] Urban Roman: 6.5 | Urban LR: 5.9 | Urban EMA: 7.2 | Urban Ma: 9
+# [CORRECTED RICHNESS]: UrbR: 8.45 | UrbLR: 7.2 | UrbEMA: 9.625 | UrbMa: 17.5
+# [DIVERSITY] Urban Roman: 1.02 | Urban LR: 1.20 | Urban EMA: 1.45 |Urban Ma: 1.39
+
+mean((filter(Df_Cond_Plants_RichnDiv.R, Type=="Urban"))$Specnumber)
+mean((filter(Df_Cond_Plants_RichnDiv.R[-IncompleteSamplesIndexes.R,], Type=="Urban"))$Specnumber)
+mean((filter(Df_Cond_Plants_RichnDiv.LR, Type=="Urban"))$Specnumber)
+mean((filter(Df_Cond_Plants_RichnDiv.LR[-IncompleteSamplesIndexes.LR,], Type=="Urban"))$Specnumber)
+mean((filter(Df_Cond_Plants_RichnDiv.EMA, Type=="Urban"))$Shannon.Div)
+mean((filter(Df_Cond_Plants_RichnDiv.EMA[-IncompleteSamplesIndexes.EMA,], Type=="Urban"))$Shannon.Div)
+mean((filter(Df_Cond_Plants_RichnDiv.Ma, Type=="Urban"))$Specnumb)
+mean((filter(Df_Cond_Plants_RichnDiv.Ma[-IncompleteSamplesIndexes.Ma,], Type=="Urban"))$Specnumber)
+
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| layout: "[[100,100], [100,100]], [100,100]"
+#| label: fig-type-richness-div
+#| fig-cap: "Violin plots of plant richness and diversity in different site types. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| fig-subcap: 
+#|   - "Roman plant richness" 
+#|   - "Roman plant diversity."
+#|   - "Late Roman plant richness" 
+#|   - "Late Roman plant diversity."
+#|   - "EMA plant richness" 
+#|   - "EMA plant diversity."
+#| fig-height: 4
+#| fig-width: 6
+#| fig-dpi: 600
+
+plot_RichnessType.R
+plot_DiversityType.R
+plot_RichnessType.LR
+plot_DiversityType.LR
+plot_RichnessType.EMA
+plot_DiversityType.EMA
+
+```
+
+#### Richness in urban contexts
+
+The richness of plants in urban contexts has been calculated for every phase. As not every sample reported cereals, fruits/nuts and legumes, a correction has also been applied to exclude contexts that did not report the three types of plant taxa under examination. This correction has however strong disadvantages as it removes sites where the absence of certain plant categories may have been deliberate (*e.g.*, storages). However, if the figures vary considerably (especially in the case of the 11^th^ century CE which only consists of 2 samples after the correction), the general trend is similar after the correction. Plant richness in urban contexts slightly decreases after the Roman age, but early medieval cities are richer in plants when compared to the Roman and Late Roman phases. In the 11th century, plant richness increases further. These values will be discussed in the results chapter.
+
+| Chronology | Richness | Samples | Richness\* | Samples\* |
+|------------|----------|---------|------------|-----------|
+| R          | 6.5      | 44      | 8.45       | 22        |
+| LR         | 5.9      | 24      | 7.2        | 10        |
+| EMA        | 7.2      | 25      | 9.6        | 8         |
+| Ma         | 9        | 8       | 17.5       | 2         |
+
+: Plant richness in urban contexts before and after (**\***) removing incomplete samples. {#tbl-richness-urban}
+
+### Correspondence analysis tests
+
+```{r}
+#| eval: FALSE
+#| echo: false
+
+#Perform CCA with vegan package
+Ubiq_typ_chr.Roman.CCA <- cca(Ubiquity_typology_chronology.Roman, data = Ubiquity_typology_chronology.Roman)
+
+# Getting the coordinates to plot with ggplot
+site_data.Roman <- scores(Ubiq_typ_chr.Roman.CCA, display = "sites") %>% 
+  as.data.frame()
+
+species_data.Roman <- scores(Ubiq_typ_chr.Roman.CCA, display = "species") %>% 
+  as.data.frame()
+
+Plants_Type <- data.frame(Type=1:11) # To color the plot
+Plants_Type$Type[1:2] <- "Cereals"
+Plants_Type$Type[3] <- "Pulses"
+Plants_Type$Type[4:11] <- "Fruits/Nuts"
+
+species_data.Roman <- cbind.data.frame(species_data.Roman, Plants_Type) # Merging the df
+
+# Plot
+library(ggrepel)
+Ubiq_CA_palette <- c("#e8c120", "#ee542f", "#60a561")
+
+Ubiq_typ_chr.Roman.CCA.plot <- ggplot(site_data.Roman) +
+  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
+  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
+  geom_point(aes(x = CA1, y = CA2), shape = 15, size = 2, alpha = 0.8) +
+  geom_text_repel(data = species_data.Roman, aes(x = CA1, y = CA2, color=Type, label = rownames(species_data.Roman)), size=3.5,  nudge_x = 0.1, nudge_y = 0.1)+
+  geom_label_repel(data = site_data.Roman, aes(x = CA1, y = CA2, label = rownames(site_data.Roman)), nudge_x = 0.3, nudge_y = 0.3)+
+  coord_fixed() +
+  scale_color_manual(values = Ubiq_CA_palette) +
+  geom_point(data = species_data.Roman, aes(x = CA1, y = CA2, color=Type), shape = 3, size = 2, alpha=0.8) +
+  scale_x_continuous(limits = c(-2, 2)) +
+  scale_y_continuous(limits = c(-2, 2)) +
+  clean_background +
+  labs(title = "Canonical Correspondence Analysis", subtitle="Roman - Ubiquity (%) of plants against site type.", color="Plants")
+```
+
+```{r}
+#| eval: false
+#| echo: false
+#| 
+#Perform CCA with vegan package
+Ubiq_typ_chr.LateRoman.CCA <- cca(Ubiquity_typology_chronology.LateRoman, data = Ubiquity_typology_chronology.LateRoman)
+
+# Getting the coordinates to plot with ggplot
+site_data.LateRoman <- scores(Ubiq_typ_chr.LateRoman.CCA, display = "sites") %>% 
+  as.data.frame()
+
+species_data.LateRoman <- scores(Ubiq_typ_chr.LateRoman.CCA, display = "species") %>% 
+  as.data.frame()
+
+Plants_Type.LR <- data.frame(Type=1:11) # To color the plot
+Plants_Type.LR$Type[1:2] <- "Cereals"
+Plants_Type.LR$Type[3] <- "Pulses"
+Plants_Type.LR$Type[4:11] <- "Fruits/Nuts"
+
+species_data.LateRoman <- cbind.data.frame(species_data.LateRoman, Plants_Type.LR) # Merging the df
+
+# Plot
+Ubiq_typ_chr.LateRoman.CCA.plot <- ggplot(site_data.LateRoman) +
+  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
+  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
+  geom_point(aes(x = CA1, y = CA2), shape = 15, size = 2, alpha = 0.8) +
+  geom_text_repel(data = species_data.LateRoman, aes(x = CA1, y = CA2, color=Type,  label = rownames(species_data.LateRoman)), size=3.5,  nudge_x = 0.1, nudge_y = 0.1)+
+  geom_label_repel(data = site_data.LateRoman, aes(x = CA1, y = CA2, label = rownames(site_data.LateRoman)), nudge_x = 0.3, nudge_y = 0.3)+
+  coord_fixed() +
+  scale_color_manual(values = Ubiq_CA_palette) +
+  geom_point(data = species_data.LateRoman, aes(x = CA1, y = CA2, color=Type), shape = 3, size = 2, alpha=0.8) +
+  scale_x_continuous(limits = c(-2, 2)) +
+  scale_y_continuous(limits = c(-2, 2)) +
+  clean_background +
+  labs(title = "Canonical Correspondence Analysis", subtitle="Late Roman - Ubiquity (%) of plants against site type.", color="Plants")
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| warning: false
+#| label: fig-CCA-Roman-ubiquity-plants
+#| fig-cap: "CCA performed on the ubiquity of site types in the Roman age" 
+
+Ubiq_typ_chr.Roman.CCA.plot
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| warning: false
+#| label: fig-CCA-LateRoman-ubiquity-plants
+#| fig-cap: "CCA performed on the ubiquity of site types in the Late Roman age" 
+
+Ubiq_typ_chr.LateRoman.CCA.plot
+```
+
+## Soil types vs Crops
+
+see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in Hamerow and McKerracher 2022, p. 153
+
+# To do:
+
+-   Wine production in Italy
+-   Olive oil production in Italy

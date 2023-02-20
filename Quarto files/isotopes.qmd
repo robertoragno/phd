@@ -1,0 +1,294 @@
+# Isotopes
+
+Data is from the Compendium Isotoporum Medii Aevi (CIMA) database [@cocozzaPresentingCompendiumIsotoporum2022] and from the IsoArch database.
+
+```{r}
+#| echo: false
+#| message: false
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(tidyverse)
+
+
+Cima=read.csv2("/Users/robertoragno/Downloads/Isotopes/cima-humans-29.05.2021-csv.csv")
+IsoArch_Ita <- read.csv2("/Users/robertoragno/Downloads/Isotopes/isoarch_2023-02-18_16_04_24.csv")
+
+humans_isoArch <- with(subset(IsoArch_Ita, individualRelDatingLowerLimit>=-200 & individualRelDatingUpperLimit <= 1200), {
+ data.frame(
+  Site = siteName,
+#  Modern_Site = town,
+  Type = siteType,
+#  Region=region,
+  Y = lat,
+  X = lon,
+  From.Date = individualRelDatingLowerLimit,
+  To.Date = individualRelDatingUpperLimit,
+  Ref = publications,
+  IRMS_d13C_Collagen=as.numeric(d13C),
+  d15N_Collagen=as.numeric(d15N)
+  )
+}
+      )
+
+humans_iso <- with(subset(Cima, Modern_Country=="Italy"), {
+   data.frame(
+  Site = Site_Name,
+  Type = Site_Description,
+  Y = Latitude,
+  X = Longitude,
+  From.Date = Min_Year_95_perc,
+  To.Date = Max_Year_95_perc,
+#  Dating.Method = Dating_Method,
+#  C14= C14,
+#  C14_Unc=C14_unc,
+  Ref = Reference,
+#  DOI= DOI,
+  IRMS_d13C_Collagen=as.numeric(IRMS_d13C_Collagen),
+#  IRMS_d13C_Collagen_unc=as.numeric(IRMS_d13C_Collagen_unc),
+  d15N_Collagen=as.numeric(d15N_Collagen)
+#  d15N_Collagen_unc=as.numeric(d15N_Collagen_unc)
+)
+}
+)
+
+# Change names of the same contexts
+humans_isoArch$Site[humans_isoArch$Site=="Villamagna - Churchyard"] <- "Villamagna"
+humans_isoArch$Site[humans_isoArch$Site=="La Selvicciola cemetery"] <- "La Selvicciola"
+humans_isoArch$Site[humans_isoArch$Site=="Nuova Stazione dell‘Alta Velocita’"] <- "Bologna"
+humans_isoArch$Site[humans_isoArch$Site=="ANAS"] <- "ANAS, via del Mare"
+humans_isoArch$Type[humans_isoArch$Type=="Rural cemetery"] <- "Rural Settlement"
+humans_isoArch$Type[humans_isoArch$Type=="Urban cemetery"] <- "Urban Settlement"
+humans_isoArch$Type[humans_isoArch$Type=="Subterranean cemetery"] <- "Urban Settlement"
+
+# Merge the two data frames
+humans_combined <- humans_isoArch %>%
+  anti_join(humans_iso, by = "Site") %>%
+  bind_rows(humans_iso)
+
+
+# Providing site types to those sites missing it
+humans_combined$Type[which(humans_combined$Site == 'Herculaneum')] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Romans d'Isonzo")] <- 'Rural Settlement'
+humans_combined$Type[which(humans_combined$Site == "Catacombs of SS Marcellino e Pietro")] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Paestum - Porta Sirena")] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Tenuta del Duca")] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Imperiale Navalia Building 5")] <- 'Military Settlement'
+humans_combined$Type[which(humans_combined$Site == "Bologna")] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Santo Stefano in Pertica")] <- 'Urban Settlement'
+humans_combined$Type[which(humans_combined$Site == "Civitanova Marche")] <- 'Urban Settlement'
+
+# Create a new column called 'Macroregion'
+humans_combined$Macroregion <- ifelse(humans_combined$Y > 43.58, "Northern", 
+                               ifelse(humans_combined$Y < 41.00, "Southern", "Central"))
+
+humans_combined$Macroregion <- as.factor(humans_combined$Macroregion)
+
+
+humans_iso.R <- subset(humans_combined, From.Date >=-200 & To.Date<=200)
+humans_iso.LR <- subset(humans_combined, From.Date >=201 & To.Date<=500)
+humans_iso.EMA <- subset(humans_combined, From.Date >=501 & To.Date<=1200)
+
+
+humans_iso.R.Southern <- subset(humans_iso.EMA, Macroregion=="Southern")
+humans_iso.R.Central <- subset(humans_iso.EMA, Macroregion=="Central")
+humans_iso.R.Northern <- subset(humans_iso.EMA, Macroregion=="Northern")
+humans_iso.EMA.Southern <- subset(humans_iso.EMA, Macroregion=="Southern")
+humans_iso.EMA.Central <- subset(humans_iso.EMA, Macroregion=="Central")
+humans_iso.EMA.Northern <- subset(humans_iso.EMA, Macroregion=="Northern")
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+humans_iso.EMA.plot1 <- ggplot(
+  humans_iso.EMA, 
+  aes(x = IRMS_d13C_Collagen, y = d15N_Collagen, shape = Macroregion)
+) +
+  geom_point(size = 2.9, aes(colour = Type)) + 
+  scale_color_manual(values=c("#FF8C00", "#CD5555", "#A2CD5A", "#00688B"))+
+  scale_shape_manual(values=c(18,20,22))+
+  theme_minimal() +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  labs(
+    title = "Humans Isotopes \n501-1200 CE",
+    x = "IRMS d13 Collagen", 
+    y = "d15N Collagen"
+  )
+```
+
+
+```{r}
+#| echo: false
+#| error: false
+
+
+humans_iso.EMA.plot1 <- plot_ly(
+  humans_iso.EMA, 
+  x = ~IRMS_d13C_Collagen, 
+  y = ~d15N_Collagen, 
+  color = ~Type,
+  colors = c("#FF8C00", "#CD5555", "#A2CD5A", "#00688B"),
+  symbol = ~Macroregion,
+  symbols = c(18, 20, 22),
+  text = ~Site,
+  type = "scatter",
+  mode = "markers"
+) %>% 
+  layout(
+    title = "Humans Isotopes \n501-1200 CE",
+    xaxis = list(title = "IRMS d13 Collagen"),
+    yaxis = list(title = "d15N Collagen")
+  )
+
+
+humans_iso.EMA.plot2 <- ggplot(
+  humans_iso.EMA, 
+  aes(x = IRMS_d13C_Collagen, y = d15N_Collagen, shape = Type)
+) +
+  geom_point(size = 2, aes(colour = Macroregion)) + 
+  scale_color_manual(values=c("#698B69", "#CD9B1D", "red"))+
+  scale_shape_manual(values=c(18,20,15,2))+
+  theme_minimal() +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  labs(
+    title = "Humans Isotopes \n501-1200 CE",
+    x = "IRMS d13 Collagen", 
+    y = "d15N Collagen"
+  )
+
+humans_iso.R.plot2 <- ggplot(
+  humans_iso.R, 
+  aes(x = IRMS_d13C_Collagen, y = d15N_Collagen, shape = Type)
+) +
+  geom_point(size = 2, aes(colour = Macroregion)) + 
+  scale_color_manual(values=c("#698B69", "#CD9B1D", "red"))+
+  scale_shape_manual(values=c(18,20,15,2))+
+  theme_minimal() +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  labs(
+    title = "Humans Isotopes \n200 BCE - 200 CE",
+    x = "IRMS d13 Collagen", 
+    y = "d15N Collagen"
+  )
+
+
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-isotopes-ema-humans
+#| fig-cap: "Human isotopes (300-1100 CE). Source "
+#| fig-subcap: 
+#|  - "Early Medieval / Medieval sites, colored by Type"
+#|  - "Early Medieval / Medieval sites, colored by Macroregion"
+#| layout-nrow: 2
+#| layout-ncol: 1
+#| fig-height: 4.5
+
+humans_iso.EMA.plot1
+humans_iso.EMA.plot2
+
+```
+
+## Intrasite variability
+
+```{r}
+#| echo: false
+#| output: false
+#| message: false
+
+library(dplyr)
+
+humans_iso_meansd <- humans_iso.EMA %>%
+  group_by(Site) %>%
+  summarise(
+            Macroregion = first(Macroregion),
+            Type=first(Type),
+            From.Date = first(From.Date),
+            To.Date = first(To.Date),
+            Samples_No = n(),
+            mean_IRMS_d13C_Collagen = round(mean(IRMS_d13C_Collagen, na.rm = TRUE),2),
+            sd_IRMS_d13C_Collagen = round(sd(IRMS_d13C_Collagen, na.rm = TRUE),2),
+            mean_d15N_Collagen = round(mean(d15N_Collagen, na.rm = TRUE),2),
+            sd_d15N_Collagen = round(sd(d15N_Collagen, na.rm = TRUE),2)
+            )
+
+```
+
+```{r}
+#| echo: false
+
+DT::datatable(humans_iso_meansd, 
+              style = 'bootstrap',
+              class="table table-condensed",
+              rownames = T,
+              caption = 'Mean and standard deviation of D13C and D15N for each site in the dataset.'
+)
+
+```
+
+```{r}
+#| echo: false
+
+humans_iso.EMA.merged <- ggplot(
+  humans_iso_meansd, 
+  aes(x = mean_IRMS_d13C_Collagen, y = mean_d15N_Collagen, shape = Macroregion)
+) +
+  geom_errorbar(aes(ymin = mean_d15N_Collagen - sd_d15N_Collagen, 
+                    ymax = mean_d15N_Collagen + sd_d15N_Collagen,
+                    width = 0),
+                size = 0.1, colour = "black") +
+  geom_errorbarh(aes(xmin = mean_IRMS_d13C_Collagen - sd_IRMS_d13C_Collagen, 
+                     xmax = mean_IRMS_d13C_Collagen + sd_IRMS_d13C_Collagen,
+                     height = 0),
+                 size = 0.1, colour = "black") +
+    geom_point(size = 3.5, aes(colour = Type)) + 
+  scale_color_manual(values=c("#454545", "#CD5555", "#556B2F", "#9FB6CD"))+
+  scale_shape_manual(values=c(18,20,22))+
+  theme_minimal() +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  labs(
+    title = "Humans Isotopes \n501-1200 CE",
+    x = "IRMS d13 Collagen", 
+    y = "d15N Collagen"
+  )
+
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-isotopes-ema-humans-means-sd
+#| fig-cap: "Human isotopes (501-1200 CE). Points represent the mean for each site and the bars show the standard deviation."
+
+humans_iso.EMA.merged
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-isotopes-ema-humans-boxplot-sd
+#| fig-cap: "Human isotopes (501-1200 CE). Standard deviation within individual settlements. The d15N st.dev. median (0.98) shows higher variability than d13C values."
+
+boxplot(humans_iso_meansd$sd_IRMS_d13C_Collagen, humans_iso_meansd$sd_d15N_Collagen, 
+        boxwex=0.5,
+        na.action = na.omit,
+        names=c("d13C St.Dev", "d15N St.Dev"),
+        col=c("#C1CDCD", "#CDCDB4"),
+        main="Standard deviations of d13C and d15N.",
+        sub="Is the intrasite variability more related to meat consumption or C4 plants?"
+        )
+
+
+```
+
+
+
+

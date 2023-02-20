@@ -1,0 +1,976 @@
+---
+always_allow_html: true
+---
+
+# Zooarchaeology
+
+::: callout-important
+## Page under construction {style="text-align:justify;"}
+:::
+
+```{r}
+#| echo: false
+#| message: false
+
+# Load functions
+source('functions_zoo.R')
+
+```
+
+```{r}
+#| echo: false
+
+zooarch_cond <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed.csv", header=TRUE, sep=";")
+
+```
+
+## Case studies {style="text-align:justify;"}
+
+The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right.
+
+```{r}
+#| echo: false
+#| output: false
+
+# Load libraries
+library(sp)
+library(rgdal)
+library(leaflet)
+library(leaflet.extras)
+library(htmltools)
+library(tidyverse)
+library(fontawesome) 
+library(vegan)
+
+# Get an Italy shapefile
+#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
+            #  destfile = 'italy.zip')
+#unzip(zipfile = 'italy.zip')
+
+italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
+
+# Grouping
+zoo_map_R <- filter(zooarch_cond, Chronology=="R")
+zoo_map_LR<- filter(zooarch_cond, Chronology=="LR")
+zoo_map_EMA<- filter(zooarch_cond, Chronology=="EMA")
+zoo_map_Ma<- filter(zooarch_cond, Chronology=="Ma")
+
+#Icon for the map
+
+Icon_red_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'yellow',
+  library = 'fa',
+  markerColor = "red"
+)
+
+Icon_lightred_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor = "lightred"
+)
+
+Icon_lightgray_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor = "lightgray"
+)
+
+Icon_green_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'darkgreen',
+  library = 'glyphicon',
+  markerColor = "lightgreen"
+)
+
+# Build the map
+italy_zoo_map <- leaflet(data=italy) %>%
+  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(weight = 1, 
+              smoothFactor = 0.5,
+              opacity = 0.2, 
+              fillOpacity = 0.5,
+              fillColor = "#F9F5EB",
+              color="#D7A86E"
+              ) %>%
+  addAwesomeMarkers(data=zoo_map_R, lng = zoo_map_R$X, lat = zoo_map_R$Y,
+                    group="R", 
+                    icon = Icon_red_zoo,
+                    popup = paste(
+                      "<b>", zoo_map_R$Site, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", zoo_map_R$ID,"<br>",
+                           "<b>Type:</b>", zoo_map_R$Type, "<br>",
+                           "<b>Centuries:</b>", zoo_map_R$From.Century,
+                           "-", zoo_map_R$To.Century, "<br>",
+                           "<b>Chronology:</b>", zoo_map_R$Chronology, "<br>",
+                           "<b>Reference:</b><i>", zoo_map_R$Reference, "</i><br>",
+                           "<b>NISP</b>:", rowSums(zoo_map_R[,c(15:23)], na.rm=T), "<br>",
+                           "<br><b>Domestic %:</b> <br>",
+                           "Pigs:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
+                           "Cattle:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
+                           "Sheep/Goat:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
+                           ), 
+             label=~htmlEscape(zoo_map_R$Site)
+ ) %>%
+    addAwesomeMarkers(data=zoo_map_LR, lng = zoo_map_LR$X, lat = zoo_map_LR$Y,
+                    group="LR",
+                    icon = Icon_lightred_zoo,
+                    popup = paste(
+                      "<b>", zoo_map_LR$Site, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", zoo_map_LR$ID,"<br>",
+                           "<b>Type:</b>", zoo_map_LR$Type, "<br>",
+                           "<b>Centuries:</b>", zoo_map_LR$From.Century,
+                           "-", zoo_map_LR$To.Century, "<br>",
+                           "<b>Chronology:</b>", zoo_map_LR$Chronology, "<br>",
+                           "<b>Reference:</b><i>", zoo_map_LR$Reference, "</i> <br>",
+                      "<b>NISP</b>:", rowSums(zoo_map_LR[,c(15:23)], na.rm=T), "<br>",
+                           "<br><b>Domestic %:</b> <br>",
+                           "Pigs:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
+                           "Cattle:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
+                           "Sheep/Goat:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
+                           ), 
+             label=~htmlEscape(zoo_map_LR$Site)
+ ) %>%
+      addAwesomeMarkers(data=zoo_map_EMA, lng = zoo_map_EMA$X, lat = zoo_map_EMA$Y,
+                    group="EMA",
+                    icon = Icon_lightgray_zoo,
+                    popup = paste(
+                      "<b>", zoo_map_EMA$Site, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", zoo_map_EMA$ID,"<br>",
+                           "<b>Type:</b>", zoo_map_EMA$Type, "<br>",
+                           "<b>Centuries:</b>", zoo_map_EMA$From.Century,
+                           "-", zoo_map_EMA$To.Century, "<br>",
+                           "<b>Chronology:</b>", zoo_map_EMA$Chronology, "<br>",
+                           "<b>Reference:</b><i>", zoo_map_EMA$Reference, "</i> <br>",
+                      "<b>NISP</b>:", rowSums(zoo_map_EMA[,c(15:23)], na.rm=T), "<br>",
+                           "<br><b>Domestic %:</b> <br>",
+                           "Pigs:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
+                           "Cattle:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
+                           "Sheep/Goat:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
+                      ), 
+             label=~htmlEscape(zoo_map_EMA$Site)
+ ) %>%
+        addAwesomeMarkers(data=zoo_map_Ma, lng = zoo_map_Ma$X, lat = zoo_map_Ma$Y,
+                    group="Ma",
+                    icon = Icon_green_zoo,
+                    popup = paste(
+                      "<b>", zoo_map_Ma$Site, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", zoo_map_Ma$ID,"<br>",
+                           "<b>Type:</b>", zoo_map_Ma$Type, "<br>",
+                           "<b>Centuries:</b>", zoo_map_Ma$From.Century,
+                           "-", zoo_map_Ma$To.Century, "<br>",
+                           "<b>Chronology:</b>", zoo_map_Ma$Chronology, "<br>",
+                      "<b>Reference:</b><i>", zoo_map_Ma$Reference, "</i> <br>",
+                      "<b>NISP</b>:", rowSums(zoo_map_Ma[,c(15:23)], na.rm=T), "<br><br>",
+                           "<b>Domestic %:</b> <br>",
+                           "Pigs:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
+                           "Cattle:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
+                           "Sheep/Goat:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
+                           ), 
+             label=~htmlEscape(zoo_map_Ma$Site)
+ ) %>%
+  addLayersControl(
+    overlayGroups = c("R", "LR", "EMA", "Ma"),
+    baseGroups = c("Political", "Physical"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  hideGroup(c("LR", "EMA", "Ma")) %>%
+  addResetMapButton() %>%
+  addFullscreenControl() %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }")
+
+
+```
+
+::: {.content-visible when-format="html"}
+```{r}
+#| echo: false
+#| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
+
+italy_zoo_map
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+Show map
+:::
+
+## Medians {style="text-align:justify;"}
+
+::: {.content-visible when-format="html"}
+The faunal dataset is large (434+ records) and diversified. Looking at the distributions of each animal, the curve is not gaussian. The best choice for non-normal curves is to use medians instead of means to come up with figures that are less dependent on outliers. The function `Medians_Chrono_Zoo()` (@sec-fun-Medians-Chrono-Zoo) can be used to return as output weighted medians for each chronology. The in-depth description of how weights are calculated for each sample can be found in @sec-chrono-fuzziness. To summarise, sites with a very large (*i.e.* fuzzy) chronology contribute less to the calculation of the median. @tbl-zoo-medians-chronology provides the median values of the main categories of faunal remains for each chronology, and @tbl-zoo-medians-centuries the median values for each century. Stronger colours in the cells indicate higher values.
+:::
+
+::: {.content-visible when-format="pdf"}
+The faunal dataset is large (434+ records) and diversified. Looking at the distributions of each animal, the curve is not gaussian. The best choice for non-normal curves is to use medians instead of means to come up with figures that are less dependent on outliers. The function `Medians_Chrono_Zoo()` (@sec-fun-Medians-Chrono-Zoo) can be used to return as output weighted medians for each chronology. The in-depth description of how weights are calculated for each sample can be found in @sec-chrono-fuzziness. To summarise, sites with a very large (*i.e.* fuzzy) chronology contribute less to the calculation of the median. @tbl-zoo-medians-chronology-pdf provides the median values of the main categories of faunal remains for each chronology, and @tbl-zoo-medians-centuries-pdf the median values for each century.
+:::
+
+```{r}
+#| echo: false
+#| output: false
+
+library(knitr)
+library(kableExtra)
+library(formattable)
+library(dplyr)
+
+```
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code"
+#| code-overflow: wrap
+
+Medians_Categorised_per_Chronology_ZOO <- 
+  data.frame(
+    Medians_Chrono_Zoo(zooarch_cond, "R")*100,
+    Medians_Chrono_Zoo(zooarch_cond, "LR")*100,
+    Medians_Chrono_Zoo(zooarch_cond, "EMA")*100,
+    Medians_Chrono_Zoo(zooarch_cond, "Ma")*100
+  )
+
+# Round to 2 digits
+Medians_Categorised_per_Chronology_ZOO <- round(Medians_Categorised_per_Chronology_ZOO, 2)
+
+## Weighted medians per century ##
+Medians_ZOO_Centuries <- data.frame(
+  "I BCE" = zooarch_tables(zooarch_cond, -1)$Medians,  
+  "I CE" = zooarch_tables(zooarch_cond, 1)$Medians,
+  "II CE" = zooarch_tables(zooarch_cond, 2)$Medians,
+  "III CE" = zooarch_tables(zooarch_cond, 3)$Medians,
+  "IV CE" = zooarch_tables(zooarch_cond, 4)$Medians,
+  "V CE" = zooarch_tables(zooarch_cond, 5)$Medians,
+  "VI CE" = zooarch_tables(zooarch_cond, 6)$Medians,
+  "VII CE" = zooarch_tables(zooarch_cond, 7)$Medians,
+  "VIII CE" = zooarch_tables(zooarch_cond, 8)$Medians,
+  "IX CE" = zooarch_tables(zooarch_cond, 9)$Medians,
+  "X CE" = zooarch_tables(zooarch_cond, 10)$Medians,
+  "XI CE" = zooarch_tables(zooarch_cond, 11)$Medians
+)
+
+# Assigning the colnames (optional - instead of roman numerals)
+colnames(Medians_ZOO_Centuries) <- c("1st c. BCE", "1st c. CE", "2nd c.", "3rd c.", "4th c.", "5th c.", "6th c.", "7th c.", "8th c.", "9th c.", "10th c.", "11th c.")
+
+# Rounding the medians
+Medians_ZOO_Centuries <- round(Medians_ZOO_Centuries, digits=2)
+
+# Removing categories that are not necessary
+Medians_ZOO_Centuries <- Medians_ZOO_Centuries[-c(6:9),]
+
+```
+:::
+
+::: {.content-visible when-format="html"}
+```{r}
+#| label: tbl-zoo-medians-chronology
+#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by chronology."
+#| echo: false
+
+Medians_Categorised_per_Chronology_ZOO.tbl <- (Medians_Categorised_per_Chronology_ZOO[-10,])
+
+Medians_Categorised_per_Chronology_ZOO.tbl$R <- color_tile("white", "#bb4734")(Medians_Categorised_per_Chronology_ZOO.tbl$R)
+Medians_Categorised_per_Chronology_ZOO.tbl$LR <- color_tile("white", "#ef8f7f")(Medians_Categorised_per_Chronology_ZOO.tbl$LR)
+Medians_Categorised_per_Chronology_ZOO.tbl$EMA <- color_tile("white", "#a3a3a3")(Medians_Categorised_per_Chronology_ZOO.tbl$EMA)
+Medians_Categorised_per_Chronology_ZOO.tbl$Ma <- color_tile("white", "#c4ef81")(Medians_Categorised_per_Chronology_ZOO.tbl$Ma)
+
+Medians_Categorised_per_Chronology_ZOO.tbl %>%
+  kable("html", escape = F, digits = 2) %>%
+  kable_styling("hover", full_width = T) %>%  
+  column_spec(1, image = spec_image(
+    c("https://cdn-icons-png.flaticon.com/512/776/776487.png", "https://cdn-icons-png.flaticon.com/512/4455/4455466.png", "https://cdn-icons-png.flaticon.com/512/1676/1676821.png", "https://cdn-icons-png.flaticon.com/512/6678/6678092.png", "https://cdn-icons-png.flaticon.com/512/1063/1063448.png", "https://cdn-icons-png.flaticon.com/512/1728/1728751.png", "https://cdn-icons-png.flaticon.com/512/7591/7591559.png", "https://cdn-icons-png.flaticon.com/512/91/91536.png", "https://cdn-icons-png.flaticon.com/512/616/616519.png"), 70, 70)) %>%
+  add_header_above(c(" ", "Chronologies" = 4))
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r}
+#| label: tbl-zoo-medians-chronology-pdf
+#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by chronology."
+#| echo: false
+Medians_Categorised_per_Chronology_ZOO.tbl <- (Medians_Categorised_per_Chronology_ZOO[-10,])
+
+knitr::kable(Medians_Categorised_per_Chronology_ZOO.tbl, format="latex", booktabs=TRUE) %>% 
+  kable_styling(latex_options = "HOLD_position") %>%
+  add_header_above(c(" ", "Chronologies" = 4))
+
+```
+:::
+
+Pigs' medians from the Italian peninsula are the highest in each chronology, although their values decrease after the Roman age peak. Cattle medians slightly decrease after the Roman age, even though surprisingly (*put a reference here to literature review to explain why surprisingly*) the values increase again (18--19.71%) during the early Medieval and Medieval age. The trends for sheeps and goats are also interesting. During the Roman age the Italian median is 25%, slightly decreasing in the 3^rd^ to the 5^th^ century, and increasing again after. When discussing sheep-farming, one must always consider the geographical features from which the data is being collected. This will be discussed later on in the chapter, where more regional and geographical trends will be provided. Domestic fowl (chickens and geese) has quite stable values of 4-5%, with a peak of 7.68% in the 11^th^ century. Wild game peaks during the Roman age, with a median value of 5%, reaching a minimum in the early Middle ages (2%) and rising again in the 11^th^ century. Two considerations must be made for game consumption. The first is that as we will see later on, game consumption is strongly related to the site typology. Secondly, the Roman age value is pulled up by assemblages from the 1^st^ century BCE. After that, the values strongly decrease and by looking at the individual centuries the medians from the 7^th^ century onwards are much higher (ranging from 1.42% to 2.09%).
+
+::: {.content-visible when-format="html"}
+```{r}
+#| label: tbl-zoo-medians-centuries
+#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by century."
+#| echo: false
+
+Medians_ZOO_Centuries.tbl <- Medians_ZOO_Centuries
+
+# Coloring the rows according to Chronology (R = Red, LR = Light red, EMA = gray, Ma = light green)
+for(i in 1:3) {
+Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#bb4734")(Medians_ZOO_Centuries.tbl[,i])
+}
+
+for(i in 4:6) {
+ Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#ef8f7f")(Medians_ZOO_Centuries.tbl[,i])
+}
+ 
+for(i in 7:11) {
+  Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#a3a3a3")(Medians_ZOO_Centuries.tbl[,i])
+}
+  
+Medians_ZOO_Centuries.tbl[,12] <- color_tile("white", "#c4ef81")(Medians_ZOO_Centuries.tbl[,12])
+
+Medians_ZOO_Centuries.tbl<- t(Medians_ZOO_Centuries.tbl)
+
+Medians_ZOO_Centuries.tbl_names_spaced <- c(
+  'Pigs', 'Cattle', 'Caprine', 
+  'Domestic fowl',
+  'Wild game')
+
+Medians_ZOO_Centuries.tbl %>%
+  kable("html", escape = F, col.names = Medians_ZOO_Centuries.tbl_names_spaced) %>%
+  kable_styling(bootstrap_options = "hover", full_width = T) %>%
+  footnote(symbol = "The color gradients in this table are used to indicate the chronologies.") %>%
+  add_header_above(c(" ", "Faunal remains" = 5))
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r}
+#| label: tbl-zoo-medians-centuries-pdf
+#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by century."
+#| echo: false
+
+Medians_ZOO_Centuries.tbl <- Medians_ZOO_Centuries
+Medians_ZOO_Centuries.tbl<- t(Medians_ZOO_Centuries.tbl)
+
+Medians_ZOO_Centuries.tbl_names_spaced <- c(
+  'Pigs', 'Cattle', 'Caprine', 
+  'Domestic fowl',
+  'Wild game')
+
+knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_names_spaced, format="latex", booktabs=TRUE) %>% 
+  kable_styling(latex_options = "HOLD_position") %>%
+  add_header_above(c(" ", "Faunal remains" = 5))
+```
+:::
+
+### Medians of faunal remains by context type {style="text-align:justify;"}
+
+The weighted medians included below have been generated using the package `dplyr` and the `summarize()` function, applied to the exported relative proportion table (using the custom function `zooarch_tables_general()`, described in @sec-fun-zooarch-tables-general). The medians have been calculated for four animal categories (pigs, cattle, caprine, and game) for each site type and chronology. After, similar context types have been merged to simplify the reading; for example, the category `Castle` has been merged with the category `Castrum`, as they both indicate élite/military fortified contexts.
+
+```{r}
+#| echo: false
+#| output: false 
+
+# Import libraries
+library(matrixStats) # WeightedMedian() function
+library(ggpubr)
+library(stringr) # To rename strings
+
+zooarch_summary <- (zooarch_tables_general(zooarch_cond)$Rel_Prop_exp_XY)
+zooarch_summary[zooarch_summary==0] <- NA
+
+#Simplify the categories
+#zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Urban, amphitheater", "Urban")    
+zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Urban, amphitheater", "Amphitheater")    
+#zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Rural site, villa", "Rural")    
+zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Rural site, mansio", "Rural")
+zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Religious, monastery", "Religious")
+zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Castle", "Fortified")
+zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Castrum", "Fortified")
+#zooarch_summary$Type <- str_replace(zooarch_summary$Type, "Castle/Castle/Castrum", "Castle/Castrum")
+zooarch_summary$Geo <- str_replace(zooarch_summary$Geo, "Hilltop", "Hill")
+
+# Creating medians by site type
+
+zoo_medians_type <- zooarch_summary %>%
+  group_by(Type, Chronology) %>%
+  summarize(Pigs = weightedMedian(Pigs, w=weight, na.rm = TRUE),
+            Cattle = weightedMedian(Cattle, w=weight, na.rm = TRUE),
+            Caprine = weightedMedian(Caprine, w=weight, na.rm = TRUE),
+            Edible_Wild = weightedMedian(Edible.W..Mammals, w=weight, na.rm = TRUE)
+            )
+
+zoo_medians_type <- as.data.frame(zoo_medians_type)
+
+# Remove amphiteaters and shipwreck categories
+#zoo_medians_type <- zoo_medians_type[-c(16,17,22,23),] 
+zoo_medians_type <- subset(zoo_medians_type, Type != "Shipwreck")
+
+
+# Create levels for Chronology, Macroregion, Type to plot them in the desired order
+level_order <- c("R", "LR", "EMA", "Ma") 
+level_macroreg_order <- c("Southern Italy", "Central Italy", "Northern Italy")
+level_type_order <- c("Urban", "Rural", "Rural site, villa", "Fortified", "Religious", "Necropolis", "Amphitheater")
+level_geo_order <- c("Plain", "Coast", "Hill", "Hilltop", "Mountain") 
+
+# Plots for animals in each site type
+pigs_by_type <- ggplot(data=zoo_medians_type, 
+       aes(fill=factor(Chronology, levels=(level_order)), 
+           x=factor(Type, levels=(level_type_order)),
+           y=(Pigs)
+       )) +
+        geom_bar(position="dodge", stat="identity") + 
+        theme_pubclean() + 
+        theme(legend.position="none") +
+        scale_fill_grey() +
+        labs(
+          title = "Pigs",
+          x= "",
+          y = "%",
+        fill="Chronology"
+    )
+
+cattle_by_type <- ggplot(data=zoo_medians_type, 
+                       aes(fill=factor(Chronology, levels=(level_order)), 
+                           x=factor(Type, levels=(level_type_order)),
+                           y=Cattle
+                       )) +
+                  geom_bar(position="dodge", stat="identity") + 
+                  theme_pubclean() + 
+                  theme(legend.position="none") +
+                  scale_fill_grey() +
+                  labs(
+                     title = "Cattle",
+                     x= "",
+                     y = "%",
+                     fill=""
+                    )
+
+caprine_by_type <- ggplot(data=zoo_medians_type, 
+                         aes(fill=factor(Chronology, levels=(level_order)), 
+                             x=factor(Type, levels=(level_type_order)),
+                             y=Caprine
+                         )) +
+                  geom_bar(position="dodge", stat="identity") + 
+                  theme_pubclean() + 
+                  scale_fill_grey() +
+                  theme(legend.position="none") +
+                  labs(
+                    title = "Caprine",
+                    x= "",
+                    y = "%",
+                    fill=""
+                  )
+
+ediblewild_by_type <- ggplot(data=zoo_medians_type, 
+                          aes(fill=factor(Chronology, levels=(level_order)), 
+                              x=factor(Type, levels=(level_type_order)),
+                              y=Edible_Wild
+                          )) +
+                      geom_bar(position="dodge", stat="identity") + 
+                      theme_pubclean() + 
+                      scale_fill_grey() +
+                      theme(legend.position="bottom") +
+                      labs(
+                        title = "Wild edible animals",
+                        x= "",
+                        y = "%",
+                        fill=""
+                      )
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| label: fig-medians-edible-animals-site-type
+#| fig-cap: "Medians (%) of edible animal remains, divided by site type and chronology."
+#| fig-subcap: 
+#|  - "Pigs"
+#|  - "Cattle"
+#|  - "Caprine"
+#|  - "Game"
+#| layout-nrow: 4
+#| layout-ncol: 1
+#| fig-height: 2.5
+#| fig-asp: 0.3
+
+
+pigs_by_type
+cattle_by_type
+caprine_by_type
+ediblewild_by_type
+
+
+```
+
+### Medians of faunal remains by macro region
+
+The process for generating weighted medians for the three Italian macro regions (Southern, Central and Northern Italy) has followed the same logic used in the previous section. The medians have been calculated for four animal categories (pigs, cattle, caprine, and game) for each macro area and chronology.
+
+```{r}
+#| echo: false
+#| output: false
+
+# Creating medians by site macroregion
+zoo_medians_macroreg <- zooarch_summary %>%
+  group_by(Macroregion, Chronology) %>%
+  summarize(Pigs = weightedMedian(Pigs, w=weight, na.rm = TRUE),
+            Cattle = weightedMedian(Cattle, w=weight, na.rm = TRUE),
+            Caprine = weightedMedian(Caprine, w=weight, na.rm = TRUE),
+            Edible_Wild = weightedMedian(Edible.W..Mammals, w=weight, na.rm=TRUE)
+  )
+
+zoo_medians_macroreg <- as.data.frame(zoo_medians_macroreg)
+
+# Plots for macroregions
+
+pigs_by_macroregion <- ggplot(data=zoo_medians_macroreg, 
+                      aes(fill=factor(Chronology, levels=(level_order)),
+                          x=factor(Macroregion, levels=(level_macroreg_order)),
+                          y=Pigs
+                       )) +
+                      geom_bar(position="dodge", stat="identity") + 
+                      theme_pubclean() + 
+                      theme(legend.position="none") +
+                      scale_fill_grey() +
+                      labs(
+                        title = "Pigs",
+                        x= "",
+                        y = "%",
+                        fill="Chronology"
+                      )
+
+cattle_by_macroregion <- ggplot(data=zoo_medians_macroreg, 
+                              aes(fill=factor(Chronology, levels=(level_order)),
+                                  x=factor(Macroregion, levels=(level_macroreg_order)),
+                                  y=Cattle
+                              )) +
+                        geom_bar(position="dodge", stat="identity") + 
+                        theme_pubclean() + 
+                        theme(legend.position="none") +
+                        scale_fill_grey() +
+                        labs(
+                          title = "Cattle",
+                          x= "",
+                          y = "%",
+                          fill="Chronology"
+                        )
+
+caprine_by_macroregion <- ggplot(data=zoo_medians_macroreg, 
+                                aes(fill=factor(Chronology, levels=(level_order)),
+                                    x=factor(Macroregion, levels=(level_macroreg_order)),
+                                    y=Caprine
+                                )) +
+                          geom_bar(position="dodge", stat="identity") + 
+                          theme_pubclean() + 
+                          theme(legend.position="none") +
+                          scale_fill_grey() +
+                          labs(
+                            title = "Caprine",
+                            x= "",
+                            y = "%",
+                            fill="Chronology"
+                          )
+
+ediblewild_by_macroregion <- ggplot(data=zoo_medians_macroreg, 
+                                 aes(fill=factor(Chronology, levels=(level_order)),
+                                     x=factor(Macroregion, levels=(level_macroreg_order)),
+                                     y=Edible_Wild
+                                 )) +
+                            geom_bar(position="dodge", stat="identity") + 
+                            theme_pubclean() + 
+                            theme(legend.position="bottom") +
+                            scale_fill_grey() +
+                            labs(
+                              title = "Wild edible animals",
+                              x= "",
+                              y = "%",
+                              fill="Chronology"
+                            )
+
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-medians-edible-animals-macroregion
+#| fig-cap: "Medians (%) of edible animal remains, plotted by macroregion and chronology."
+#| fig-subcap: 
+#|  - "Pigs"
+#|  - "Cattle"
+#|  - "Caprine"
+#|  - "Game"
+#| layout-nrow: 4
+#| layout-ncol: 1
+#| fig-height: 2.5
+#| fig-asp: 0.3
+
+pigs_by_macroregion
+cattle_by_macroregion
+caprine_by_macroregion
+ediblewild_by_macroregion
+
+```
+
+### Medians of faunal remains by geography type
+
+Weighted medians have been generated for the four geographies considered (plain, hill, hilltop, coast, and mountain), after the categories `Hill` and `Hilltop` have been merged. The medians have been calculated for four animal categories (pigs, cattle, caprine, and game) for each geography and chronology.
+
+```{r}
+#| echo: false
+#| output: false
+
+# Creating medians by site geography
+zoo_medians_geo <- zooarch_summary %>%
+  group_by(Geo, Chronology) %>%
+  summarize(Pigs = weightedMedian(Pigs, w=weight, na.rm = TRUE),
+            Cattle = weightedMedian(Cattle, w=weight, na.rm = TRUE),
+            Caprine = weightedMedian(Caprine, w=weight, na.rm = TRUE),
+            Edible_Wild = weightedMedian(Edible.W..Mammals, w=weight, na.rm=TRUE)
+  )
+
+zoo_medians_geo <- as.data.frame(zoo_medians_geo)
+
+# Plots for macroregions
+
+pigs_by_geo <- ggplot(data=zoo_medians_geo, 
+                      aes(fill=factor(Chronology, levels=(level_order)),
+                          x=factor(Geo, levels=(level_geo_order)),
+                          y=Pigs
+                       )) +
+                      geom_bar(position="dodge", stat="identity") + 
+                      theme_pubclean() + 
+                      theme(legend.position="none") +
+                      scale_fill_grey() +
+                      labs(
+                        title = "Pigs",
+                        x= "",
+                        y = "%",
+                        fill="Chronology"
+                      )
+
+cattle_by_geo <- ggplot(data=zoo_medians_geo, 
+                              aes(fill=factor(Chronology, levels=(level_order)),
+                                  x=factor(Geo, levels=(level_geo_order)),
+                                  y=Cattle
+                              )) +
+                        geom_bar(position="dodge", stat="identity") + 
+                        theme_pubclean() + 
+                        theme(legend.position="none") +
+                        scale_fill_grey() +
+                        labs(
+                          title = "Cattle",
+                          x= "",
+                          y = "%",
+                          fill="Chronology"
+                        )
+
+caprine_by_geo <- ggplot(data=zoo_medians_geo, 
+                                aes(fill=factor(Chronology, levels=(level_order)),
+                                    x=factor(Geo, levels=(level_geo_order)),
+                                    y=Caprine
+                                )) +
+                          geom_bar(position="dodge", stat="identity") + 
+                          theme_pubclean() + 
+                          theme(legend.position="none") +
+                          scale_fill_grey() +
+                          labs(
+                            title = "Caprine",
+                            x= "",
+                            y = "%",
+                            fill="Chronology"
+                          )
+
+ediblewild_by_geo <- ggplot(data=zoo_medians_geo, 
+                                 aes(fill=factor(Chronology, levels=(level_order)),
+                                     x=factor(Geo, levels=(level_geo_order)),
+                                     y=Edible_Wild
+                                 )) +
+                            geom_bar(position="dodge", stat="identity") + 
+                            theme_pubclean() + 
+                            theme(legend.position="bottom") +
+                            scale_fill_grey() +
+                            labs(
+                              title = "Wild edible animals",
+                              x= "",
+                              y = "%",
+                              fill="Chronology"
+                            )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-medians-edible-animals-geo
+#| fig-cap: "Medians (%) of edible animal remains, plotted by geography and chronology."
+#| fig-subcap: 
+#|  - "Pigs"
+#|  - "Cattle"
+#|  - "Caprine"
+#|  - "Game"
+#| layout-nrow: 4
+#| layout-ncol: 1
+#| fig-height: 2.5
+#| fig-asp: 0.3
+
+pigs_by_geo
+cattle_by_geo
+caprine_by_geo
+ediblewild_by_geo
+```
+
+### Caprine vs altitude
+
+```{r}
+#| echo: false
+#| eval: false
+
+zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
+
+zoo_altitude.freqs <- decostand(zoo_altitude[16:ncol(zoo_altitude)], method="total", na.rm = T)
+
+caprine_altitude <- data.frame(
+  Site_ID = zoo_altitude$ID,
+  Macroregion = zoo_altitude$Macroregion,
+  Altitude = zoo_altitude$Altitude,
+  Chronology = zoo_altitude$Chronology,
+  Frequency = zoo_altitude.freqs$Caprine
+)
+
+caprine_altitude[is.na(caprine_altitude)] <- 0
+caprine_altitude <- subset(caprine_altitude, Altitude>0 & Frequency>0)
+
+ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
+
+model1 <- glm(Frequency ~ log(Altitude)*Chronology, data = caprine_altitude)
+summary(model1)
+plot(model1, which=1)
+
+model2 <- glm(Frequency ~ Altitude*Chronology, data = caprine_altitude)
+summary(model2)
+
+
+# DIAGNOSTICS
+plot(density(resid(model2, type='response')))
+plot(density(resid(model2, type='deviance')))
+plot(density(rstandard(model2, type='deviance')))
+
+# Test if the prediction is similar to the original distribution
+plot(density(caprine_altitude$Frequency), main='Model')
+lines(density(predict(model2, type='response')), col='red')
+
+scatter.smooth(1:570, rstandard(model2, type='deviance'), col='gray')
+
+scatter.smooth(predict(model2, type='response'), rstandard(model2, type='deviance'), col='gray')
+
+# Is the choice of distribution appropriate?
+qqnorm(resid(model2)); qqline(resid(model2))
+
+# Cook distance
+plot(cooks.distance(model2), type='h')
+
+plot(density(caprine_altitude$Altitude), type ="l")
+plot(density(caprine_altitude$Frequency))
+
+caprine_altitude.R <- subset(caprine_altitude, Chronology=="R")
+
+cor_capr_altitude <- cor.test(
+  caprine_altitude.R$Frequency, 
+  caprine_altitude.R$Altitude, 
+  method = "spearman", 
+  conf.level = 0.95,
+  covar = caprine_altitude.R$Chronology, 
+  exact=F
+  )
+
+model4 <- lm(Frequency~Altitude, caprine_altitude.R)
+summary(model4)
+
+```
+
+
+
+
+## Future work to do
+
+*1. Animal sizes must be considered:*
+
+-   find a way
+
+-   at least cattle
+
+-   at least in the south
+
+*2. Feature selection models: Which feature is most discriminating the dataset?*
+
+-   E.g. Is the geographical context (Plain, Hill, ...) more important than Southern vs Northern Italy?
+
+-   It might be worth it, if data allows it, to subset the geographical features of Southern Italy or by main type (Rural vs Urban / Elite vs non-Elite)
+
+-   Maybe soil type is not so useful for animals? Ask someone
+
+-   What causes a different distribution of cattle in Italy in each chronology?
+
+-   What are the factors that influence the most the different distribution of domestic animals?
+
+## Test 1: RDA + Anova
+
+The RDA is performed on the condensed zooarchaeological export from the database, using the `vegan` package. The absolute counts are converted to frequencies (using the function `decostand()`). 
+
+
+```{r}
+#| echo: FALSE
+#| eval: true
+#| warning: false
+#| message: false
+
+#######################
+## Read the libraries
+#######################
+
+require(purrr)
+require(caret)
+library(vegan)
+library(stringr)
+library(tidyverse)
+
+############################################################################
+## Read the file: Zooarch_Condensed_with_altitude.csv
+## This file is the Zooarch_Condensed to which it 
+## has been added a column containing the altitude.
+############################################################################
+
+data_test <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
+
+############################################################################
+##
+## Reformat the data so that:
+## 1. The absolute counts become frequencies.
+##    - Using the decostand() function in the vegan package
+## 2. The columns subsetted are: 
+##    - Type 'numerical': Pigs, Cattle, Caprine, Edible.W..Mammals, Altitude
+##    - Type 'factor': Type, Chronology, Geo, Macroregion
+## 3. In the subsetted dataframe, convert the relative counts to %s.
+## 4. The column Type has too many categories. Some are merged using the 
+##    str_replace() function in the stringr library.
+##
+############################################################################
+
+# 1. Convert to frequencies
+data_test[c(16:22)] <- decostand(data_test[c(16:22)], method="total", na.rm = TRUE)*100
+
+# 2. Subsetting the dataframe
+data_test <- data_test[c(16,17,18,20,4,5,6,7,10)]
+
+# 3. Merge some categories in the 'Type' column
+#data_test$Type <- str_replace(data_test$Type, "Rural site, villa", "Rural")    
+data_test$Type <- str_replace(data_test$Type, "Rural site, mansio", "Rural")      
+data_test$Type <- str_replace(data_test$Type, "Religious, monastery", "Religious")
+data_test$Type <- str_replace(data_test$Type, "Castle", "Fortified")
+data_test$Type <- str_replace(data_test$Type, "Castrum", "Fortified")
+data_test$Geo <- str_replace(data_test$Geo, "Hilltop", "Hill")
+
+# 4a. Remove the categories 'Necropolis' and 'Religious' as they might skew
+# the results.
+data_test <- filter(data_test, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
+
+# If I need to select a chronology:
+#data_test <- filter(data_test, Chronology=="LR")
+
+# 5. Convert NAs to 0s.
+#data_test[is.na(data_test)]<- 0
+
+
+# Remove duplicates caused by column Chronology
+data_test <- data_test[!duplicated(data_test[,-6]), ]   
+library(tidyverse)
+data_test <- filter(data_test, rowSums(data_test[,c(1:4)]) >0)
+```
+
+The density of each animal % is shown in the plots below.  
+
+```{r}
+#| echo: FALSE
+#| eval: true
+#| warning: false
+#| message: false
+
+
+# Distribution of main animals
+data_test[,-8] %>%
+  select_if(is.numeric) %>%
+  gather(metric, value) %>%
+  ggplot(aes(value, fill = metric)) +
+  geom_density(show.legend = FALSE) +
+  facet_wrap( ~ metric, scales = "free")+
+  theme_minimal()
+
+data_test <- data_test %>%
+  mutate(
+    Type = as.factor(Type),
+    Geo = as.factor(Geo),
+    Macroregion = as.factor(Macroregion)
+)
+```
+
+
+## Test 2: GLM
+
+::: {.callout-alert}
+What was it I needed to plot?
+:::
+
+```{r}
+#| echo: false
+
+Animals_Df <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
+
+Animals_Df$Tot_NISP <- rowSums(Animals_Df[c(16:22)], na.rm = T)
+
+# 1. Subsetting the dataframe
+Animals_Df <- Animals_Df[c(16,17,18,20,25,4,5,6,7,10)]
+
+# 2. Merge some categories in the 'Type' column
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Rural site, mansio", "Rural")      
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Religious, monastery", "Religious")
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Castle", "Fortified")
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Castrum", "Fortified")
+Animals_Df$Geo <- str_replace(Animals_Df$Geo, "Hilltop", "Hill")
+
+# 3. Remove the categories 'Necropolis' and 'Religious' as they might skew
+# the results.
+Animals_Df <- filter(Animals_Df, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
+
+# Convert to proportions (or simply use vegan decostand)
+Animals_Df[,c(1:4)] <- Animals_Df[,c(1:4)]/Animals_Df$Tot_NISP
+
+
+m_zoo_st <- glm(Pigs~Type, 
+                weights = Tot_NISP, 
+                family = "binomial",
+                data=Animals_Df
+                )
+
+summary(m_zoo_st)
+
+pseudoR2=with(m_zoo_st,
+1-(deviance/null.deviance)
+)
+
+cat("Pseudo R-squared: ", pseudoR2)
+
+
+
+```
+
