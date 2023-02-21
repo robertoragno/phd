@@ -1389,41 +1389,125 @@ plt.show()
 
 ```
 
-### Network Analysis of cereals in EMA sites
+### GLM: Minor grains
 
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-:::
+Mapping the use of minor grains by century in each of the three macroregions. Their diffusion is not linear as shown by the cdplots. There are two options here probably:
 
-In this section I would like to perform a Network Analysis based on the Jaccard similarity of sites, and then georeference the points on a map to create a network of sites that share similarities. Is it redundant as the point has already been made or can it be used elsewhere?
+-   using just the presence/absence of minor grains.
+
+    -   Problem 1: Include Emmer? It is a minor grain, but it is still the only minor grain used in southern Italy.
+
+    -   Problem 2: It is not very indicative of how much minor grains are important.
+
+-   counting how many minor grain taxa are found in each context.
+
+    -   Problem 1: Not binomial anymore, maybe poisson. Is it giving better results? Not really.
+
+Another problem for both models is that probably melting the entries by century gives a better chance to entries where the chronology is more uncertain. For instance, if a context spans 5 centuries it will be repeated 5 times in this way.
 
 ```{r}
 #| echo: false
-#| eval: false
-#| code-fold: true
-#| code-summary: "Show the code"
-#| code-overflow: wrap
+#| warning: false
+#| message: false
 
-library(vegan)
+# Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
+# For the moment, I will start from scratch
 
-cereals_EMA <- bot_map_EMA[c(1,2,5, 13:23)]
-cereals_EMA[6:ncol(cereals_EMA)] <- decostand(cereals_EMA[6:ncol(cereals_EMA)], method = "pa", na.rm=TRUE)
-cereals_EMA[6:ncol(cereals_EMA)][is.na(cereals_EMA[6:ncol(cereals_EMA)])] <-0 
+Df_Cond_Plants.pa <- Df_Cond_Plants
+Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
 
-# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
-cereals_EMA <- cereals_EMA[rowSums(cereals_EMA[6:ncol(cereals_EMA)])>0,]
+Minor_Grains <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  From.Century=From.Century, 
+  To.Century=To.Century,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum
+  )
+)
 
-cereals_EMA.pa <- cereals_EMA[6:ncol(cereals_EMA)]
-cereals_EMA.sites <- cereals_EMA$site_code
-# Deal with duplicate site names or codes? How?
-# Opt 1: Combine them?
-# Opt 2: 
-cereals_EMA.pa <- as.data.frame(cereals_EMA.pa)
-rownames(cereals_EMA.pa) <- make.names(cereals_EMA.sites, unique=TRUE)
+library(dplyr)
+#Simplify categories
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monastery", "Religious")    
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
+Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
 
-cereals_EMA.jaccard <- vegdist(cereals_EMA.pa, method="jaccard", na.rm=TRUE)
+Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
+
+Minor_Grains$Present <- ifelse(Minor_Grains$Grain_Count > 0, 1, 0)
+
+# Test: Transform Chronology to discrete values so to visualise 
+Minor_Grains <- Minor_Grains %>% 
+    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    select(-From.Century, -To.Century) %>% 
+    unnest
+# End
+
+# Remove duplicate rows caused by uncertain chronology
+Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
+```
+
+#### Option 1
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| eval: true
+par(mfrow=c(1,3))
+cdplot(as.factor(Present)~Chronology,data=subset(Minor_Grains, Macroregion=="Southern Italy"), main="Southern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Central Italy"), main="Central Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Northern Italy"), main="Northern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+
+m_mg1 <- glm(Present~Macroregion*year, family = binomial(link="logit"), data=Minor_Grains)
+
+summary(m_mg1)
+cat("Pseudo R-squared: ", 1-(m_mg1$deviance/m_mg1$null.deviance))
+
+SouthPred.data  <- data.frame(year=-1:12,Macroregion='Southern Italy')
+NorthPred.data  <- data.frame(year=-1:12,Macroregion='Northern Italy')
+CentralPred.data  <- data.frame(year=-1:12,Macroregion='Central Italy')
+
+South.pred  <- predict(m_mg1,newdata = SouthPred.data,type = 'response')
+North.pred  <- predict(m_mg1,newdata = NorthPred.data,type = 'response')
+Central.pred  <- predict(m_mg1,newdata = CentralPred.data,type = 'response')
+
+# Assign colors to each region
+Minor_Grains$col='darkgreen'
+Minor_Grains$col[which(Minor_Grains$Macroregion=='Southern Italy')]='lightblue'
+Minor_Grains$col[which(Minor_Grains$Macroregion=='Central Italy')]='goldenrod'
 
 
+# Make an empty plot
+par(mfrow=c(1,1))
+plot(NULL,xlim=c(-1,12),ylim=c(0,1),xlab='Century',ylab='Probability of Minor Grains')
+# Add observed data:
+points(Minor_Grains$year,jitter(Minor_Grains$Present,factor = 0.1),col=Minor_Grains$col)
+# Add model predictions
+lines(-1:12,South.pred,col='lightblue',lwd=2)
+lines(-1:12,North.pred,col='darkgreen',lwd=2)
+lines(-1:12,Central.pred,col='goldenrod',lwd=2)
+
+# Add legend
+legend('topright', title="Macroregion", legend=c('Southern','Northern', 'Central'),fill=c('lightblue','darkgreen','goldenrod'))
+
+```
+
+#### Option 2
+
+The pseudo-$R^2$ is slightly better, but the residual deviance is much bigger than the degrees of freedom.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+m_mg2 <- glm(Grain_Count~Macroregion*year, family = poisson, data=Minor_Grains)
+
+summary(m_mg2)
+cat("Pseudo R-squared: ", 1-(m_mg2$deviance/m_mg2$null.deviance))
 ```
 
 ## Distribution of plants in different site types {style="text-align:justify"}
@@ -1722,126 +1806,6 @@ nuts_by_type
 stonefruits_by_type
 ```
 
-#### GLM: Minor grains
-
-Mapping the use of minor grains by century in each of the three macroregions. Their diffusion is not linear as shown by the cdplots. There are two options here probably:
-
--   using just the presence/absence of minor grains.
-
-    -   Problem 1: Include Emmer? It is a minor grain, but it is still the only minor grain used in southern Italy.
-
-    -   Problem 2: It is not very indicative of how much minor grains are important.
-
--   counting how many minor grain taxa are found in each context.
-
-    -   Problem 1: Not binomial anymore, maybe poisson. Is it giving better results? Not really.
-
-Another problem for both models is that probably melting the entries by century gives a better chance to entries where the chronology is more uncertain. For instance, if a context spans 5 centuries it will be repeated 5 times in this way.
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-# Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
-# For the moment, I will start from scratch
-
-Df_Cond_Plants.pa <- Df_Cond_Plants
-Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
-
-Minor_Grains <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  From.Century=From.Century, 
-  To.Century=To.Century,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum
-  )
-)
-
-library(dplyr)
-#Simplify categories
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monastery", "Religious")    
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
-
-Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
-
-Minor_Grains$Present <- ifelse(Minor_Grains$Grain_Count > 0, 1, 0)
-
-# Test: Transform Chronology to discrete values so to visualise 
-Minor_Grains <- Minor_Grains %>% 
-    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
-    select(-From.Century, -To.Century) %>% 
-    unnest
-# End
-
-# Remove duplicate rows caused by uncertain chronology
-Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
-```
-
-##### Option 1
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| eval: true
-par(mfrow=c(1,3))
-cdplot(as.factor(Present)~Chronology,data=subset(Minor_Grains, Macroregion=="Southern Italy"), main="Southern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
-cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Central Italy"), main="Central Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
-cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Northern Italy"), main="Northern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
-
-m_mg1 <- glm(Present~Macroregion*year, family = binomial(link="logit"), data=Minor_Grains)
-
-summary(m_mg1)
-cat("Pseudo R-squared: ", 1-(m_mg1$deviance/m_mg1$null.deviance))
-
-SouthPred.data  <- data.frame(year=-1:12,Macroregion='Southern Italy')
-NorthPred.data  <- data.frame(year=-1:12,Macroregion='Northern Italy')
-CentralPred.data  <- data.frame(year=-1:12,Macroregion='Central Italy')
-
-South.pred  <- predict(m_mg1,newdata = SouthPred.data,type = 'response')
-North.pred  <- predict(m_mg1,newdata = NorthPred.data,type = 'response')
-Central.pred  <- predict(m_mg1,newdata = CentralPred.data,type = 'response')
-
-# Assign colors to each region
-Minor_Grains$col='darkgreen'
-Minor_Grains$col[which(Minor_Grains$Macroregion=='Southern Italy')]='lightblue'
-Minor_Grains$col[which(Minor_Grains$Macroregion=='Central Italy')]='goldenrod'
-
-
-# Make an empty plot
-par(mfrow=c(1,1))
-plot(NULL,xlim=c(-1,12),ylim=c(0,1),xlab='Century',ylab='Probability of Minor Grains')
-# Add observed data:
-points(Minor_Grains$year,jitter(Minor_Grains$Present,factor = 0.1),col=Minor_Grains$col)
-# Add model predictions
-lines(-1:12,South.pred,col='lightblue',lwd=2)
-lines(-1:12,North.pred,col='darkgreen',lwd=2)
-lines(-1:12,Central.pred,col='goldenrod',lwd=2)
-
-# Add legend
-legend('topright', title="Macroregion", legend=c('Southern','Northern', 'Central'),fill=c('lightblue','darkgreen','goldenrod'))
-
-```
-
-##### Option 2
-
-The pseudo-$R^2$ is slightly better, but the residual deviance is much bigger than the degrees of freedom.
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-m_mg2 <- glm(Grain_Count~Macroregion*year, family = poisson, data=Minor_Grains)
-
-summary(m_mg2)
-cat("Pseudo R-squared: ", 1-(m_mg2$deviance/m_mg2$null.deviance))
-```
 
 ### Richness and diversity in the sites
 
