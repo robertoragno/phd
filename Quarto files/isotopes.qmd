@@ -1,5 +1,8 @@
 # Isotopes
 
+
+
+
 Data is from the Compendium Isotoporum Medii Aevi (CIMA) database [@cocozzaPresentingCompendiumIsotoporum2022] and from the IsoArch database.
 
 ```{r}
@@ -20,8 +23,8 @@ humans_isoArch <- with(subset(IsoArch_Ita, individualRelDatingLowerLimit>=-200 &
 #  Modern_Site = town,
   Type = siteType,
 #  Region=region,
-  Y = lat,
-  X = lon,
+  Y = as.numeric(lat),
+  X = as.numeric(lon),
   From.Date = individualRelDatingLowerLimit,
   To.Date = individualRelDatingUpperLimit,
   Ref = publications,
@@ -35,8 +38,8 @@ humans_iso <- with(subset(Cima, Modern_Country=="Italy"), {
    data.frame(
   Site = Site_Name,
   Type = Site_Description,
-  Y = Latitude,
-  X = Longitude,
+  Y = as.numeric(Latitude),
+  X = as.numeric(Longitude),
   From.Date = Min_Year_95_perc,
   To.Date = Max_Year_95_perc,
 #  Dating.Method = Dating_Method,
@@ -178,6 +181,93 @@ humans_iso.R.plot2 <- ggplot(
 
 
 ```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Load libraries
+library(sp)
+library(rgdal)
+library(leaflet)
+library(leaflet.extras)
+library(htmltools)
+library(tidyverse)
+
+# Get an Italy shapefile
+#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
+            #  destfile = 'italy.zip')
+#unzip(zipfile = 'italy.zip')
+
+italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
+
+# Create a palette that maps factor levels to colors
+map_pal <- leaflet::colorFactor(palette = c(
+                                           "Fortified Settlement" = "#FF8C00", 
+                                           "Military Settlement" = "#CD5555",
+                                           "Rural Settlement" = "#A2CD5A", 
+                                           "Urban Settlement" = "#00688B"
+                                           ), 
+                               domain = humans_combined$Type)
+
+italy_map <- leaflet(data=italy) %>%
+  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%
+  addPolygons(weight = 1, 
+              smoothFactor = 0.5,
+              opacity = 0.3, 
+              fillOpacity = 0.4,
+              fillColor = "#F9F5EB",
+              color="#D7A86E"
+              ) %>%
+  addCircleMarkers(
+    lng=humans_combined$X, lat=humans_combined$Y,
+    label = ~htmlEscape(humans_combined$Site),
+    color=map_pal(humans_combined$Type),
+    fillOpacity = 0.5,
+    stroke = F,
+    radius=4,
+     popup = paste(
+                   "<b>", humans_combined$Site, "</b>",
+                   "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Type:</b>", humans_combined$Type, "<br>",
+                   "<b>Chronology (c.):</b>", humans_combined$From.Date,
+                   "-", humans_combined$To.Date, "<br>",
+                   "<b>d13C:</b>", humans_combined$IRMS_d13C_Collagen, "<br>",
+                   "<br><b>d15N:</b>", humans_combined$d15N_Collagen, "<br>",
+                   "Reference:", humans_combined$Ref
+                           )
+  ) %>% 
+  addLegend(position = "bottomright",
+            values = humans_combined$Type, # data frame column for legend
+            opacity = .7, # alpha of the legend
+            pal = map_pal, # palette declared earlier
+            title = "Data") %>%
+  addResetMapButton() %>%
+  addFullscreenControl() %>%
+  addLayersControl(baseGroups = c("Political", "Physical"),
+  options = layersControlOptions(collapsed = T))  %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-isotopes-map
+#| fig-cap: "Human isotopes available for the Italian peninsula in the first millennium CE."
+
+italy_map
+```
+
+
+## 6th--12th century CE
 
 ```{r}
 #| warning: false

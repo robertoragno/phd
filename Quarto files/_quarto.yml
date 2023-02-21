@@ -33,8 +33,8 @@ book:
       chapters:
         - archaeobotany.qmd
         - zooarchaeology.qmd
-        - integrating_bot_zoo.qmd
         - isotopes.qmd
+        - integrating_bot_zoo.qmd
     - discussion.qmd
     - conclusions.qmd
     - sites_references.qmd

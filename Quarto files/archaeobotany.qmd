@@ -881,7 +881,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|-----|----------------------------------------|------------|--------------|--------------|-------------------|
+|------------|-------------|------------|------------|------------|------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -1101,7 +1101,6 @@ Df_Cereals_EMA[is.na(Df_Cereals_EMA)] <- 0
 Df_Cereals_EMA <- Df_Cereals_EMA[rowSums(Df_Cereals_EMA[,5:14] != 0) > 0, ]
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -1342,7 +1341,6 @@ wasserstein_distance(df_EMA_South["value"], df_EMA_North["value"], u_weights=df_
 ```
 :::
 
-
 ```{python}
 #| code-fold: true
 #| code-summary: "Show the code: Plotting the NCA"
@@ -1378,7 +1376,6 @@ plt.tight_layout()
 plt.show()
 ```
 
-
 ```{python}
 #| echo: false
 #| label: fig-boxplot-NCA-EMA
@@ -1391,7 +1388,6 @@ plt.tight_layout()
 plt.show()
 
 ```
-
 
 ### Network Analysis of cereals in EMA sites
 
@@ -1728,19 +1724,37 @@ stonefruits_by_type
 
 #### GLM: Minor grains
 
-::: {.callout-alert}
-This can't work because by calculating the ubiquity (or the presence) for each site I am just producing a dataframe with 5 variables, meaning that no p-value will be significant and the glm will be weak anyway because I am losing the individuality of the site. 
-:::
+Mapping the use of minor grains by century in each of the three macroregions. Their diffusion is not linear as shown by the cdplots. There are two options here probably:
 
+-   using just the presence/absence of minor grains.
+
+    -   Problem 1: Include Emmer? It is a minor grain, but it is still the only minor grain used in southern Italy.
+
+    -   Problem 2: It is not very indicative of how much minor grains are important.
+
+-   counting how many minor grain taxa are found in each context.
+
+    -   Problem 1: Not binomial anymore, maybe poisson. Is it giving better results? Not really.
+
+Another problem for both models is that probably melting the entries by century gives a better chance to entries where the chronology is more uncertain. For instance, if a context spans 5 centuries it will be repeated 5 times in this way.
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 # Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
 # For the moment, I will start from scratch
 
+Df_Cond_Plants.pa <- Df_Cond_Plants
+Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
+
 Minor_Grains <- with(
-  Df_Cond_Plants,
+  Df_Cond_Plants.pa,
   data.frame(
   Chronology = Chronology,
+  From.Century=From.Century, 
+  To.Century=To.Century,
   Macroregion = name_macroreg,
   Site_Type = as.factor(Type),
   Geo = Geo,
@@ -1754,22 +1768,80 @@ Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monast
 Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
 Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
 
-# calculate the required statistics for each Site_Type
-Minor_Grains_Ubiquity_SiteType <- Minor_Grains %>%
-  group_by(Site_Type) %>%
-  summarise(
-    Tot_Sites=n(),
-    Presences=count(Grain_Count>0),
-    Proportion=Presences/Tot_Sites
-  )
+Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
 
-m_st <- glm(Proportion ~ Site_Type, weights = Tot_Sites, family="binomial", data=Minor_Grains_Ubiquity_SiteType)
+Minor_Grains$Present <- ifelse(Minor_Grains$Grain_Count > 0, 1, 0)
 
-summary(m_st)
+# Test: Transform Chronology to discrete values so to visualise 
+Minor_Grains <- Minor_Grains %>% 
+    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    select(-From.Century, -To.Century) %>% 
+    unnest
+# End
+
+# Remove duplicate rows caused by uncertain chronology
+Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
+```
+
+##### Option 1
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| eval: true
+par(mfrow=c(1,3))
+cdplot(as.factor(Present)~Chronology,data=subset(Minor_Grains, Macroregion=="Southern Italy"), main="Southern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Central Italy"), main="Central Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Northern Italy"), main="Northern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+
+m_mg1 <- glm(Present~Macroregion*year, family = binomial(link="logit"), data=Minor_Grains)
+
+summary(m_mg1)
+cat("Pseudo R-squared: ", 1-(m_mg1$deviance/m_mg1$null.deviance))
+
+SouthPred.data  <- data.frame(year=-1:12,Macroregion='Southern Italy')
+NorthPred.data  <- data.frame(year=-1:12,Macroregion='Northern Italy')
+CentralPred.data  <- data.frame(year=-1:12,Macroregion='Central Italy')
+
+South.pred  <- predict(m_mg1,newdata = SouthPred.data,type = 'response')
+North.pred  <- predict(m_mg1,newdata = NorthPred.data,type = 'response')
+Central.pred  <- predict(m_mg1,newdata = CentralPred.data,type = 'response')
+
+# Assign colors to each region
+Minor_Grains$col='darkgreen'
+Minor_Grains$col[which(Minor_Grains$Macroregion=='Southern Italy')]='lightblue'
+Minor_Grains$col[which(Minor_Grains$Macroregion=='Central Italy')]='goldenrod'
+
+
+# Make an empty plot
+par(mfrow=c(1,1))
+plot(NULL,xlim=c(-1,12),ylim=c(0,1),xlab='Century',ylab='Probability of Minor Grains')
+# Add observed data:
+points(Minor_Grains$year,jitter(Minor_Grains$Present,factor = 0.1),col=Minor_Grains$col)
+# Add model predictions
+lines(-1:12,South.pred,col='lightblue',lwd=2)
+lines(-1:12,North.pred,col='darkgreen',lwd=2)
+lines(-1:12,Central.pred,col='goldenrod',lwd=2)
+
+# Add legend
+legend('topright', title="Macroregion", legend=c('Southern','Northern', 'Central'),fill=c('lightblue','darkgreen','goldenrod'))
 
 ```
 
+##### Option 2
 
+The pseudo-$R^2$ is slightly better, but the residual deviance is much bigger than the degrees of freedom.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+m_mg2 <- glm(Grain_Count~Macroregion*year, family = poisson, data=Minor_Grains)
+
+summary(m_mg2)
+cat("Pseudo R-squared: ", 1-(m_mg2$deviance/m_mg2$null.deviance))
+```
 
 ### Richness and diversity in the sites
 
@@ -2116,5 +2188,16 @@ see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in 
 
 # To do:
 
--   Wine production in Italy
--   Olive oil production in Italy
+## Wine/Olive oil production in Italy
+
+Questions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.
+
+Available data:
+
+-   Seed remains
+
+-   Wine presses in Roman Italy (1st to 6th c. ca) -> Dodd
+
+-   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
+
+-   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided. 

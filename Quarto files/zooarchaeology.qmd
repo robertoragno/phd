@@ -933,6 +933,7 @@ What was it I needed to plot?
 
 ```{r}
 #| echo: false
+library(effects)
 
 Animals_Df <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
@@ -952,13 +953,21 @@ Animals_Df$Geo <- str_replace(Animals_Df$Geo, "Hilltop", "Hill")
 # the results.
 Animals_Df <- filter(Animals_Df, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
 
+# 4. Exclude the castrum of Ostia, very strong outlier
+Animals_Df <- subset(Animals_Df, !(Chronology=="R" & Type=="Fortified"))
+
 # Convert to proportions (or simply use vegan decostand)
 Animals_Df[,c(1:4)] <- Animals_Df[,c(1:4)]/Animals_Df$Tot_NISP
 
+# Convert to factors
+Animals_Df[,c(6,7,8,10)] <- lapply(Animals_Df[,c(6,7,8,10)], factor)
 
-m_zoo_st <- glm(Pigs~Type, 
+# Specify chronological order
+Animals_Df$Chronology <- factor(Animals_Df$Chronology, levels = c("R", "LR", "EMA", "Ma"))
+
+m_zoo_st <- glm(Pigs~Type*Chronology, 
                 weights = Tot_NISP, 
-                family = "binomial",
+                family = "quasibinomial",
                 data=Animals_Df
                 )
 
@@ -970,7 +979,17 @@ pseudoR2=with(m_zoo_st,
 
 cat("Pseudo R-squared: ", pseudoR2)
 
+hist(m_zoo_st$residuals)
 
+plot(
+  Effect(
+    focal.predictors = c("Type", "Chronology"), 
+    mod=m_zoo_st),
+    as.table=T,
+    lattice = list(strip = list(factor.names = FALSE)),
+    main="Effect plot: Type*Chronology",
+  sub="Fortified sites are missing for the Roman age, and villas for the Medieval age."
+  )
 
 ```
 
