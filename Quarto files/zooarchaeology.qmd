@@ -749,17 +749,16 @@ caprine_altitude <- data.frame(
 )
 
 caprine_altitude[is.na(caprine_altitude)] <- 0
-caprine_altitude <- subset(caprine_altitude, Altitude>0 & Frequency>0)
+caprine_altitude <- subset(caprine_altitude, Altitude>150 & Frequency>0)
 
 ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
 
-model1 <- glm(Frequency ~ log(Altitude)*Chronology, data = caprine_altitude)
+model1 <- glm(Frequency ~ log(Altitude)*Chronology, family="quasibinomial", data = caprine_altitude)
 summary(model1)
 plot(model1, which=1)
 
-model2 <- glm(Frequency ~ Altitude*Chronology, data = caprine_altitude)
+model2 <- glm(Frequency ~ Altitude, family="quasibinomial", data = subset(caprine_altitude, Chronology=="R"))
 summary(model2)
-
 
 # DIAGNOSTICS
 plot(density(resid(model2, type='response')))
@@ -799,148 +798,37 @@ summary(model4)
 
 ```
 
+# In progress
 
+## Test 1: GLM-Pigs %
 
+::: callout-alert
+**Question:** Is the animal X - let's say Pigs - more strongly associated to a particular settlement type during a certain chronology?
 
-## Future work to do
+**Expectation 1:** Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.
 
-*1. Animal sizes must be considered:*
+**Expectation 2:** Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).
 
--   find a way
+**Expectation 3:** If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?
+:::
 
--   at least cattle
-
--   at least in the south
-
-*2. Feature selection models: Which feature is most discriminating the dataset?*
-
--   E.g. Is the geographical context (Plain, Hill, ...) more important than Southern vs Northern Italy?
-
--   It might be worth it, if data allows it, to subset the geographical features of Southern Italy or by main type (Rural vs Urban / Elite vs non-Elite)
-
--   Maybe soil type is not so useful for animals? Ask someone
-
--   What causes a different distribution of cattle in Italy in each chronology?
-
--   What are the factors that influence the most the different distribution of domestic animals?
-
-## Test 1: RDA + Anova
-
-The RDA is performed on the condensed zooarchaeological export from the database, using the `vegan` package. The absolute counts are converted to frequencies (using the function `decostand()`). 
-
-
-```{r}
-#| echo: FALSE
-#| eval: true
-#| warning: false
-#| message: false
-
-#######################
-## Read the libraries
-#######################
-
-require(purrr)
-require(caret)
-library(vegan)
-library(stringr)
-library(tidyverse)
-
-############################################################################
-## Read the file: Zooarch_Condensed_with_altitude.csv
-## This file is the Zooarch_Condensed to which it 
-## has been added a column containing the altitude.
-############################################################################
-
-data_test <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
-
-############################################################################
-##
-## Reformat the data so that:
-## 1. The absolute counts become frequencies.
-##    - Using the decostand() function in the vegan package
-## 2. The columns subsetted are: 
-##    - Type 'numerical': Pigs, Cattle, Caprine, Edible.W..Mammals, Altitude
-##    - Type 'factor': Type, Chronology, Geo, Macroregion
-## 3. In the subsetted dataframe, convert the relative counts to %s.
-## 4. The column Type has too many categories. Some are merged using the 
-##    str_replace() function in the stringr library.
-##
-############################################################################
-
-# 1. Convert to frequencies
-data_test[c(16:22)] <- decostand(data_test[c(16:22)], method="total", na.rm = TRUE)*100
-
-# 2. Subsetting the dataframe
-data_test <- data_test[c(16,17,18,20,4,5,6,7,10)]
-
-# 3. Merge some categories in the 'Type' column
-#data_test$Type <- str_replace(data_test$Type, "Rural site, villa", "Rural")    
-data_test$Type <- str_replace(data_test$Type, "Rural site, mansio", "Rural")      
-data_test$Type <- str_replace(data_test$Type, "Religious, monastery", "Religious")
-data_test$Type <- str_replace(data_test$Type, "Castle", "Fortified")
-data_test$Type <- str_replace(data_test$Type, "Castrum", "Fortified")
-data_test$Geo <- str_replace(data_test$Geo, "Hilltop", "Hill")
-
-# 4a. Remove the categories 'Necropolis' and 'Religious' as they might skew
-# the results.
-data_test <- filter(data_test, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
-
-# If I need to select a chronology:
-#data_test <- filter(data_test, Chronology=="LR")
-
-# 5. Convert NAs to 0s.
-#data_test[is.na(data_test)]<- 0
-
-
-# Remove duplicates caused by column Chronology
-data_test <- data_test[!duplicated(data_test[,-6]), ]   
-library(tidyverse)
-data_test <- filter(data_test, rowSums(data_test[,c(1:4)]) >0)
-```
-
-The density of each animal % is shown in the plots below.  
-
-```{r}
-#| echo: FALSE
-#| eval: true
-#| warning: false
-#| message: false
-
-
-# Distribution of main animals
-data_test[,-8] %>%
-  select_if(is.numeric) %>%
-  gather(metric, value) %>%
-  ggplot(aes(value, fill = metric)) +
-  geom_density(show.legend = FALSE) +
-  facet_wrap( ~ metric, scales = "free")+
-  theme_minimal()
-
-data_test <- data_test %>%
-  mutate(
-    Type = as.factor(Type),
-    Geo = as.factor(Geo),
-    Macroregion = as.factor(Macroregion)
-)
-```
-
-
-## Test 2: GLM
-
-::: {.callout-alert}
-What was it I needed to plot?
+::: callout-warning
+Note however that there is a temporal divergence in the means of pigs for Central-Southern Italy (Pigs % decrease from the Roman to the Medieval age) and Northern Italy (Pigs % increase from the Roman to the Medieval age).
 :::
 
 ```{r}
 #| echo: false
-library(effects)
+
+####################
+## Data pre-processing
+####################
 
 Animals_Df <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
 Animals_Df$Tot_NISP <- rowSums(Animals_Df[c(16:22)], na.rm = T)
 
 # 1. Subsetting the dataframe
-Animals_Df <- Animals_Df[c(16,17,18,20,25,4,5,6,7,10)]
+Animals_Df <- Animals_Df[c(1,16,17,18,20,25,4,5,6,7,10)]
 
 # 2. Merge some categories in the 'Type' column
 Animals_Df$Type <- str_replace(Animals_Df$Type, "Rural site, mansio", "Rural")      
@@ -957,19 +845,62 @@ Animals_Df <- filter(Animals_Df, Type!="Necropolis" & Type!="Religious" & Type!=
 Animals_Df <- subset(Animals_Df, !(Chronology=="R" & Type=="Fortified"))
 
 # Convert to proportions (or simply use vegan decostand)
-Animals_Df[,c(1:4)] <- Animals_Df[,c(1:4)]/Animals_Df$Tot_NISP
+Animals_Df[,c(2:5)] <- Animals_Df[,c(2:5)]/Animals_Df$Tot_NISP
 
 # Convert to factors
-Animals_Df[,c(6,7,8,10)] <- lapply(Animals_Df[,c(6,7,8,10)], factor)
+Animals_Df[,c(7:9,11)] <- lapply(Animals_Df[,c(7:9,11)], factor)
 
 # Specify chronological order
 Animals_Df$Chronology <- factor(Animals_Df$Chronology, levels = c("R", "LR", "EMA", "Ma"))
 
-m_zoo_st <- glm(Pigs~Type*Chronology, 
+# Convert NAs to 0
+Animals_Df[is.na(Animals_Df)]<-0
+```
+
+Before running the GLM, a quick look at the distribution of Pigs in each chronology and site type.
+
+```{r}
+#| echo: false
+
+print("Number of samples:")
+table(Animals_Df$Chronology)
+
+
+print("Chronological means and sd:")
+Animals_Df %>% 
+  group_by(Chronology) %>% 
+  summarise(mean = mean(Pigs, na.rm = T), 
+            SD = sd(Pigs, na.rm = T)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+
+```
+
+Plots showing very high variability in each site type:
+```{r}
+#| echo: false
+Animals_Df %>% 
+  ggplot(aes(Pigs)) + 
+  geom_density() +
+  facet_wrap(Chronology~Type)
+```
+
+We can now run the GLM: 
+```{r}
+m_zoo_st <- glm(Pigs~Chronology*Type, 
                 weights = Tot_NISP, 
                 family = "quasibinomial",
                 data=Animals_Df
                 )
+```
+
+::: {callout-warning}
+Somehow the results for Ma:Urban are NA, even though the category is not empty (as is the case for Rural site, villas in the Middle ages) and there are no NAs.
+:::
+
+```{r}
+#| echo: false
+#| message: false
 
 summary(m_zoo_st)
 
@@ -979,8 +910,21 @@ pseudoR2=with(m_zoo_st,
 
 cat("Pseudo R-squared: ", pseudoR2)
 
-hist(m_zoo_st$residuals)
+library(effects)
+```
 
+
+```{r}
+#| label: fig-glm-pigs-resid-effect
+#| echo: false
+#| fig-caption: "Some diagnostics"
+#| fig-subcap: 
+#|  - "Normality of residuals"
+#|  - "Effect plot"
+#| layout-nrow: 1
+#| layout-ncol: 2
+
+hist(m_zoo_st$residuals)
 plot(
   Effect(
     focal.predictors = c("Type", "Chronology"), 
@@ -993,3 +937,66 @@ plot(
 
 ```
 
+
+## Test 2: GLMM - Pigs %
+::: {.callout-warning}
+Not working anymore somehow!
+:::
+
+```{r}
+#| eval: false
+#| message: false
+#| output: false
+
+# Load brms
+library(brms)
+
+################################################################################
+# FORMULA definition
+################################################################################
+# I was using Type or Macroregion as a random effect, because I thought that the
+# random effect should be the column possibly producing variability in the 
+# samples (and since I know that pigs have diverging trends in the north and 
+# south/center I thought it was the right thing to do). I have read somewhere 
+# however that the random effect should be a variable with many levels, 
+# so I am using the Site ID variable. This should provide me with an estimate of
+# intra-site variability. Is this correct? 
+# Having said this, I am more interested in macroregional variability = what is
+# the variability of animals within each macroregion.
+################################################################################
+
+prior <- prior(normal(0, 1), class = "b") # Pigs not normally distributed so 
+# probably should not use this prior
+
+# Should probably using binomial, but it giving weird results and a warning message
+# about specifying trials on the left side of the formula
+pigs_glm_mod <- brm(as.integer(Pigs) ~ Type*Chronology, # + (1 | ID)
+                    data = Animals_Df, 
+                    family=binomial(),
+                    iter=3000,
+                    warmup = 1000,
+                    chains = 2, 
+                    cores = 4 
+                    )
+```
+
+Besides the problem of the `ID` column being informative or the correct one to use, how do I interpret the results? Are the estimates estimates of the mean that I have to add up to the intercept? Is this true also for the interaction estimates? 
+
+
+```{r}
+#| echo: false
+#| eval: false
+# Summarize the results
+summary(pigs_glm_mod)
+
+plot(pigs_glm_mod)
+pp_check(pigs_glm_mod)
+
+#use the `predict()` function to calculate the predicted probabilities of pupils in the original data from the fitted model
+Pred <- predict(pigs_glm_mod, type = "response")
+Pred <- if_else(Pred[,1] > 0.5, 1, 0)
+ConfusionMatrix <- table(Pred, pull(Animals_Df, Pigs)) #`pull` results in a vector
+#correct classification rate
+sum(diag(ConfusionMatrix))/sum(ConfusionMatrix)
+
+```

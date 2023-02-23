@@ -2165,3 +2165,102 @@ Available data:
 -   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
 
 -   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided. 
+
+## Fruit consumption
+
+-   The domesticated and the wild
+
+-   What fruits arrive on the Roman table? 
+
+-   Can we see a decreased consumption of figs during the LALIA in the north? 
+
+::: {.callout-alert}
+This kind of data manipulation might be misleading as it is ignoring the fact that some centuries are only represented by - let's say - two sites. Is this a good idea? 
+:::
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+######################
+## Fig presence
+######################
+
+  figs <- with(
+  Df_Cond_Plants,
+data.frame(
+  Site, name_macroreg, Chronology, From.Century, To.Century, 
+  Present=decostand(Df_Cond_Plants[11:ncol(Df_Cond_Plants)], method="pa")$Fig
+  )
+)
+
+# North
+figs.North <- subset(figs, name_macroreg=="Northern Italy")
+figs.North$From.Century <- figs.North$From.Century*100
+figs.North$To.Century <- figs.North$To.Century*100
+figs.North <- figs.North[!duplicated(figs.North[-3]), ]
+
+figs.North <- figs.North %>% 
+    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    select(-From.Century, -To.Century) %>% 
+    unnest
+
+# South
+figs.South <- subset(figs, name_macroreg=="Southern Italy")
+figs.South$From.Century <- figs.South$From.Century*100
+figs.South$To.Century <- figs.South$To.Century*100
+figs.South <- figs.South[!duplicated(figs.South[-3]), ]
+
+figs.South <- figs.South %>% 
+    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    select(-From.Century, -To.Century) %>% 
+    unnest
+
+
+# Central
+figs.Central <- subset(figs, name_macroreg=="Central Italy")
+figs.Central$From.Century <- figs.Central$From.Century*100
+figs.Central$To.Century <- figs.Central$To.Century*100
+figs.Central <- figs.Central[!duplicated(figs.Central[-3]), ]
+
+figs.Central <- figs.Central %>% 
+    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    select(-From.Century, -To.Century) %>% 
+    unnest
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 2
+#| label: fig-figs-cdplots
+#| fig-cap: "The values for Central Italy and for Late Roman Southern Italy are based on very few contexts."
+
+
+par(mfrow=c(1,3))
+cdplot(figs.South$year, as.factor(figs.South$Present), 
+       xlim=c(-100,1100),
+       main="Presence of figs in S Italy",
+       xlab="Year",
+       ylab="Presence"
+       )
+
+cdplot(figs.Central$year, as.factor(figs.Central$Present), 
+       xlim=c(-100,1100),
+       main="Presence of figs in C Italy",
+       sub="Very few archaeobotanical contexts.",
+       xlab="Year",
+       ylab="Presence"
+       )
+
+cdplot(figs.North$year, as.factor(figs.North$Present), 
+       xlim=c(-100,1100),
+       main="Presence of figs in N Italy",
+       xlab="Year",
+       ylab="Presence"
+       )
+
+
+```
+
