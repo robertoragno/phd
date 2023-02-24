@@ -944,7 +944,7 @@ Not working anymore somehow!
 :::
 
 ```{r}
-#| eval: false
+#| eval: true
 #| message: false
 #| output: false
 
@@ -986,7 +986,7 @@ Besides the problem of the `ID` column being informative or the correct one to u
 
 ```{r}
 #| echo: false
-#| eval: false
+#| eval: true
 # Summarize the results
 summary(pigs_glm_mod)
 
@@ -997,11 +997,5 @@ performance::icc(pigs_glm_mod)
 
 pp_check(pigs_glm_mod)
 
-#use the `predict()` function to calculate the predicted probabilities of pupils in the original data from the fitted model
-Pred <- predict(pigs_glm_mod, type = "response")
-Pred <- if_else(Pred[,1] > 0.5, 1, 0)
-ConfusionMatrix <- table(Pred, pull(Animals_Df, Pigs)) #`pull` results in a vector
-#correct classification rate
-sum(diag(ConfusionMatrix))/sum(ConfusionMatrix)
 
 ```
