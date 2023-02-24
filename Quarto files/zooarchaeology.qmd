@@ -970,13 +970,14 @@ prior <- prior(normal(0, 1), class = "b") # Pigs not normally distributed so
 
 # Should probably using binomial, but it giving weird results and a warning message
 # about specifying trials on the left side of the formula
-pigs_glm_mod <- brm(as.integer(Pigs) ~ Type*Chronology, # + (1 | ID)
-                    data = Animals_Df, 
-                    family=binomial(),
+pigs_glm_mod <- brm(Pigs ~ 1 + Type + (1|ID),
+                    data = Animals_Df,
+                    zero_inflated_beta(),
                     iter=3000,
-                    warmup = 1000,
+                    warmup = 500,
                     chains = 2, 
-                    cores = 4 
+                    cores = 4,
+                    seed=123
                     )
 ```
 
@@ -990,6 +991,10 @@ Besides the problem of the `ID` column being informative or the correct one to u
 summary(pigs_glm_mod)
 
 plot(pigs_glm_mod)
+
+print("ICC Scores:")
+performance::icc(pigs_glm_mod)
+
 pp_check(pigs_glm_mod)
 
 #use the `predict()` function to calculate the predicted probabilities of pupils in the original data from the fitted model
