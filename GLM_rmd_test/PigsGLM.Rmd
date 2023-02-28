@@ -1,0 +1,251 @@
+---
+title: "GLM - Pigs"
+output:
+  html_document:
+    toc: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background
+
+![Idea behind the model. Demand and Investment are unknown and cannot be estimated: in a sense, Pigs % might help in estimating them. Chronology influences the demand (more or less people, dietary preferences, etc.) and the site type (as some sites do not exist in other chronologies, or settlement patterns change). The site types influence the investment (low to high) and consequently the pigs husbandry. Investment is also influenced by demand (again, low to high). For instance, sites with high demand are `Fortified` or `Urban` sites. Sites with high investment might be `Villas` in the Late Roman phase.](Blank%20diagram.png){width="400"}
+
+# Data processing
+
+```{r message=FALSE}
+####################
+## Data pre-processing
+####################
+
+library(here)
+library(tidyverse)
+
+Animals_Df <- read.csv(here("Zooarch_Condensed_with_altitude.csv"), header=TRUE, sep=";")
+
+Animals_Df$Tot_NISP <- rowSums(Animals_Df[c(16:22)], na.rm = T)
+
+# 1. Subsetting the dataframe
+Animals_Df <- Animals_Df[c(1,16,17,18,20,25,4,5,6,7,10)]
+
+# 2. Merge some categories in the 'Type' column
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Rural site, mansio", "Rural")      
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Religious, monastery", "Religious")
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Castle", "Fortified")
+Animals_Df$Type <- str_replace(Animals_Df$Type, "Castrum", "Fortified")
+Animals_Df$Geo <- str_replace(Animals_Df$Geo, "Hilltop", "Hill")
+
+# 3. Remove the categories 'Necropolis' and 'Religious' as they might skew
+# the results.
+Animals_Df <- filter(Animals_Df, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
+
+# 4. Exclude the castrum of Ostia, very strong outlier and regardless only fortified
+# roman site
+Animals_Df <- subset(Animals_Df, !(Chronology=="R" & Type=="Fortified"))
+
+# Create a copy that keeps the original counts
+Animals_Df2 <- Animals_Df
+
+# Convert to proportions (or simply use vegan decostand)
+Animals_Df[,c(2:5)] <- Animals_Df[,c(2:5)]/Animals_Df$Tot_NISP
+
+# Convert to factors
+Animals_Df[,c(7:9,11)] <- lapply(Animals_Df[,c(7:9,11)], factor)
+Animals_Df2[,c(7:9,11)] <- lapply(Animals_Df2[,c(7:9,11)], factor)
+
+# Specify chronological order
+Animals_Df$Chronology <- factor(Animals_Df$Chronology, levels = c("R", "LR", "EMA", "Ma"))
+Animals_Df2$Chronology <- factor(Animals_Df2$Chronology, levels = c("R", "LR", "EMA", "Ma"))
+
+# Convert NAs to 0
+Animals_Df[is.na(Animals_Df)]<-0
+Animals_Df2[is.na(Animals_Df2)]<-0
+
+```
+
+```{r echo=FALSE}
+print("Number of samples:")
+table(Animals_Df$Chronology)
+
+
+print("Chronological means and sd:")
+Animals_Df %>% 
+  group_by(Chronology) %>% 
+  summarise(mean = mean(Pigs, na.rm = T), 
+            SD = sd(Pigs, na.rm = T)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+
+```
+
+Plots showing very high variability in each site type:
+
+```{r}
+#| echo: false
+Animals_Df %>% 
+  ggplot(aes(Pigs)) + 
+  geom_density() +
+  facet_wrap(Chronology~Type)
+```
+
+# Test 1: GLM on Pigs %
+
+This can probably work, even though I am a bit more interested in the bayesian approach to provide estimate intervals + multi level modelling . At the moment, this is the only approach where the interaction works.
+
+```{r eval=TRUE}
+m_zoo_st <- glm(Pigs~Chronology*Type, 
+               # weights = Tot_NISP, 
+                family = "quasibinomial",
+                data=Animals_Df
+                )
+
+# This model uses % data, so I am not sure if I should use the weights.
+# The overdispersion Resid > Df is better when the weights are ignored, but the PseudoR2 is lower
+
+```
+
+Somehow the results for Ma:Urban are NA, even though the category is not empty (as for instance the case for Rural site, villas in the Middle ages) and there are no NAs. Why? High correlation between Roman:Urban and Ma:Urban?
+
+```{r eval=TRUE}
+#| echo: false
+#| message: false
+
+summary(m_zoo_st)
+
+pseudoR2=with(m_zoo_st,
+1-(deviance/null.deviance)
+)
+
+cat("Pseudo R-squared: ", pseudoR2)
+
+library(effects)
+```
+
+```{r}
+#| echo: false
+plot(
+  Effect(
+    focal.predictors = c("Chronology", "Type"), 
+    mod=m_zoo_st),
+    as.table=T,
+    lattice = list(strip = list(factor.names = FALSE)),
+    main="Effect plot: Type*Chronology",
+  sub="Fortified sites are missing for the Roman age, and villas for the Medieval age."
+  )
+```
+
+# Test 2: GLMM with BRMS
+
+I have not been able yet to run the model using the interaction Type:Chronology. The betabinomial seems to run fine, but whenever I use an interaction of the fixed effects the model becomes impossibly long to compute and eventually just does not converge, providing a lot of warnings.
+
+
+```{r}
+#| eval: true
+#| message: false
+#| output: false
+
+# Load brms
+library(brms)
+
+pigs_glm_mod <- brm(Pigs|trials(Tot_NISP) ~ 1 +Type+Chronology + (1|ID),
+                    data = Animals_Df2,
+                    beta_binomial(),
+                    iter=3000,
+                    warmup = 500,
+                    chains = 2, 
+                    cores = 4,
+                    seed=123
+                    )
+
+
+summary(pigs_glm_mod)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+
+plot(pigs_glm_mod)
+
+print("ICC Scores:")
+performance::icc(pigs_glm_mod)
+
+pp_check(pigs_glm_mod)
+conditional_effects(pigs_glm_mod, conditions = data.frame(size = 1))
+
+```
+
+# Test 3: GLM with `betabin()`
+
+I have encountered by far several issues in computing an interaction of the fixed effects using the `betabin()` function from the package `aod`:
+
+1.  Conflicts with missing levels (`R:Fortified` and `Ma:Rural site, villa`)
+
+2.  The last level read by the model is automatically reported as `NA`. In this case, `Ma:Urban`. So, even if I tried to input random values for the missing levels (see \# 1), the function will not run because it sees `Ma:Urban` as `NA`. If (for testing reasons) I removed entirely the Ma level, then the new NA would be `EMA:Urban`. This is a weird behaviour that also happens in the first GLM (in the summary you can see that `Ma:Urban` is `NA`).
+
+If I try to run the function without an interaction (using the `+` sign), it works, but provides results that I do not trust (probably because I am plotting them in a weird way and it is not a real interaction). Moreover, these results are different from the medians that I have calculated in the past and they are much more flat.
+
+```{r}
+library(aod)
+
+pigs_beta_mod1 <- aod::betabin(
+  cbind(Pigs, Tot_NISP - Pigs) ~ Type+Chronology, ~1,
+  data = Animals_Df2,
+  control = list(maxit = 10000),
+  na.action=na.omit
+  )
+
+summary(pigs_beta_mod1)
+
+```
+
+```{r}
+#| echo: false
+Mod_Levels <- expand.grid(Type = levels(Animals_Df2$Type),
+                     Chronology = levels(Animals_Df2$Chronology))
+
+New.pred <- data.frame(Mod_Levels, 
+                       predict(pigs_beta_mod1, 
+                               Mod_Levels, 
+                               se = TRUE, 
+                               type = "response")
+                       )
+```
+
+```{r}
+#| echo: false
+
+library(ggpubr)
+level_order <- c("R", "LR", "EMA", "Ma") 
+
+Pigs_Pred_Plot <-ggplot(New.pred) +
+  geom_bar(aes(x=Chronology, 
+               y=fit, 
+               fill=factor(Chronology, 
+                           levels=(level_order))), 
+           position="dodge",
+           stat="identity",
+) +
+  scale_fill_grey() +
+  geom_errorbar(aes(x=Chronology, 
+                    ymin=fit-se.fit, 
+                    ymax=fit+se.fit), 
+                width=0.2, colour="orange", alpha=0.9, size=0.9)+
+  theme_pubclean()+
+  labs(
+    title="Fitted Beta-Binomial GLM: Pigs",
+    subtitle = "Barplot with associated error bars.",
+    y="Fitted values",
+    fill=""
+  )+
+  theme(legend.position="bottom") +
+  facet_wrap(~ Type)
+
+Pigs_Pred_Plot
+```
+
+
