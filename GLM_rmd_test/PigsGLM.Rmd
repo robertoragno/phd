@@ -12,7 +12,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Background
 
-![Idea behind the model. Demand and Investment are unknown and cannot be estimated: in a sense, Pigs % might help in estimating them. Chronology influences the demand (more or less people, dietary preferences, etc.) and the site type (as some sites do not exist in other chronologies, or settlement patterns change). The site types influence the investment (low to high) and consequently the pigs husbandry. Investment is also influenced by demand (again, low to high). For instance, sites with high demand are `Fortified` or `Urban` sites. Sites with high investment might be `Villas` in the Late Roman phase.](Blank%20diagram.png){width="400"}
+![Graphical representation of the model.](Blank%20diagram.png){width="400"}
+
+Ideas behind the model:
+
+-   *Demand* and *Investment* are unknown and cannot be estimated: in a sense, `Pigs` % might help in estimating them.
+
+-   `Chronology` influences the *demand* (more or less people, dietary preferences, etc.) and the site `Type` (as some sites do not exist in other chronologies, or settlement patterns change).
+
+-   The site `Type` influences the *investment* (low to high) and consequently the pigs husbandry.
+
+-   *Investment* is also influenced by *demand* (again, low to high). For instance, sites with high demand are `Fortified` or `Urban` sites. Sites with high investment might be `Villas` in the Late Roman phase.
+
+-   The `Macroregion` is an important confounding variable, as it shows diverging trends for `Pigs` %.
 
 # Data processing
 
@@ -187,7 +199,7 @@ The results seem to be similar to the ones of the GLMM with BRMS, which I still 
 
 2.  The random effect `(1|ID)` seems to work in the `brm()` function, whereas it does not in the `betabin()`. I have tried coercing it to factor, passing it just as `~ID`, etc. but I am just getting errors. In theory, if I am able to pass a random effect to this function, it should work as a (frequentist) GLMM.
 
-At this moment, I am trying to understand more about modelling dispersion. Is the dispersion information just provided by the standard error bars in my plots? By providing the parameter `phi` in the `betabin()` call I can set a low (0) to high (0.9) overdispersion. What is then the meaning of the ϕ value provided in the `summary()` of the model? I am not sure I have got correctly the definition of 'modelling dispersion' itself.
+At this moment, I am trying to understand more about modelling dispersion. Is the dispersion information just provided by the standard error bars in my plots? By providing the parameter `phi` in the `betabin()` call I can set a low (0) to high (0.9) overdispersion. What is then the meaning of the ϕ value provided in the `summary()` of the model? I am not sure I have got correctly the definition of 'modelling dispersion' itself. From what I understood it meant something along the lines of "providing a phi value that allows a better fit". However, I would ideally like to get something like "in Roman rural sites the results are less reliable than another Chronology:Type and fall within this range". 
 
 ```{r}
 library(aod)
@@ -202,7 +214,7 @@ pigs_beta_mod1 <- aod::betabin(
 
   
 pigs_beta_fort <- aod::betabin(
-  cbind(Pigs, Tot_NISP - Pigs) ~ Macroregion*Chronology, ~1,
+  cbind(Pigs, Tot_NISP - Pigs) ~ Chronology, ~1,
   data = Animals_Df_fort,
   control = list(maxit = 10000),
   na.action=na.omit
@@ -303,8 +315,7 @@ Pigs_Pred_Plot_fort <-ggplot(New.pred_fort) +
     y="Fitted values",
     fill=""
   )+
-  theme(legend.position="bottom") +
-  facet_wrap(~ Macroregion)
+  theme(legend.position="bottom")
 
 Pigs_Pred_Plot_villas <-ggplot(New.pred_villas) +
   geom_bar(aes(x=Chronology, 
