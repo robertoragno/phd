@@ -101,15 +101,15 @@ Animals_Df %>%
 
 # Test 1: GLMM with BRMS
 
-Ideally, bayesian GLMMs would be the way I would like to go forward. However, I am finding it hard to understand the meaning of the diagnostics and `summary()` call of the model. I know I should look at the caterpillar plots to look for convergence, at the rhat value, and that I should have large enough tails. I find however hard to make sense of the Intercept estimate and other estimates (in the population-level effects).
+Ideally, bayesian GLMMs would be the way I would like to go forward. However, I am finding it hard to understand the meaning of the diagnostics and `summary()` call of the model. I know I should look at the caterpillar plots to look for convergence, at the rhat value, and that I should have large enough tails. I find however hard to make sense of the intercept estimate and other estimates (in the population-level effects).
 
 Questions:
 
 -   The group-level effects (`~ID`) should tell me in the sd(Intercept) how much is the variation between sites. Is this correct?
 
--   At the moment, I have added priors using the get_prior() function, which should provide weakly informative priors generated according to the dataset and distribution I want to use. How can I add - still weakly informative - priors that are actually based on my beliefs? For instance that pigs should be higher in urban and fortified sites, higher in late Roman villas, higher in places close to forests in the early Middle ages, etc. This is something that might have to be done in Stan. I am not set on `brms`, I am just using this because of the tutorials I have found online and because it allows for the betabinomial distribution.
+-   At the moment, I have added priors using the `get_prior()` function, which should provide weakly informative priors generated based on the dataset and distribution I want to use. How can I add (weakly informative) priors that are based on my beliefs? For instance that pigs should be higher in urban and fortified sites, higher in late Roman villas, higher in places close to forests in the early Middle ages, etc. This is something that might have to be done in Stan. I am not set on `brms`, I am just using this because of the tutorials I have found online and because it allows for the betabinomial distribution.
 
--   I have copied a code to get the posterior distribution of the intercept, but I think that is too general and I am not sure about how to read it. The boxplots do give me some more information, in the % scale (I think?) that I would like to have for the publication, but ideally I would like to have density distributions. I do not know if it is simply a matter of extracting the right values, because I am not entirely sure where to get those values.
+-   I have copied a code to get the posterior distribution of the intercept, but I think that is too general and I am not sure about how to read it. The boxplots do give me some more information, in the % scale (I think?) which I would like to have for publication, but ideally I'd love to have density distributions with confidence intervals. I do not know if it is simply a matter of extracting the right values, because I am not entirely sure where to get those values.
 
 ```{r}
 #| eval: true
@@ -182,6 +182,8 @@ conditional_effects(pigs_glm_mod, conditions = data.frame(size = 1))
 The results seem to be similar to the ones of the GLMM with BRMS, which I still prefer because:
 
 1.  It is multilevel, if I can get it to work it should allow me to account for variability within unbalanced classes. From what I gathered, with unbalanced datasets multilevel models should give me more accurate estimates/bayesian distributions.
+
+    1.  Question: If the random effect is the `ID`, is `betabin()` dealing with variability within the covariates `Type` and `Chronology`?
 
 2.  The random effect `(1|ID)` seems to work in the `brm()` function, whereas it does not in the `betabin()`. I have tried coercing it to factor, passing it just as `~ID`, etc. but I am just getting errors. In theory, if I am able to pass a random effect to this function, it should work as a (frequentist) GLMM.
 
