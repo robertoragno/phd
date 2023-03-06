@@ -124,7 +124,7 @@ Questions:
 -   I have copied a code to get the posterior distribution of the intercept, but I think that is too general and I am not sure about how to read it. The boxplots do give me some more information, in the % scale (I think?) which I would like to have for publication, but ideally I'd love to have density distributions with confidence intervals. I do not know if it is simply a matter of extracting the right values, because I am not entirely sure where to get those values.
 
 ```{r}
-#| eval: true
+#| eval: false
 #| message: false
 #| output: false
 
@@ -151,6 +151,7 @@ summary(pigs_glm_mod)
 ```
 
 ```{r}
+#| eval: false
 #| echo: false
 post <- posterior_samples(pigs_glm_mod, add_chain = T)
 
@@ -174,7 +175,7 @@ post %>%
 
 ```{r}
 #| echo: false
-#| eval: true
+#| eval: false
 #| message: false
 
 # plot(pigs_glm_mod)
@@ -202,10 +203,12 @@ The results seem to be similar to the ones of the GLMM with BRMS, which I still 
 At this moment, I am trying to understand more about modelling dispersion. Is the dispersion information just provided by the standard error bars in my plots? By providing the parameter `phi` in the `betabin()` call I can set a low (0) to high (0.9) overdispersion. What is then the meaning of the ϕ value provided in the `summary()` of the model? I am not sure I have got correctly the definition of 'modelling dispersion' itself. From what I understood it meant something along the lines of "providing a phi value that allows a better fit". However, I would ideally like to get something like "in Roman rural sites the results are less reliable than another Chronology:Type and fall within this range". 
 
 ```{r}
+#| eval: false
+
 library(aod)
 
 pigs_beta_mod1 <- aod::betabin(
-  cbind(Pigs, Tot_NISP - Pigs) ~ Type*Chronology, ~1,
+  cbind(Pigs, Tot_NISP - Pigs) ~ Type*Chronology, ~Chronology,
   data = Animals_Df2,
   control = list(maxit = 10000),
   na.action=na.omit,
@@ -232,6 +235,8 @@ summary(pigs_beta_mod1)
 ```
 
 ```{r}
+#| eval: false
+
 #| echo: false
 Mod_Levels <- expand.grid(Type = levels(Animals_Df2$Type),
                      Chronology = levels(Animals_Df2$Chronology))
@@ -267,6 +272,8 @@ New.pred_villas <- data.frame(Mod_Levels_villas,
 ```
 
 ```{r}
+#| eval: false
+
 #| echo: false
 
 library(ggpubr)
@@ -343,3 +350,123 @@ Pigs_Pred_Plot
 Pigs_Pred_Plot_fort
 Pigs_Pred_Plot_villas
 ```
+
+# Test 3: Rethinking
+
+```{r}
+#| warning: false
+#| message: false
+
+library(rethinking)
+
+d <- Animals_Df2
+d$TC_id <- as.integer(interaction(d$Type, d$Chronology))
+dat <-  list( P=d$Pigs , N=d$Tot_NISP , TC_id=d$TC_id )
+
+# pbar is the mean of the distribution
+
+m12.1 <- ulam(
+    alist(
+        P ~ dbetabinom( N , pbar , theta ),
+        logit(pbar) <- a[TC_id],
+        a[TC_id] ~ dnorm( 0 , 1.5 ),
+        transpars> theta <<- phi + 2.0,
+        phi ~ dexp(1)
+    ), data=dat , chains=4
+    )
+
+#m12.2 <- ulam(
+#    alist(
+#         P ~ dbetabinom( N , pbar , theta ),
+#         logit(pbar) <- a[TC_id],
+#         a[TC_id] ~ dnorm( 0 , 1.5 ),
+#         theta <- phi,
+#         vector[425]: phi ~ dexp(1)
+#    ), data=dat, chains=4
+#     )
+
+post <- extract.samples( m12.1 )
+#post$da <- post$a[,1] - post$a[,2]
+precis( post , depth=2 )
+
+# postcheck( m12.1 )
+
+
+```
+
+```{r}
+#| eval: false
+#| echo: false
+library(modelr)
+library(tidybayes.rethinking)
+library(tidybayes)
+
+as.data.frame(dat) %>%
+  data_grid(TC_id) %>%
+  add_linpred_draws(m12.1) %>%
+  ggplot(aes(x = .linpred, y = fct_rev(as.factor(TC_id)))) +
+  stat_pointinterval(.width = c(.66, .95))+
+  labs(x="Prediction",
+       y="Type:Chronology",
+       title="Pigs",
+       caption="Type:Chronology = (1) R:Rur, (2): R:Urb, (3) LR:Rur,\n (4) LR:Urb, (5) EMA:Rur, (6) EMA:Urb,\n (7) Ma:Rur, (8) Ma:Urb")+
+  theme_tidybayes()
+
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+# PLOTS
+
+# Function to create plot for the distribution
+
+make_post_plot <- function(post, TC_id) {
+  library(ggplot2)
+  library(ggpubr)
+  
+  curve_data <- as.data.frame(
+    curve(
+      rethinking::dbeta2(x, mean(logistic(post$a[, TC_id])), mean(post$theta)), 
+      from = 0, to = 1
+    )
+  )
+  
+  plot <- ggplot() +
+    geom_line(data = curve_data, aes(x = x, y = y),
+              color = "orange", linewidth = 0.5, alpha = 0.9, linetype = 1)+
+    xlab("Probability") +
+    ylab("Density") +
+    xlim(0, 1) +
+    ylim(0, 3) +
+    theme_pubclean()
+  
+  for (i in 1:50) {
+    # calculate the parameters for the beta distribution
+    p_beta <- logistic(post$a[i, TC_id])
+    theta <- post$theta[i]
+    # calculate the y values for the beta distribution
+    y <- dbeta2(x, p_beta, theta)
+    # create a new data frame with x and y columns
+    df_beta <- data.frame(x = x, y = y)
+    # add the curve to the plot using geom_line
+    plot <- plot + geom_line(data = df_beta, aes(x = x, y = y),
+                             color = "orange3", alpha = 0.1, linetype = 1)
+  }
+  
+  return(plot)
+}
+
+# TC_id:
+# (1) R:Rur, (2): R:Urb, (3) LR:Rur, (4) LR:Urb, (5) EMA:Rur, (6) EMA:Urb, (7) Ma:Rur, (8) Ma:Urb
+
+library(patchwork)
+
+(make_post_plot(post, 1) + ggtitle("Pigs - Roman rural sites")+make_post_plot(post, 2) + ggtitle("Pigs - Roman urban sites")) / (make_post_plot(post, 3) + ggtitle("Pigs - Late Roman rural sites")+make_post_plot(post, 4) + ggtitle("Pigs - Late Roman urban sites")) / (make_post_plot(post, 5) + ggtitle("Pigs - EMA rural sites")+make_post_plot(post, 6) + ggtitle("Pigs - EMA urban sites")) / (make_post_plot(post, 7) + ggtitle("Pigs - 11th c. rural sites")+make_post_plot(post, 8) + ggtitle("Pigs - 11th c. urban sites"))
+
+
+```
+
+
