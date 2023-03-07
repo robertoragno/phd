@@ -162,7 +162,9 @@ precis( post , depth=2 )
 
 ```
 
-The formula that I ideally would like to use is something like: Formula: $$P_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \Theta )$$
+The variation to the formula that I would like to apply is the following, where the dispersion $\theta$ varies accordingly to the `TC_id` interaction parameter. I am using the same parameter of the $\alpha$ intercept because I want the dispersion for each intercept ( = I want them in the same for cycle). 
+
+$$P_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \theta )$$
 
 $$
 logit(\bar{p}_{i}) = \alpha_{[TCid]}
@@ -180,7 +182,7 @@ $$
 \phi_{j} \sim Exponential(1)
 $$
 
-However, judging from the previous STAN output (m12.1) it seems like $\Theta$ is already varying according to the index TC_id (as it is iteratively multiplied by pbar) although I am not getting what I need: phi[1], phi[2], etc. 
+Judging from the STAN output of the previous model (`m12.1`), it looks like $\theta$ is already varying according to the index `TC_id` (as it is iteratively multiplied by pbar), although I am not getting what I need: phi[1], phi[2], etc. 
 
     model { 
         vector[425] pbar; 
@@ -229,9 +231,12 @@ m12.2 <- ulam(
 
 ```
 
+
+## Plots 
 ```{r}
-#| eval: false
+#| eval: true
 #| echo: false
+#| message: false
 library(modelr)
 library(tidybayes.rethinking)
 library(tidybayes)
@@ -255,7 +260,7 @@ as.data.frame(dat) %>%
 
 # PLOTS
 
-# Function to create plot for the distribution
+# Function to create plot for the distribution - NOT WORKING ANYMORE
 
 make_post_plot <- function(post, TC_id) {
   library(ggplot2)
