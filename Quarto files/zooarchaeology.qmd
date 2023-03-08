@@ -855,6 +855,7 @@ Animals_Df$Chronology <- factor(Animals_Df$Chronology, levels = c("R", "LR", "EM
 
 # Convert NAs to 0
 Animals_Df[is.na(Animals_Df)]<-0
+
 ```
 
 Before running the GLM, a quick look at the distribution of Pigs in each chronology and site type.
@@ -888,10 +889,13 @@ Animals_Df %>%
 We can now run the GLM: 
 ```{r}
 m_zoo_st <- glm(Pigs~Chronology*Type, 
-                weights = Tot_NISP, 
+               # weights = Tot_NISP, 
                 family = "quasibinomial",
                 data=Animals_Df
                 )
+
+# This model uses % data, so I am not sure I should use the weights.
+
 ```
 
 ::: {callout-warning}
@@ -927,7 +931,7 @@ library(effects)
 hist(m_zoo_st$residuals)
 plot(
   Effect(
-    focal.predictors = c("Type", "Chronology"), 
+    focal.predictors = c("Chronology", "Type"), 
     mod=m_zoo_st),
     as.table=T,
     lattice = list(strip = list(factor.names = FALSE)),
@@ -944,35 +948,18 @@ Not working anymore somehow!
 :::
 
 ```{r}
-#| eval: true
+#| eval: false
 #| message: false
 #| output: false
 
 # Load brms
 library(brms)
 
-################################################################################
-# FORMULA definition
-################################################################################
-# I was using Type or Macroregion as a random effect, because I thought that the
-# random effect should be the column possibly producing variability in the 
-# samples (and since I know that pigs have diverging trends in the north and 
-# south/center I thought it was the right thing to do). I have read somewhere 
-# however that the random effect should be a variable with many levels, 
-# so I am using the Site ID variable. This should provide me with an estimate of
-# intra-site variability. Is this correct? 
-# Having said this, I am more interested in macroregional variability = what is
-# the variability of animals within each macroregion.
-################################################################################
-
-prior <- prior(normal(0, 1), class = "b") # Pigs not normally distributed so 
-# probably should not use this prior
-
 # Should probably using binomial, but it giving weird results and a warning message
 # about specifying trials on the left side of the formula
-pigs_glm_mod <- brm(Pigs ~ 1 + Type + (1|ID),
+pigs_glm_mod <- brm(Pigs|trials(Tot_NISP) ~ 1 +Type+Chronology + (1|ID),
                     data = Animals_Df,
-                    zero_inflated_beta(),
+                    beta_binomial(),
                     iter=3000,
                     warmup = 500,
                     chains = 2, 
@@ -986,7 +973,7 @@ Besides the problem of the `ID` column being informative or the correct one to u
 
 ```{r}
 #| echo: false
-#| eval: true
+#| eval: false
 # Summarize the results
 summary(pigs_glm_mod)
 
@@ -996,6 +983,107 @@ print("ICC Scores:")
 performance::icc(pigs_glm_mod)
 
 pp_check(pigs_glm_mod)
+conditional_effects(pigs_glm_mod, conditions = data.frame(size = 1))
+
+```
+
+##Test 3 - Betabin 
+
+```{r}
+#| echo: false
+#| eval: false
+library(aod)
+
+pigs_beta_mod1 <- aod::betabin(
+  cbind(Pigs, Tot_NISP - Pigs) ~ Type*Chronology, ~1,
+  data = Animals_Df2,
+  control = list(maxit = 10000),
+  na.action=na.omit
+  )
+
+# Why does it think that Urban:ChronologyMa is NA? 
+
+
+AIC(pigs_beta_mod1)
+
+round(pigs_beta_mod1@random.param, 3)    # from the beta - binomial model
+
+Mod_Levels <- expand.grid(Type = levels(Animals_Df$Type),
+                     Chronology = levels(Animals_Df$Chronology))
+
+New.pred <- data.frame(Mod_Levels, 
+                       predict(pigs_beta_mod1, 
+                               Mod_Levels, 
+                               se = TRUE, 
+                               type = "response")
+                       )
+  
+Pigs_Pred_Plot <-ggplot(New.pred) +
+  geom_bar(aes(x=Chronology, 
+               y=fit, 
+               fill=factor(Chronology, 
+                           levels=(level_order))), 
+           position="dodge",
+           stat="identity",
+) +
+  scale_fill_grey() +
+  geom_errorbar(aes(x=Chronology, 
+                    ymin=fit-se.fit, 
+                    ymax=fit+se.fit), 
+                width=0.2, colour="orange", alpha=0.9, size=0.9)+
+  theme_pubclean()+
+  labs(
+    title="Fitted Beta-Binomial GLM: Pigs",
+    subtitle = "Barplot with associated error bars.",
+    y="Fitted values",
+    fill=""
+  )+
+  theme(legend.position="bottom") +
+  facet_wrap(~ Type)
+
+Pigs_Pred_Plot
 
 
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+caprine_beta_mod1 <- aod::betabin(
+  cbind(Caprine, Tot_NISP - Caprine) ~ Chronology*Geo, ~ 1, 
+  data = Animals_Df,
+  control = list(maxit = 10000)
+                               )
+
+Mod_Levels_Cap <- expand.grid(Geo = levels(Animals_Df$Geo),
+                     Chronology = levels(Animals_Df$Chronology))
+
+New.pred.Capr <- data.frame(Mod_Levels_Cap, predict(caprine_beta_mod1, Mod_Levels_Cap, se = TRUE, type = "response"))
+  
+Caprine_Pred_Plot <-ggplot(New.pred.Capr) +
+  geom_bar(aes(x=Chronology, 
+               y=fit, 
+               fill=factor(Chronology, 
+                           levels=(level_order))), 
+           position="dodge",
+           stat="identity",
+) +
+  scale_fill_grey() +
+  geom_errorbar(aes(x=Chronology, 
+                    ymin=fit-se.fit, 
+                    ymax=fit+se.fit), 
+                width=0.2, colour="orange", alpha=0.9, size=0.9)+
+  theme_pubclean()+
+  labs(
+    title="Fitted Beta-Binomial GLM: Caprine",
+    subtitle = "Barplot with associated error bars.",
+    y="Fitted values",
+    fill=""
+  )+
+  theme(legend.position="bottom") +
+  facet_wrap(~ Geo)
+
+Caprine_Pred_Plot
+
+```
+

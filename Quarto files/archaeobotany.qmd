@@ -1391,19 +1391,8 @@ plt.show()
 
 ### GLM: Minor grains
 
-Mapping the use of minor grains by century in each of the three macroregions. Their diffusion is not linear as shown by the cdplots. There are two options here probably:
+Mapping the use of minor grains by chronology in each of the three macroregions. 
 
--   using just the presence/absence of minor grains.
-
-    -   Problem 1: Include Emmer? It is a minor grain, but it is still the only minor grain used in southern Italy.
-
-    -   Problem 2: It is not very indicative of how much minor grains are important.
-
--   counting how many minor grain taxa are found in each context.
-
-    -   Problem 1: Not binomial anymore, maybe poisson. Is it giving better results? Not really.
-
-Another problem for both models is that probably melting the entries by century gives a better chance to entries where the chronology is more uncertain. For instance, if a context spans 5 centuries it will be repeated 5 times in this way.
 
 ```{r}
 #| echo: false
@@ -1412,6 +1401,7 @@ Another problem for both models is that probably melting the entries by century 
 
 # Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
 # For the moment, I will start from scratch
+library(dplyr)
 
 Df_Cond_Plants.pa <- Df_Cond_Plants
 Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
@@ -1425,90 +1415,104 @@ Minor_Grains <- with(
   Macroregion = name_macroreg,
   Site_Type = as.factor(Type),
   Geo = Geo,
-  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum
+  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum+Emmer,
+  All_Grain_Count = rowSums(Df_Cond_Plants.pa[,c(11:19)])
   )
 )
 
-library(dplyr)
 #Simplify categories
 Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monastery", "Religious")    
 Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
 Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
 
+# Transform categories to factors
 Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
 
+# Count the occurrences of minor grains in each context
 Minor_Grains$Present <- ifelse(Minor_Grains$Grain_Count > 0, 1, 0)
 
 # Test: Transform Chronology to discrete values so to visualise 
 Minor_Grains <- Minor_Grains %>% 
-    mutate(year = map2(From.Century, To.Century, `:`)) %>% 
+    mutate(Century = map2(From.Century, To.Century, `:`)) %>% 
     select(-From.Century, -To.Century) %>% 
     unnest
 # End
 
 # Remove duplicate rows caused by uncertain chronology
-Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
+#Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
 ```
 
-#### Option 1
 
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
-#| eval: true
-par(mfrow=c(1,3))
-cdplot(as.factor(Present)~Chronology,data=subset(Minor_Grains, Macroregion=="Southern Italy"), main="Southern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
-cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Central Italy"), main="Central Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
-cdplot(as.factor(Present)~year,data=subset(Minor_Grains, Macroregion=="Northern Italy"), main="Northern Italy", xlab="Century", ylab="Presence vs Absence of Minor Grains")
+#| output: false
 
-m_mg1 <- glm(Present~Macroregion*year, family = binomial(link="logit"), data=Minor_Grains)
+library(rethinking)
+library(tidybayes.rethinking)
+library(tidybayes)
 
-summary(m_mg1)
-cat("Pseudo R-squared: ", 1-(m_mg1$deviance/m_mg1$null.deviance))
+# Create a copy of the dataframe
+Minor_Grains2 <- Minor_Grains
 
-SouthPred.data  <- data.frame(year=-1:12,Macroregion='Southern Italy')
-NorthPred.data  <- data.frame(year=-1:12,Macroregion='Northern Italy')
-CentralPred.data  <- data.frame(year=-1:12,Macroregion='Central Italy')
+# Convert to list
+Minor_Grains2.list <- list(
+    MG_Found = Minor_Grains2$Grain_Count,
+    MG_Tot = 7,
+    RC_ID = as.factor((interaction(Minor_Grains2$Chronology, 
+                                   Minor_Grains2$Macroregion)))
+   )
 
-South.pred  <- predict(m_mg1,newdata = SouthPred.data,type = 'response')
-North.pred  <- predict(m_mg1,newdata = NorthPred.data,type = 'response')
-Central.pred  <- predict(m_mg1,newdata = CentralPred.data,type = 'response')
+# Create a binomial model, where N is 7 because that is the total number of minor 
+# grains studied in this thesis
+m_mg_reg <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Minor_Grains2.list , chains=4
+    )
 
-# Assign colors to each region
-Minor_Grains$col='darkgreen'
-Minor_Grains$col[which(Minor_Grains$Macroregion=='Southern Italy')]='lightblue'
-Minor_Grains$col[which(Minor_Grains$Macroregion=='Central Italy')]='goldenrod'
+m_mg_reg.df <- m_mg_reg %>%
+  spread_draws(RegChr[RC_ID])
 
+m_mg_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_mg_reg.df
 
-# Make an empty plot
-par(mfrow=c(1,1))
-plot(NULL,xlim=c(-1,12),ylim=c(0,1),xlab='Century',ylab='Probability of Minor Grains')
-# Add observed data:
-points(Minor_Grains$year,jitter(Minor_Grains$Present,factor = 0.1),col=Minor_Grains$col)
-# Add model predictions
-lines(-1:12,South.pred,col='lightblue',lwd=2)
-lines(-1:12,North.pred,col='darkgreen',lwd=2)
-lines(-1:12,Central.pred,col='goldenrod',lwd=2)
-
-# Add legend
-legend('topright', title="Macroregion", legend=c('Southern','Northern', 'Central'),fill=c('lightblue','darkgreen','goldenrod'))
+m_mg_reg.plot <- m_mg_reg %>%
+  spread_draws(RegChr[RC_ID]) %>%
+  ggplot(aes(y = fct_rev(
+    factor(m_mg_reg.df$Chrono, 
+           levels=c("R", "LR", "EMA", "Ma")
+           )
+    ), 
+    x = inv_logit(RegChr))) +
+    stat_interval(.width = c(.50, .80, .95, .99), 
+                  position=position_nudge(y= -0.2)) +
+  stat_halfeye()+
+  xlab("Probability of adoption")+
+  ylab("Chronology")+
+  ggtitle("Minor Grains")+
+  labs(color="Credible interval")+
+  scale_color_brewer(palette="Greys")+
+  theme_tidybayes()+
+  facet_grid(~factor(m_mg_reg.df$Region, levels=c("SI", "CI", "NI")))
 
 ```
-
-#### Option 2
-
-The pseudo-$R^2$ is slightly better, but the residual deviance is much bigger than the degrees of freedom.
 
 ```{r}
-#| echo: false
-#| warning: false
-#| message: false
-m_mg2 <- glm(Grain_Count~Macroregion*year, family = poisson, data=Minor_Grains)
-
-summary(m_mg2)
-cat("Pseudo R-squared: ", 1-(m_mg2$deviance/m_mg2$null.deviance))
+m_mg_reg.plot
 ```
+
 
 ## Distribution of plants in different site types {style="text-align:justify"}
 
@@ -1804,6 +1808,572 @@ grape_by_type
 olive_by_type
 nuts_by_type
 stonefruits_by_type
+```
+
+
+### Bayesian alternative
+
+```{r}
+#| echo: false
+#| include: false
+
+## NOBLE GRAINS
+
+Noble_Grains <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Grain_Count = rowSums(Df_Cond_Plants.pa[,c(11,15)])
+  )
+)
+
+#Simplify categories
+Noble_Grains$Site_Type <- str_replace(Noble_Grains$Site_Type, "Religious, monastery", "Religious")    
+Noble_Grains$Site_Type <- str_replace(Noble_Grains$Site_Type, "Castle", "Fortified")    
+Noble_Grains$Site_Type <- str_replace(Noble_Grains$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Noble_Grain.list <- list(
+    NG_Found = Noble_Grains$Grain_Count,
+    NG_Tot = 2,
+    TC_ID = as.factor((interaction(Noble_Grains$Chronology, 
+                                   Noble_Grains$Site_Type)))
+   )
+
+Noble_Grain.list$TC_ID <- droplevels(Noble_Grain.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_ng_type <- ulam(
+    alist(
+        NG_Found ~ dbinom( 2 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Noble_Grain.list , chains=4
+    )
+
+m_ng_type.df <- m_ng_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_ng_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_ng_type.df
+
+m_ng_type.plot <- ggplot(data=m_ng_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Noble Grains",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+
+## MINOR GRAINS
+
+# Convert to list
+Minor_Grains_Type.list <- list(
+    MG_Found = Minor_Grains$Grain_Count,
+    MG_Tot = 7,
+    TC_ID = as.factor((interaction(Minor_Grains$Chronology, 
+                                   Minor_Grains$Site_Type)))
+   )
+
+Minor_Grains_Type.list$TC_ID <- droplevels(Minor_Grains_Type.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_mg_type <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Minor_Grains_Type.list , chains=4
+    )
+
+m_mg_type.df <- m_mg_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_mg_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_mg_type.df
+
+m_mg_type.plot <- ggplot(data=m_mg_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Minor Grains",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+## LEGUMES
+
+Legumes <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(21,27)]) # Excludes Unsp. Pulses
+  )
+)
+
+#Simplify categories
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Religious, monastery", "Religious")    
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castle", "Fortified")    
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Legumes.list <- list(
+    Leg_Found = Legumes$Seed_Count,
+    Leg_Tot = 7,
+    TC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Site_Type)))
+   )
+
+Legumes.list$TC_ID <- droplevels(Legumes.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_leg_type <- ulam(
+    alist(
+        Leg_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Legumes.list , chains=4
+    )
+
+m_leg_type.df <- m_leg_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_leg_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_leg_type.df
+
+m_leg_type.plot <- ggplot(data=m_leg_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Noble Grains",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+## GRAPE
+
+Grape <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Present = ifelse(Grape>0, 1, 0)
+  )
+)
+
+#Simplify categories
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Religious, monastery", "Religious")    
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Castle", "Fortified")    
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Grape.list <- list(
+    Grape_Found = Grape$Present,
+    TC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Site_Type)))
+   )
+
+Grape.list$TC_ID <- droplevels(Grape.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_grape_type <- ulam(
+    alist(
+        Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Grape.list , chains=4
+    )
+
+m_grape_type.df <- m_grape_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_grape_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_grape_type.df
+
+m_grape_type.plot <- ggplot(data=m_grape_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+  labs(
+          title = "Grape",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+## OLIVES
+
+Olives <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Present = ifelse(Olive>0, 1, 0)
+  )
+)
+
+#Simplify categories
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Religious, monastery", "Religious")
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Castle", "Fortified")    
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Olive.list <- list(
+    Olive_Found = Olives$Present,
+    TC_ID = as.factor((interaction(Olives$Chronology, 
+                                   Olives$Site_Type)))
+   )
+
+Olive.list$TC_ID <- droplevels(Olive.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_olives_type <- ulam(
+    alist(
+        Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Olive.list , chains=4
+    )
+
+# Why is it predicting means where there is no data? 
+
+m_olives_type.df <- m_olives_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_olives_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_olives_type.df
+
+m_olives_type.plot <- ggplot(data=m_olives_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Olive",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    ) + 
+  facet_wrap(~Type)
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+## NUTS
+
+Nuts <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(29,31)])
+  )
+)
+
+#Simplify categories
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Religious, monastery", "Religious")    
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castle", "Fortified")    
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Nuts.list <- list(
+    Nuts_Found = Nuts$Seed_Count,
+    Nuts_Tot = 3,
+    TC_ID = as.factor((interaction(Nuts$Chronology, 
+                                   Nuts$Site_Type)))
+   )
+
+Nuts.list$TC_ID <- droplevels(Nuts.list$TC_ID)
+  
+# Create a binomial model, where N is 3 because that is the total number of noble 
+# grains studied in this thesis
+m_nuts_type <- ulam(
+    alist(
+        Nuts_Found ~ dbinom( 3 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Nuts.list , chains=4
+    )
+
+m_nuts_type.df <- m_nuts_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_nuts_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_nuts_type.df
+
+m_nuts_type.plot <- ggplot(data=m_nuts_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Nuts",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+## Stone fruits
+#Berries = c("Blackberry", "Elderberry", "Blackthorn", "Wild.Cherry", "Corn..Cherry", "Sorbus.sp.", "Strawberry"),
+#  Stone.fruits = c("Peach", "Plum", "Sour.Cherry", "Unsp..Prunus"),
+
+
+DomFruit <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(32,33,35:38,50)])
+  )
+)
+
+#Simplify categories
+DomFruit$Site_Type <- str_replace(DomFruit$Site_Type, "Religious, monastery", "Religious")
+DomFruit$Site_Type <- str_replace(DomFruit$Site_Type, "Castle", "Fortified")    
+DomFruit$Site_Type <- str_replace(DomFruit$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+DomFruit.list <- list(
+    DF_Found = DomFruit$Seed_Count,
+    DF_Tot = 7,
+    TC_ID = as.factor((interaction(DomFruit$Chronology, 
+                                   DomFruit$Site_Type)))
+   )
+
+DomFruit.list$TC_ID <- droplevels(DomFruit.list$TC_ID)
+  
+# Create a binomial model, where N is 3 because that is the total number of noble 
+# grains studied in this thesis
+m_dfruit_type <- ulam(
+    alist(
+        DF_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=DomFruit.list , chains=4
+    )
+
+m_dfruit_type.df <- m_dfruit_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_dfruit_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_dfruit_type.df
+
+m_dfruit_type.plot <- ggplot(data=m_dfruit_type.df, 
+       aes(
+         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
+         y=inv_logit(TypeChr), 
+         ), 
+       ) +
+    stat_interval(.width = c(.50, .80, .95, .99)) +
+    theme_pubclean()+
+        theme(legend.position="top") +
+        scale_color_brewer(palette="Greys") +
+        labs(
+          title = "Domestic fruits",
+          x= "",
+          y = "Probability",
+          color="Credible interval"
+    )+ facet_wrap(~Type)
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| label: fig-bayes-glm-site-type
+#| fig-cap: "Bayesian probability estimates for main plant taxa, divided by site type and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credibility intervals are provided."
+#| fig-subcap: 
+#|  - "Noble grains (wheat and barley)."
+#|  - "Minor grains."
+#|  - "Legumes."
+#|  - "Grape."
+#|  - "Olive."
+#|  - "Nuts."
+#|  - "Domestic fruits."
+#| layout-nrow: 7
+#| layout-ncol: 1
+
+m_ng_type.plot
+m_mg_type.plot
+m_leg_type.plot
+m_grape_type.plot
+m_olives_type.plot
+m_nuts_type.plot
+m_dfruit_type.plot
+
 ```
 
 
