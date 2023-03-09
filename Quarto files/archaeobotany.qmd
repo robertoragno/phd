@@ -1406,6 +1406,14 @@ library(dplyr)
 Df_Cond_Plants.pa <- Df_Cond_Plants
 Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
 
+```
+
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-fold: true
+
 Minor_Grains <- with(
   Df_Cond_Plants.pa,
   data.frame(
@@ -1440,18 +1448,6 @@ Minor_Grains <- Minor_Grains %>%
 
 # Remove duplicate rows caused by uncertain chronology
 #Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
-```
-
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| output: false
-
-library(rethinking)
-library(tidybayes.rethinking)
-library(tidybayes)
 
 # Create a copy of the dataframe
 Minor_Grains2 <- Minor_Grains
@@ -1474,6 +1470,23 @@ m_mg_reg <- ulam(
     ), data=Minor_Grains2.list , chains=4
     )
 
+#saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
+
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+library(rethinking)
+library(tidybayes.rethinking)
+library(tidybayes)
+
+m_mg_reg <- readRDS("stan_models/m_mg_reg.rds")
+
 m_mg_reg.df <- m_mg_reg %>%
   spread_draws(RegChr[RC_ID])
 
@@ -1492,24 +1505,34 @@ m_mg_reg.plot <- m_mg_reg %>%
   spread_draws(RegChr[RC_ID]) %>%
   ggplot(aes(y = fct_rev(
     factor(m_mg_reg.df$Chrono, 
-           levels=c("R", "LR", "EMA", "Ma")
-           )
+           levels=c("R", "LR", "EMA", "Ma"))
     ), 
     x = inv_logit(RegChr))) +
-    stat_interval(.width = c(.50, .80, .95, .99), 
-                  position=position_nudge(y= -0.2)) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=6,
+    position=position_nudge(y= -0.2)
+    ) +
   stat_halfeye()+
-  xlab("Probability of adoption")+
-  ylab("Chronology")+
-  ggtitle("Minor Grains")+
-  labs(color="Credible interval")+
+  labs(
+    title = "Minor Grains",
+    color="Credible interval",
+    x="Probability",
+    y="Chronology"
+    )+
   scale_color_brewer(palette="Greys")+
   theme_tidybayes()+
+  theme(legend.position = "bottom"
+    )+
   facet_grid(~factor(m_mg_reg.df$Region, levels=c("SI", "CI", "NI")))
 
 ```
 
 ```{r}
+#| echo: false
+#| label: fig-bayes-glm-mg-macroregion
+#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credibility intervals are provided."
+
 m_mg_reg.plot
 ```
 
@@ -1813,11 +1836,17 @@ stonefruits_by_type
 
 ### Bayesian alternative
 
+#### Pre-processing and models
 ```{r}
-#| echo: false
-#| include: false
+#| echo: true
+#| code-fold: true
+#| eval: false
 
+# Eval is set to false because the models have been saved
+
+####################
 ## NOBLE GRAINS
+####################
 
 Noble_Grains <- with(
   Df_Cond_Plants.pa,
@@ -1844,16 +1873,224 @@ Noble_Grain.list <- list(
    )
 
 Noble_Grain.list$TC_ID <- droplevels(Noble_Grain.list$TC_ID)
-  
+
 # Create a binomial model, where N is 2 because that is the total number of noble 
 # grains studied in this thesis
 m_ng_type <- ulam(
-    alist(
+   alist(
         NG_Found ~ dbinom( 2 , p ),
         logit(p) <- TypeChr[TC_ID],
         TypeChr[TC_ID] ~ dnorm(0,1)
     ), data=Noble_Grain.list , chains=4
     )
+
+####################
+## MINOR GRAINS
+####################
+
+# Convert to list
+Minor_Grains_Type.list <- list(
+    MG_Found = Minor_Grains$Grain_Count,
+    MG_Tot = 7,
+    TC_ID = as.factor((interaction(Minor_Grains$Chronology, 
+                                   Minor_Grains$Site_Type)))
+   )
+
+Minor_Grains_Type.list$TC_ID <- droplevels(Minor_Grains_Type.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_mg_type <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Minor_Grains_Type.list , chains=4
+    )
+
+#saveRDS(m_mg_type, "stan_models/m_mg_type.rds")
+
+
+####################
+## LEGUMES 
+####################
+
+Legumes <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(21,27)]) # Excludes Unsp. Pulses
+  )
+)
+
+#Simplify categories
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Religious, monastery", "Religious")    
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castle", "Fortified")    
+Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Legumes.list <- list(
+    Leg_Found = Legumes$Seed_Count,
+    Leg_Tot = 7,
+    TC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Site_Type)))
+   )
+
+Legumes.list$TC_ID <- droplevels(Legumes.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_leg_type <- ulam(
+    alist(
+        Leg_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Legumes.list , chains=4
+    )
+
+#saveRDS(m_leg_type, "stan_models/m_leg_type.rds")
+
+####################
+## GRAPE 
+####################
+
+Grape <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Present = ifelse(Grape>0, 1, 0)
+  )
+)
+
+#Simplify categories
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Religious, monastery", "Religious")    
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Castle", "Fortified")    
+Grape$Site_Type <- str_replace(Grape$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Grape.list <- list(
+    Grape_Found = Grape$Present,
+    TC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Site_Type)))
+   )
+
+Grape.list$TC_ID <- droplevels(Grape.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_grape_type <- ulam(
+    alist(
+        Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Grape.list , chains=4
+    )
+
+#saveRDS(m_grape_type, "stan_models/m_grape_type.rds")
+
+####################
+## OLIVES 
+####################
+
+Olives <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Present = ifelse(Olive>0, 1, 0)
+  )
+)
+
+#Simplify categories
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Religious, monastery", "Religious")
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Castle", "Fortified")    
+Olives$Site_Type <- str_replace(Olives$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Olive.list <- list(
+    Olive_Found = Olives$Present,
+    TC_ID = as.factor((interaction(Olives$Chronology, 
+                                   Olives$Site_Type)))
+   )
+
+Olive.list$TC_ID <- droplevels(Olive.list$TC_ID)
+  
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_olives_type <- ulam(
+    alist(
+        Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Olive.list , chains=4
+    )
+
+#saveRDS(m_olives_type, "stan_models/m_olives_type.rds")
+
+####################
+## OLIVES 
+####################
+
+Nuts <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(29,31)])
+  )
+)
+
+#Simplify categories
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Religious, monastery", "Religious")    
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castle", "Fortified")    
+Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Nuts.list <- list(
+    Nuts_Found = Nuts$Seed_Count,
+    Nuts_Tot = 3,
+    TC_ID = as.factor((interaction(Nuts$Chronology, 
+                                   Nuts$Site_Type)))
+   )
+
+Nuts.list$TC_ID <- droplevels(Nuts.list$TC_ID)
+  
+# Create a binomial model, where N is 3 because that is the total number of noble 
+# grains studied in this thesis
+m_nuts_type <- ulam(
+    alist(
+        Nuts_Found ~ dbinom( 3 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Nuts.list , chains=4
+    )
+
+
+#saveRDS(m_nuts_type, "stan_models/m_nuts_type.rds")
+
+
+
+```
+
+#### Results
+
+```{r}
+#| echo: false
+#| include: false
+
+## NOBLE GRAINS
+
+m_ng_type<-readRDS("stan_models/m_ng_type.rds")
 
 m_ng_type.df <- m_ng_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -1898,26 +2135,7 @@ m_ng_type.plot <- ggplot(data=m_ng_type.df,
 
 
 ## MINOR GRAINS
-
-# Convert to list
-Minor_Grains_Type.list <- list(
-    MG_Found = Minor_Grains$Grain_Count,
-    MG_Tot = 7,
-    TC_ID = as.factor((interaction(Minor_Grains$Chronology, 
-                                   Minor_Grains$Site_Type)))
-   )
-
-Minor_Grains_Type.list$TC_ID <- droplevels(Minor_Grains_Type.list$TC_ID)
-  
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_mg_type <- ulam(
-    alist(
-        MG_Found ~ dbinom( 7 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Minor_Grains_Type.list , chains=4
-    )
+m_mg_type <- readRDS("stan_models/m_mg_type.rds")
 
 m_mg_type.df <- m_mg_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -1961,42 +2179,7 @@ m_mg_type.plot <- ggplot(data=m_mg_type.df,
 #| include: false
 
 ## LEGUMES
-
-Legumes <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(21,27)]) # Excludes Unsp. Pulses
-  )
-)
-
-#Simplify categories
-Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Religious, monastery", "Religious")    
-Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castle", "Fortified")    
-Legumes$Site_Type <- str_replace(Legumes$Site_Type, "Castrum", "Fortified")  
-
-# Convert to list
-Legumes.list <- list(
-    Leg_Found = Legumes$Seed_Count,
-    Leg_Tot = 7,
-    TC_ID = as.factor((interaction(Legumes$Chronology, 
-                                   Legumes$Site_Type)))
-   )
-
-Legumes.list$TC_ID <- droplevels(Legumes.list$TC_ID)
-  
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_leg_type <- ulam(
-    alist(
-        Leg_Found ~ dbinom( 7 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Legumes.list , chains=4
-    )
+m_leg_type <- readRDS("stan_models/m_leg_type.rds")
 
 m_leg_type.df <- m_leg_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -2038,42 +2221,7 @@ m_leg_type.plot <- ggplot(data=m_leg_type.df,
 #| echo: false
 #| include: false
 
-## GRAPE
-
-Grape <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Present = ifelse(Grape>0, 1, 0)
-  )
-)
-
-#Simplify categories
-Grape$Site_Type <- str_replace(Grape$Site_Type, "Religious, monastery", "Religious")    
-Grape$Site_Type <- str_replace(Grape$Site_Type, "Castle", "Fortified")    
-Grape$Site_Type <- str_replace(Grape$Site_Type, "Castrum", "Fortified")  
-
-# Convert to list
-Grape.list <- list(
-    Grape_Found = Grape$Present,
-    TC_ID = as.factor((interaction(Legumes$Chronology, 
-                                   Legumes$Site_Type)))
-   )
-
-Grape.list$TC_ID <- droplevels(Grape.list$TC_ID)
-  
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_grape_type <- ulam(
-    alist(
-        Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
-    ), data=Grape.list , chains=4
-    )
+m_grape_type <- readRDS("stan_models/m_grape_type.rds")
 
 m_grape_type.df <- m_grape_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -2117,42 +2265,9 @@ m_grape_type.plot <- ggplot(data=m_grape_type.df,
 
 ## OLIVES
 
-Olives <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Present = ifelse(Olive>0, 1, 0)
-  )
-)
-
-#Simplify categories
-Olives$Site_Type <- str_replace(Olives$Site_Type, "Religious, monastery", "Religious")
-Olives$Site_Type <- str_replace(Olives$Site_Type, "Castle", "Fortified")    
-Olives$Site_Type <- str_replace(Olives$Site_Type, "Castrum", "Fortified")  
-
-# Convert to list
-Olive.list <- list(
-    Olive_Found = Olives$Present,
-    TC_ID = as.factor((interaction(Olives$Chronology, 
-                                   Olives$Site_Type)))
-   )
-
-Olive.list$TC_ID <- droplevels(Olive.list$TC_ID)
-  
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_olives_type <- ulam(
-    alist(
-        Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
-    ), data=Olive.list , chains=4
-    )
-
 # Why is it predicting means where there is no data? 
+
+m_olives_type <- readRDS("stan_models/m_olives_type.rds")
 
 m_olives_type.df <- m_olives_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -2196,42 +2311,7 @@ m_olives_type.plot <- ggplot(data=m_olives_type.df,
 #| include: false
 
 ## NUTS
-
-Nuts <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(29,31)])
-  )
-)
-
-#Simplify categories
-Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Religious, monastery", "Religious")    
-Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castle", "Fortified")    
-Nuts$Site_Type <- str_replace(Nuts$Site_Type, "Castrum", "Fortified")  
-
-# Convert to list
-Nuts.list <- list(
-    Nuts_Found = Nuts$Seed_Count,
-    Nuts_Tot = 3,
-    TC_ID = as.factor((interaction(Nuts$Chronology, 
-                                   Nuts$Site_Type)))
-   )
-
-Nuts.list$TC_ID <- droplevels(Nuts.list$TC_ID)
-  
-# Create a binomial model, where N is 3 because that is the total number of noble 
-# grains studied in this thesis
-m_nuts_type <- ulam(
-    alist(
-        Nuts_Found ~ dbinom( 3 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Nuts.list , chains=4
-    )
+m_nuts_type <- readRDS("stan_models/m_nuts_type.rds")
 
 m_nuts_type.df <- m_nuts_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -2360,7 +2440,7 @@ m_dfruit_type.plot <- ggplot(data=m_dfruit_type.df,
 #|  - "Minor grains."
 #|  - "Legumes."
 #|  - "Grape."
-#|  - "Olive."
+#|  - "Olives. The model is predicting (conservative) values for fortified sites, in which no olive was found."
 #|  - "Nuts."
 #|  - "Domestic fruits."
 #| layout-nrow: 7
