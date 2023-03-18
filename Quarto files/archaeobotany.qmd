@@ -364,10 +364,9 @@ The heatmap (@fig-heatmap-ubiquity-for-PDF) shows the diachronical ubiquity valu
 :::
 
 ::: {.content-visible when-format="html"}
-**Source code:**
 
 ```{r}
-#| code-fold: true
+#| echo: false
 #| output: false
 #| code-summary: "Show the code: data preparation"
 #| code-overflow: wrap
@@ -438,7 +437,7 @@ fnuts_ubiquity_macroreg.Ma <- filter(fnuts_ubiquity_macroreg.Ma, Macroregion!="S
 ```
 
 ```{r}
-#| code-fold: true
+#| echo: false
 #| output: false
 #| code-summary: "Show the code: plots"
 #| code-overflow: wrap
@@ -759,7 +758,7 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ::: {.content-visible when-format="html"}
 ```{r}
-#| code-fold: true
+#| echo: false
 #| output: false
 #| code-summary: "Show the code: data preparation"
 #| code-overflow: wrap
@@ -804,7 +803,7 @@ Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroreg
 ```
 
 ```{r}
-#| code-fold: true
+#| echo: false
 #| output: false
 #| code-summary: "Show the code: plots"
 #| code-overflow: wrap
@@ -1224,170 +1223,6 @@ mds_EMA.boxplot
 
 ```
 
-*Old Python code for the NCA to delete:*
-
-```{python}
-#| code-summary: "Show the code: Libraries"
-#| code-overflow: wrap
-#| code-fold: true
-#| eval: false
-# Load Python libraries
-#!pip install pandas
-import pandas as pd
-import os
-
-#!pip install scikit-hubness
-import random
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-
-from sklearn.neighbors import (KNeighborsClassifier,
-                                 NeighborhoodComponentsAnalysis)
-
-from scipy.stats import wasserstein_distance
-
-import seaborn as sns
-
-# Set seed
-random.seed(10)
-
-```
-
-```{python}
-#| echo: false
-#| eval: true
-#| code-fold: true
-
-## The r. before the dataframe is used for Python to evaluate r dataframes.
-
-# Import the files
-df_EMA = r.Df_Cereals_EMA
-
-df_R = r.Df_Cereals_R
-
-```
-
-```{python}
-#| code-fold: true
-#| code-summary: "Show the code: Selecting random samples, with replacement"
-#| code-overflow: wrap
-#| eval: false
-
-#R
-df_R_SI = df_R[df_R["Macroregion"]=="Southern Italy"].sample(20, random_state=21, replace="TRUE")
-df_R_NI = df_R[df_R["Macroregion"]=="Northern Italy"].sample(20, random_state=21, replace="TRUE")
-# Create a dataset with northern and southern Italy
-df_R_merge = pd.concat([df_R_SI, df_R_NI], ignore_index=True)
-
-data_R_byPlantGroup = df_R_merge.drop(['Chronology','Type', 'Macroregion', 'Weight'], axis=1)
-labels_R_byPlantGroup = df_R_merge.iloc[:,2] # nrow, 0 for Chronology - nrow, 1 for Type - nrow,2 for Macroregion
-
-#EMA
-df_EMA_SI = df_EMA[df_EMA["Macroregion"]=="Southern Italy"].sample(20, random_state=21, replace="TRUE")
-df_EMA_NI = df_EMA[df_EMA["Macroregion"]=="Northern Italy"].sample(20, random_state=21, replace="TRUE")
-df_EMA_merge = pd.concat([df_EMA_SI, df_EMA_NI], ignore_index=True)
- 
-data_EMA_byPlantGroup = df_EMA_merge.drop(['Chronology','Type', 'Macroregion', 'Weight'], axis=1)
-labels_EMA_byPlantGroup = df_EMA_merge.iloc[:,2] # nrow, 0 for Chronology - nrow, 1 for Type - nrow,2 for Macroregion
-
-```
-
-```{python}
-#| code-fold: true
-#| code-summary: "Show the code: Performing the NCA"
-#| code-overflow: wrap
-#| eval: false
-
-#R
-nca_for_KDE_R_PlantGroup = NeighborhoodComponentsAnalysis(n_components =1, init="lda").fit(data_R_byPlantGroup, labels_R_byPlantGroup)
-reduction_for_KDE_R_PlantGroup = nca_for_KDE_R_PlantGroup.transform(data_R_byPlantGroup)
-df_R_merge["value"] = reduction_for_KDE_R_PlantGroup
-     
-#EMA
-nca_for_KDE_EMA_PlantGroup = NeighborhoodComponentsAnalysis(n_components =1, init="lda").fit(data_EMA_byPlantGroup, labels_EMA_byPlantGroup)
-reduction_for_KDE_EMA_PlantGroup = nca_for_KDE_EMA_PlantGroup.transform(data_EMA_byPlantGroup)
-df_EMA_merge["value"] = reduction_for_KDE_EMA_PlantGroup
-```
-
-```{python}
-#| code-fold: true
-#| code-summary: "Show the code: Wasserstein distance"
-#| code-overflow: wrap
-#| eval: false
-
-# R
-df_R_North = df_R_merge[df_R_merge["Macroregion"] == "Northern Italy"]
-df_R_South = df_R_merge[df_R_merge["Macroregion"] == "Southern Italy"]
-
-print('Roman age - Wasserstein Distance')
-wasserstein_distance(df_R_South["value"], df_R_North["value"], u_weights=df_R_North["Weight"], v_weights=df_R_South["Weight"])
-
-
-#EMA
-print('EMA - Wasserstein Distance')
-df_EMA_North = df_EMA_merge[df_EMA_merge["Macroregion"] == "Northern Italy"]
-df_EMA_South = df_EMA_merge[df_EMA_merge["Macroregion"] == "Southern Italy"]
-
-wasserstein_distance(df_EMA_South["value"], df_EMA_North["value"], u_weights=df_EMA_North["Weight"], v_weights=df_EMA_South["Weight"])
-
-
-
-```
-:::
-
-```{python}
-#| code-fold: true
-#| code-summary: "Show the code: Plotting the NCA"
-#| code-overflow: wrap
-#| label: fig-KDE-NCA-RvsEMA
-#| fig-cap: "One-Dimension NCA on the Presence/Absence Cereals Dataset"
-#| fig-dpi: 300
-#| eval: false
-
-NCA_KDE_1D, ax = plt.subplots(1, 2, figsize=(10, 5), sharey=True, sharex=True)
-
-sns.kdeplot(data=df_R_merge, x="value", ax=ax[0], hue="Macroregion", fill=True, alpha=.1, palette="colorblind", linewidth=1, legend=None).set(xlabel='NCA', title="(a) Roman age")
-
-sns.kdeplot(data=df_EMA_merge, x="value", ax=ax[1], hue="Macroregion", fill=True, alpha=.1, palette="colorblind", linewidth=1).set(xlabel='NCA', title="(b) early Middle ages")
-
-NCA_KDE_1D.text(0.08, 0.03, 'Weighted Wasserstein Distance: W = 20.67 \nPERMANOVA test: p>0.05', fontsize=10)
-NCA_KDE_1D.text(0.68, 0.03, 'Weighted Wasserstein Distance: W = 88.32\nPERMANOVA test: p<0.001', fontsize=10)
-plt.tight_layout()
-plt.subplots_adjust(bottom=0.19)
-plt.show()
-
-```
-
-```{python}
-#| echo: false
-#| label: fig-boxplot-NCA-R
-#| fig-cap: "Boxplots showing the NCA value for Northern and Southern Roman Italy."
-#| eval: false
-
-Boxplot_R_NCA_Fig = plt.figure(figsize = (4.5,3))
-sns.boxplot(x="Macroregion", y="value", data=df_R_merge)
-plt.tight_layout()
-plt.show()
-```
-
-```{python}
-#| echo: false
-#| label: fig-boxplot-NCA-EMA
-#| fig-cap: "Boxplots showing the NCA value for Northern and Southern Early Medieval Italy."
-#| eval: false
-
-Boxplot_EMA_NCA_Fig = plt.figure(figsize = (4.5,3))
-sns.boxplot(x="Macroregion", y="value", data=df_EMA_merge)
-plt.tight_layout()
-plt.show()
-
-```
 
 ### GLM: Minor grains
 
@@ -1501,30 +1336,55 @@ m_mg_reg.df %>% mutate(Region = case_when(
     RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
 )) -> m_mg_reg.df
 
-m_mg_reg.plot <- m_mg_reg %>%
-  spread_draws(RegChr[RC_ID]) %>%
-  ggplot(aes(y = fct_rev(
-    factor(m_mg_reg.df$Chrono, 
-           levels=c("R", "LR", "EMA", "Ma"))
-    ), 
-    x = inv_logit(RegChr))) +
+m_mg_reg.plot <- ggplot(
+  data = m_mg_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
   stat_interval(
-    .width = c(.50, .80, .95, .99), 
-    linewidth=6,
-    position=position_nudge(y= -0.2)
-    ) +
-  stat_halfeye()+
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
   labs(
     title = "Minor Grains",
-    color="Credible interval",
-    x="Probability",
-    y="Chronology"
-    )+
-  scale_color_brewer(palette="Greys")+
-  theme_tidybayes()+
-  theme(legend.position = "bottom"
-    )+
-  facet_grid(~factor(m_mg_reg.df$Region, levels=c("SI", "CI", "NI")))
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
 
 ```
 
@@ -1540,13 +1400,14 @@ m_mg_reg.plot
 ## Distribution of plants in different site types {style="text-align:justify"}
 
 ::: callout-note
-I might merge all the fruits (excluding grape and olive) into one graph.
+This section has to be rewritten as now the approach is not frequentist anymore. 
 :::
 
 It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
 
 ```{r}
 #| echo: false
+#| eval: false
                                                                 
 # Store a copy of the original dataframe
 Plants_Df_for_Ubiquity <- Df_Cond_Plants 
@@ -1808,35 +1669,8 @@ stonefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type,
 
 ```
 
-```{r}
-#| echo: false
-#| warning: false
-#| label: fig-ubiquity-site-type
-#| fig-cap: "Ubiquity (%) of plants, divided by site type and chronology."
-#| fig-subcap: 
-#|  - "Noble grains (wheat and barley)."
-#|  - "Minor grains."
-#|  - "Legumes."
-#|  - "Grape."
-#|  - "Olive."
-#| layout-nrow: 7
-#| layout-ncol: 1
-#| fig-height: 2.5
-#| fig-asp: 0.3
 
-noblegrains_by_type
-minorgrains_by_type
-legumes_by_type
-grape_by_type
-olive_by_type
-nuts_by_type
-stonefruits_by_type
-```
-
-
-### Bayesian alternative
-
-#### Pre-processing and models
+### Pre-processing and models
 ```{r}
 #| echo: true
 #| code-fold: true
@@ -2082,7 +1916,7 @@ m_nuts_type <- ulam(
 
 ```
 
-#### Results
+### Results
 
 ```{r}
 #| echo: false
@@ -2109,22 +1943,54 @@ m_ng_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_ng_type.df
 
-m_ng_type.plot <- ggplot(data=m_ng_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Noble Grains",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+m_ng_type.plot <- ggplot(
+  data = m_ng_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_ng_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Noble Grains",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
 
 
 ```
@@ -2154,22 +2020,55 @@ m_mg_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_mg_type.df
 
-m_mg_type.plot <- ggplot(data=m_mg_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Minor Grains",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+
+m_mg_type.plot <- ggplot(
+  data = m_mg_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_mg_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Minor Grains",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
 
 
 ```
@@ -2198,22 +2097,54 @@ m_leg_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_leg_type.df
 
-m_leg_type.plot <- ggplot(data=m_leg_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Noble Grains",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+m_leg_type.plot <- ggplot(
+  data = m_leg_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_leg_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Legumes",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
 
 ```
 
@@ -2240,22 +2171,55 @@ m_grape_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_grape_type.df
 
-m_grape_type.plot <- ggplot(data=m_grape_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
+m_grape_type.plot <- ggplot(
+  data = m_grape_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_grape_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
   labs(
-          title = "Grape",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+    title = "Grape",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
+
 
 ```
 
@@ -2286,23 +2250,55 @@ m_olives_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_olives_type.df
 
-m_olives_type.plot <- ggplot(data=m_olives_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Olive",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    ) + 
-  facet_wrap(~Type)
+m_olives_type.plot <- ggplot(
+  data = m_olives_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_olives_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Olive",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
+
 
 ```
 
@@ -2330,22 +2326,55 @@ m_nuts_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_nuts_type.df
 
-m_nuts_type.plot <- ggplot(data=m_nuts_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Nuts",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+
+m_nuts_type.plot <- ggplot(
+  data = m_nuts_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_nuts_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Nuts",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
 
 ```
 
@@ -2411,22 +2440,55 @@ m_dfruit_type.df %>% mutate(Type = case_when(
     TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_dfruit_type.df
 
-m_dfruit_type.plot <- ggplot(data=m_dfruit_type.df, 
-       aes(
-         x=factor(Chrono, levels=c("R", "LR", "EMA", "Ma")),
-         y=inv_logit(TypeChr), 
-         ), 
-       ) +
-    stat_interval(.width = c(.50, .80, .95, .99)) +
-    theme_pubclean()+
-        theme(legend.position="top") +
-        scale_color_brewer(palette="Greys") +
-        labs(
-          title = "Domestic fruits",
-          x= "",
-          y = "Probability",
-          color="Credible interval"
-    )+ facet_wrap(~Type)
+
+m_dfruit_type.plot <- ggplot(
+  data = m_dfruit_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_dfruit_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Domestic fruits",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
 
 ```
 
@@ -2455,7 +2517,6 @@ m_nuts_type.plot
 m_dfruit_type.plot
 
 ```
-
 
 ### Richness and diversity in the sites
 
