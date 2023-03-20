@@ -2507,6 +2507,7 @@ m_dfruit_type.plot <- ggplot(
 #|  - "Domestic fruits."
 #| layout-nrow: 7
 #| layout-ncol: 1
+#| fig-height: 10
 
 m_ng_type.plot
 m_mg_type.plot
