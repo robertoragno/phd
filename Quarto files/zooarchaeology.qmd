@@ -730,73 +730,6 @@ caprine_by_geo
 ediblewild_by_geo
 ```
 
-### Caprine vs altitude
-
-```{r}
-#| echo: false
-#| eval: false
-
-zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
-
-zoo_altitude.freqs <- decostand(zoo_altitude[16:ncol(zoo_altitude)], method="total", na.rm = T)
-
-caprine_altitude <- data.frame(
-  Site_ID = zoo_altitude$ID,
-  Macroregion = zoo_altitude$Macroregion,
-  Altitude = zoo_altitude$Altitude,
-  Chronology = zoo_altitude$Chronology,
-  Frequency = zoo_altitude.freqs$Caprine
-)
-
-caprine_altitude[is.na(caprine_altitude)] <- 0
-caprine_altitude <- subset(caprine_altitude, Altitude>150 & Frequency>0)
-
-ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
-
-model1 <- glm(Frequency ~ log(Altitude)*Chronology, family="quasibinomial", data = caprine_altitude)
-summary(model1)
-plot(model1, which=1)
-
-model2 <- glm(Frequency ~ Altitude, family="quasibinomial", data = subset(caprine_altitude, Chronology=="R"))
-summary(model2)
-
-# DIAGNOSTICS
-plot(density(resid(model2, type='response')))
-plot(density(resid(model2, type='deviance')))
-plot(density(rstandard(model2, type='deviance')))
-
-# Test if the prediction is similar to the original distribution
-plot(density(caprine_altitude$Frequency), main='Model')
-lines(density(predict(model2, type='response')), col='red')
-
-scatter.smooth(1:570, rstandard(model2, type='deviance'), col='gray')
-
-scatter.smooth(predict(model2, type='response'), rstandard(model2, type='deviance'), col='gray')
-
-# Is the choice of distribution appropriate?
-qqnorm(resid(model2)); qqline(resid(model2))
-
-# Cook distance
-plot(cooks.distance(model2), type='h')
-
-plot(density(caprine_altitude$Altitude), type ="l")
-plot(density(caprine_altitude$Frequency))
-
-caprine_altitude.R <- subset(caprine_altitude, Chronology=="R")
-
-cor_capr_altitude <- cor.test(
-  caprine_altitude.R$Frequency, 
-  caprine_altitude.R$Altitude, 
-  method = "spearman", 
-  conf.level = 0.95,
-  covar = caprine_altitude.R$Chronology, 
-  exact=F
-  )
-
-model4 <- lm(Frequency~Altitude, caprine_altitude.R)
-summary(model4)
-
-```
 
 # Context type 
 
@@ -1322,7 +1255,7 @@ Pigs_BB.plot <- Pigs_BB_Merge_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                        size = 0.25,
+                                        linewidth = 0.25,
                                         linetype = 2),
         axis.title.x.top = element_blank()
         )+
@@ -1351,7 +1284,7 @@ Pigs_BB_phi.plot <- Pigs_BB_Merge_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                        size = 0.25,
+                                        linewidth = 0.25,
                                         linetype = 2),
         axis.title.x.top = element_blank()
         )+
@@ -1361,6 +1294,7 @@ Pigs_BB_phi.plot <- Pigs_BB_Merge_phi %>%
 
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Pigs_BB.plot
 Pigs_BB_phi.plot
@@ -1823,6 +1757,7 @@ Cattle_BB_phi.plot <- Cattle_BB_Merge_phi %>%
 
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Cattle_BB.plot
 Cattle_BB_phi.plot
@@ -2271,9 +2206,9 @@ Caprine_BB_phi.plot <- Caprine_BB_Merge_phi %>%
 
 ```
 
-
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Caprine_BB.plot
 Caprine_BB_phi.plot
@@ -2504,7 +2439,7 @@ Pigs_Reg_phi.plot <- Pigs_Reg.fit_phi %>%
 
 ```{r}
 #| echo: false
-
+#| fig-height: 8
 
 Pigs_Reg.plot
 Pigs_Reg_phi.plot
@@ -2715,6 +2650,7 @@ Cattle_Reg_phi.plot <- Cattle_Reg.fit_phi %>%
 
 ```{r}
 #| echo: false
+#| fig-height: 8
 
 Cattle_Reg.plot
 Cattle_Reg_phi.plot
@@ -2746,6 +2682,7 @@ Caprine_Reg.fit <- stan(
 #saveRDS(Caprine_Reg.fit, "stan_models/Caprine_Reg_fit.rds")
 
 ```
+
 ```{r}
 #| echo: false
 #| message: false
@@ -2920,9 +2857,9 @@ Caprine_Reg_phi.plot <- Caprine_Reg.fit_phi %>%
 
 ```
 
-
 ```{r}
 #| echo: false
+#| fig-height: 8
 
 Caprine_Reg.plot
 Caprine_Reg_phi.plot
@@ -3178,6 +3115,7 @@ Pigs_Geo_phi.plot <- Pigs_Geo.fit_phi %>%
 
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Pigs_Geo.plot
 Pigs_Geo_phi.plot
@@ -3372,7 +3310,7 @@ Cattle_Geo.plot <- Cattle_Geo.fit_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -3401,16 +3339,16 @@ Cattle_Geo_phi.plot <- Cattle_Geo.fit_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
   facet_grid(Geography ~ ., scales="free")
 ```
 
-
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Cattle_Geo.plot
 Cattle_Geo_phi.plot
@@ -3605,7 +3543,7 @@ Caprine_Geo.plot <- Caprine_Geo.fit_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -3634,16 +3572,16 @@ Caprine_Geo_phi.plot <- Caprine_Geo.fit_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
   facet_grid(Geography ~ ., scales="free")
 ```
 
-
 ```{r}
 #| echo: false
+#| fig-height: 10
 
 Caprine_Geo.plot
 Caprine_Geo_phi.plot
@@ -3653,3 +3591,73 @@ Caprine_Geo_phi.plot
 ::: callout-alert
 Model under construction
 :::
+
+
+# Modelling caprine against altitude
+
+```{r}
+#| echo: false
+#| eval: false
+
+zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
+
+zoo_altitude.freqs <- decostand(zoo_altitude[16:ncol(zoo_altitude)], method="total", na.rm = T)
+
+caprine_altitude <- data.frame(
+  Site_ID = zoo_altitude$ID,
+  Macroregion = zoo_altitude$Macroregion,
+  Altitude = zoo_altitude$Altitude,
+  Chronology = zoo_altitude$Chronology,
+  Frequency = zoo_altitude.freqs$Caprine
+)
+
+caprine_altitude[is.na(caprine_altitude)] <- 0
+caprine_altitude <- subset(caprine_altitude, Altitude>150 & Frequency>0)
+
+ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
+
+model1 <- glm(Frequency ~ log(Altitude)*Chronology, family="quasibinomial", data = caprine_altitude)
+summary(model1)
+plot(model1, which=1)
+
+model2 <- glm(Frequency ~ Altitude, family="quasibinomial", data = subset(caprine_altitude, Chronology=="R"))
+summary(model2)
+
+# DIAGNOSTICS
+plot(density(resid(model2, type='response')))
+plot(density(resid(model2, type='deviance')))
+plot(density(rstandard(model2, type='deviance')))
+
+# Test if the prediction is similar to the original distribution
+plot(density(caprine_altitude$Frequency), main='Model')
+lines(density(predict(model2, type='response')), col='red')
+
+scatter.smooth(1:570, rstandard(model2, type='deviance'), col='gray')
+
+scatter.smooth(predict(model2, type='response'), rstandard(model2, type='deviance'), col='gray')
+
+# Is the choice of distribution appropriate?
+qqnorm(resid(model2)); qqline(resid(model2))
+
+# Cook distance
+plot(cooks.distance(model2), type='h')
+
+plot(density(caprine_altitude$Altitude), type ="l")
+plot(density(caprine_altitude$Frequency))
+
+caprine_altitude.R <- subset(caprine_altitude, Chronology=="R")
+
+cor_capr_altitude <- cor.test(
+  caprine_altitude.R$Frequency, 
+  caprine_altitude.R$Altitude, 
+  method = "spearman", 
+  conf.level = 0.95,
+  covar = caprine_altitude.R$Chronology, 
+  exact=F
+  )
+
+model4 <- lm(Frequency~Altitude, caprine_altitude.R)
+summary(model4)
+
+```
+
