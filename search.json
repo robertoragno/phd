@@ -4,7 +4,7 @@
     "href": "zooarchaeology.html",
     "title": "8  Zooarchaeology",
     "section": "",
-    "text": "9 In progress"
+    "text": "9 Context type"
   },
   {
     "objectID": "zooarchaeology.html#case-studies",
@@ -628,5 +628,89 @@
     "title": "8  Zooarchaeology",
     "section": "9.1 Test 1: GLM-Pigs %",
     "text": "9.1 Test 1: GLM-Pigs %\n\n\n\n\n\n\nQuestion: Is the animal X - let’s say Pigs - more strongly associated to a particular settlement type during a certain chronology?\nExpectation 1: Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.\nExpectation 2: Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).\nExpectation 3: If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?\n\n\n\n\n\n\n\n\n\nNote however that there is a temporal divergence in the means of pigs for Central-Southern Italy (Pigs % decrease from the Roman to the Medieval age) and Northern Italy (Pigs % increase from the Roman to the Medieval age).\n\n\n\n\n\n\nBefore running the GLM, a quick look at the distribution of Pigs in each chronology and site type.\n\n\n[1] \"Number of samples:\"\n\n\n\n  R  LR EMA  Ma \n169 174 130  60 \n\n\n[1] \"Chronological means and sd:\"\n\n\n# A tibble: 4 × 3\n  Chronology  mean    SD\n  <fct>      <dbl> <dbl>\n1 R           0.43  0.22\n2 LR          0.36  0.19\n3 EMA         0.33  0.16\n4 Ma          0.37  0.15\n\n\nPlots showing very high variability in each site type:\n\n\n\n\n\nWe can now run the GLM:\n\nm_zoo_st <- glm(Pigs~Chronology*Type, \n               # weights = Tot_NISP, \n                family = \"quasibinomial\",\n                data=Animals_Df\n                )\n\n# This model uses % data, so I am not sure I should use the weights.\n\n\nSomehow the results for Ma:Urban are NA, even though the category is not empty (as is the case for Rural site, villas in the Middle ages) and there are no NAs.\n\n\n\n\nCall:\nglm(formula = Pigs ~ Chronology * Type, family = \"quasibinomial\", \n    data = Animals_Df)\n\nDeviance Residuals: \n     Min        1Q    Median        3Q       Max  \n-1.07441  -0.26547   0.01331   0.24466   1.06624  \n\nCoefficients: (2 not defined because of singularities)\n                                    Estimate Std. Error t value Pr(>|t|)    \n(Intercept)                           0.1474     0.2335   0.631   0.5281    \nChronologyLR                         -0.6914     0.3715  -1.861   0.0632 .  \nChronologyEMA                        -0.4723     0.2870  -1.645   0.1005    \nChronologyMa                         -0.5183     0.1579  -3.283   0.0011 ** \nTypeRural                            -1.0929     0.2630  -4.156 3.79e-05 ***\nTypeRural site, villa                -0.4605     0.2805  -1.641   0.1013    \nTypeUrban                            -0.1778     0.2215  -0.802   0.4227    \nChronologyLR:TypeRural                0.6469     0.4090   1.582   0.1143    \nChronologyEMA:TypeRural               0.5664     0.3416   1.658   0.0979 .  \nChronologyMa:TypeRural                0.6182     0.3136   1.972   0.0492 *  \nChronologyLR:TypeRural site, villa    0.8783     0.4247   2.068   0.0391 *  \nChronologyEMA:TypeRural site, villa   0.4242     0.4110   1.032   0.3025    \nChronologyMa:TypeRural site, villa        NA         NA      NA       NA    \nChronologyLR:TypeUrban                0.2011     0.3728   0.539   0.5899    \nChronologyEMA:TypeUrban              -0.2711     0.2936  -0.923   0.3562    \nChronologyMa:TypeUrban                    NA         NA      NA       NA    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for quasibinomial family taken to be 0.1357735)\n\n    Null deviance: 91.342  on 532  degrees of freedom\nResidual deviance: 77.731  on 519  degrees of freedom\nAIC: NA\n\nNumber of Fisher Scoring iterations: 4\n\n\nPseudo R-squared:  0.149007\n\n\n\n\nNote:\n  2 values in the Chronology*Type effect are not estimable\n\n\n\n\n\n\n\nFigure 9.1: Normality of residuals\n\n\n\n\n\n\n\nFigure 9.2: Effect plot"
+  },
+  {
+    "objectID": "zooarchaeology.html#pigs",
+    "href": "zooarchaeology.html#pigs",
+    "title": "8  Zooarchaeology",
+    "section": "9.1 Pigs",
+    "text": "9.1 Pigs\n\n\n\n\n\n\nQuestion: Is the animal X - let’s say Pigs - more strongly associated to a particular settlement type during a certain chronology?\nExpectation 1: Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.\nExpectation 2: Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).\nExpectation 3: If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.\nℹ Please use the `linewidth` argument instead."
+  },
+  {
+    "objectID": "zooarchaeology.html#cattle",
+    "href": "zooarchaeology.html#cattle",
+    "title": "8  Zooarchaeology",
+    "section": "9.2 Cattle",
+    "text": "9.2 Cattle"
+  },
+  {
+    "objectID": "zooarchaeology.html#caprine",
+    "href": "zooarchaeology.html#caprine",
+    "title": "8  Zooarchaeology",
+    "section": "9.3 Caprine",
+    "text": "9.3 Caprine"
+  },
+  {
+    "objectID": "zooarchaeology.html#cattle-1",
+    "href": "zooarchaeology.html#cattle-1",
+    "title": "8  Zooarchaeology",
+    "section": "10.2 Cattle",
+    "text": "10.2 Cattle"
+  },
+  {
+    "objectID": "zooarchaeology.html#pigs-1",
+    "href": "zooarchaeology.html#pigs-1",
+    "title": "8  Zooarchaeology",
+    "section": "10.1 Pigs",
+    "text": "10.1 Pigs"
+  },
+  {
+    "objectID": "zooarchaeology.html#edible-w.-mammals",
+    "href": "zooarchaeology.html#edible-w.-mammals",
+    "title": "8  Zooarchaeology",
+    "section": "9.4 Edible W. Mammals",
+    "text": "9.4 Edible W. Mammals\n\n\n\n\n\n\nModel under construction"
+  },
+  {
+    "objectID": "zooarchaeology.html#caprine-1",
+    "href": "zooarchaeology.html#caprine-1",
+    "title": "8  Zooarchaeology",
+    "section": "10.3 Caprine",
+    "text": "10.3 Caprine"
+  },
+  {
+    "objectID": "zooarchaeology.html#edible-w.-mammals-1",
+    "href": "zooarchaeology.html#edible-w.-mammals-1",
+    "title": "8  Zooarchaeology",
+    "section": "10.4 Edible W. Mammals",
+    "text": "10.4 Edible W. Mammals\n\n\n\n\n\n\nModel under construction"
+  },
+  {
+    "objectID": "zooarchaeology.html#pigs-2",
+    "href": "zooarchaeology.html#pigs-2",
+    "title": "8  Zooarchaeology",
+    "section": "11.1 Pigs",
+    "text": "11.1 Pigs"
+  },
+  {
+    "objectID": "zooarchaeology.html#cattle-2",
+    "href": "zooarchaeology.html#cattle-2",
+    "title": "8  Zooarchaeology",
+    "section": "11.2 Cattle",
+    "text": "11.2 Cattle"
+  },
+  {
+    "objectID": "zooarchaeology.html#caprine-2",
+    "href": "zooarchaeology.html#caprine-2",
+    "title": "8  Zooarchaeology",
+    "section": "11.3 Caprine",
+    "text": "11.3 Caprine"
+  },
+  {
+    "objectID": "zooarchaeology.html#edible-w.-mammals-2",
+    "href": "zooarchaeology.html#edible-w.-mammals-2",
+    "title": "8  Zooarchaeology",
+    "section": "11.4 Edible W. Mammals",
+    "text": "11.4 Edible W. Mammals\n\n\n\n\n\n\nModel under construction"
   }
 ]

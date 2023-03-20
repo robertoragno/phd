@@ -798,10 +798,9 @@ summary(model4)
 
 ```
 
-# In progress
+# Context type 
 
-## Test 1: GLM-Pigs %
-
+## Pigs 
 ::: callout-alert
 **Question:** Is the animal X - let's say Pigs - more strongly associated to a particular settlement type during a certain chronology?
 
@@ -810,10 +809,6 @@ summary(model4)
 **Expectation 2:** Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).
 
 **Expectation 3:** If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?
-:::
-
-::: callout-warning
-Note however that there is a temporal divergence in the means of pigs for Central-Southern Italy (Pigs % decrease from the Roman to the Medieval age) and Northern Italy (Pigs % increase from the Roman to the Medieval age).
 :::
 
 ```{r}
@@ -839,13 +834,11 @@ Animals_Df$Geo <- str_replace(Animals_Df$Geo, "Hilltop", "Hill")
 
 # 3. Remove the categories 'Necropolis' and 'Religious' as they might skew
 # the results.
-Animals_Df <- filter(Animals_Df, Type!="Necropolis" & Type!="Religious" & Type!="Shipwreck" & Type!="Urban, amphitheater")
+Animals_Df <- filter(Animals_Df,  Type!="Shipwreck")
 
-# 4. Exclude the castrum of Ostia, very strong outlier
+# 4. Exclude the castrum of Ostia, very strong outlier and regardless only fortified
+# roman site
 Animals_Df <- subset(Animals_Df, !(Chronology=="R" & Type=="Fortified"))
-
-# Convert to proportions (or simply use vegan decostand)
-Animals_Df[,c(2:5)] <- Animals_Df[,c(2:5)]/Animals_Df$Tot_NISP
 
 # Convert to factors
 Animals_Df[,c(7:9,11)] <- lapply(Animals_Df[,c(7:9,11)], factor)
@@ -856,32 +849,2807 @@ Animals_Df$Chronology <- factor(Animals_Df$Chronology, levels = c("R", "LR", "EM
 # Convert NAs to 0
 Animals_Df[is.na(Animals_Df)]<-0
 
+# Create copies
+Animals_Df2 <- Animals_Df
+Animals_Df_fort <- Animals_Df
+Animals_Df_villas <- Animals_Df
+Animals_Df_Necr_Amph <- Animals_Df
+Animals_Df_Rel <- Animals_Df
+
+# Convert to proportions just the 
+#Animals_Df[,c(2:5)] <- Animals_Df[,c(2:5)]/Animals_Df$Tot_NISP
+
+# Simplifying: Urban vs Rural
+# Because they exist in the same chronologies
+Animals_Df2 <- subset(Animals_Df2, Type=="Rural" | Type=="Urban")
+Animals_Df2 <- droplevels(Animals_Df2)
+
+Animals_Df_fort <- subset(Animals_Df_fort, Type=="Fortified")
+Animals_Df_fort <- droplevels(Animals_Df_fort)
+
+Animals_Df_villas <- subset(Animals_Df_villas, Type=="Rural site, villa")
+Animals_Df_villas <- droplevels(Animals_Df_villas)
+
+# Because they exist in the same chronologies
+Animals_Df_Necr_Amph <- subset(Animals_Df_Necr_Amph, Type=="Necropolis" | Type=="Urban, amphitheater")
+Animals_Df_Necr_Amph <- droplevels(Animals_Df_Necr_Amph)
+
+Animals_Df_Rel <- subset(Animals_Df_Rel, Type=="Religious")
+Animals_Df_Rel <- droplevels(Animals_Df_Rel)
+
+
 ```
 
-Before running the GLM, a quick look at the distribution of Pigs in each chronology and site type.
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+########################################
+# Data processing for bayesian models
+########################################
+
+library(rethinking)
+library(tidybayes)
+library(tidybayes.rethinking)
+
+set.seed(24)
+
+# RURAL AND URBAN SITES
+d.Animals_RurUrb <- Animals_Df2
+d.Animals_RurUrb$TC_id <- as.integer(interaction(d.Animals_RurUrb$Type, d.Animals_RurUrb$Chronology))
+dat.Pigs_RurUrb = list(N=d.Animals_RurUrb$Tot_NISP, A=d.Animals_RurUrb$Pigs, Tc_id=d.Animals_RurUrb$TC_id, J=nrow(d.Animals_RurUrb))
+
+# Religious sites
+d.Animals_Rel <- Animals_Df_Rel
+d.Animals_Rel$TC_id <- as.integer(interaction(d.Animals_Rel$Type, d.Animals_Rel$Chronology))
+dat.Pigs_Rel = list(N=d.Animals_Rel$Tot_NISP, A=d.Animals_Rel$Pigs, Tc_id=d.Animals_Rel$TC_id, J=nrow(d.Animals_Rel))
+
+## Necropolis and amphitheaters
+d.Animals_Necr_Amph <- Animals_Df_Necr_Amph
+d.Animals_Necr_Amph$TC_id <- as.integer(interaction(d.Animals_Necr_Amph$Type, d.Animals_Necr_Amph$Chronology))
+dat.Pigs_Necr_Amph = list(N=d.Animals_Necr_Amph$Tot_NISP, A=d.Animals_Necr_Amph$Pigs, Tc_id=d.Animals_Necr_Amph$TC_id, J=nrow(d.Animals_Necr_Amph))
+
+# FORTIFIED SETTLEMENTS
+
+d.Animals_fort <- Animals_Df_fort
+d.Animals_fort$TC_id <- as.integer(interaction(d.Animals_fort$Type, d.Animals_fort$Chronology))
+dat.Pigs_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Pigs, Tc_id=d.Animals_fort$TC_id, J=nrow(d.Animals_fort))
+
+# Pigs - Villas
+
+d.Animals_villas <- Animals_Df_villas
+d.Animals_villas$TC_id <- as.integer(interaction(d.Animals_villas$Type, d.Animals_villas$Chronology))
+dat.Pigs_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Pigs, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+########################################
+# Running the models
+# Saving the models
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Pigs_RurUrb.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRur.stan",  # Stan program
+  data = dat.Pigs_RurUrb,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_RurUrb.fit, "stan_models/Pigs_RurUrb_fit.rds")
+
+Pigs_Rel.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
+  data = dat.Pigs_Rel,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_Rel.fit, "stan_models/Pigs_Rel_fit.rds")
+
+Pigs_Necr_Amph.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
+  data = dat.Pigs_Necr_Amph,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_Necr_Amph.fit, "stan_models/Pigs_Necr_Amph_fit.rds")
+
+Pigs_Fort.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Pigs_fort,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_Fort.fit, "stan_models/Pigs_Fort_fit.rds")
+
+Pigs_Villas_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Pigs_villas,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_Villas_fit, "stan_models/Pigs_Villas_fit.rds")
+
+
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Pigs_RurUrb.fit <- readRDS("stan_models/Pigs_RurUrb_fit.rds")
+Pigs_Rel.fit <- readRDS("stan_models/Pigs_Rel_fit.rds")
+Pigs_Necr_Amph.fit <- readRDS("stan_models/Pigs_Necr_Amph_fit.rds")
+Pigs_Fort.fit <- readRDS("stan_models/Pigs_Fort_fit.rds")
+Pigs_Villas_fit <- readRDS("stan_models/Pigs_Villas_fit.rds")
+
+```
 
 ```{r}
 #| echo: false
 
-print("Number of samples:")
-table(Animals_Df$Chronology)
+################################
+## Data handling for ggplot
+################################
 
 
-print("Chronological means and sd:")
-Animals_Df %>% 
-  group_by(Chronology) %>% 
-  summarise(mean = mean(Pigs, na.rm = T), 
-            SD = sd(Pigs, na.rm = T)) %>% 
-  mutate_if(is.numeric, ~round(., 2))
+Pigs_BB_Merge_a_UrbRur <- Pigs_RurUrb.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+    )
+) 
 
+Pigs_BB_Merge_a_NecrAmph <- Pigs_Necr_Amph.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+    )
+) 
+
+Pigs_BB_Merge_a_Rel <- Pigs_Rel.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+    )
+) 
+
+Pigs_BB_Merge_a_Fortified <- Pigs_Fort.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+    )
+)  %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+    )
+)  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+    )
+)
+
+Pigs_BB_Merge_a_Villas <- Pigs_Villas_fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+    ) ) %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+    ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+    )
+)
+
+################################
+## Data handling for phi/theta
+################################
+
+Pigs_BB_Merge_theta_UrbRur <- Pigs_RurUrb.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+    )
+) 
+
+Pigs_BB_Merge_theta_NecrAmph <- Pigs_Necr_Amph.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+    )
+) 
+
+Pigs_BB_Merge_theta_Rel <- Pigs_Rel.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+    )
+) 
+
+Pigs_BB_Merge_theta_Fortified <- Pigs_Fort.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+    )
+)  %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+    )
+)  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+    )
+)
+
+Pigs_BB_Merge_theta_Villas <- Pigs_Villas_fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+    ) ) %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+    ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+    )
+)
+
+################################
+# Merging all this data together
+################################
+
+
+Pigs_BB_Merge_phi <- rbind(Pigs_BB_Merge_theta_UrbRur, Pigs_BB_Merge_theta_Fortified, Pigs_BB_Merge_theta_Villas, Pigs_BB_Merge_theta_Rel, Pigs_BB_Merge_theta_NecrAmph)
+Pigs_BB_Merge_phi$TC_text <- factor(Pigs_BB_Merge_phi$TC_text)
+
+Pigs_BB_Merge_a <- rbind(Pigs_BB_Merge_a_UrbRur, Pigs_BB_Merge_a_Fortified, Pigs_BB_Merge_a_Villas, Pigs_BB_Merge_a_Rel, Pigs_BB_Merge_a_NecrAmph)
+Pigs_BB_Merge_a$TC_text <- factor(Pigs_BB_Merge_a$TC_text)
+
+
+################################
+# Creating the plots
+################################
+
+chrono_levels <- c("R", "LR", "EMA", "Ma")
+
+Pigs_BB.plot <- Pigs_BB_Merge_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+    )+
+    geom_vline(xintercept = inv_logit(mean(Pigs_BB_Merge_a$a)),    
+               linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    scale_y_discrete(limits=rev)+
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+    scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Pigs",
+       subtitle = "Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        size = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )+
+  facet_grid(Type ~ ., scales="free")
+
+
+Pigs_BB_phi.plot <- Pigs_BB_Merge_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+    geom_vline(xintercept = mean(Pigs_BB_Merge_phi$theta),
+               linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    scale_y_discrete(limits=rev)+
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+    scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Pigs",
+       subtitle="Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        size = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )+
+  facet_grid(Type ~ ., scales="free")
 
 ```
 
-Plots showing very high variability in each site type:
 ```{r}
 #| echo: false
-Animals_Df %>% 
-  ggplot(aes(Pigs)) + 
-  geom_density() +
-  facet_wrap(Chronology~Type)
+
+Pigs_BB.plot
+Pigs_BB_phi.plot
+
 ```
+
+## Cattle
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| output: false
+
+######################################################
+# Initial data processing for input in models
+######################################################
+
+# RURAL AND URBAN SITES
+dat.Cattle_RurUrb = list(N=d.Animals_RurUrb$Tot_NISP, A=d.Animals_RurUrb$Cattle, Tc_id=d.Animals_RurUrb$TC_id, J=nrow(d.Animals_RurUrb))
+
+# Religious sites
+dat.Cattle_Rel = list(N=d.Animals_Rel$Tot_NISP, A=d.Animals_Rel$Cattle, Tc_id=d.Animals_Rel$TC_id, J=nrow(d.Animals_Rel))
+
+## Necropolis and amphitheaters
+dat.Cattle_Necr_Amph = list(N=d.Animals_Necr_Amph$Tot_NISP, A=d.Animals_Necr_Amph$Cattle, Tc_id=d.Animals_Necr_Amph$TC_id, J=nrow(d.Animals_Necr_Amph))
+
+# FORTIFIED SETTLEMENTS
+dat.Cattle_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Cattle, Tc_id=d.Animals_fort$TC_id, J=nrow(d.Animals_fort))
+
+# Cattle - Villas
+dat.Cattle_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Cattle, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| message: false
+#| warning: false
+#| output: false
+
+########################################
+# Running the models
+# Saving the models
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Cattle_RurUrb.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRur.stan",  # Stan program
+  data = dat.Cattle_RurUrb,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_RurUrb.fit, "stan_models/Cattle_RurUrb_fit.rds")
+
+Cattle_Rel.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
+  data = dat.Cattle_Rel,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_Rel.fit, "stan_models/Cattle_Rel_fit.rds")
+
+Cattle_Necr_Amph.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
+  data = dat.Cattle_Necr_Amph,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_Necr_Amph.fit, "stan_models/Cattle_Necr_Amph_fit.rds")
+
+Cattle_Fort.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Cattle_fort,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_Fort.fit, "stan_models/Cattle_Fort_fit.rds")
+
+Cattle_Villas_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Cattle_villas,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_Villas_fit, "stan_models/Cattle_Villas_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Cattle_RurUrb.fit <- readRDS("stan_models/Cattle_RurUrb_fit.rds")
+Cattle_Rel.fit <- readRDS("stan_models/Cattle_Rel_fit.rds")
+Cattle_Necr_Amph.fit <- readRDS("stan_models/Cattle_Necr_Amph_fit.rds")
+Cattle_Fort.fit <- readRDS("stan_models/Cattle_Fort_fit.rds")
+Cattle_Villas_fit <- readRDS("stan_models/Cattle_Villas_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+
+################################################################
+## Data handling for ggplot: a and theta/phi parameters
+################################################################
+
+Cattle_BB_Merge_a_UrbRur <- Cattle_RurUrb.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+    )
+) 
+
+Cattle_BB_Merge_a_NecrAmph <- Cattle_Necr_Amph.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+    )
+) 
+
+Cattle_BB_Merge_a_Rel <- Cattle_Rel.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+    )
+) 
+
+Cattle_BB_Merge_a_Fortified <- Cattle_Fort.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+    )
+)  %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+    )
+)  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+    )
+)
+
+Cattle_BB_Merge_a_Villas <- Cattle_Villas_fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+    ) ) %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+    ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+    )
+)
+
+Cattle_BB_Merge_a <- rbind(Cattle_BB_Merge_a_UrbRur, Cattle_BB_Merge_a_Fortified, Cattle_BB_Merge_a_Villas, Cattle_BB_Merge_a_Rel, Cattle_BB_Merge_a_NecrAmph)
+Cattle_BB_Merge_a$TC_text <- factor(Cattle_BB_Merge_a$TC_text)
+
+## Data handling for theta/phi
+
+Cattle_BB_Merge_theta_UrbRur <- Cattle_RurUrb.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+    )
+) 
+
+Cattle_BB_Merge_theta_NecrAmph <- Cattle_Necr_Amph.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+    )
+) 
+
+Cattle_BB_Merge_theta_Rel <- Cattle_Rel.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+    )
+) 
+
+Cattle_BB_Merge_theta_Fortified <- Cattle_Fort.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+    )
+)  %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+    )
+)  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+    )
+)
+
+Cattle_BB_Merge_theta_Villas <- Cattle_Villas_fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+    ) ) %>% 
+    mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+    ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+    )
+)
+
+Cattle_BB_Merge_phi <- rbind(Cattle_BB_Merge_theta_UrbRur, Cattle_BB_Merge_theta_Fortified, Cattle_BB_Merge_theta_Villas, Cattle_BB_Merge_theta_Rel, Cattle_BB_Merge_theta_NecrAmph)
+Cattle_BB_Merge_phi$TC_text <- factor(Cattle_BB_Merge_phi$TC_text)
+
+
+################################
+# Plotting
+################################
+
+Cattle_BB.plot <- Cattle_BB_Merge_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+    )+
+    geom_vline(xintercept = inv_logit(mean(Cattle_BB_Merge_a$a)), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    scale_y_discrete(limits=rev)+
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+    scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Cattle",
+       subtitle="Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        size = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )+
+  facet_grid(Type ~ ., scales="free")
+
+
+Cattle_BB_phi.plot <- Cattle_BB_Merge_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+    geom_vline(xintercept = mean(Cattle_BB_Merge_phi$theta),     
+               linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    scale_y_discrete(limits=rev)+
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+    scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Cattle",
+       subtitle="Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        size = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )+
+  facet_grid(Type ~ ., scales="free")
+
+```
+
+```{r}
+#| echo: false
+
+Cattle_BB.plot
+Cattle_BB_phi.plot
+
+```
+
+## Caprine
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| output: false
+
+# RURAL AND URBAN SITES
+dat.Caprine_RurUrb = list(N=d.Animals_RurUrb$Tot_NISP, A=d.Animals_RurUrb$Caprine, Tc_id=d.Animals_RurUrb$TC_id, J=nrow(d.Animals_RurUrb))
+
+# Religious sites
+dat.Caprine_Rel = list(N=d.Animals_Rel$Tot_NISP, A=d.Animals_Rel$Caprine, Tc_id=d.Animals_Rel$TC_id, J=nrow(d.Animals_Rel))
+
+# Necropolis and amphitheaters
+dat.Caprine_Necr_Amph = list(N=d.Animals_Necr_Amph$Tot_NISP, A=d.Animals_Necr_Amph$Caprine, Tc_id=d.Animals_Necr_Amph$TC_id, J=nrow(d.Animals_Necr_Amph))
+
+# FORTIFIED SETTLEMENTS
+dat.Caprine_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Caprine, Tc_id=d.Animals_fort$TC_id, J=nrow(d.Animals_fort))
+
+# Caprine - Villas
+dat.Caprine_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Caprine, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| message: false
+#| warning: false
+#| output: false
+
+Caprine_RurUrb.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRur.stan",  # Stan program
+  data = dat.Caprine_RurUrb,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+#saveRDS(Caprine_RurUrb.fit, "stan_models/Caprine_RurUrb_fit.rds")
+
+Caprine_Rel.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
+  data = dat.Caprine_Rel,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Caprine_Rel.fit, "stan_models/Caprine_Rel_fit.rds")
+
+Caprine_Necr_Amph.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
+  data = dat.Caprine_Necr_Amph,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Caprine_Necr_Amph.fit, "stan_models/Caprine_Necr_Amph_fit.rds")
+
+Caprine_Fort.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Caprine_fort,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Caprine_Fort.fit, "stan_models/Caprine_Fort_fit.rds")
+
+Caprine_Villas_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
+  data = dat.Caprine_villas,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Caprine_Villas_fit, "stan_models/Caprine_Villas_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Caprine_RurUrb.fit <- readRDS("stan_models/Caprine_RurUrb_fit.rds")
+Caprine_Rel.fit <- readRDS("stan_models/Caprine_Rel_fit.rds")
+Caprine_Necr_Amph.fit <- readRDS("stan_models/Caprine_Necr_Amph_fit.rds")
+Caprine_Fort.fit <- readRDS("stan_models/Caprine_Fort_fit.rds")
+Caprine_Villas_fit <- readRDS("stan_models/Caprine_Villas_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+
+################################################################
+## Data handling for ggplot: a and theta/phi parameters
+################################################################
+
+Caprine_BB_Merge_a_UrbRur <- Caprine_RurUrb.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+  )
+  ) 
+
+Caprine_BB_Merge_a_NecrAmph <- Caprine_Necr_Amph.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+  )
+  ) 
+
+Caprine_BB_Merge_a_Rel <- Caprine_Rel.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+  )
+  ) 
+
+Caprine_BB_Merge_a_Fortified <- Caprine_Fort.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+  )
+  )  %>% 
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+  )
+  )  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+  )
+  )
+
+Caprine_BB_Merge_a_Villas <- Caprine_Villas_fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+  ) ) %>% 
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+  ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+  )
+  )
+
+Caprine_BB_Merge_a <- rbind(Caprine_BB_Merge_a_UrbRur, Caprine_BB_Merge_a_Fortified, Caprine_BB_Merge_a_Villas, Caprine_BB_Merge_a_Rel, Caprine_BB_Merge_a_NecrAmph)
+Caprine_BB_Merge_a$TC_text <- factor(Caprine_BB_Merge_a$TC_text)
+
+## Data handling for theta
+
+Caprine_BB_Merge_theta_UrbRur <- Caprine_RurUrb.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rural.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rural.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rural.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rural",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rural",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rural",
+    TC_id == 8 ~ "Urban"
+  )
+  ) 
+
+Caprine_BB_Merge_theta_NecrAmph <- Caprine_Necr_Amph.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Necropolis.R",
+    TC_id == 2 ~ "Urban, amphitheater.R",
+    TC_id == 3 ~ "Necropolis.LR",
+    TC_id == 4 ~ "Urban, amphitheater.LR",
+    TC_id == 5 ~ "Necropolis.EMA",
+    TC_id == 6 ~ "Urban, amphitheater.EMA"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Necropolis",
+    TC_id == 2 ~ "A.Flavium",
+    TC_id == 3 ~ "Necropolis",
+    TC_id == 4 ~ "A.Flavium",
+    TC_id == 5 ~ "Necropolis",
+    TC_id == 6 ~ "A.Flavium"
+  )
+  ) 
+
+Caprine_BB_Merge_theta_Rel <- Caprine_Rel.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Religious.R",
+    TC_id == 2 ~ "Religious.LR",
+    TC_id == 3 ~ "Religious.EMA",
+    TC_id == 4 ~ "Religious.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA",
+    TC_id == 4 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Religious",
+    TC_id == 2 ~ "Religious",
+    TC_id == 3 ~ "Religious",
+    TC_id == 4 ~ "Religious"
+  )
+  ) 
+
+Caprine_BB_Merge_theta_Fortified <- Caprine_Fort.fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Fortified.LR",
+    TC_id == 2 ~ "Fortified.EMA",
+    TC_id == 3 ~ "Fortified.Ma"
+  )
+  )  %>% 
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "LR",
+    TC_id == 2 ~ "EMA",
+    TC_id == 3 ~ "Ma"
+  )
+  )  %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Fortified",
+    TC_id == 2 ~ "Fortified",
+    TC_id == 3 ~ "Fortified"
+  )
+  )
+
+Caprine_BB_Merge_theta_Villas <- Caprine_Villas_fit %>%
+  spread_draws(theta[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rural site, villa.R",
+    TC_id == 2 ~ "Rural site, villa.LR",
+    TC_id == 3 ~ "Rural site, villa.EMA"
+  ) ) %>% 
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "LR",
+    TC_id == 3 ~ "EMA"
+  ) ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rural villa",
+    TC_id == 2 ~ "Rural villa",
+    TC_id == 3 ~ "Rural villa"
+  )
+  )
+
+Caprine_BB_Merge_phi <- rbind(Caprine_BB_Merge_theta_UrbRur, Caprine_BB_Merge_theta_Fortified, Caprine_BB_Merge_theta_Villas, Caprine_BB_Merge_theta_Rel, Caprine_BB_Merge_theta_NecrAmph)
+Caprine_BB_Merge_phi$TC_text <- factor(Caprine_BB_Merge_phi$TC_text)
+
+# Plotting
+
+Caprine_BB.plot <- Caprine_BB_Merge_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+  geom_vline(xintercept = inv_logit(mean(Caprine_BB_Merge_a$a)),     
+             linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Caprine",
+       subtitle="Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Type ~ ., scales="free")
+
+
+Caprine_BB_phi.plot <- Caprine_BB_Merge_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(
+    xintercept = mean(Caprine_BB_Merge_phi$theta), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Caprine",
+       subtitle="Site type",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Type ~ ., scales="free")
+
+```
+
+
+```{r}
+#| echo: false
+
+Caprine_BB.plot
+Caprine_BB_phi.plot
+```
+
+## Edible W. Mammals
+
+::: callout-alert
+Model under construction
+:::
+
+# Macroregion
+
+```{r}
+#| echo: false
+
+d.Animals_Reg <- Animals_Df2
+d.Animals_Reg$Reg_id <- as.integer(interaction(d.Animals_Reg$Macroregion, d.Animals_Reg$Chronology))
+
+dat.Pigs_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Pigs, Reg_id=d.Animals_Reg$Reg_id, J=nrow(d.Animals_Reg))
+dat.Cattle_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Cattle, Reg_id=d.Animals_Reg$Reg_id, J=nrow(d.Animals_Reg))
+dat.Caprine_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Caprine, Reg_id=d.Animals_Reg$Reg_id, J=nrow(d.Animals_Reg))
+
+
+```
+
+## Pigs 
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Pigs_Reg.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_reg.stan",  # Stan program
+  data = dat.Pigs_Reg,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Pigs_Reg.fit, "stan_models/Pigs_Reg_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Pigs_Reg.fit <- readRDS("stan_models/Pigs_Reg_fit.rds")
+
+Pigs_Reg.fit_a <- Pigs_Reg.fit %>%
+  spread_draws(a[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Northern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+Pigs_Reg.fit_phi <- Pigs_Reg.fit %>%
+  spread_draws(theta[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Southern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+# Plotting
+
+Pigs_Reg.plot <- Pigs_Reg.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+    geom_vline(
+    xintercept = inv_logit(mean(Pigs_Reg.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Pigs",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+Pigs_Reg_phi.plot <- Pigs_Reg.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Pigs_Reg.fit_phi$theta), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Pigs",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+```
+
+```{r}
+#| echo: false
+
+
+Pigs_Reg.plot
+Pigs_Reg_phi.plot
+```
+
+## Cattle 
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Cattle_Reg.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_reg.stan",  # Stan program
+  data = dat.Cattle_Reg,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Cattle_Reg.fit, "stan_models/Cattle_Reg_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Cattle_Reg.fit <- readRDS("stan_models/Cattle_Reg_fit.rds")
+
+Cattle_Reg.fit_a <- Cattle_Reg.fit %>%
+  spread_draws(a[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Southern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+Cattle_Reg.fit_phi <- Cattle_Reg.fit %>%
+  spread_draws(theta[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Southern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+# Plotting
+
+Cattle_Reg.plot <- Cattle_Reg.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+    geom_vline(
+    xintercept = inv_logit(mean(Cattle_Reg.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Cattle",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+Cattle_Reg_phi.plot <- Cattle_Reg.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Cattle_Reg.fit_phi$theta), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Cattle",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+```
+
+
+```{r}
+#| echo: false
+
+Cattle_Reg.plot
+Cattle_Reg_phi.plot
+```
+
+## Caprine
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Caprine_Reg.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_reg.stan",  # Stan program
+  data = dat.Caprine_Reg,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+#saveRDS(Caprine_Reg.fit, "stan_models/Caprine_Reg_fit.rds")
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Caprine_Reg.fit <- readRDS("stan_models/Caprine_Reg_fit.rds")
+
+Caprine_Reg.fit_a <- Caprine_Reg.fit %>%
+  spread_draws(a[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Southern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+Caprine_Reg.fit_phi <- Caprine_Reg.fit %>%
+  spread_draws(theta[Reg_id]) %>% 
+  mutate(Reg_text = case_when(
+    Reg_id == 1 ~ "Central Italy.R",
+    Reg_id == 2 ~ "Northern Italy.R",
+    Reg_id == 3 ~ "Southern Italy.R",
+    Reg_id == 4 ~ "Central Italy.LR",
+    Reg_id == 5 ~ "Northern Italy.LR",
+    Reg_id == 6 ~ "Southern Italy.LR",
+    Reg_id == 7 ~ "Central Italy.EMA",
+    Reg_id == 8 ~ "Northern Italy.EMA",
+    Reg_id == 9 ~ "Southern Italy.EMA",
+    Reg_id == 10 ~ "Central Italy.Ma",
+    Reg_id == 11 ~ "Northern Italy.Ma",
+    Reg_id == 12 ~ "Southern Italy.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Reg_id == 1 ~ "R",
+    Reg_id == 2 ~ "R",
+    Reg_id == 3 ~ "R",
+    Reg_id == 4 ~ "LR",
+    Reg_id == 5 ~ "LR",
+    Reg_id == 6 ~ "LR",
+    Reg_id == 7 ~ "EMA",
+    Reg_id == 8 ~ "EMA",
+    Reg_id == 9 ~ "EMA",
+    Reg_id == 10 ~ "Ma",
+    Reg_id == 11 ~ "Ma",
+    Reg_id == 12 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Region = case_when(
+    Reg_id == 1 ~ "Central Italy",
+    Reg_id == 2 ~ "Northern Italy",
+    Reg_id == 3 ~ "Southern Italy",
+    Reg_id == 4 ~ "Central Italy",
+    Reg_id == 5 ~ "Northern Italy",
+    Reg_id == 6 ~ "Southern Italy",
+    Reg_id == 7 ~ "Central Italy",
+    Reg_id == 8 ~ "Northern Italy",
+    Reg_id == 9 ~ "Southern Italy",
+    Reg_id == 10 ~ "Central Italy",
+    Reg_id == 11 ~ "Northern Italy",
+    Reg_id == 12 ~ "Southern Italy"
+  )
+  ) 
+
+# Plotting
+
+Caprine_Reg.plot <- Caprine_Reg.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+    geom_vline(
+    xintercept = inv_logit(mean(Caprine_Reg.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Caprine",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+Caprine_Reg_phi.plot <- Caprine_Reg.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Caprine_Reg.fit_phi$theta), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Caprine",
+       subtitle="Macroregion",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Region ~ ., scales="free")
+
+
+```
+
+
+```{r}
+#| echo: false
+
+Caprine_Reg.plot
+Caprine_Reg_phi.plot
+```
+
+
+## Edible W. Mammals
+::: callout-alert
+Model under construction
+:::
+
+# Geography
+
+```{r}
+#| echo: false
+
+d.Animals_Geo <- Animals_Df2
+d.Animals_Geo$Geo_id <- as.integer(interaction(d.Animals_Geo$Geo,d.Animals_Geo$Chronology))
+
+dat.Pigs_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Pigs, Geo_id=d.Animals_Geo$Geo_id, J=nrow(d.Animals_Geo))
+dat.Cattle_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Cattle, Geo_id=d.Animals_Geo$Geo_id, J=nrow(d.Animals_Geo))
+dat.Caprine_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Caprine, Geo_id=d.Animals_Geo$Geo_id, J=nrow(d.Animals_Geo))
+
+
+```
+
+
+## Pigs
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Pigs_Geo.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_geo.stan",  # Stan program
+  data = dat.Pigs_Geo,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+#saveRDS(Pigs_Geo.fit, "stan_models/Pigs_Geo_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Pigs_Geo.fit <- readRDS("stan_models/Pigs_Geo_fit.rds")
+
+Pigs_Geo.fit_a <- Pigs_Geo.fit %>%
+  spread_draws(a[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+Pigs_Geo.fit_phi <- Pigs_Geo.fit %>%
+  spread_draws(theta[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+# Plotting
+
+Pigs_Geo.plot <- Pigs_Geo.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+    geom_vline(
+    xintercept = inv_logit(mean(Pigs_Geo.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Pigs",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+
+
+Pigs_Geo_phi.plot <- Pigs_Geo.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Pigs_Geo.fit_phi$theta), 
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Pigs",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+```
+
+
+```{r}
+#| echo: false
+
+Pigs_Geo.plot
+Pigs_Geo_phi.plot
+```
+
+## Cattle
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Cattle_Geo.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_geo.stan",  # Stan program
+  data = dat.Cattle_Geo,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+#saveRDS(Cattle_Geo.fit, "stan_models/Cattle_Geo_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Cattle_Geo.fit <- readRDS("stan_models/Cattle_Geo_fit.rds")
+
+Cattle_Geo.fit_a <- Cattle_Geo.fit %>%
+  spread_draws(a[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+Cattle_Geo.fit_phi <- Cattle_Geo.fit %>%
+  spread_draws(theta[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+# Plotting
+
+Cattle_Geo.plot <- Cattle_Geo.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+  geom_vline(
+    xintercept = inv_logit(mean(Cattle_Geo.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Cattle",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+
+
+Cattle_Geo_phi.plot <- Cattle_Geo.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Cattle_Geo.fit_phi$theta), 
+             linetype = "twodash",
+             linewidth = 0.45,
+             color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Cattle",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+```
+
+
+```{r}
+#| echo: false
+
+Cattle_Geo.plot
+Cattle_Geo_phi.plot
+```
+
+## Caprine
+
+```{r}
+#| echo: false
+#| eval: false
+#| output: false
+#| message: false
+
+
+########################################
+# Running the model
+# Saving the model
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+Caprine_Geo.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_geo.stan",  # Stan program
+  data = dat.Caprine_Geo,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+#saveRDS(Caprine_Geo.fit, "stan_models/Caprine_Geo_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+##################
+# Load models
+##################
+
+Caprine_Geo.fit <- readRDS("stan_models/Caprine_Geo_fit.rds")
+
+Caprine_Geo.fit_a <- Caprine_Geo.fit %>%
+  spread_draws(a[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+Caprine_Geo.fit_phi <- Caprine_Geo.fit %>%
+  spread_draws(theta[Geo_id]) %>% 
+  mutate(Reg_text = case_when(
+    Geo_id == 1 ~ "Coast.R",
+    Geo_id == 2 ~ "Hill.R",
+    Geo_id == 3 ~ "Mountain.R",
+    Geo_id == 4 ~ "Plain.R",
+    Geo_id == 5 ~ "Coast.LR",
+    Geo_id == 6 ~ "Hill.LR",
+    Geo_id == 7 ~ "Mountain.LR",
+    Geo_id == 8 ~ "Plain.LR",
+    Geo_id == 9 ~ "Coast.EMA",
+    Geo_id == 10 ~ "Hill.EMA",
+    Geo_id == 11 ~ "Mountain.EMA",
+    Geo_id == 12 ~ "Plain.EMA",
+    Geo_id == 13 ~ "Coast.Ma",
+    Geo_id == 14 ~ "Hill.Ma",
+    Geo_id == 15 ~ "Mountain.Ma",
+    Geo_id == 16 ~ "Plain.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    Geo_id == 1 ~ "R",
+    Geo_id == 2 ~ "R",
+    Geo_id == 3 ~ "R",
+    Geo_id == 4 ~ "R",
+    Geo_id == 5 ~ "LR",
+    Geo_id == 6 ~ "LR",
+    Geo_id == 7 ~ "LR",
+    Geo_id == 8 ~ "LR",
+    Geo_id == 9 ~ "EMA",
+    Geo_id == 10 ~ "EMA",
+    Geo_id == 11 ~ "EMA",
+    Geo_id == 12 ~ "EMA",
+    Geo_id == 13 ~ "Ma",
+    Geo_id == 14 ~ "Ma",
+    Geo_id == 15 ~ "Ma",
+    Geo_id == 16 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Geography = case_when(
+    Geo_id == 1 ~ "Coast",
+    Geo_id == 2 ~ "Hill",
+    Geo_id == 3 ~ "Mountain",
+    Geo_id == 4 ~ "Plain",
+    Geo_id == 5 ~ "Coast",
+    Geo_id == 6 ~ "Hill",
+    Geo_id == 7 ~ "Mountain",
+    Geo_id == 8 ~ "Plain",
+    Geo_id == 9 ~ "Coast",
+    Geo_id == 10 ~ "Hill",
+    Geo_id == 11 ~ "Mountain",
+    Geo_id == 12 ~ "Plain",
+    Geo_id == 13 ~ "Coast",
+    Geo_id == 14 ~ "Hill",
+    Geo_id == 15 ~ "Mountain",
+    Geo_id == 16 ~ "Plain"
+  )
+  ) 
+
+# Plotting
+
+Caprine_Geo.plot <- Caprine_Geo.fit_a %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+  geom_vline(
+    xintercept = inv_logit(mean(Caprine_Geo.fit_a$a)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Caprine",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+
+
+Caprine_Geo_phi.plot <- Caprine_Geo.fit_phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Caprine_Geo.fit_phi$theta), 
+             linetype = "twodash",
+             linewidth = 0.45,
+             color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Caprine",
+       subtitle="Geography",
+       caption="The dashed line indicates the mean for each site type and chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          size = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Geography ~ ., scales="free")
+```
+
+
+```{r}
+#| echo: false
+
+Caprine_Geo.plot
+Caprine_Geo_phi.plot
+```
+
+## Edible W. Mammals
+::: callout-alert
+Model under construction
+:::
