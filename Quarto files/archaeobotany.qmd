@@ -353,7 +353,12 @@ Ubiquity_HM
 ```
 :::
 
-### Macroregional differences {#sec-macroregional-differences-ubiquity}
+### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
+
+::: {.alert}
+Probably delete, in favor of the bayesian predictions. 
+If this section is kept, make sure to explain that ubiquity was calculated by macroregion only because it was more reliable etc etc
+:::
 
 ::: {.content-visible when-format="html"}
 The heatmap (@fig-heatmap-ubiquity) shows the diachronical ubiquity values of the Italian mainland. It is possible however to compare plants' ubiquity values in different areas of the peninsula. The R function `Ubiquity_macroreg_chrono()` (@sec-Ubiquity-macroreg-chrono) was created to subset data from Northern, Central and Southern Italian regions, using modern boundaries. Archaeobotanical data from Italy is scarce, and subsetting the dataset required a larger chronological division to have enough sites for a valid statistical interpretation of the results. For this reason, the ubiquity values are presented using the variable `Chronology` rather than subsetting the individual centuries. For a clearer reading of the plot, the taxa have been divided into--Cereals, Pulses and Fruits/Nuts. Some taxa have been omitted from the plot.
@@ -748,659 +753,10 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
-## Richness and diversity {style="text-align:justify;"}
-
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-:::
-
-### Richness and diversity in the Italian macroregions {#sec-richness-diversity-macroregions style="text-align:justify;"}
-
-::: {.content-visible when-format="html"}
-```{r}
-#| echo: false
-#| output: false
-#| code-summary: "Show the code: data preparation"
-#| code-overflow: wrap
-# Species richness based on geographical features
-# RELATIVE PROPORTIONS OF ARCHAEOBOT_VIZ QUERY EXPORT FROM THE DB
-# (Condensed, without totals)
-
-# Remove NAs
-Df_Cond_Plants[is.na(Df_Cond_Plants)] <-0 
-
-# Generate a dataframe with the relative proportions and round the results
-Df_Cond_Plants_Rel <- decostand(Df_Cond_Plants[11:50], method = "total")
-Df_Cond_Plants_Rel <- round(Df_Cond_Plants_Rel, digits=2)
-
-# Add more info to the dataframe
-Df_Cond_Plants_Rel_Richness_Diversity <- data.frame(
-                                 "Geo" = Df_Cond_Plants$Geo,
-                                 "Chronology" = Df_Cond_Plants$Chronology, 
-                                 "Type"= Df_Cond_Plants$Type, 
-                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel),
-                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
-                                 Df_Cond_Plants_Rel
-)
-
-Df_Cond_Plants_Rel_withMacroregion <- data.frame("Geo" = Df_Cond_Plants$Geo,
-                                                 "Chronology" = Df_Cond_Plants$Chronology,
-                                                 "Type"= Df_Cond_Plants$Type, 
-                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
-                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel[1:10]), #Only cereals
-                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel[1:10]),
-                                                 Df_Cond_Plants_Rel[1:10]
-)
-
-# Let's plot the diversity by macroregion
-
-# Creating the dataframes for R and EMA age 
-# I know it's called "Plants" but it's actually just cereals
-Df_Cond_Plants_Rel_withMacroregion.R <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "R")
-Df_Cond_Plants_Rel_withMacroregion.LR <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "LR")
-Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "EMA")
-
-```
-
-```{r}
-#| echo: false
-#| output: false
-#| code-summary: "Show the code: plots"
-#| code-overflow: wrap
-
-pal_RichnessvsGeo <- c("cadetblue3", "gold1",  "bisque4", "palegreen4")
-
-plot_RichnessMacroReg.R <- ggplot(Df_Cond_Plants_Rel_withMacroregion.R, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
-  scale_fill_manual(values = pal_RichnessvsGeo) +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Central Italy \n (n = 5)", "Northern Italy \n (n = 41)", "Southern Italy \n (n=34)")) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 12, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
-  labs(x = "Macroregion",
-       y = "Number of species per site",
-       title = "R - Cereal richness")
-
-plot_RichnessMacroReg.EMA <- ggplot(Df_Cond_Plants_Rel_withMacroregion.EMA, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
-  scale_fill_manual(values = pal_RichnessvsGeo) +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Central Italy \n (n = 11)", "Northern Italy \n (n = 36)", "Southern Italy \n (n=17)")) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 12, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
-  labs(x = "Macroregion",
-       y = "Number of species per site",
-       title = "EMA - Cereal richness")
-
-# Check median of cereal richness per macroregion
-
-# ROMAN NORTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Northern Italy"))$Specnumber)
-#ROMAN SOUTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Southern Italy"))$Specnumber)
-# EMA NORTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Northern Italy"))$Specnumber)
-#EMA SOUTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Southern Italy"))$Specnumber)
-
-```
-:::
-
-Cereals share similar presence values in Roman Northern and Southern Italian sites (@fig-cereal-richness-RvsEMA). Central Italy reports higher values, although this is based only on three sites and hence it is not reliable. During the Early Middle Ages, Central Italy again is the richest in cereals, closely followed by Northern Italy. Interestingly, Southern Italy still reports values very close to the Roman age. A full list of the Southern Italian EMA sites is reported in @tbl-southern-ema-sites.
-
-```{r}
-#| echo: false
-#| layout: "[[100,100], [1]]"
-#| label: fig-cereal-richness-RvsEMA
-#| fig-cap: "Violin plots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
-#| fig-subcap: 
-#|   - "Roman age." 
-#|   - "Early Medieval age."
-#| fig-height: 4
-#| fig-width: 6
-#| fig-dpi: 600
-
-plot_RichnessMacroReg.R
-plot_RichnessMacroReg.EMA
-
-```
-
-| ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|------------|-------------|------------|------------|------------|------------|
-| 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
-| 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
-| 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
-| 198 | Salapia, area botteghe, US 2475        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
-| 198 | Salapia, area botteghe, US 2437        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
-| 199 | Salapia, area conceria, US 2054        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
-| 199 | Salapia, area conceria, US 2211-2217   | Puglia     | Coast/Lagoon | Urban        | Lombard           |
-| 199 | Salapia, area conceria, 8th-9th c.     | Puglia     | Coast/Lagoon | Urban        | Lombard           |
-| 196 | Faragola, wastepit 61                  | Puglia     | Plain        | Rural, villa | Lombard           |
-| 196 | Faragola, wastepit 66                  | Puglia     | Plain        | Rural, villa | Lombard           |
-| 234 | Colle Castellano, Phase 3-4            | Molise     | Hill         | Urban        | Lombard           |
-| 177 | San Vincenzo al Volturno, kitchen area | Molise     | Hill         | Monastery    | Lombard           |
-| 101 | Supersano, loc. Scorpo                 | Puglia     | Plain        | Rural        | Byzantine         |
-| 250 | Apigliano, 9th-10th c., pits           | Puglia     | Plain        | Rural        | Byzantine         |
-| 250 | Apigliano, 10th-11th c., pits          | Puglia     | Plain        | Rural        | Byzantine         |
-| 196 | Faragola, granary A7                   | Puglia     | Plain        | Rural, villa | Lombard           |
-| 196 | Faragola, granary A8                   | Puglia     | Plain        | Rural, villa | Lombard           |
-
-: List of Southern Italian sites with chronology EMA {#tbl-southern-ema-sites}
-
-## Cereals regionality {style="text-align: justify;"}
-
-### PERMANOVA {#sec-permanova-cereals}
+# Context type {style="text-align:justify"}
 
 ::: callout-note
-## Notes on terminology: PERMANOVA {style="text-align:justify;"}
-
-Permutational multivariate analysis of variance (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not[^archaeobotany-2] [@andersonPermutationalMultivariateAnalysis2017]. In this context, the *null hypothesis* is that there is no regional difference in the cereals dataset, with cereals being evenly distributed across macroregions and chronologies.
-:::
-
-[^archaeobotany-2]: Source: Wikipedia. Change the source later
-
-The suggestion of an Early Medieval shift in cereal farming stated in @sec-macroregional-differences-ubiquity and @sec-richness-diversity-macroregions needs statistical support. Considering that data is not unimodal and that we are dealing with presence/absence analysis, the best choice is to use a non-parametric test as PERMANOVA on the early medieval botanical dataset. Prior to performing the test, it was necessary to pre-process data by:
-
--   Selecting all the cereals columns of the plant remains table, keeping the categorical variables: `Macroregion`.
-
--   Removing empty rows (samples that only reported seeds/fruits, but not cereals).
-
--   Transforming the raw counts into presence/absence, using the function `decostand()` (`method=pa`) in the `R` package `vegan` [@vegan].
-
-::: {.content-visible when-format="html"}
-```{r}
-#| code-fold: true
-#| output: false
-#| code-summary: "Show the code: Pre-processing"
-#| code-overflow: wrap
-# Testing the results: Regionality in the dataset? 
-library(vegan)
-
-set.seed(29)
-
-# Pre processing: remove empty rows
-
-# Note: The input table is the CONDENSED table without totals
-
-# Selecting all the cereals columns of the plant remains table, keeping some categorical variables 
-cer_macroreg_ubiquity_transp.tot <- Df_Cond_Plants[c(4,5,6,7,11:19)]
-
-# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
-cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer_macroreg_ubiquity_transp.tot[5:13])>0,]
-
-# Assigning a column name "Macroregion"
-colnames(cer_macroreg_ubiquity_transp.tot)[1] = "Macroregion"
-
-# Selecting the Chronology of interest (EMA) and excluding Central Italy
-cer_macroreg_ubiquity_transp.tot<- filter(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
-
-# dividing categorical and numerical columns
-cer_macroreg_ubiquity_transp.categ <- cer_macroreg_ubiquity_transp.tot[1:4]
-cer_macroreg_ubiquity_transp.data <- cer_macroreg_ubiquity_transp.tot[5:13]
-
-# Converting the numerical columns into a presence/absence matrix (using method=pa)
-cer_macroreg_ubiquity_transp.dist <- decostand(cer_macroreg_ubiquity_transp.data, method="pa", na.rm=TRUE)
-
-
-```
-:::
-
-After the pre-processing, it was possible to run the PERMANOVA using the function `adonis2()` in the package `vegan`. The function creates a distance matrix and computes an analysis of variance on the matrix. The method chosen to calculate the distance matrix is the `jaccard` distance. The Jaccard distance, based on the Jaccard similarity index, is a value of dissimilarity between sample sets [@kosubNoteTriangleInequality2019]. When compared to other dissimilarity indices, it is more appropriate for presence/absence analyses as it is not based on Euclidean distance.
-
-**Results of `adonis2()`**.
-
-::: {.content-visible when-format="html"}
-```{r}
-#| code-fold: true
-#| output: false
-#| code-summary: "Show the code: adonis2() "
-#| code-overflow: wrap
-
-cer_macroreg_ubiquity_transp.div <- adonis2(
-  cer_macroreg_ubiquity_transp.dist ~ Macroregion, 
-  data = cer_macroreg_ubiquity_transp.categ,
-  permutations = 10000, method="jaccard"
-  )
-
-```
-:::
-
-```{r}
-#| echo: false
-
-cer_macroreg_ubiquity_transp.div
-
-```
-
-The calculation of PERMANOVA on the Roman dataset using the variable `Macroregion` reported a not statistically significant p-value, suggesting a degree of homogeneity. On the other hand, when applied to the early Medieval dataset, the results were highly significant (0\<p\<0.001) with a 99.99% confidence. PERMANOVA has not been calculated on the Late Roman dataset as samples from Southern Italy were too scarce. To confirm the significance of the results of PERMANOVA applied to the EMA dataset, it is necessary to check that its assumptions are met (especially since we are dealing with small groups of data). Firstly, we check the homogeneity of variances. The function `betadisper()` from the package `vegan` provides the distances of group samples from centroids. If the variation is even, the null hypothesis of no difference in dispersion between groups is accepted. To test the variation, it is possible to use the analysis of variance (ANOVA).
-
-::: {.content-visible when-format="html"}
-```{r}
-#| code-fold: true
-#| output: false
-#| code-summary: "Show the code: betadisper()"
-#| code-overflow: wrap
-
-# We do not need to calculate the distance separately, but it will be useful later for the betadisper() function
-
-# Distance dissimilarity matrix with the Jaccard method
-cer_macroreg_ubiquity_transp.dist2 <- vegdist(cer_macroreg_ubiquity_transp.dist, method="jaccard", na.rm=TRUE)
-
-# Betadisper: distances of group samples from centroids
-cer_macroreg_ubiquity_transp.betadisper <- betadisper(cer_macroreg_ubiquity_transp.dist2, cer_macroreg_ubiquity_transp.categ$Macroregion)
-```
-:::
-
-**Results of `anova()` on the betadisper.**
-
-```{r}
-#| code-fold: true
-#| output: true
-#| code-summary: "Show the code: ANOVA on betadisper()"
-#| code-overflow: wrap
-
-# We will see that the ANOVA's p-value is not significant meaning that group dispersions are homogenous 
-#("Null hypothesis of no difference in dispersion between groups"; https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/betadisper).
-
-anova(cer_macroreg_ubiquity_transp.betadisper) # This should not be significant!
-```
-
-```{r}
-#| echo: false
-#| layout: "[[100,100], [1]]"
-#| label: fig-betadisper
-#| fig-cap: "Results of the betadisper() (groups dispersions) on the distance matrix calculated with the Jaccard method." 
-#| fig-subcap: 
-#|   - "Groups dispersions plot with confidence ellipses." 
-#|   - "Boxplot showing equal distances from centroid."
-#| fig-height: 4
-#| fig-width: 5
-#| fid-dpi: 300
-
-# Now we can plot and see that group dispersions (distances from centroids) are very similar, but compositions seem to be very different. Let's go to adonis to test that.
-plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot")
-boxplot(cer_macroreg_ubiquity_transp.betadisper)
-
-```
-
-The `betadisper()` graphs (@fig-betadisper) show similar distances from the centroids for the categories `Northern Italy` and `Southern Italy`. In addition, the ANOVA on the `betadisper()` shows that the separation is not significant (p-value over the significance threshold), meaning that the groups dispersions are homogeneous. We can thus be confident in the PERMANOVA results and accept the difference between the two groups of sites under investigation. In other words, the Southern and Northern Italian group of sites are different during the Early Middle Ages for what concerns cereal farming.
-
-Running the same tests on the Roman sites failed to separate the two groups of sites, confirming that there was not a significant difference in the types of cereals cultivated during the Roman age between Northern and Southern Italy.
-
-### nMDS {#sec-nMDS-Cereals style="text-align:justify"}
-
-::: callout-note
-## Notes on terminology: Wasserstein metric {style="text-align:justify;"}
-
-The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distance) (or earth's mover distance) is a measure of distance between two probability distributions on a metric space.
-:::
-
-In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-boxplot-nMDS-R-EMA.
-
-::: {.content-visible when-format="html"}
-**Source code:**
-
-```{r}
-#| code-summary: "Show the code: Data preparation"
-#| code-overflow: wrap
-#| code-fold: true
-
-# DATA PREPARATION #
-
-# Creating a simple dataframe just for the purpose of the NCA
-Df_Cond_Plants_simplified <- data.frame(
-  "Chronology" = Df_Cond_Plants$Chronology, 
-  "Type" = Df_Cond_Plants$Type,
-  "Macroregion" = Df_Cond_Plants$name_macroreg,
-  "Weight" = Df_Cond_Plants$weight,
-  Df_Cond_Plants[11:ncol(Df_Cond_Plants)]
-  )
-
-# Joining site typology categories to simplify the output, using library stringr
-library(vegan)
-library(stringr)
-
-Df_Cond_Plants_simplified$Type <- str_replace_all(
-  Df_Cond_Plants_simplified$Type, c(
-    "Rural site, villa" = "Rural", 
-    "Rural site, mansio" = "Rural",
-    "Religious, monastery" = "Religious",
-    "Castle" = "Fortified",
-    "Castrum" = "Fortified")
-  )
-
-# Convert to Presence (1) / Absence (0) using library vegan
-Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)] <- decostand(Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)], method="pa")
-
-# Creating dataframes for the chronologies R and EMA
-Df_Cereals_R <- filter(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
-Df_Cereals_EMA <- filter(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
-
-# Selecting only cereals from both dataframes
-Df_Cereals_R <- Df_Cereals_R[1:14]
-Df_Cereals_R[is.na(Df_Cereals_R)] <- 0
-Df_Cereals_R <- Df_Cereals_R[rowSums(Df_Cereals_R[,5:14] != 0) > 0, ] # Removing empty rows
-
-Df_Cereals_EMA <- Df_Cereals_EMA[1:14]
-Df_Cereals_EMA[is.na(Df_Cereals_EMA)] <- 0
-Df_Cereals_EMA <- Df_Cereals_EMA[rowSums(Df_Cereals_EMA[,5:14] != 0) > 0, ]
-
-```
-
-```{r}
-#| echo: false
-#| output: false
-
-library(ggpubr)
-set.seed(7)
-
-# Perform the metaMDS to 1D for Df_Cereals_R and Df_Cereals_EMA 
-mds_R <- metaMDS(Df_Cereals_R[, c(5:14)], k=1, distance = "jaccard")
-mds_EMA <- metaMDS(Df_Cereals_EMA[, c(5:14)], k=1, distance = "jaccard")
-
-# Add the Macroregion data to the metaMDS results for both dataframes
-mds_df_R <- data.frame(mds_R$points, Macroregion = Df_Cereals_R$Macroregion)
-mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Df_Cereals_EMA$Macroregion)
-
-# Create dataframes to calculate wasserstein distance
-library(transport)
-
-MDS_Scores_R_SI <- (filter(mds_df_R, Macroregion=="Southern Italy"))$MDS1
-MDS_Scores_R_NI <- (filter(mds_df_R, Macroregion=="Northern Italy"))$MDS1
-
-MDS_Scores_EMA_SI <- (filter(mds_df_EMA, Macroregion=="Southern Italy"))$MDS1
-MDS_Scores_EMA_NI <- (filter(mds_df_EMA, Macroregion=="Northern Italy"))$MDS1
-
-       
-# Create the plots
-mds_R.plot <- ggplot(
-  data=mds_df_R, 
-  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)) +
-    geom_density(adjust=1.5, alpha=.2) +
-      geom_vline(aes(xintercept=mean(MDS_Scores_R_SI)),
-            color="#90a955", linetype="dashed", size=.8)+ #South
-      geom_vline(aes(xintercept=mean(MDS_Scores_R_NI)),
-            color="#212529", linetype="dashed", size=.8)+ #North
-  scale_fill_manual(values=c("#212529","#90a955"))+
-  scale_color_manual(values=c("#212529","#90a955"))+
-  theme_pubclean()+
-  theme(legend.position = "none")+
-    labs(
-      title="Roman age",
-      caption = paste0(
-      "PERMANOVA: p > 0.05 \n",
-      "Wasserstein distance: ", round(
-      wasserstein1d(MDS_Scores_R_SI,MDS_Scores_R_NI),2
-      )))
-
-mds_EMA.plot <- ggplot(
-  data=mds_df_EMA, 
-  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)
-  ) +
-  scale_alpha(guide = 'none')+
-  geom_density(adjust=1.5, alpha=.2) +
-  geom_vline(
-    aes(xintercept=mean(MDS_Scores_EMA_SI), color="mean"),
-    color="#90a955", linetype="dashed", size=.8)+ #South
-  geom_vline(
-    aes(xintercept=mean(MDS_Scores_EMA_NI)),
-    color="#212529", linetype="dashed", size=.8)+ #North
-  scale_fill_manual(values=c("#212529","#90a955"))+
-  scale_color_manual(values=c("#212529","#90a955"))+
-  theme_pubclean()+
-    labs(
-      title="EMA",
-      caption = paste0(
-      "PERMANOVA: p < 0.0001 \n",
-      "Wasserstein distance: ", round(
-      wasserstein1d(MDS_Scores_EMA_SI,MDS_Scores_EMA_NI),2
-      )))+
-  theme(legend.position = "right")
-
-
-mds_R.boxplot <- ggplot(mds_df_R, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
-    geom_boxplot(alpha=.2)+
-  scale_fill_manual(values=c("#212529","#90a955"))+
-  scale_color_manual(values=c("#212529","#90a955"))+
-  theme_pubclean()+
-    labs(
-      title="Roman Age")+
-  theme(legend.position = "none")
-
-mds_EMA.boxplot <- ggplot(mds_df_EMA, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
-    geom_boxplot(alpha=.2)+
-  scale_fill_manual(values=c("#212529","#90a955"))+
-  scale_color_manual(values=c("#212529","#90a955"))+
-  theme_pubclean()+
-    labs(
-      title="EMA")+
-  theme(legend.position = "right")
-
-```
-
-```{r}
-#| label: fig-nMDS-1D-macroregion
-#| fig-cap: "nMDS reduction to one dimension performed on the Roman and early Medieval cereal datasets. The dashed colored lines indicate the mean of the distribution."
-#| fig-subcap: 
-#|  - "Roman age."
-#|  - "Early Medieval Age."
-#| layout-nrow: 1
-#| layout-ncol: 2
-#| echo: false
-
-
-# Plot the two plots side by side
-mds_R.plot 
-mds_EMA.plot
-```
-
-```{r}
-#| echo: false
-#| label: fig-boxplot-nMDS-R-EMA
-#| fig-cap: "Boxplots showing the nMDS scores for Northern and Southern Roman Italy."
-#| fig-subcap: 
-#|  - "Roman age."
-#|  - "Early Medieval age."
-#| layout-nrow: 1
-#| layout-ncol: 2
-
-mds_R.boxplot
-mds_EMA.boxplot
-
-```
-
-
-### GLM: Minor grains
-
-Mapping the use of minor grains by chronology in each of the three macroregions. 
-
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-# Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
-# For the moment, I will start from scratch
-library(dplyr)
-
-Df_Cond_Plants.pa <- Df_Cond_Plants
-Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
-
-```
-
-
-```{r}
-#| echo: true
-#| eval: false
-#| code-fold: true
-
-Minor_Grains <- with(
-  Df_Cond_Plants.pa,
-  data.frame(
-  Chronology = Chronology,
-  From.Century=From.Century, 
-  To.Century=To.Century,
-  Macroregion = name_macroreg,
-  Site_Type = as.factor(Type),
-  Geo = Geo,
-  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum+Emmer,
-  All_Grain_Count = rowSums(Df_Cond_Plants.pa[,c(11:19)])
-  )
-)
-
-#Simplify categories
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Religious, monastery", "Religious")    
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castle", "Fortified")    
-Minor_Grains$Site_Type <- str_replace(Minor_Grains$Site_Type, "Castrum", "Fortified")  
-
-# Transform categories to factors
-Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
-
-# Count the occurrences of minor grains in each context
-Minor_Grains$Present <- ifelse(Minor_Grains$Grain_Count > 0, 1, 0)
-
-# Test: Transform Chronology to discrete values so to visualise 
-Minor_Grains <- Minor_Grains %>% 
-    mutate(Century = map2(From.Century, To.Century, `:`)) %>% 
-    select(-From.Century, -To.Century) %>% 
-    unnest
-# End
-
-# Remove duplicate rows caused by uncertain chronology
-#Minor_Grains <- Minor_Grains[!duplicated(Minor_Grains[-1]), ]
-
-# Create a copy of the dataframe
-Minor_Grains2 <- Minor_Grains
-
-# Convert to list
-Minor_Grains2.list <- list(
-    MG_Found = Minor_Grains2$Grain_Count,
-    MG_Tot = 7,
-    RC_ID = as.factor((interaction(Minor_Grains2$Chronology, 
-                                   Minor_Grains2$Macroregion)))
-   )
-
-# Create a binomial model, where N is 7 because that is the total number of minor 
-# grains studied in this thesis
-m_mg_reg <- ulam(
-    alist(
-        MG_Found ~ dbinom( 7 , p ),
-        logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
-    ), data=Minor_Grains2.list , chains=4
-    )
-
-#saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
-
-```
-
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| output: false
-
-library(rethinking)
-library(tidybayes.rethinking)
-library(tidybayes)
-
-m_mg_reg <- readRDS("stan_models/m_mg_reg.rds")
-
-m_mg_reg.df <- m_mg_reg %>%
-  spread_draws(RegChr[RC_ID])
-
-m_mg_reg.df %>% mutate(Region = case_when(
-  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
-  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
-  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
-))  %>% mutate(Chrono = case_when(
-    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
-    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
-    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
-    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
-)) -> m_mg_reg.df
-
-m_mg_reg.plot <- ggplot(
-  data = m_mg_reg.df,
-  aes(
-    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
-    x = inv_logit(RegChr)
-  )
-) +
-  stat_interval(
-    .width = c(.50, .80, .95, .99),
-    linewidth = 3
-  ) +
-  geom_vline(
-    xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  scale_color_brewer(palette = "Greys") +
-  scale_y_discrete(limits = rev) +
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 10),
-    sec.axis = dup_axis()
-  ) +
-  theme_tidybayes() +
-  theme(
-    legend.position = "bottom",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.25,
-      linetype = 2
-    ),
-    axis.title.x.top = element_blank()
-  ) +
-  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
-  labs(
-    title = "Minor Grains",
-    subtitle = "Macroregional distribution",
-    x = "Probability",
-    y = "Chronology",
-    color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
-  )
-
-```
-
-```{r}
-#| echo: false
-#| label: fig-bayes-glm-mg-macroregion
-#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credibility intervals are provided."
-
-m_mg_reg.plot
-```
-
-
-## Distribution of plants in different site types {style="text-align:justify"}
-
-::: callout-note
-This section has to be rewritten as now the approach is not frequentist anymore. 
+Important: This section has to be rewritten as now the approach is not frequentist anymore. 
 :::
 
 It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
@@ -1670,13 +1026,78 @@ stonefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type,
 ```
 
 
-### Pre-processing and models
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Note: The code has to be cleaned because this is a new update and it is not related to the plots used just above this code. 
+# For the moment, I will start from scratch
+library(dplyr)
+
+Df_Cond_Plants.pa <- Df_Cond_Plants
+Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
+
+#Simplify categories
+Df_Cond_Plants.pa$Type <- str_replace(Df_Cond_Plants.pa$Type, "Religious, monastery", "Religious")    
+Df_Cond_Plants.pa$Type <- str_replace(Df_Cond_Plants.pa$Type, "Castle", "Fortified")    
+Df_Cond_Plants.pa$Type <- str_replace(Df_Cond_Plants.pa$Type, "Castrum", "Fortified")  
+
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| code-fold: true
+
+Minor_Grains <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  From.Century=From.Century, 
+  To.Century=To.Century,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Grain_Count = Einkorn+Oats+Rye+Proso.millet+Foxtail.millet+Sorghum+Emmer,
+  All_Grain_Count = rowSums(Df_Cond_Plants.pa[,c(11:19)])
+  )
+)
+
+# Transform categories to factors
+Minor_Grains[,c(1,4,5,6)] <- lapply(Minor_Grains[,c(1,4,5,6)], factor)
+
+Noble_Grains_Reg <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  From.Century=From.Century, 
+  To.Century=To.Century,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Grain_Count = Common.Wheat+Barley,
+  All_Grain_Count = rowSums(Df_Cond_Plants.pa[,c(11:19)])
+  )
+)
+
+# Transform categories to factors
+Noble_Grains_Reg[,c(1,4,5,6)] <- lapply(Noble_Grains_Reg[,c(1,4,5,6)], factor)
+
+
+```
+
+
 ```{r}
 #| echo: true
 #| code-fold: true
-#| eval: false
+#| eval: true
+#| message: false
+#| output: false
 
-# Eval is set to false because the models have been saved
+library(rethinking)
+library(tidybayes.rethinking)
+library(tidybayes)
 
 ####################
 ## NOBLE GRAINS
@@ -1708,15 +1129,6 @@ Noble_Grain.list <- list(
 
 Noble_Grain.list$TC_ID <- droplevels(Noble_Grain.list$TC_ID)
 
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_ng_type <- ulam(
-   alist(
-        NG_Found ~ dbinom( 2 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Noble_Grain.list , chains=4
-    )
 
 ####################
 ## MINOR GRAINS
@@ -1732,18 +1144,6 @@ Minor_Grains_Type.list <- list(
 
 Minor_Grains_Type.list$TC_ID <- droplevels(Minor_Grains_Type.list$TC_ID)
   
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_mg_type <- ulam(
-    alist(
-        MG_Found ~ dbinom( 7 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Minor_Grains_Type.list , chains=4
-    )
-
-#saveRDS(m_mg_type, "stan_models/m_mg_type.rds")
-
 
 ####################
 ## LEGUMES 
@@ -1774,18 +1174,7 @@ Legumes.list <- list(
    )
 
 Legumes.list$TC_ID <- droplevels(Legumes.list$TC_ID)
-  
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_leg_type <- ulam(
-    alist(
-        Leg_Found ~ dbinom( 7 , p ),
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
-    ), data=Legumes.list , chains=4
-    )
 
-#saveRDS(m_leg_type, "stan_models/m_leg_type.rds")
 
 ####################
 ## GRAPE 
@@ -1816,17 +1205,6 @@ Grape.list <- list(
 
 Grape.list$TC_ID <- droplevels(Grape.list$TC_ID)
   
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_grape_type <- ulam(
-    alist(
-        Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
-    ), data=Grape.list , chains=4
-    )
-
-#saveRDS(m_grape_type, "stan_models/m_grape_type.rds")
 
 ####################
 ## OLIVES 
@@ -1857,20 +1235,9 @@ Olive.list <- list(
 
 Olive.list$TC_ID <- droplevels(Olive.list$TC_ID)
   
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this thesis
-m_olives_type <- ulam(
-    alist(
-        Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
-        logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
-    ), data=Olive.list , chains=4
-    )
-
-#saveRDS(m_olives_type, "stan_models/m_olives_type.rds")
 
 ####################
-## OLIVES 
+## NUTS 
 ####################
 
 Nuts <- with(
@@ -1899,8 +1266,80 @@ Nuts.list <- list(
 
 Nuts.list$TC_ID <- droplevels(Nuts.list$TC_ID)
   
-# Create a binomial model, where N is 3 because that is the total number of noble 
+
+
+```
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| eval: false
+# Eval is set to false because the models have been saved
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
 # grains studied in this thesis
+m_ng_type <- ulam(
+   alist(
+        NG_Found ~ dbinom( 2 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Noble_Grain.list , chains=4
+    )
+
+#saveRDS(m_ng_type, "stan_models/m_ng_type.rds")
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_mg_type <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Minor_Grains_Type.list , chains=4
+    )
+
+#saveRDS(m_mg_type, "stan_models/m_mg_type.rds")
+
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_leg_type <- ulam(
+    alist(
+        Leg_Found ~ dbinom( 7 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Legumes.list , chains=4
+    )
+
+#saveRDS(m_leg_type, "stan_models/m_leg_type.rds")
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_grape_type <- ulam(
+    alist(
+        Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Grape.list , chains=4
+    )
+
+#saveRDS(m_grape_type, "stan_models/m_grape_type.rds")
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this thesis
+m_olives_type <- ulam(
+    alist(
+        Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,2)
+    ), data=Olive.list , chains=4
+    )
+
+#saveRDS(m_olives_type, "stan_models/m_olives_type.rds")
+
+# NUTS
+# Create a binomial model, where N is 3 because that is the total number of nuts
+#  studied in this thesis
 m_nuts_type <- ulam(
     alist(
         Nuts_Found ~ dbinom( 3 , p ),
@@ -1909,14 +1348,21 @@ m_nuts_type <- ulam(
     ), data=Nuts.list , chains=4
     )
 
+# NUTS
+# Create a binomial model, where N is 3 because that is the total number of noble 
+# grains studied in this thesis
+m_berries_type <- ulam(
+    alist(
+        Berries_Found ~ dbinom( 9 , p ),
+        logit(p) <- TypeChr[TC_ID],
+        TypeChr[TC_ID] ~ dnorm(0,1)
+    ), data=Berries_type.list , chains=4
+    )
 
-#saveRDS(m_nuts_type, "stan_models/m_nuts_type.rds")
-
-
+#saveRDS(m_berries_type, "stan_models/m_berries_type.rds")
 
 ```
 
-### Results
 
 ```{r}
 #| echo: false
@@ -2412,7 +1858,55 @@ DomFruit.list <- list(
    )
 
 DomFruit.list$TC_ID <- droplevels(DomFruit.list$TC_ID)
-  
+
+### BERRIES
+
+Berries <- with(
+  Df_Cond_Plants.pa,
+  data.frame(
+  Chronology = Chronology,
+  Macroregion = name_macroreg,
+  Site_Type = as.factor(Type),
+  Geo = Geo,
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(41:49)])
+  )
+)
+
+#Simplify categories
+Berries$Site_Type <- str_replace(Berries$Site_Type, "Religious, monastery", "Religious")
+Berries$Site_Type <- str_replace(Berries$Site_Type, "Castle", "Fortified")    
+Berries$Site_Type <- str_replace(Berries$Site_Type, "Castrum", "Fortified")  
+
+# Convert to list
+Berries_type.list <- list(
+    Berries_Found = Berries$Seed_Count,
+    DF_Tot = 9,
+    TC_ID = as.factor((interaction(Berries$Chronology, 
+                                   Berries$Site_Type)))
+   )
+
+Berries_type.list$TC_ID <- droplevels(Berries_type.list$TC_ID)
+
+Berries_reg.list <- list(
+    Berries_Found = Berries$Seed_Count,
+    DF_Tot = 9,
+    RC_ID = as.factor((interaction(Berries$Chronology, 
+                                   Berries$Macroregion)))
+   )
+
+Berries_reg.list$RC_ID <- droplevels(Berries_reg.list$RC_ID)
+
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+
+####################
+## Domestic FRUITS 
+####################
+
 # Create a binomial model, where N is 3 because that is the total number of noble 
 # grains studied in this thesis
 m_dfruit_type <- ulam(
@@ -2422,6 +1916,15 @@ m_dfruit_type <- ulam(
         TypeChr[TC_ID] ~ dnorm(0,1)
     ), data=DomFruit.list , chains=4
     )
+
+saveRDS(m_dfruit_type, "stan_models/m_dfruit_type.rds")
+```
+
+
+```{r}
+#| echo: false
+
+m_dfruit_type <- readRDS("stan_models/m_dfruit_type.rds")
 
 m_dfruit_type.df <- m_dfruit_type %>%
   spread_draws(TypeChr[TC_ID])
@@ -2434,10 +1937,10 @@ m_dfruit_type.df %>% mutate(Type = case_when(
   TC_ID >=14 & TC_ID<=16 ~ "Villa",
   TC_ID >=17 & TC_ID <=20 ~ "Urban"
 ))  %>% mutate(Chrono = case_when(
-    TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
-    TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
-    TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
-    TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+  TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+  TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+  TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+  TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
 )) -> m_dfruit_type.df
 
 
@@ -2483,7 +1986,77 @@ m_dfruit_type.plot <- ggplot(
   ) +
   facet_grid(Type ~ ., scales = "free") +
   labs(
-    title = "Domestic fruits",
+    title = "Domestic Fruits",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each site type and chronology."
+  )
+
+
+m_berries_type <- readRDS("stan_models/m_berries_type.rds")
+
+m_berries_type.df <- m_berries_type %>%
+  spread_draws(TypeChr[TC_ID])
+
+m_berries_type.df %>% mutate(Type = case_when(
+  TC_ID >= 1 &  TC_ID <= 3 ~ "Fortified",
+  TC_ID >= 4 & TC_ID <= 6 ~ "Necropolis",
+  TC_ID >= 7 & TC_ID <= 9  ~ "Religious",
+  TC_ID >= 10 & TC_ID<=13 ~ "Rural",
+  TC_ID >=14 & TC_ID<=16 ~ "Villa",
+  TC_ID >=17 & TC_ID <=20 ~ "Urban"
+))  %>% mutate(Chrono = case_when(
+  TC_ID == 6 | TC_ID==9 |  TC_ID == 13 | TC_ID==16 | TC_ID==20  ~ "R",
+  TC_ID == 2 |  TC_ID == 5 | TC_ID == 11 | TC_ID==15 | TC_ID==18  ~ "LR",
+  TC_ID == 1 |  TC_ID == 4 | TC_ID == 7 | TC_ID==10 | TC_ID==14 | TC_ID==17  ~ "EMA",
+  TC_ID == 3 |  TC_ID == 8 | TC_ID == 12 | TC_ID==19 ~ "Ma"
+)) -> m_berries_type.df
+
+
+m_berries_type.plot <- ggplot(
+  data = m_berries_type.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(TypeChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_berries_type.df$TypeChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(Type ~ ., scales = "free") +
+  labs(
+    title = "Berries",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2505,7 +2078,8 @@ m_dfruit_type.plot <- ggplot(
 #|  - "Olives. The model is predicting (conservative) values for fortified sites, in which no olive was found."
 #|  - "Nuts."
 #|  - "Domestic fruits."
-#| layout-nrow: 7
+#|  - "Berries."
+#| layout-nrow: 8
 #| layout-ncol: 1
 #| fig-height: 10
 
@@ -2516,13 +2090,22 @@ m_grape_type.plot
 m_olives_type.plot
 m_nuts_type.plot
 m_dfruit_type.plot
+m_berries_type.plot
 
 ```
 
-### Richness and diversity in the sites
+### Richness and diversity
 
 ```{r}
 #| echo: false
+
+
+# Remove NAs
+Df_Cond_Plants[is.na(Df_Cond_Plants)] <-0 
+
+# Generate a dataframe with the relative proportions and round the results
+Df_Cond_Plants_Rel <- decostand(Df_Cond_Plants[11:50], method = "total")
+Df_Cond_Plants_Rel <- round(Df_Cond_Plants_Rel, digits=2)
 
 Df_Cond_Plants_RichnDiv <- data.frame("Geo" = Df_Cond_Plants$Geo,
                                                  "Chronology" = Df_Cond_Plants$Chronology,
@@ -2759,108 +2342,1423 @@ The richness of plants in urban contexts has been calculated for every phase. As
 
 : Plant richness in urban contexts before and after (**\***) removing incomplete samples. {#tbl-richness-urban}
 
-### Correspondence analysis tests
-
-```{r}
-#| eval: FALSE
-#| echo: false
-
-#Perform CCA with vegan package
-Ubiq_typ_chr.Roman.CCA <- cca(Ubiquity_typology_chronology.Roman, data = Ubiquity_typology_chronology.Roman)
-
-# Getting the coordinates to plot with ggplot
-site_data.Roman <- scores(Ubiq_typ_chr.Roman.CCA, display = "sites") %>% 
-  as.data.frame()
-
-species_data.Roman <- scores(Ubiq_typ_chr.Roman.CCA, display = "species") %>% 
-  as.data.frame()
-
-Plants_Type <- data.frame(Type=1:11) # To color the plot
-Plants_Type$Type[1:2] <- "Cereals"
-Plants_Type$Type[3] <- "Pulses"
-Plants_Type$Type[4:11] <- "Fruits/Nuts"
-
-species_data.Roman <- cbind.data.frame(species_data.Roman, Plants_Type) # Merging the df
-
-# Plot
-library(ggrepel)
-Ubiq_CA_palette <- c("#e8c120", "#ee542f", "#60a561")
-
-Ubiq_typ_chr.Roman.CCA.plot <- ggplot(site_data.Roman) +
-  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
-  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
-  geom_point(aes(x = CA1, y = CA2), shape = 15, size = 2, alpha = 0.8) +
-  geom_text_repel(data = species_data.Roman, aes(x = CA1, y = CA2, color=Type, label = rownames(species_data.Roman)), size=3.5,  nudge_x = 0.1, nudge_y = 0.1)+
-  geom_label_repel(data = site_data.Roman, aes(x = CA1, y = CA2, label = rownames(site_data.Roman)), nudge_x = 0.3, nudge_y = 0.3)+
-  coord_fixed() +
-  scale_color_manual(values = Ubiq_CA_palette) +
-  geom_point(data = species_data.Roman, aes(x = CA1, y = CA2, color=Type), shape = 3, size = 2, alpha=0.8) +
-  scale_x_continuous(limits = c(-2, 2)) +
-  scale_y_continuous(limits = c(-2, 2)) +
-  clean_background +
-  labs(title = "Canonical Correspondence Analysis", subtitle="Roman - Ubiquity (%) of plants against site type.", color="Plants")
-```
-
-```{r}
-#| eval: false
-#| echo: false
-#| 
-#Perform CCA with vegan package
-Ubiq_typ_chr.LateRoman.CCA <- cca(Ubiquity_typology_chronology.LateRoman, data = Ubiquity_typology_chronology.LateRoman)
-
-# Getting the coordinates to plot with ggplot
-site_data.LateRoman <- scores(Ubiq_typ_chr.LateRoman.CCA, display = "sites") %>% 
-  as.data.frame()
-
-species_data.LateRoman <- scores(Ubiq_typ_chr.LateRoman.CCA, display = "species") %>% 
-  as.data.frame()
-
-Plants_Type.LR <- data.frame(Type=1:11) # To color the plot
-Plants_Type.LR$Type[1:2] <- "Cereals"
-Plants_Type.LR$Type[3] <- "Pulses"
-Plants_Type.LR$Type[4:11] <- "Fruits/Nuts"
-
-species_data.LateRoman <- cbind.data.frame(species_data.LateRoman, Plants_Type.LR) # Merging the df
-
-# Plot
-Ubiq_typ_chr.LateRoman.CCA.plot <- ggplot(site_data.LateRoman) +
-  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
-  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
-  geom_point(aes(x = CA1, y = CA2), shape = 15, size = 2, alpha = 0.8) +
-  geom_text_repel(data = species_data.LateRoman, aes(x = CA1, y = CA2, color=Type,  label = rownames(species_data.LateRoman)), size=3.5,  nudge_x = 0.1, nudge_y = 0.1)+
-  geom_label_repel(data = site_data.LateRoman, aes(x = CA1, y = CA2, label = rownames(site_data.LateRoman)), nudge_x = 0.3, nudge_y = 0.3)+
-  coord_fixed() +
-  scale_color_manual(values = Ubiq_CA_palette) +
-  geom_point(data = species_data.LateRoman, aes(x = CA1, y = CA2, color=Type), shape = 3, size = 2, alpha=0.8) +
-  scale_x_continuous(limits = c(-2, 2)) +
-  scale_y_continuous(limits = c(-2, 2)) +
-  clean_background +
-  labs(title = "Canonical Correspondence Analysis", subtitle="Late Roman - Ubiquity (%) of plants against site type.", color="Plants")
-```
-
-```{r}
-#| echo: false
-#| eval: false
-#| warning: false
-#| label: fig-CCA-Roman-ubiquity-plants
-#| fig-cap: "CCA performed on the ubiquity of site types in the Roman age" 
-
-Ubiq_typ_chr.Roman.CCA.plot
-```
-
-```{r}
-#| echo: false
-#| eval: false
-#| warning: false
-#| label: fig-CCA-LateRoman-ubiquity-plants
-#| fig-cap: "CCA performed on the ubiquity of site types in the Late Roman age" 
-
-Ubiq_typ_chr.LateRoman.CCA.plot
-```
 
 ## Soil types vs Crops
 
 see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in Hamerow and McKerracher 2022, p. 153
+
+
+
+# Macroregion {style="text-align: justify;"}
+
+### Cereals
+
+## Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
+
+::: callout-important
+## Section in progress {style="text-align:justify;"}
+:::
+
+::: {.content-visible when-format="html"}
+```{r}
+#| echo: false
+#| output: false
+#| code-summary: "Show the code: data preparation"
+#| code-overflow: wrap
+
+# Species richness based on geographical features
+# RELATIVE PROPORTIONS OF ARCHAEOBOT_VIZ QUERY EXPORT FROM THE DB
+# (Condensed, without totals)
+
+
+# Add more info to the dataframe
+Df_Cond_Plants_Rel_Richness_Diversity <- data.frame(
+                                 "Geo" = Df_Cond_Plants$Geo,
+                                 "Chronology" = Df_Cond_Plants$Chronology, 
+                                 "Type"= Df_Cond_Plants$Type, 
+                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel),
+                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
+                                 Df_Cond_Plants_Rel
+)
+
+Df_Cond_Plants_Rel_withMacroregion <- data.frame("Geo" = Df_Cond_Plants$Geo,
+                                                 "Chronology" = Df_Cond_Plants$Chronology,
+                                                 "Type"= Df_Cond_Plants$Type, 
+                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
+                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel[1:10]), #Only cereals
+                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel[1:10]),
+                                                 Df_Cond_Plants_Rel[1:10]
+)
+
+# Let's plot the diversity by macroregion
+
+# Creating the dataframes for R and EMA age 
+# I know it's called "Plants" but it's actually just cereals
+Df_Cond_Plants_Rel_withMacroregion.R <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "R")
+Df_Cond_Plants_Rel_withMacroregion.LR <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "LR")
+Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "EMA")
+
+```
+
+```{r}
+#| echo: false
+#| output: false
+#| code-summary: "Show the code: plots"
+#| code-overflow: wrap
+
+pal_RichnessvsGeo <- c("cadetblue3", "gold1",  "bisque4", "palegreen4")
+
+plot_RichnessMacroReg.R <- ggplot(Df_Cond_Plants_Rel_withMacroregion.R, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  scale_fill_manual(values = pal_RichnessvsGeo) +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Central Italy \n (n = 5)", "Northern Italy \n (n = 41)", "Southern Italy \n (n=34)")) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 12, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Macroregion",
+       y = "Number of species per site",
+       title = "R - Cereal richness")
+
+plot_RichnessMacroReg.EMA <- ggplot(Df_Cond_Plants_Rel_withMacroregion.EMA, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
+  geom_violin(trim=FALSE) + 
+  geom_boxplot(width=0.1, fill="white")+
+  scale_fill_manual(values = pal_RichnessvsGeo) +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Central Italy \n (n = 11)", "Northern Italy \n (n = 36)", "Southern Italy \n (n=17)")) +
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        panel.grid = element_line("grey90"),
+        axis.line = element_line("gray25"),
+        axis.text = element_text(size = 12, color = "gray25"),
+        axis.title = element_text(color = "gray25"),
+        legend.text = element_text(size = 12)) + 
+  labs(x = "Macroregion",
+       y = "Number of species per site",
+       title = "EMA - Cereal richness")
+
+# Check median of cereal richness per macroregion
+
+# ROMAN NORTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Northern Italy"))$Specnumber)
+#ROMAN SOUTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Southern Italy"))$Specnumber)
+# EMA NORTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Northern Italy"))$Specnumber)
+#EMA SOUTH
+mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Southern Italy"))$Specnumber)
+
+```
+:::
+
+Cereals share similar presence values in Roman Northern and Southern Italian sites (@fig-cereal-richness-RvsEMA). Central Italy reports higher values, although this is based only on three sites and hence it is not reliable. During the Early Middle Ages, Central Italy again is the richest in cereals, closely followed by Northern Italy. Interestingly, Southern Italy still reports values very close to the Roman age. A full list of the Southern Italian EMA sites is reported in @tbl-southern-ema-sites.
+
+```{r}
+#| echo: false
+#| layout: "[[100,100], [1]]"
+#| label: fig-cereal-richness-RvsEMA
+#| fig-cap: "Violin plots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| fig-subcap: 
+#|   - "Roman age." 
+#|   - "Early Medieval age."
+#| fig-height: 4
+#| fig-width: 6
+#| fig-dpi: 600
+
+plot_RichnessMacroReg.R
+plot_RichnessMacroReg.EMA
+
+```
+
+| ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
+|------------|-------------|------------|------------|------------|------------|
+| 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
+| 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
+| 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
+| 198 | Salapia, area botteghe, US 2475        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 198 | Salapia, area botteghe, US 2437        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, US 2054        | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, US 2211-2217   | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 199 | Salapia, area conceria, 8th-9th c.     | Puglia     | Coast/Lagoon | Urban        | Lombard           |
+| 196 | Faragola, wastepit 61                  | Puglia     | Plain        | Rural, villa | Lombard           |
+| 196 | Faragola, wastepit 66                  | Puglia     | Plain        | Rural, villa | Lombard           |
+| 234 | Colle Castellano, Phase 3-4            | Molise     | Hill         | Urban        | Lombard           |
+| 177 | San Vincenzo al Volturno, kitchen area | Molise     | Hill         | Monastery    | Lombard           |
+| 101 | Supersano, loc. Scorpo                 | Puglia     | Plain        | Rural        | Byzantine         |
+| 250 | Apigliano, 9th-10th c., pits           | Puglia     | Plain        | Rural        | Byzantine         |
+| 250 | Apigliano, 10th-11th c., pits          | Puglia     | Plain        | Rural        | Byzantine         |
+| 196 | Faragola, granary A7                   | Puglia     | Plain        | Rural, villa | Lombard           |
+| 196 | Faragola, granary A8                   | Puglia     | Plain        | Rural, villa | Lombard           |
+
+: List of Southern Italian sites with chronology EMA {#tbl-southern-ema-sites}
+
+
+### Assessing the difference {#sec-permanova-cereals}
+
+::: callout-note
+## Notes on terminology: PERMANOVA {style="text-align:justify;"}
+
+Permutational multivariate analysis of variance (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not[^archaeobotany-2] [@andersonPermutationalMultivariateAnalysis2017]. In this context, the *null hypothesis* is that there is no regional difference in the cereals dataset, with cereals being evenly distributed across macroregions and chronologies.
+:::
+
+[^archaeobotany-2]: Source: Wikipedia. Change the source later
+
+The suggestion of an Early Medieval shift in cereal farming stated in @sec-macroregional-differences-ubiquity and @sec-richness-diversity-macroregions needs statistical support. Considering that data is not unimodal and that we are dealing with presence/absence analysis, the best choice is to use a non-parametric test as PERMANOVA on the early medieval botanical dataset. Prior to performing the test, it was necessary to pre-process data by:
+
+-   Selecting all the cereals columns of the plant remains table, keeping the categorical variables: `Macroregion`.
+
+-   Removing empty rows (samples that only reported seeds/fruits, but not cereals).
+
+-   Transforming the raw counts into presence/absence, using the function `decostand()` (`method=pa`) in the `R` package `vegan` [@vegan].
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: Pre-processing"
+#| code-overflow: wrap
+# Testing the results: Regionality in the dataset? 
+library(vegan)
+
+set.seed(29)
+
+# Pre processing: remove empty rows
+
+# Note: The input table is the CONDENSED table without totals
+
+# Selecting all the cereals columns of the plant remains table, keeping some categorical variables 
+cer_macroreg_ubiquity_transp.tot <- Df_Cond_Plants[c(4,5,6,7,11:19)]
+
+# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
+cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer_macroreg_ubiquity_transp.tot[5:13])>0,]
+
+# Assigning a column name "Macroregion"
+colnames(cer_macroreg_ubiquity_transp.tot)[1] = "Macroregion"
+
+# Selecting the Chronology of interest (EMA) and excluding Central Italy
+cer_macroreg_ubiquity_transp.tot<- filter(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
+
+# dividing categorical and numerical columns
+cer_macroreg_ubiquity_transp.categ <- cer_macroreg_ubiquity_transp.tot[1:4]
+cer_macroreg_ubiquity_transp.data <- cer_macroreg_ubiquity_transp.tot[5:13]
+
+# Converting the numerical columns into a presence/absence matrix (using method=pa)
+cer_macroreg_ubiquity_transp.dist <- decostand(cer_macroreg_ubiquity_transp.data, method="pa", na.rm=TRUE)
+
+
+```
+:::
+
+After the pre-processing, it was possible to run the PERMANOVA using the function `adonis2()` in the package `vegan`. The function creates a distance matrix and computes an analysis of variance on the matrix. The method chosen to calculate the distance matrix is the `jaccard` distance. The Jaccard distance, based on the Jaccard similarity index, is a value of dissimilarity between sample sets [@kosubNoteTriangleInequality2019]. When compared to other dissimilarity indices, it is more appropriate for presence/absence analyses as it is not based on Euclidean distance.
+
+**Results of `adonis2()`**.
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: adonis2() "
+#| code-overflow: wrap
+
+cer_macroreg_ubiquity_transp.div <- adonis2(
+  cer_macroreg_ubiquity_transp.dist ~ Macroregion, 
+  data = cer_macroreg_ubiquity_transp.categ,
+  permutations = 10000, method="jaccard"
+  )
+
+```
+:::
+
+```{r}
+#| echo: false
+
+cer_macroreg_ubiquity_transp.div
+
+```
+
+The calculation of PERMANOVA on the Roman dataset using the variable `Macroregion` reported a not statistically significant p-value, suggesting a degree of homogeneity. On the other hand, when applied to the early Medieval dataset, the results were highly significant (0\<p\<0.001) with a 99.99% confidence. PERMANOVA has not been calculated on the Late Roman dataset as samples from Southern Italy were too scarce. To confirm the significance of the results of PERMANOVA applied to the EMA dataset, it is necessary to check that its assumptions are met (especially since we are dealing with small groups of data). Firstly, we check the homogeneity of variances. The function `betadisper()` from the package `vegan` provides the distances of group samples from centroids. If the variation is even, the null hypothesis of no difference in dispersion between groups is accepted. To test the variation, it is possible to use the analysis of variance (ANOVA).
+
+::: {.content-visible when-format="html"}
+```{r}
+#| code-fold: true
+#| output: false
+#| code-summary: "Show the code: betadisper()"
+#| code-overflow: wrap
+
+# We do not need to calculate the distance separately, but it will be useful later for the betadisper() function
+
+# Distance dissimilarity matrix with the Jaccard method
+cer_macroreg_ubiquity_transp.dist2 <- vegdist(cer_macroreg_ubiquity_transp.dist, method="jaccard", na.rm=TRUE)
+
+# Betadisper: distances of group samples from centroids
+cer_macroreg_ubiquity_transp.betadisper <- betadisper(cer_macroreg_ubiquity_transp.dist2, cer_macroreg_ubiquity_transp.categ$Macroregion)
+```
+:::
+
+**Results of `anova()` on the betadisper.**
+
+```{r}
+#| code-fold: true
+#| output: true
+#| code-summary: "Show the code: ANOVA on betadisper()"
+#| code-overflow: wrap
+
+# We will see that the ANOVA's p-value is not significant meaning that group dispersions are homogenous 
+#("Null hypothesis of no difference in dispersion between groups"; https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/betadisper).
+
+anova(cer_macroreg_ubiquity_transp.betadisper) # This should not be significant!
+```
+
+```{r}
+#| echo: false
+#| layout: "[[100,100], [1]]"
+#| label: fig-betadisper
+#| fig-cap: "Results of the betadisper() (groups dispersions) on the distance matrix calculated with the Jaccard method." 
+#| fig-subcap: 
+#|   - "Groups dispersions plot with confidence ellipses." 
+#|   - "Boxplot showing equal distances from centroid."
+#| fig-height: 4
+#| fig-width: 5
+#| fid-dpi: 300
+
+# Now we can plot and see that group dispersions (distances from centroids) are very similar, but compositions seem to be very different. Let's go to adonis to test that.
+plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot")
+boxplot(cer_macroreg_ubiquity_transp.betadisper)
+
+```
+
+The `betadisper()` graphs (@fig-betadisper) show similar distances from the centroids for the categories `Northern Italy` and `Southern Italy`. In addition, the ANOVA on the `betadisper()` shows that the separation is not significant (p-value over the significance threshold), meaning that the groups dispersions are homogeneous. We can thus be confident in the PERMANOVA results and accept the difference between the two groups of sites under investigation. In other words, the Southern and Northern Italian group of sites are different during the Early Middle Ages for what concerns cereal farming.
+
+Running the same tests on the Roman sites failed to separate the two groups of sites, confirming that there was not a significant difference in the types of cereals cultivated during the Roman age between Northern and Southern Italy.
+
+### Quantifying the separation: nMDS {#sec-nMDS-Cereals style="text-align:justify"}
+
+::: callout-note
+## Notes on terminology: Wasserstein metric {style="text-align:justify;"}
+
+The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distance) (or earth's mover distance) is a measure of distance between two probability distributions on a metric space.
+:::
+
+In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-boxplot-nMDS-R-EMA.
+
+::: {.content-visible when-format="html"}
+
+**Source code:**
+
+```{r}
+#| code-summary: "Show the code: Data preparation"
+#| code-overflow: wrap
+#| code-fold: true
+
+# DATA PREPARATION #
+
+# Creating a simple dataframe just for the purpose of the NCA
+Df_Cond_Plants_simplified <- data.frame(
+  "Chronology" = Df_Cond_Plants$Chronology, 
+  "Type" = Df_Cond_Plants$Type,
+  "Macroregion" = Df_Cond_Plants$name_macroreg,
+  "Weight" = Df_Cond_Plants$weight,
+  Df_Cond_Plants[11:ncol(Df_Cond_Plants)]
+  )
+
+# Joining site typology categories to simplify the output, using library stringr
+library(vegan)
+library(stringr)
+
+Df_Cond_Plants_simplified$Type <- str_replace_all(
+  Df_Cond_Plants_simplified$Type, c(
+    "Rural site, villa" = "Rural", 
+    "Rural site, mansio" = "Rural",
+    "Religious, monastery" = "Religious",
+    "Castle" = "Fortified",
+    "Castrum" = "Fortified")
+  )
+
+# Convert to Presence (1) / Absence (0) using library vegan
+Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)] <- decostand(Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)], method="pa")
+
+# Creating dataframes for the chronologies R and EMA
+Df_Cereals_R <- filter(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
+Df_Cereals_EMA <- filter(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
+
+# Selecting only cereals from both dataframes
+Df_Cereals_R <- Df_Cereals_R[1:14]
+Df_Cereals_R[is.na(Df_Cereals_R)] <- 0
+Df_Cereals_R <- Df_Cereals_R[rowSums(Df_Cereals_R[,5:14] != 0) > 0, ] # Removing empty rows
+
+Df_Cereals_EMA <- Df_Cereals_EMA[1:14]
+Df_Cereals_EMA[is.na(Df_Cereals_EMA)] <- 0
+Df_Cereals_EMA <- Df_Cereals_EMA[rowSums(Df_Cereals_EMA[,5:14] != 0) > 0, ]
+
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+library(ggpubr)
+set.seed(7)
+
+# Perform the metaMDS to 1D for Df_Cereals_R and Df_Cereals_EMA 
+mds_R <- metaMDS(Df_Cereals_R[, c(5:14)], k=1, distance = "jaccard")
+mds_EMA <- metaMDS(Df_Cereals_EMA[, c(5:14)], k=1, distance = "jaccard")
+
+# Add the Macroregion data to the metaMDS results for both dataframes
+mds_df_R <- data.frame(mds_R$points, Macroregion = Df_Cereals_R$Macroregion)
+mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Df_Cereals_EMA$Macroregion)
+
+# Create dataframes to calculate wasserstein distance
+library(transport)
+
+MDS_Scores_R_SI <- (filter(mds_df_R, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_R_NI <- (filter(mds_df_R, Macroregion=="Northern Italy"))$MDS1
+
+MDS_Scores_EMA_SI <- (filter(mds_df_EMA, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_EMA_NI <- (filter(mds_df_EMA, Macroregion=="Northern Italy"))$MDS1
+
+       
+# Create the plots
+mds_R.plot <- ggplot(
+  data=mds_df_R, 
+  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)) +
+    geom_density(adjust=1.5, alpha=.2) +
+      geom_vline(aes(xintercept=mean(MDS_Scores_R_SI)),
+            color="#90a955", linetype="dashed", size=.8)+ #South
+      geom_vline(aes(xintercept=mean(MDS_Scores_R_NI)),
+            color="#212529", linetype="dashed", size=.8)+ #North
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+  theme(legend.position = "none")+
+    labs(
+      title="Roman age",
+      caption = paste0(
+      "PERMANOVA: p > 0.05 \n",
+      "Wasserstein distance: ", round(
+      wasserstein1d(MDS_Scores_R_SI,MDS_Scores_R_NI),2
+      )))
+
+mds_EMA.plot <- ggplot(
+  data=mds_df_EMA, 
+  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)
+  ) +
+  scale_alpha(guide = 'none')+
+  geom_density(adjust=1.5, alpha=.2) +
+  geom_vline(
+    aes(xintercept=mean(MDS_Scores_EMA_SI), color="mean"),
+    color="#90a955", linetype="dashed", size=.8)+ #South
+  geom_vline(
+    aes(xintercept=mean(MDS_Scores_EMA_NI)),
+    color="#212529", linetype="dashed", size=.8)+ #North
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="EMA",
+      caption = paste0(
+      "PERMANOVA: p < 0.0001 \n",
+      "Wasserstein distance: ", round(
+      wasserstein1d(MDS_Scores_EMA_SI,MDS_Scores_EMA_NI),2
+      )))+
+  theme(legend.position = "right")
+
+
+mds_R.boxplot <- ggplot(mds_df_R, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
+    geom_boxplot(alpha=.2)+
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="Roman Age")+
+  theme(legend.position = "none")
+
+mds_EMA.boxplot <- ggplot(mds_df_EMA, aes(x=Macroregion, y=MDS1, fill=Macroregion)) + 
+    geom_boxplot(alpha=.2)+
+  scale_fill_manual(values=c("#212529","#90a955"))+
+  scale_color_manual(values=c("#212529","#90a955"))+
+  theme_pubclean()+
+    labs(
+      title="EMA")+
+  theme(legend.position = "right")
+
+```
+
+```{r}
+#| label: fig-nMDS-1D-macroregion
+#| fig-cap: "nMDS reduction to one dimension performed on the Roman and early Medieval cereal datasets. The dashed colored lines indicate the mean of the distribution."
+#| fig-subcap: 
+#|  - "Roman age."
+#|  - "Early Medieval Age."
+#| layout-nrow: 1
+#| layout-ncol: 2
+#| echo: false
+
+
+# Plot the two plots side by side
+mds_R.plot 
+mds_EMA.plot
+```
+
+```{r}
+#| echo: false
+#| label: fig-boxplot-nMDS-R-EMA
+#| fig-cap: "Boxplots showing the nMDS scores for Northern and Southern Roman Italy."
+#| fig-subcap: 
+#|  - "Roman age."
+#|  - "Early Medieval age."
+#| layout-nrow: 1
+#| layout-ncol: 2
+
+mds_R.boxplot
+mds_EMA.boxplot
+
+```
+
+:::
+
+### Noble grains
+
+```{r}
+#| echo: false
+
+# Convert to list
+Noble_Grains.list <- list(
+    NG_Found = Noble_Grains_Reg$Grain_Count,
+    MG_Tot = 2, # Barley + Common Wheat
+    RC_ID = as.factor((interaction(Noble_Grains_Reg$Chronology, 
+                                   Noble_Grains_Reg$Macroregion)))
+   )
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this research
+m_ng_reg <- ulam(
+    alist(
+        NG_Found ~ dbinom( 2 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Noble_Grains.list , chains=4
+    )
+
+#saveRDS(m_ng_reg, "stan_models/m_ng_reg.rds")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+
+m_ng_reg <- readRDS("stan_models/m_ng_reg.rds")
+
+m_ng_reg.df <- m_ng_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_ng_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_ng_reg.df
+
+m_ng_reg.plot <- ggplot(
+  data = m_ng_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_ng_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Noble Grains",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-ng-macroregion
+#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_ng_reg.plot
+```
+
+
+
+### Minor grains
+
+
+```{r}
+#| echo: false
+#| eval: true
+#| code-fold: true
+
+# Convert to list
+Minor_Grains.list <- list(
+    MG_Found = Minor_Grains$Grain_Count,
+    MG_Tot = 7,
+    RC_ID = as.factor((interaction(Minor_Grains$Chronology, 
+                                   Minor_Grains$Macroregion)))
+   )
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+
+# Create a binomial model, where N is 7 because that is the total number of minor 
+# grains studied in this thesis
+m_mg_reg <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Minor_Grains.list , chains=4
+    )
+
+#saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
+
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_mg_reg <- readRDS("stan_models/m_mg_reg.rds")
+
+m_mg_reg.df <- m_mg_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_mg_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_mg_reg.df
+
+m_mg_reg.plot <- ggplot(
+  data = m_mg_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Minor Grains",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-mg-macroregion
+#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_mg_reg.plot
+```
+
+## Legumes
+
+```{r}
+#| echo: false
+
+
+####################
+## LEGUMES 
+####################
+
+# Convert to list
+Legumes_reg.list <- list(
+    Leg_Found = Legumes$Seed_Count,
+    Leg_Tot = 7,
+    RC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Macroregion)))
+   )
+
+Legumes_reg.list$RC_ID <- droplevels(Legumes_reg.list$RC_ID)
+
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+
+# Create a binomial model, where N is 7 because that is the total number of minor 
+# grains studied in this thesis
+m_leg_reg <- ulam(
+    alist(
+        Leg_Found ~ dbinom( 7 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Legumes_reg.list , chains=4
+    )
+
+#saveRDS(m_leg_reg, "stan_models/m_leg_reg.rds")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_leg_reg <- readRDS("stan_models/m_leg_reg.rds")
+
+m_leg_reg.df <- m_leg_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_leg_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_leg_reg.df
+
+m_leg_reg.plot <- ggplot(
+  data = m_leg_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_leg_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Legumes",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-legumes-macroregion
+#| fig-cap: "Bayesian probability estimates for legumes, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_leg_reg.plot
+
+```
+
+
+## Fruits
+
+
+### Grape
+
+```{r}
+#| echo: false
+
+Grape_reg.list <- list(
+    Grape_Found = Grape$Present,
+    RC_ID = as.factor((interaction(Legumes$Chronology, 
+                                   Legumes$Macroregion)))
+   )
+
+Grape_reg.list$RC_ID <- droplevels(Grape_reg.list$RC_ID)
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+m_grape_reg <- ulam(
+    alist(
+        Grape_Found ~ dbinom( 1 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Grape_reg.list , chains=4
+    )
+
+#saveRDS(m_grape_reg, "stan_models/m_grape_reg.rds")
+
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_grape_reg <- readRDS("stan_models/m_grape_reg.rds")
+
+m_grape_reg.df <- m_grape_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_grape_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_grape_reg.df
+
+m_grape_reg.plot <- ggplot(
+  data = m_grape_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_grape_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Grape",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-grape-macroregion
+#| fig-cap: "Bayesian probability estimates for grape, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_grape_reg.plot
+
+```
+
+
+### Olives
+
+```{r}
+#| echo: false
+
+
+# Convert to list
+Olive_reg.list <- list(
+    Olive_Found = Olives$Present,
+    RC_ID = as.factor((interaction(Olives$Chronology, 
+                                   Olives$Macroregion)))
+   )
+
+Olive_reg.list$RC_ID <- droplevels(Olive_reg.list$RC_ID)
+  
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+m_olive_reg <- ulam(
+    alist(
+        Olive_Found ~ dbinom( 1 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Olive_reg.list , chains=4
+    )
+
+saveRDS(m_olive_reg, "stan_models/m_olive_reg.rds")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_olive_reg <- readRDS("stan_models/m_olive_reg.rds")
+
+m_olive_reg.df <- m_olive_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_olive_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_olive_reg.df
+
+m_olive_reg.plot <- ggplot(
+  data = m_olive_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_olive_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Olive",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-olive-macroregion
+#| fig-cap: "Bayesian probability estimates for olive, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_olive_reg.plot
+
+```
+
+### Nuts
+
+
+```{r}
+#| echo: false
+
+####################
+## NUTS
+####################
+
+# Convert to list
+Nuts_reg.list <- list(
+    Nuts_Found = Nuts$Seed_Count,
+    Nuts_Tot = 3,
+    RC_ID = as.factor((interaction(Nuts$Chronology, 
+                                   Nuts$Macroregion)))
+   )
+
+Nuts_reg.list$RC_ID <- droplevels(Nuts_reg.list$RC_ID)
+
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+m_nuts_reg <- ulam(
+    alist(
+        Nuts_Found ~ dbinom( 3 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Nuts_reg.list , chains=4
+    )
+
+saveRDS(m_nuts_reg, "stan_models/m_nuts_reg.rds")
+
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_nuts_reg <- readRDS("stan_models/m_nuts_reg.rds")
+
+m_nuts_reg.df <- m_nuts_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_nuts_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_nuts_reg.df
+
+m_nuts_reg.plot <- ggplot(
+  data = m_nuts_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_nuts_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Nuts",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-nuts-macroregion
+#| fig-cap: "Bayesian probability estimates for nuts, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_nuts_reg.plot
+
+```
+
+
+### Domestic and wild fruits
+
+
+```{r}
+#| echo: false
+
+####################
+## Domestic FRUITS 
+####################
+
+# Convert to list
+DomFruit_reg.list <- list(
+    DF_Found = DomFruit$Seed_Count,
+    DF_Tot = 7,
+    RC_ID = as.factor((interaction(DomFruit$Chronology, 
+                                   DomFruit$Macroregion)))
+   )
+
+DomFruit_reg.list$RC_ID <- droplevels(DomFruit_reg.list$RC_ID)
+
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+m_dfruit_reg <- ulam(
+    alist(
+        DF_Found ~ dbinom( 7 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=DomFruit_reg.list , chains=4
+    )
+
+m_berries_reg <- ulam(
+    alist(
+        Berries_Found ~ dbinom( 9 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1)
+    ), data=Berries_reg.list , chains=4
+    )
+
+#saveRDS(m_dfruit_reg, "stan_models/m_dfruit_reg.rds")
+#saveRDS(m_berries_reg, "stan_models/m_berries_reg.rds")
+
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_berries_reg <- readRDS("stan_models/m_berries_reg.rds")
+
+m_berries_reg.df <- m_berries_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_berries_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+  RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+  RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+  RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+  RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_berries_reg.df
+
+m_berries_reg.plot <- ggplot(
+  data = m_berries_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_berries_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Berries",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+
+m_dfruit_reg <- readRDS("stan_models/m_dfruit_reg.rds")
+
+m_dfruit_reg.df <- m_dfruit_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_dfruit_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+  RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+  RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+  RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+  RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_dfruit_reg.df
+
+m_dfruit_reg.plot <- ggplot(
+  data = m_dfruit_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+  geom_vline(
+    xintercept = inv_logit(mean(m_dfruit_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Domestic Fruits",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-domfruits-macroregion
+#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_dfruit_reg.plot
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-berries-macroregion
+#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_berries_reg.plot
+
+```
+
+
+
 
 # To do:
 

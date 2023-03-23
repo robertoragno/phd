@@ -730,10 +730,10 @@ caprine_by_geo
 ediblewild_by_geo
 ```
 
+# Context type
 
-# Context type 
+## Pigs
 
-## Pigs 
 ::: callout-alert
 **Question:** Is the animal X - let's say Pigs - more strongly associated to a particular settlement type during a certain chronology?
 
@@ -2235,7 +2235,7 @@ dat.Caprine_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Caprine, Reg_id
 
 ```
 
-## Pigs 
+## Pigs
 
 ```{r}
 #| echo: false
@@ -2445,7 +2445,7 @@ Pigs_Reg.plot
 Pigs_Reg_phi.plot
 ```
 
-## Cattle 
+## Cattle
 
 ```{r}
 #| echo: false
@@ -2646,7 +2646,6 @@ Cattle_Reg_phi.plot <- Cattle_Reg.fit_phi %>%
 
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -2865,8 +2864,8 @@ Caprine_Reg.plot
 Caprine_Reg_phi.plot
 ```
 
-
 ## Edible W. Mammals
+
 ::: callout-alert
 Model under construction
 :::
@@ -2885,7 +2884,6 @@ dat.Caprine_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Caprine, Geo_id
 
 
 ```
-
 
 ## Pigs
 
@@ -3111,7 +3109,6 @@ Pigs_Geo_phi.plot <- Pigs_Geo.fit_phi %>%
   )+
   facet_grid(Geography ~ ., scales="free")
 ```
-
 
 ```{r}
 #| echo: false
@@ -3588,76 +3585,221 @@ Caprine_Geo_phi.plot
 ```
 
 ## Edible W. Mammals
+
 ::: callout-alert
 Model under construction
 :::
 
-
 # Modelling caprine against altitude
+
+Proposed model:
+
+$$
+P_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]} Alt_{i}
+$$
+
+$$
+\alpha_{ChrID} \sim Normal(0,1.5)
+$$
+
+$$
+\beta_{ChrID} \sim Uniform (0,1.5)
+$$
+
+$$
+\phi \sim Exponential(1)
+$$
+
+
 
 ```{r}
 #| echo: false
-#| eval: false
+#| eval: true
 
 zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
-zoo_altitude.freqs <- decostand(zoo_altitude[16:ncol(zoo_altitude)], method="total", na.rm = T)
-
 caprine_altitude <- data.frame(
   Site_ID = zoo_altitude$ID,
-  Macroregion = zoo_altitude$Macroregion,
+  Macroregion = factor(zoo_altitude$Macroregion),
   Altitude = zoo_altitude$Altitude,
-  Chronology = zoo_altitude$Chronology,
-  Frequency = zoo_altitude.freqs$Caprine
+  Chronology = factor(zoo_altitude$Chronology),
+  Capr_NISP = zoo_altitude$Caprine,
+  Tot_NISP = rowSums(zoo_altitude[c(16:24)], na.rm = T)
 )
 
 caprine_altitude[is.na(caprine_altitude)] <- 0
-caprine_altitude <- subset(caprine_altitude, Altitude>150 & Frequency>0)
+caprine_altitude <- subset(caprine_altitude, Altitude>0 & Capr_NISP>0)
 
-ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
+plot(
+  subset(caprine_altitude, Chronology=="R")$Capr_NISP / 
+    subset(caprine_altitude, Chronology=="R")$Tot_NISP
+)
 
-model1 <- glm(Frequency ~ log(Altitude)*Chronology, family="quasibinomial", data = caprine_altitude)
-summary(model1)
-plot(model1, which=1)
 
-model2 <- glm(Frequency ~ Altitude, family="quasibinomial", data = subset(caprine_altitude, Chronology=="R"))
-summary(model2)
+#ggplot(caprine_altitude, aes(log(Altitude), Frequency)) + geom_point(size=0.5) + facet_wrap(~ Chronology)
 
-# DIAGNOSTICS
-plot(density(resid(model2, type='response')))
-plot(density(resid(model2, type='deviance')))
-plot(density(rstandard(model2, type='deviance')))
-
-# Test if the prediction is similar to the original distribution
-plot(density(caprine_altitude$Frequency), main='Model')
-lines(density(predict(model2, type='response')), col='red')
-
-scatter.smooth(1:570, rstandard(model2, type='deviance'), col='gray')
-
-scatter.smooth(predict(model2, type='response'), rstandard(model2, type='deviance'), col='gray')
-
-# Is the choice of distribution appropriate?
-qqnorm(resid(model2)); qqline(resid(model2))
-
-# Cook distance
-plot(cooks.distance(model2), type='h')
-
-plot(density(caprine_altitude$Altitude), type ="l")
-plot(density(caprine_altitude$Frequency))
-
-caprine_altitude.R <- subset(caprine_altitude, Chronology=="R")
-
-cor_capr_altitude <- cor.test(
-  caprine_altitude.R$Frequency, 
-  caprine_altitude.R$Altitude, 
-  method = "spearman", 
-  conf.level = 0.95,
-  covar = caprine_altitude.R$Chronology, 
-  exact=F
+dat.Caprine_Altitude = list(
+  N = caprine_altitude$Tot_NISP, 
+  A = caprine_altitude$Capr_NISP, 
+  Chr_id = as.factor(as.numeric(caprine_altitude$Chronology)), 
+  Alt = caprine_altitude$Altitude,
+  J = nrow(caprine_altitude)
   )
+```
 
-model4 <- lm(Frequency~Altitude, caprine_altitude.R)
-summary(model4)
+
+```{r}
+#| eval: false
+
+# MODELS
+
+# CODE WITH STAN MODEL
+# THIS GIVES A THETA FOR EACH CHRONOLOGY
+Capr_Alt_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_capr_altitude2.stan",  # Stan program
+  data = dat.Caprine_Altitude,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4
+)
+
+traceplot(Capr_Alt_fit)
+
+# CODE WITH Rethinking MODEL
+# Only one theta
+m12.1 <- ulam(
+    alist(
+        A ~ dbetabinom( N , pbar , theta ),
+        logit(pbar) <- a[Chr_id] + b[Chr_id]*log(Alt),
+        a[Chr_id] ~ dnorm( 0 , 1.5 ),
+        b[Chr_id] ~ dnorm( 0 , 1 ),
+        transpars> theta <<- phi + 2.0,
+        phi ~ dexp(1)
+    ), data=dat.Caprine_Altitude , chains=4 )
 
 ```
 
+
+```{r}
+#| echo: false
+
+
+traceplot(Capr_Alt_fit, pars = c("a", "b"))
+
+Capr_Alt_fit.post <- extract.samples(Capr_Alt_fit)
+
+
+mean(Capr_Alt_fit.post$a[,1])
+mean(Capr_Alt_fit.post$b[,1])
+
+Alt.seq <- seq( 
+    from = min(dat.Caprine_Altitude$Alt),
+    to = max(dat.Caprine_Altitude$Alt),
+    length.out=30
+    )
+
+Caprine_Alt_R.post <- sapply(Alt.seq, function(Altitude)
+  inv_logit(Capr_Alt_fit.post$a[,1] +Capr_Alt_fit.post$b[,1] *log(Altitude))
+    )
+
+Caprine_Alt_R.PI <- apply(Caprine_Alt_R.post, 2, PI, prob=0.89)
+
+
+plot(
+  apply(Caprine_Alt_R.post, 2, mean) ~ (Alt.seq)
+)
+
+mcmc_nuts_energy(nuts_params(Capr_Alt_fit)) + ggtitle("NUTS Energy Diagnostic")
+
+post <- extract.samples(m12.1)
+
+library(tidybayes)
+library(tidyverse)
+library(tidybayes.rethinking)
+library(modelr)
+
+as.data.frame(dat.Caprine_Altitude) %>%
+  group_by(Chr_id) %>%
+  mutate(Chronology = case_when(
+    Chr_id == 1 ~ "EMA",
+    Chr_id == 2 ~ "LR",
+    Chr_id == 3 ~ "Ma",
+    Chr_id == 4 ~ "R"
+  )) %>% 
+  data_grid(Alt = seq_range(log(Alt), n = 101), Chronology) %>%
+  add_linpred_draws(m12.1) %>%
+  ggplot(aes(x = Alt, y = .linpred)) +
+  stat_lineribbon(aes(y = .linpred), color="grey90") +
+  scale_fill_brewer(palette = "Greys")+ 
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+    labs(
+       y="P (Caprine | Total NISP)",
+       x="Altitude (log)",
+       title="Caprine",
+       subtitle="Altitude",
+       caption = expression(paste("Precision parameter (", phi, "): 8.13"))
+       )+
+  facet_wrap(~ factor(Chronology, levels=chrono_levels))
+
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+
+# PHI PLOT
+
+Capr_Alt_fit.phi <- Capr_Alt_fit %>%
+  spread_draws(theta[Chr_id]) %>% 
+  mutate(Chronology = case_when(
+    Chr_id == 1 ~ "EMA",
+    Chr_id == 2 ~ "LR",
+    Chr_id == 3 ~ "Ma",
+    Chr_id == 4 ~ "R"
+  )
+  ) 
+
+Capr_Alt_fit_phi.plot <- Capr_Alt_fit.phi %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = theta)) +
+  stat_halfeye() +
+  geom_vline(xintercept = mean(Capr_Alt_fit.phi$theta), 
+             linetype = "twodash",
+             linewidth = 0.45,
+             color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys")+
+  labs(x=expression(paste("Precision parameter (", phi, ")")),
+       y="Chronology",
+       title="Caprine",
+       subtitle="Altitude",
+       caption="The dashed line indicates the mean for each chronology.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )
+
+```

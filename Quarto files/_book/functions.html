@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Long-term Dynamics and Peasant Autonomy in the Italian Countryside - Custom functions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Custom functions</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Long-term Dynamics and Peasant Autonomy in the Italian Countryside</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./literature_review.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Materials</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./database.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Results</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">Sites bibliography</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link active">Custom functions</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries">Libraries</a></li>
+  <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany">Archaeobotany</a>
+  <ul class="collapse">
+  <li><a href="#archaeobotany_tables" id="toc-archaeobotany_tables" class="nav-link" data-scroll-target="#archaeobotany_tables">archaeobotany_tables()</a></li>
+  <li><a href="#rel_prop_per_century" id="toc-rel_prop_per_century" class="nav-link" data-scroll-target="#rel_prop_per_century">Rel_Prop_per_Century()</a></li>
+  <li><a href="#sec-Ubiquity-macroreg-chrono" id="toc-sec-Ubiquity-macroreg-chrono" class="nav-link" data-scroll-target="#sec-Ubiquity-macroreg-chrono">Ubiquity_macroreg_chrono()</a></li>
+  <li><a href="#sec-Ubiquity-type-chrono" id="toc-sec-Ubiquity-type-chrono" class="nav-link" data-scroll-target="#sec-Ubiquity-type-chrono">Ubiquity_type_chrono()</a></li>
+  </ul></li>
+  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology">Zooarchaeology</a>
+  <ul class="collapse">
+  <li><a href="#sec-fun-Medians-Chrono-Zoo" id="toc-sec-fun-Medians-Chrono-Zoo" class="nav-link" data-scroll-target="#sec-fun-Medians-Chrono-Zoo">Medians_Chrono_Zoo()</a></li>
+  <li><a href="#sec-fun-zooarch-tables-general" id="toc-sec-fun-zooarch-tables-general" class="nav-link" data-scroll-target="#sec-fun-zooarch-tables-general">zooarch_tables_general()</a></li>
+  <li><a href="#zooarch_tables_general" id="toc-zooarch_tables_general" class="nav-link" data-scroll-target="#zooarch_tables_general">zooarch_tables_general</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-custom-functions" class="quarto-section-identifier d-none d-lg-block">Custom functions</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This section contains the list of custom functions that have been written to prepare, handle and visualize the data exported from the database.</p>
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.5.0 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="archaeobotany" class="level2">
+<h2 class="anchored" data-anchor-id="archaeobotany">Archaeobotany</h2>
+<section id="archaeobotany_tables" class="level3">
+<h3 class="anchored" data-anchor-id="archaeobotany_tables">archaeobotany_tables()</h3>
+<p>This function has two arguments:</p>
+<ul>
+<li><p>a dataframe of the exported table of plants from the database (<code>view_archaeobot.csv</code>).</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "site_code"               "site_name"              
+ [3] "type_name"               "region_name"            
+ [5] "data_valid_start"        "data_valid_end"         
+ [7] "weight"                  "sampling_notes"         
+ [9] "extra_notes"             "short_ref"              
+[11] "culture_type"            "x"                      
+[13] "y"                       "Triticum.aestivum.durum"
+[15] "Triticum.dicoccum"       "Triticum.monococcum"    
+[17] "Avena.sp"                "Hordeum.vulgare"        
+[19] "Panicum.milliaceum"      "Secale.cereale"         
+[21] "Setaria.italica"         "Sorghum.bicolor"        
+[23] "Cerealia.ind"            "Leguminosae"            
+[25] "Lens.culinaris"          "Pisum.sativum"          
+[27] "Vicia.faba"              "Vicia.sativa"           
+[29] "Vicia.sp"                "Lathyrus.cicera.sativus"
+[31] "Cicer.aretinum"          "Cornus.mas"             
+[33] "Corylus.avellana"        "Ficus.carica"           
+[35] "Fragaria.vesca"          "Juglans.regia"          
+[37] "Castanea.sativa"         "Malus.domestica"        
+[39] "Olea.europaea.L"         "Prunus.cerasus"         
+[41] "Prunus.avium"            "Prunus.sp"              
+[43] "Prunus.persica"          "Prunus.domestica"       
+[45] "Prunus.spinosa"          "Rubus.fruticosus"       
+[47] "Pyrus.communis"          "Sambucus.nigra"         
+[49] "Cucumis.melo"            "Vitis.vinifera"         
+[51] "Linum.usatissimus"       "Sorbus.sp"              </code></pre>
+</div>
+</div></li>
+<li><p>the century of interest.</p></li>
+</ul>
+<p>The function <code>archaeobotany_tables()</code> can be used to return the ubiquity, relative proportions or a print of the table with the sites from the chosen century. The comments in the code below explain the process.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">##FUNCTION FOR GENERATING CENTURY BASED</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># - UBIQUITY</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - RELATIVE PROPORTIONS</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - A PRINT OF THE TABLE</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>archaeobotany_tables <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span><span class="dv">0</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen century</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, data_valid_start <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> data_valid_end <span class="sc">&gt;=</span> century)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The total of each row is needed to calculate the relative proportions</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Calculation starts from column 14 because it is the first column with numerical data. If the table exported from the database changes, this number must be adjusted.</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subsetting the given dataframe by creating a new dataframe with fewer columns </span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  plants <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x<span class="sc">$</span>site_name, x<span class="sc">$</span>type_name, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>data_valid_start, x<span class="sc">$</span>data_valid_end,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                       x<span class="sc">$</span>culture_type, x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)], </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                       Total</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating the relative proportions and rounding the results to 2 digits.</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ubiquity: </span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Note: It is given by the no. of sites where the plant is present divided by the total of sites</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Total of sites: (No. of rows - header row)</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating a new dataframe from the Relative Proportions one (Rel_Prop). </span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: This can be done also from the original dataframe, it is not important since it is just a calculation based on presence/absence. I chose this dataframe as it has already the columns I need.</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  Pres_Abs <span class="ot">&lt;-</span> Rel_Prop</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the value is &gt; 0 it means that the plant is present: this line replaces this value with a 1 (indicating presence)</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  Pres_Abs[Pres_Abs <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># In how many sites is this plant present?</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  Tot_sites_present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(Pres_Abs)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Finally calculate ubiquity</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: The score is multiplied by 100 to obtain results in %</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (Tot_sites_present <span class="sc">/</span> <span class="fu">nrow</span>(Pres_Abs))<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ubiquity_exp =</span> Ubiquity,</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rel_Prop_exp =</span> Rel_Prop,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">Raw_Counts =</span> plants</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="rel_prop_per_century" class="level3">
+<h3 class="anchored" data-anchor-id="rel_prop_per_century">Rel_Prop_per_Century()</h3>
+<p>This function has two arguments: - a dataframe of the exported table of plants from the database (<code>view_archaeobot.csv</code>).</p>
+<ul>
+<li>the century of interest. The function <code>Rel_Prop_per_Century()</code> can be used to return the relative proportions of each site from the chosen century. The comments in the code below explain the process.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert each site raw data into relative proportions</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Rel_Prop_per_Century <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span><span class="dv">0</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen century</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, data_valid_start <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> data_valid_end <span class="sc">&gt;=</span> century)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the total of the row and divide each value by the total to get proportions</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># round() is used to get two decimal values</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  Total_per_site <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  Rel_Prop_per_site <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total_per_site)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create new dataframe with the information we need</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  plants_rel_prop <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Site"</span> <span class="ot">=</span> x<span class="sc">$</span>site_name, </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Type"</span> <span class="ot">=</span> x<span class="sc">$</span>type_name, </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"From.Century"</span> <span class="ot">=</span> x<span class="sc">$</span>data_valid_start, </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"To.Century"</span><span class="ot">=</span> x<span class="sc">$</span>data_valid_end,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Weight"</span><span class="ot">=</span>x<span class="sc">$</span>weight,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Culture"</span><span class="ot">=</span>x<span class="sc">$</span>culture_type, </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span><span class="ot">=</span>x<span class="sc">$</span>x, </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"y"</span><span class="ot">=</span>x<span class="sc">$</span>y,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    Rel_Prop_per_site</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(plants_rel_prop)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="sec-Ubiquity-macroreg-chrono" class="level3">
+<h3 class="anchored" data-anchor-id="sec-Ubiquity-macroreg-chrono">Ubiquity_macroreg_chrono()</h3>
+<p>This function has three arguments:</p>
+<ul>
+<li><p>a dataframe of the exported condensed table of plants from the database (<code>Archaeobot_Condensed.csv</code>). It is a table of plants exported with their common English name and with a column of totals for each type of plant (Cereals, Fruit/Nuts, …).</p></li>
+<li><p>the macroregion of interest: <code>Southern Italy</code>, <code>Central Italy</code>, <code>Northern Italy</code>.</p></li>
+<li><p>the chronology of interest: <code>R</code>, <code>LR</code>, <code>EMA</code>, <code>Ma</code>.</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Ubiquity_macroreg_chrono <span class="ot">&lt;-</span> <span class="cf">function</span>(df, macroregion, chronology) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  df[<span class="fu">is.na</span>(df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen chronology and macroregion</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  df.chronology <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, Chronology <span class="sc">==</span> chronology <span class="sc">&amp;</span> Macroregion <span class="sc">==</span> macroregion)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Remove useless columns: Tots, unsp.cols</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  df.chronology <span class="ot">&lt;-</span> df.chronology[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">23</span>,<span class="dv">24</span>,<span class="dv">32</span>,<span class="dv">33</span>,<span class="dv">56</span>)] </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a counts dataframe where the taxa that are present will be stored as 1</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  df.counts <span class="ot">&lt;-</span> df.chronology[<span class="dv">14</span><span class="sc">:</span><span class="fu">ncol</span>(df.chronology)]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  df.counts[df.counts<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a dataframe with a sum of presences</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  df.sites.present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(df.counts)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate ubiquity and round the value to 2 decimals</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (df.sites.present <span class="sc">/</span> <span class="fu">nrow</span>(df.chronology))<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">round</span>(Ubiquity, <span class="dv">2</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a category that explains what type of plant is it (useful for visualisation)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  Plants_Type <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Type=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">38</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="st">"Cereals"</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">10</span><span class="sc">:</span><span class="dv">16</span>] <span class="ot">&lt;-</span> <span class="st">"Pulses"</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  Plants_Type<span class="sc">$</span>Type[<span class="dv">17</span><span class="sc">:</span><span class="dv">38</span>] <span class="ot">&lt;-</span> <span class="st">"Fruits/Nuts"</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final dataframe that the function will return</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(<span class="st">"Chronology"</span> <span class="ot">=</span> chronology, </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Macroregion"</span> <span class="ot">=</span> macroregion, </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Plant"</span><span class="ot">=</span><span class="fu">names</span>(Ubiquity), </span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Plant.Type"</span><span class="ot">=</span>Plants_Type<span class="sc">$</span>Type, </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Ubiquity"</span><span class="ot">=</span> Ubiquity)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Ubiquity, <span class="at">row.names =</span> <span class="cn">NULL</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(Ubiquity)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="sec-Ubiquity-type-chrono" class="level3">
+<h3 class="anchored" data-anchor-id="sec-Ubiquity-type-chrono">Ubiquity_type_chrono()</h3>
+<p>This function has three arguments:</p>
+<ul>
+<li><p>a dataframe of the exported condensed table of plants from the database (<code>Archaeobot_Viz.csv</code>). It is a table of plants exported with their common English name (Cereals, Fruit/Nuts, …).</p></li>
+<li><p>the site typology of interest.</p></li>
+<li><p>the chronology of interest: <code>R</code>, <code>LR</code>, <code>EMA</code>, <code>Ma</code>.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ubiquity for type and chronology</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Ubiquity_type_chrono <span class="ot">&lt;-</span> <span class="cf">function</span>(df, type, chronology) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load the tidyverse library if it hasn't been loaded in the page before</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  df[<span class="fu">is.na</span>(df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter the table for the chosen chronology and macroregion</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># package: tidyverse</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  df.chronology <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, Type <span class="sc">==</span> type <span class="sc">&amp;</span> Chronology <span class="sc">==</span> chronology)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Selecting the first plant column. In this way I will avoid errors if the </span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># structure of the data set changes in the future.</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  first_col_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">names</span>(Df_Cond_Plants) <span class="sc">==</span> <span class="st">"Common.Wheat"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a counts dataframe where the taxa that are present will be stored as 1</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  df.counts <span class="ot">&lt;-</span> df.chronology[first_col_index<span class="sc">:</span><span class="fu">ncol</span>(df.chronology)]</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  df.counts[df.counts<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a dataframe with a sum of presences</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  df.sites.present <span class="ot">&lt;-</span> <span class="fu">colSums</span>(df.counts)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate ubiquity and round the value to 2 decimals</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> (df.sites.present <span class="sc">/</span> <span class="fu">nrow</span>(df.chronology))<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">round</span>(Ubiquity, <span class="dv">2</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Returning a dataframe</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Ubiquity)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transposing the dataframe to have a single row</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  Ubiquity <span class="ot">&lt;-</span> <span class="fu">t</span>(Ubiquity)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Assigning the site type as the row name </span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row.names</span>(Ubiquity) <span class="ot">&lt;-</span> type</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(Ubiquity)</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="zooarchaeology" class="level2">
+<h2 class="anchored" data-anchor-id="zooarchaeology">Zooarchaeology</h2>
+<section id="sec-fun-Medians-Chrono-Zoo" class="level3">
+<h3 class="anchored" data-anchor-id="sec-fun-Medians-Chrono-Zoo">Medians_Chrono_Zoo()</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Medians_Chrono_Zoo <span class="ot">&lt;-</span> <span class="cf">function</span>(x, Chrono) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(matrixStats)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, Chronology <span class="sc">==</span> Chrono)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#Get rid of NAs</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  x<span class="sc">$</span>Total <span class="ot">&lt;-</span> (<span class="fu">rowSums</span>(x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>x<span class="sc">$</span>Total)), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  Rel_Prop[Rel_Prop<span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  medians <span class="ot">&lt;-</span> <span class="fu">apply</span>(Rel_Prop, <span class="dv">2</span>, weightedMedian, <span class="at">w=</span>x[,<span class="dv">7</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  final_medians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Chrono =</span> medians)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(final_medians) <span class="ot">&lt;-</span> Chrono</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (final_medians)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="sec-fun-zooarch-tables-general" class="level3">
+<h3 class="anchored" data-anchor-id="sec-fun-zooarch-tables-general">zooarch_tables_general()</h3>
+<p>This function has one argument: a dataframe of the exported condensed table of faunal remains from the database (<code>Zooarch_Condensed.csv</code>). It is a table of animals exported with their common English name, columns with context information. Some of the columns are the sum of different columns, with the <code>SQL</code> function <code>COALESCE()</code>. For instance, the column <code>Edible Wild Mammals</code> is the sum of values for red deer, roe deer, hare, wild boar.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>zooarch_tables_general <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(matrixStats)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The total of each row is needed to calculate the relative proportions</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note: Calculation starts from column 15 because it is the first column </span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># with numerical data. </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If the table exported from the database changes, this number must be adjusted.</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)])</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  zoo_subset <span class="ot">&lt;-</span> x[,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(x))]</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  Rel_prop_with_sites <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], Rel_Prop)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  Rel_prop_xy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>], Rel_Prop)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">Rel_Prop_exp =</span> Rel_prop_with_sites, <span class="co">#Rel Prop by century</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">Rel_Prop_exp_XY =</span> Rel_prop_xy, <span class="co"># Rel props with coordinates</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">Means =</span> <span class="fu">colMeans</span>(Rel_Prop), <span class="co">#Column means, by century</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">Medians =</span> <span class="fu">apply</span>(Rel_Prop, <span class="dv">2</span>, weightedMedian, <span class="at">w=</span>x[,<span class="dv">7</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>), </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">RawCounts =</span> zoo_subset <span class="co">#Original table, by century</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="zooarch_tables_general" class="level3">
+<h3 class="anchored" data-anchor-id="zooarch_tables_general">zooarch_tables_general</h3>
+<p>Explain</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-overflow-wrap code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>zooarch_tables <span class="ot">&lt;-</span> <span class="cf">function</span>(x, century) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(matrixStats)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#Get rid of NAs</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Need to filter the given table for the century</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">filter</span>(x, x<span class="sc">$</span>From.Century <span class="sc">&lt;=</span> century <span class="sc">&amp;</span> x<span class="sc">$</span>To.Century <span class="sc">&gt;=</span> century)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  Total <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]) <span class="co"># Row wise total for rel prop</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  zoo_subset <span class="ot">&lt;-</span> x[,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">7</span><span class="sc">:</span><span class="dv">10</span>,<span class="dv">11</span><span class="sc">:</span><span class="fu">ncol</span>(x))]</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  Rel_Prop <span class="ot">&lt;-</span> <span class="fu">round</span>(((x[,<span class="dv">15</span><span class="sc">:</span><span class="fu">ncol</span>(x)]<span class="sc">/</span>Total)<span class="sc">*</span><span class="dv">100</span>), <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  Rel_prop_with_sites <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], Rel_Prop) <span class="co"># Check if it is the 5th or 6th column</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  Rel_prop_xy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(zoo_subset[,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], Rel_Prop) <span class="co"># Check if it is to 10 or to 13</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rel_Prop_exp =</span> Rel_prop_with_sites, <span class="co">#Rel Prop by century</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rel_Prop_exp_XY =</span> Rel_prop_xy,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Means = colMeans(Rel_Prop), #Column means, by century</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">Means =</span> <span class="fu">apply</span>(Rel_Prop, <span class="dv">2</span>, weighted.mean, <span class="at">w=</span>x[,<span class="dv">7</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medians =</span> <span class="fu">apply</span>(Rel_Prop, <span class="dv">2</span>, weightedMedian, <span class="at">w=</span>x[,<span class="dv">7</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">RawCounts =</span> zoo_subset <span class="co">#Original table, by century</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./references.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">References</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+  </div>
+</footer>
+
+
+
+</body></html>
