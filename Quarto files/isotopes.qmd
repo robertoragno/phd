@@ -1,8 +1,5 @@
 # Isotopes
 
-
-
-
 Data is from the Compendium Isotoporum Medii Aevi (CIMA) database [@cocozzaPresentingCompendiumIsotoporum2022] and from the IsoArch database.
 
 ```{r}

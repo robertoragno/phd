@@ -355,9 +355,8 @@ Ubiquity_HM
 
 ### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
 
-::: {.alert}
-Probably delete, in favor of the bayesian predictions. 
-If this section is kept, make sure to explain that ubiquity was calculated by macroregion only because it was more reliable etc etc
+::: alert
+Probably delete, in favor of the bayesian predictions. If this section is kept, make sure to explain that ubiquity was calculated by macroregion only because it was more reliable etc etc
 :::
 
 ::: {.content-visible when-format="html"}
@@ -369,7 +368,6 @@ The heatmap (@fig-heatmap-ubiquity-for-PDF) shows the diachronical ubiquity valu
 :::
 
 ::: {.content-visible when-format="html"}
-
 ```{r}
 #| echo: false
 #| output: false
@@ -756,7 +754,7 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 # Context type {style="text-align:justify"}
 
 ::: callout-note
-Important: This section has to be rewritten as now the approach is not frequentist anymore. 
+Important: This section has to be rewritten as now the approach is not frequentist anymore.
 :::
 
 It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
@@ -1025,7 +1023,6 @@ stonefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type,
 
 ```
 
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -1086,7 +1083,6 @@ Noble_Grains_Reg[,c(1,4,5,6)] <- lapply(Noble_Grains_Reg[,c(1,4,5,6)], factor)
 
 
 ```
-
 
 ```{r}
 #| echo: true
@@ -1362,7 +1358,6 @@ m_berries_type <- ulam(
 #saveRDS(m_berries_type, "stan_models/m_berries_type.rds")
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -1898,7 +1893,6 @@ Berries_reg.list$RC_ID <- droplevels(Berries_reg.list$RC_ID)
 
 ```
 
-
 ```{r}
 #| eval: false
 #| echo: false
@@ -1919,7 +1913,6 @@ m_dfruit_type <- ulam(
 
 saveRDS(m_dfruit_type, "stan_models/m_dfruit_type.rds")
 ```
-
 
 ```{r}
 #| echo: false
@@ -2342,18 +2335,15 @@ The richness of plants in urban contexts has been calculated for every phase. As
 
 : Plant richness in urban contexts before and after (**\***) removing incomplete samples. {#tbl-richness-urban}
 
-
 ## Soil types vs Crops
 
 see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in Hamerow and McKerracher 2022, p. 153
 
-
-
 # Macroregion {style="text-align: justify;"}
 
-### Cereals
+## Cereals
 
-## Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
+### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
 
 ::: callout-important
 ## Section in progress {style="text-align:justify;"}
@@ -2478,7 +2468,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|------------|-------------|------------|------------|------------|------------|
+|------------|------------|------------|------------|------------|------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -2498,7 +2488,6 @@ plot_RichnessMacroReg.EMA
 | 196 | Faragola, granary A8                   | Puglia     | Plain        | Rural, villa | Lombard           |
 
 : List of Southern Italian sites with chronology EMA {#tbl-southern-ema-sites}
-
 
 ### Assessing the difference {#sec-permanova-cereals}
 
@@ -2649,7 +2638,6 @@ The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distanc
 In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-boxplot-nMDS-R-EMA.
 
 ::: {.content-visible when-format="html"}
-
 **Source code:**
 
 ```{r}
@@ -2820,7 +2808,6 @@ mds_R.boxplot
 mds_EMA.boxplot
 
 ```
-
 :::
 
 ### Noble grains
@@ -2836,7 +2823,6 @@ Noble_Grains.list <- list(
                                    Noble_Grains_Reg$Macroregion)))
    )
 ```
-
 
 ```{r}
 #| echo: false
@@ -2941,10 +2927,7 @@ m_ng_reg.plot <- ggplot(
 m_ng_reg.plot
 ```
 
-
-
 ### Minor grains
-
 
 ```{r}
 #| echo: false
@@ -2959,7 +2942,6 @@ Minor_Grains.list <- list(
                                    Minor_Grains$Macroregion)))
    )
 ```
-
 
 ```{r}
 #| echo: false
@@ -2979,7 +2961,6 @@ m_mg_reg <- ulam(
 #saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -3188,9 +3169,7 @@ m_leg_reg.plot
 
 ```
 
-
 ## Fruits
-
 
 ### Grape
 
@@ -3205,7 +3184,6 @@ Grape_reg.list <- list(
 
 Grape_reg.list$RC_ID <- droplevels(Grape_reg.list$RC_ID)
 ```
-
 
 ```{r}
 #| echo: false
@@ -3307,7 +3285,6 @@ m_grape_reg.plot
 
 ```
 
-
 ### Olives
 
 ```{r}
@@ -3324,7 +3301,6 @@ Olive_reg.list <- list(
 Olive_reg.list$RC_ID <- droplevels(Olive_reg.list$RC_ID)
   
 ```
-
 
 ```{r}
 #| echo: false
@@ -3427,7 +3403,6 @@ m_olive_reg.plot
 
 ### Nuts
 
-
 ```{r}
 #| echo: false
 
@@ -3446,7 +3421,6 @@ Nuts_reg.list <- list(
 Nuts_reg.list$RC_ID <- droplevels(Nuts_reg.list$RC_ID)
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -3548,9 +3522,7 @@ m_nuts_reg.plot
 
 ```
 
-
 ### Domestic and wild fruits
-
 
 ```{r}
 #| echo: false
@@ -3570,7 +3542,6 @@ DomFruit_reg.list <- list(
 DomFruit_reg.list$RC_ID <- droplevels(DomFruit_reg.list$RC_ID)
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -3757,9 +3728,6 @@ m_berries_reg.plot
 
 ```
 
-
-
-
 # To do:
 
 ## Wine/Olive oil production in Italy
@@ -3770,22 +3738,22 @@ Available data:
 
 -   Seed remains
 
--   Wine presses in Roman Italy (1st to 6th c. ca) -> Dodd
+-   Wine presses in Roman Italy (1st to 6th c. ca) -\> Dodd
 
 -   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
 
--   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided. 
+-   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided.
 
 ## Fruit consumption
 
 -   The domesticated and the wild
 
--   What fruits arrive on the Roman table? 
+-   What fruits arrive on the Roman table?
 
--   Can we see a decreased consumption of figs during the LALIA in the north? 
+-   Can we see a decreased consumption of figs during the LALIA in the north?
 
-::: {.callout-alert}
-This kind of data manipulation might be misleading as it is ignoring the fact that some centuries are only represented by - let's say - two sites. Is this a good idea? 
+::: callout-alert
+This kind of data manipulation might be misleading as it is ignoring the fact that some centuries are only represented by - let's say - two sites. Is this a good idea?
 :::
 
 ```{r}
@@ -3840,7 +3808,6 @@ figs.Central <- figs.Central %>%
     unnest
 ```
 
-
 ```{r}
 #| echo: false
 #| fig-height: 2
@@ -3873,4 +3840,3 @@ cdplot(figs.North$year, as.factor(figs.North$Present),
 
 
 ```
-

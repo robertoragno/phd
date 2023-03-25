@@ -6,8 +6,8 @@ data{
     array[J] int Alt;
 }
 parameters{
-     vector <lower=0.01, upper=1>[4] a;
-     vector <lower=0.01, upper=1>[4] b;
+     vector[4] a;
+     vector[4] b;
      // real<lower=0> phi;
      array[4] real<lower=0> theta;
 }
@@ -15,11 +15,11 @@ model{
     vector[J] pbar;
     theta ~ exponential(1);
     for ( i in 1:J ) {
-        pbar[i] = a[Chr_id[i]] + b[Chr_id[i]]*log(Alt[i]);
+        pbar[i] = a[Chr_id[i]] + b[Chr_id[i]]*(Alt[i]/1000);
         pbar[i] = inv_logit(pbar[i]);
     }
-    a ~ uniform(0.01, 1);
-    b ~ uniform(0.01, 1);
+    a ~ normal(0,1.5);
+    b ~ normal(0,1.5);
     vector[J] theta_l;
     vector[J] pbar_l;
     vector[J] beta_c;
