@@ -4605,61 +4605,47 @@ WMammals_Alt_fit_reth.plot
 
 ```
 
-### Test: Community by elevation
+## Community plot
 
 ```{r}
 #| echo: false
 
 # Roman period
-TestWMamm.R_lower_bound.a <- quantile(WMammals_Alt_fit.reth.post$a[,4], 0.25)
-TestWMamm.R_upper_bound.a <- quantile(WMammals_Alt_fit.reth.post$a[,4], 0.75)
+WMamm_post.a <- as.data.frame(WMammals_Alt_fit.reth.post) %>% mutate(animal = "W_Mammals")
+Pigs_post.a <- as.data.frame(Pigs_Alt_fit.reth.post) %>% mutate(animal = "Pigs")
+Cattle_post.a <- as.data.frame(Cattle_Alt_fit.reth.post) %>% mutate(animal = "Cattle")
+Caprine_post.a <- as.data.frame(Capr_Alt_fit.reth.post) %>% mutate(animal = "Caprine")
 
-TestWMamm.R.a <- as.data.frame(WMammals_Alt_fit.reth.post) %>% 
-  mutate(in_credible_range = (a.4 >= TestWMamm.R_lower_bound.a & a.4 <= TestWMamm.R_upper_bound.a))
-
-TestWMamm.R_in_credible_range <- TestWMamm.R.a %>% 
-  filter(in_credible_range == TRUE)
-
-# pigs
-TestPigs.R_lower_bound.a <- quantile(Pigs_Alt_fit.reth.post$a[,4], 0.25)
-TestPigs.R_upper_bound.a <- quantile(Pigs_Alt_fit.reth.post$a[,4], 0.75)
-
-TestPigs.R.a <- as.data.frame(Pigs_Alt_fit.reth.post) %>% 
-  mutate(in_credible_range = (a.4 >= TestPigs.R_lower_bound.a & a.4 <= TestPigs.R_upper_bound.a))
-
-TestPigs.R_in_credible_range <- TestPigs.R.a %>% 
-  filter(in_credible_range == TRUE)
-
-# cattle
-TestCattle.R_lower_bound.a <- quantile(Cattle_Alt_fit.reth.post$a[,4], 0.25)
-TestCattle.R_upper_bound.a <- quantile(Cattle_Alt_fit.reth.post$a[,4], 0.75)
-
-TestCattle.R.a <- as.data.frame(Cattle_Alt_fit.reth.post) %>% 
-  mutate(in_credible_range = (a.4 >= TestCattle.R_lower_bound.a & a.4 <= TestCattle.R_upper_bound.a))
-
-TestCattle.R_in_credible_range <- TestCattle.R.a %>% 
-  filter(in_credible_range == TRUE)
-
-# caprine
-
-TestCaprine.R_lower_bound.a <- quantile(Capr_Alt_fit.reth.post$a[,4], 0.25)
-TestCaprine.R_upper_bound.a <- quantile(Capr_Alt_fit.reth.post$a[,4], 0.75)
-
-TestCaprine.R.a <- as.data.frame(Capr_Alt_fit.reth.post) %>% 
-  mutate(in_credible_range = (a.4 >= TestCaprine.R_lower_bound.a & a.4 <= TestCaprine.R_upper_bound.a))
-
-TestCaprine.R_in_credible_range <- TestCaprine.R.a %>% 
-  filter(in_credible_range == TRUE)
-
-
-TestBinded <- bind_rows(
-  TestCaprine.R.a %>% mutate(animal = "Caprine"),
-  TestPigs.R.a %>% mutate(animal = "Pigs"),
-  TestWMamm.R.a %>% mutate(animal = "WMamm"),
-  TestCattle.R.a %>% mutate(animal = "Cattle")
+Domestic_Alt_binded <- bind_rows(
+  WMamm_post.a,
+  Pigs_post.a,
+  Cattle_post.a,
+  Caprine_post.a
 )
+names(Domestic_Alt_binded)[1:8] <- c("a.EMA", "a.LR", "a.Ma", "a.R", "b.EMA", "b.LR", "b.Ma", "b.R")
 
-ggplot(TestBinded, aes(x = a.4, y = b.4, color = animal)) +
+# Reshape
+Domestic_Alt_R <- Domestic_Alt_binded %>%
+  select(animal, a= a.R, b= b.R) %>%
+  mutate(Chronology = "R")
+
+Domestic_Alt_LR <- Domestic_Alt_binded %>%
+  select(animal, a=a.LR, b=b.LR) %>%
+  mutate(Chronology = "LR")
+
+Domestic_Alt_EMA <- Domestic_Alt_binded %>%
+  select(animal, a=a.EMA, b=b.EMA) %>%
+  mutate(Chronology = "EMA")
+
+Domestic_Alt_Ma <- Domestic_Alt_binded %>%
+  select(animal, a=a.Ma, b=b.Ma) %>%
+  mutate(Chronology = "Ma")
+
+Domestic_Alt_post <- bind_rows(Domestic_Alt_R, Domestic_Alt_LR, Domestic_Alt_EMA, Domestic_Alt_Ma)
+
+# end reshape
+
+Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = a, y = b, color = animal)) +
   geom_point(alpha = .4) +
   theme_tidybayes() +
   scale_color_brewer(palette = "Spectral") +
@@ -4694,11 +4680,19 @@ ggplot(TestBinded, aes(x = a.4, y = b.4, color = animal)) +
     y = "Slope",
     color = "Animal",
     title = "Model estimates: logit(p) = Intercept+Slope*Altitude",
-    subtitle = "Altitude - Roman period",
-    caption = "MCMC estimates kept in the logit scale. \nNegative slopes indicate a negative relationship between animal remains and increased altitude."
-  )
+    subtitle = "Altitude"
+  )+
+  facet_grid(factor(Chronology, levels=chrono_levels)~., scales="free")
 
 
+```
 
+```{r}
+#| echo: false
+#| fig-height: 10
+#| label: fig-domestic-alt
+#| fig-cap: "MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation." 
+
+Domestic_Alt_post.plot
 ```
 

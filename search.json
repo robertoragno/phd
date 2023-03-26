@@ -606,7 +606,7 @@
     "href": "archaeobotany.html#fruit-consumption",
     "title": "7  Archaeobotany",
     "section": "10.2 Fruit consumption",
-    "text": "10.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\n\n\nThis kind of data manipulation might be misleading as it is ignoring the fact that some centuries are only represented by - let’s say - two sites. Is this a good idea?\n\n\n\n\n\n\n\n\n\n\n\nFigure 10.1: The values for Central Italy and for Late Roman Southern Italy are based on very few contexts.\n\n\n\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
+    "text": "10.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
   },
   {
     "objectID": "zooarchaeology.html#in-progress",
@@ -774,6 +774,13 @@
     "href": "zooarchaeology.html#edible-w.-mammals-3",
     "title": "8  Zooarchaeology",
     "section": "12.4 Edible W. Mammals",
-    "text": "12.4 Edible W. Mammals\n\n\n\n\n\n\n\n\n\n12.4.1 Test: Community by elevation"
+    "text": "12.4 Edible W. Mammals"
+  },
+  {
+    "objectID": "zooarchaeology.html#community-plot",
+    "href": "zooarchaeology.html#community-plot",
+    "title": "8  Zooarchaeology",
+    "section": "12.5 Community plot",
+    "text": "12.5 Community plot\n\n\n\n\n\n\n\n\nFigure 12.1: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation."
   }
 ]
