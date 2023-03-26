@@ -2308,7 +2308,6 @@ WMammals_BB.plot
 WMammals_BB_phi.plot
 ```
 
-
 # Macroregion
 
 ```{r}
@@ -3164,7 +3163,6 @@ WMammals_Reg_phi.plot <- WMammals_Reg.fit_phi %>%
 WMammals_Reg.plot
 WMammals_Reg_phi.plot
 ```
-
 
 # Geography
 
@@ -4114,7 +4112,6 @@ WMammals_Geo.plot
 WMammals_Geo_phi.plot
 ```
 
-
 # Altitude
 
 Proposed model:
@@ -4124,7 +4121,7 @@ P_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
 $$
 
 $$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]} Alt_{i}
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 $$
 
 $$
@@ -4132,13 +4129,12 @@ $$
 $$
 
 $$
-\beta_{ChrID} \sim Uniform (0,1.5)
+\beta_{ChrID} \sim Normal(0,1.5)
 $$
 
 $$
 \phi \sim Exponential(1)
 $$
-
 
 ```{r}
 #| echo: false
@@ -4260,7 +4256,6 @@ dat.WMammals_Altitude = list(
 
 ```
 
-
 ## Pigs
 
 ```{r}
@@ -4355,7 +4350,6 @@ saveRDS(Cattle_Alt_fit.reth, "stan_models/Cattle_Alt_fit_rethinking.rds")
 
 ```
 
-
 ```{r}
 #| echo: false
 #| message: false
@@ -4402,7 +4396,6 @@ Cattle_Alt_fit_reth.plot
 
 ```
 
-
 ## Caprine
 
 ```{r}
@@ -4438,7 +4431,6 @@ Capr_Alt_fit.reth <- ulam(
 saveRDS(Capr_Alt_fit.reth, "stan_models/Capr_Alt_fit_rethinking.rds")
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -4484,7 +4476,6 @@ Capr_Alt_fit_reth.plot <- as.data.frame(dat.Caprine_Altitude) %>%
 Capr_Alt_fit_reth.plot
 
 ```
-
 
 ```{r}
 #| eval: false
@@ -4610,7 +4601,6 @@ WMammals_Alt_fit_reth.plot
 ```{r}
 #| echo: false
 
-# Roman period
 WMamm_post.a <- as.data.frame(WMammals_Alt_fit.reth.post) %>% mutate(animal = "W_Mammals")
 Pigs_post.a <- as.data.frame(Pigs_Alt_fit.reth.post) %>% mutate(animal = "Pigs")
 Cattle_post.a <- as.data.frame(Cattle_Alt_fit.reth.post) %>% mutate(animal = "Cattle")
@@ -4695,4 +4685,3 @@ Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = a, y = b, color = an
 
 Domestic_Alt_post.plot
 ```
-

@@ -4,7 +4,7 @@
     "href": "zooarchaeology.html",
     "title": "8  Zooarchaeology",
     "section": "",
-    "text": "9 Context type\nProposed model:\n\\[\nP_{i} \\sim BetaBinomial(NISP_{i}, \\bar{p}_{i} , \\phi_{i})\n\\]\n\\[\nlogit(\\bar{p}_{i}) = \\alpha_{[ChrID]} + \\beta_{[ChrID]} Alt_{i}\n\\]\n\\[\n\\alpha_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\beta_{ChrID} \\sim Uniform (0,1.5)\n\\]\n\\[\n\\phi \\sim Exponential(1)\n\\]"
+    "text": "9 Context type\nProposed model:\n\\[\nP_{i} \\sim BetaBinomial(NISP_{i}, \\bar{p}_{i} , \\phi_{i})\n\\]\n\\[\nlogit(\\bar{p}_{i}) = \\alpha_{[ChrID]} + \\beta_{[ChrID]}\\cdot Alt_{i}\n\\]\n\\[\n\\alpha_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\beta_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\phi \\sim Exponential(1)\n\\]"
   },
   {
     "objectID": "zooarchaeology.html#case-studies",
@@ -563,8 +563,8 @@
     "objectID": "archaeobotany.html#wineolive-oil-production-in-italy",
     "href": "archaeobotany.html#wineolive-oil-production-in-italy",
     "title": "7  Archaeobotany",
-    "section": "10.1 Wine/Olive oil production in Italy",
-    "text": "10.1 Wine/Olive oil production in Italy\nQuestions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.\nAvailable data:\n\nSeed remains\nWine presses in Roman Italy (1st to 6th c. ca) -> Dodd\nWine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/\nDodd: “a notable increase in size from around the first century BCE.” No quantitative data provided."
+    "section": "11.1 Wine/Olive oil production in Italy",
+    "text": "11.1 Wine/Olive oil production in Italy\nQuestions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.\nAvailable data:\n\nSeed remains\nWine presses in Roman Italy (1st to 6th c. ca) -> Dodd\nWine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/\nDodd: “a notable increase in size from around the first century BCE.” No quantitative data provided."
   },
   {
     "objectID": "literature_review.html#studies-on-roman-economy",
@@ -605,8 +605,8 @@
     "objectID": "archaeobotany.html#fruit-consumption",
     "href": "archaeobotany.html#fruit-consumption",
     "title": "7  Archaeobotany",
-    "section": "10.2 Fruit consumption",
-    "text": "10.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
+    "section": "11.2 Fruit consumption",
+    "text": "11.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
   },
   {
     "objectID": "zooarchaeology.html#in-progress",
@@ -782,5 +782,12 @@
     "title": "8  Zooarchaeology",
     "section": "12.5 Community plot",
     "text": "12.5 Community plot\n\n\n\n\n\n\n\n\nFigure 12.1: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation."
+  },
+  {
+    "objectID": "archaeobotany.html#community-plot",
+    "href": "archaeobotany.html#community-plot",
+    "title": "7  Archaeobotany",
+    "section": "10.1 Community plot",
+    "text": "10.1 Community plot\n\n\n\n\n\n\n\n\nFigure 10.1: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the plant occurrence and increasing altitude. Intercepts were kept as a baseline occurrence probability of the taxa. Taxa on the left of the graph are rarer, while taxa on the right are more common. It is important to notice that this graph represents the taxa response to elevation."
   }
 ]
