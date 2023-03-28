@@ -4150,6 +4150,30 @@ library(modelr)
 # Load dataset
 zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
+# Add distance to coast
+# Need to calculate the distance of each point from the coast
+# Load the libraries
+library(geosphere)
+library(sf)
+
+# Load a coast shapefile
+coast <- readOGR('/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Italy_SHP/ne_110m_coastline/ne_110m_coastline.shp')
+coast <- st_as_sf(coast, crs = st_crs(italy))
+
+# Convert bot_altitude to a sf object
+zoo_altitude.sf <- st_as_sf(zoo_altitude, crs=st_crs(italy), coords=c("X","Y"))
+
+zoo_coast_dists = data.frame(
+  st_distance(zoo_altitude.sf, coast) / 1000
+  )
+
+zoo_altitude_dists <- zoo_altitude.sf
+
+zoo_altitude_dists$Dist_Coast <- apply(zoo_coast_dists, 1, min)
+
+
+# End distance to coast
+
 ###########
 # CAPRINE #
 ###########
@@ -4162,6 +4186,7 @@ caprine_altitude <- data.frame(
   Site_ID = zoo_altitude$ID,
   Macroregion = factor(zoo_altitude$Macroregion),
   Altitude = zoo_altitude$Altitude,
+  Dist_Coast = zoo_altitude_dists$Dist_Coast,
   Chronology = factor(zoo_altitude$Chronology),
   Capr_NISP = zoo_altitude$Caprine,
   Tot_NISP = rowSums(zoo_altitude[c(16:24)], na.rm = T)
@@ -4177,6 +4202,15 @@ dat.Caprine_Altitude = list(
   A = caprine_altitude$Capr_NISP, 
   Chr_id = as.factor(as.numeric(caprine_altitude$Chronology)), 
   Alt = caprine_altitude$Altitude,
+  J = nrow(caprine_altitude)
+  )
+
+dat.Caprine_Alt_Coast = list(
+  N = caprine_altitude$Tot_NISP, 
+  A = caprine_altitude$Capr_NISP, 
+  Chr_id = as.factor(as.numeric(caprine_altitude$Chronology)), 
+  Alt = caprine_altitude$Altitude,
+  Dist_Coast = caprine_altitude$Dist_Coast,
   J = nrow(caprine_altitude)
   )
 
@@ -4415,6 +4449,7 @@ Capr_Alt_fit <- stan(
   cores = 4
 )
 
+
 # CODE WITH Rethinking MODEL
 # Only one phi/theta
 
@@ -4426,7 +4461,7 @@ Capr_Alt_fit.reth <- ulam(
         b[Chr_id] ~ dnorm( 0 , 1.5 ),
         transpars> theta <<- phi + 2.0,
         phi ~ dexp(1)
-    ), data=dat.Caprine_Altitude , chains=4 )
+    ), data=dat.Caprine_Altitude , chains=4, log_lik = T )
 
 saveRDS(Capr_Alt_fit.reth, "stan_models/Capr_Alt_fit_rethinking.rds")
 
@@ -4474,6 +4509,7 @@ Capr_Alt_fit_reth.plot <- as.data.frame(dat.Caprine_Altitude) %>%
   facet_wrap(~ factor(Chronology, levels=chrono_levels))
 
 Capr_Alt_fit_reth.plot
+
 
 ```
 

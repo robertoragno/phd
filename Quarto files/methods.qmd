@@ -42,37 +42,8 @@ The **knitr** engine enables the integration of R with HTML, Markdown and LaTeX.
 
 The **vegan** package [@oksanenVeganCommunityEcology2022] is designed for ordination methods, diversity analysis and multivariate analysis in ecology.
 
-### The *Python* programming language
-
-Python is a popular high-level general-purpose programming language that supports object-oriented, procedural and functional programming. Several IDE support Python, including [JupyterLab](https://jupyter.org) (open source), [RStudio](https://www.rstudio.com/solutions/r-and-python/), [PyCharm](https://www.jetbrains.com/pycharm/) and [Visual Studio Code](https://code.visualstudio.com). In recent years, many statistical packages have been developed to compete with R in the data science field. This project uses Python in addition to R as its environment offers well-designed and intuitive packages for some of the data-reduction methods used on the datasets.
-
-#### Python packages
-
-Python's motto "batteries included" refers to its comprehensive standard library. However, over 390,000 packages are contained in the [PyPi](https://pypi.org) repository providing users with many options for coding. In particular, this project uses some data science libraries (set of packages) and packages listed below.
-
-##### Pandas
-
-**Pandas** is the most used package for data handling, manipulation and analysis [@rebackPandasdevPandasPandas2022].
-
-##### Matplotlib
-
-**Matplotlib** is Python's standard data visualisation library [@hunterMatplotlib2DGraphics2007].
-
-##### Seaborn
-
-Based on Matplotlib, **Seaborn** is a data visualisation library that allows users to create more complex graphs [@waskomSeabornStatisticalData2021].
-
-##### Scikit-learn
-
-**Scikit-learn** is the most comprehensive Python library for machine learning, including methods for classification, clustering, data reduction and regression [@pedregosaScikitlearnMachineLearning2011].
-
-##### NumPy
-
-The **NumPy** library is the main tool for array programming and it includes several functions for numerical analysis [@harrisArrayProgrammingNumPy2020].
-
-##### SciPy
-
-The **SciPy** library provides tools for scientific computing (data integration, interpolation, optimization, linear algebra, etc.) and it works with NumPy multidimensional arrays [@virtanenSciPyFundamentalAlgorithms2020].
+##### rethinking
+INSERT
 
 ## GitHub: hosting the project
 
@@ -118,7 +89,8 @@ The imported tables already contain a column of weights, as this operation has b
 The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.
 
 ## Site types
-Write that for this project, decisions were made about how to classify archaeological sites in order to gather statistical data and store them in a database. Some sites, such as castra, are relatively easy to identify and categorize. However, there can be uncertainty when it comes to classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. In order to make these categorizations, it is important to consider the specific context and characteristics of each site, as well as the definitions and criteria being used to classify them. 
+
+Write that for this project, decisions were made about how to classify archaeological sites in order to gather statistical data and store them in a database. Some sites, such as castra, are relatively easy to identify and categorize. However, there can be uncertainty when it comes to classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. In order to make these categorizations, it is important to consider the specific context and characteristics of each site, as well as the definitions and criteria being used to classify them.
 
 https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
 
@@ -128,7 +100,7 @@ https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
 ## Section in progress {style="text-align:justify;"}
 :::
 
-This research uses multivariate analysis to explore possible relationships within the sets of environmental data under investigation. Univariate analyses can be easily plotted and visualized with bar charts, histograms and density curves. A scatterplot (or scattergram) shows the relationship between two variables by plotting their values on the axes of a diagram using Cartesian coordinates. This relationship can also be mathematically measured by calculating a distance between two points in the graph. However, the relationship between more than two variables is much harder to read on a scatterplot, as it would require as many axes as the number of variables. If our analysis is exploratory, we might not know yet where to look for correlations. A possible solution is analysing each combination of two variables in the dataset and measure their correlation. This would require too much computation time if the dataset had a large number of variables, that is to say if we are dealing with big data. In addition, we would only gather information about the relationship between two variables, when there might be another factor influencing a trend or phenomenon. Multivariate statistics has a wide range of applications, including grouping and multidimensional scaling, as well as in machine learning and predictive analysis \[@fletcherDiggingNumbersElementary2005). In this research, multivariate methods have been applied both to the botanical and faunal datasets, mainly with the objective of *(i)* testing hypotheses between multiple variables and *(ii)* reducing the dimensionality of data to---assess which variables are the main drivers of change in the datasets and examine relationships between these variables.
+This research uses multivariate analysis to explore possible relationships within the sets of environmental data under investigation. Univariate analyses can be easily plotted and visualized with bar charts, histograms and density curves. A scatterplot (or scattergram) shows the relationship between two variables by plotting their values on the axes of a diagram using Cartesian coordinates. This relationship can also be mathematically measured by calculating a distance between two points in the graph. However, the relationship between more than two variables is much harder to read on a scatterplot, as it would require as many axes as the number of variables. If our analysis is exploratory, we might not know yet where to look for correlations. A possible solution is analysing each combination of two variables in the dataset and measure their correlation. This would require too much computation time if the dataset had a large number of variables, that is to say if we are dealing with big data. In addition, we would only gather information about the relationship between two variables, when there might be another factor influencing a trend or phenomenon. Multivariate statistics has a wide range of applications, including grouping and multidimensional scaling, as well as in machine learning and predictive analysis [@fletcherDiggingNumbersElementary2005]. In this research, multivariate methods have been applied both to the botanical and faunal datasets, mainly with the objective of *(i)* testing hypotheses between multiple variables and *(ii)* reducing the dimensionality of data to---assess which variables are the main drivers of change in the datasets and examine relationships between these variables.
 
 ### Statistical hypothesis testing {style="text-align:justify;"}
 
@@ -136,7 +108,7 @@ Explain what is hypothesis testing
 
 #### PERMANOVA
 
-**Permutational multivariate analysis of variance** (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. \[@andersonPermutationalMultivariateAnalysis2017.
+**Permutational multivariate analysis of variance** (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. [@andersonPermutationalMultivariateAnalysis2017].
 
 ### Dimensionality reduction and ordination {style="text-align:justify;"}
 
@@ -196,17 +168,17 @@ PCA are often visualised through biplots, which shows at the same time the score
 
 #### CA
 
-**Correspondence analysis** (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. In some ways, correspondence analysis is similar to PCA, being an indirect gradient analysis[^methods-5] used to summarize categorical variables. As opposed to maximising the variance, CA maximises the degree of correspondence between rows and columns (*i.e.* observations and variables). The distance matrix used to perform the analysis is obtained from the chi-square distance between the rows and columns profiles. This is a modification of the chi-square statistic for hypothesis testing [@tallaridaChiSquareTest1987]. An in-depth technical and methodological breakdown of correspondence analysis is beyond the scope of this text, and readers can refer to @greenacreCorrespondenceAnalysisPractice2021. As in PCA, the analysis generates---eigenvalues, row coordinates (scores), and column coordinates (loadings). An important distinction must be made with PCA with regard to eigenvalues. In PCA, eigenvalues refer to the 'variation explained'. Conversely, in CA eigenvalues represent the **inertia**, the correlation coefficient between rows and columns (*i.e.* how well does the row correspond to the column?).
+**Correspondence analysis** (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. In some ways, correspondence analysis is similar to PCA, being an indirect gradient analysis[^methods-3] used to summarize categorical variables. As opposed to maximising the variance, CA maximises the degree of correspondence between rows and columns (*i.e.* observations and variables). The distance matrix used to perform the analysis is obtained from the chi-square distance between the rows and columns profiles. This is a modification of the chi-square statistic for hypothesis testing [@tallaridaChiSquareTest1987]. An in-depth technical and methodological breakdown of correspondence analysis is beyond the scope of this text, and readers can refer to @greenacreCorrespondenceAnalysisPractice2021. As in PCA, the analysis generates---eigenvalues, row coordinates (scores), and column coordinates (loadings). An important distinction must be made with PCA with regard to eigenvalues. In PCA, eigenvalues refer to the 'variation explained'. Conversely, in CA eigenvalues represent the **inertia**, the correlation coefficient between rows and columns (*i.e.* how well does the row correspond to the column?).
 
-[^methods-5]: It is important not to confuse correspondence analysis (CA) with canonical correspondence analysis (CCA), which is a direct gradient analysis method.
+[^methods-3]: It is important not to confuse correspondence analysis (CA) with canonical correspondence analysis (CCA), which is a direct gradient analysis method.
 
-Correspondence analysis is appropriate for exploring non-negative data (*e.g.* relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship [@baxterExploratoryMultivariateAnalysis2015, p. 101]. On a practical level, CA can be used to compare assemblages from different sites, to answer questions such as "which sites do certain finds correspond to?" or "which sites are more similar according to their assemblages?". This technique is extremely useful for archaeologists, even though its reception by the archaeological community has been slow. CA has been used by archaeologists since the mid-70s in France, although the technique was only introduced to the English-speaking audience in the 80s with a paper by @bolvikenCorrespondenceAnalysisAlternative1982, and became more popular in the 90s [@baxterCorrespondenceAnalysisArchaeologists2010; @baxterExploratoryMultivariateAnalysis2015]. One of the biggest drawbacks of CA is its sensitivity to outliers (values that are either much bigger or much smaller when compared to the others in the table). Some of the samples used in this project suffer from this problem, and the causes of outliers will be discussed in more detail later in this text[^methods-6]. The algorithm tends to place larger abundances towards the centre of the diagonal, and small or zero values away from the diagonal---it is indeed a bad idea to use CA with tables containing outliers. Outliers represent a major problem in CA, as their presence will determine the scale of the biplot, thus clustering the other points closer together, and perhaps obscuring some of the patterns we are interested in finding. In this eventuality, these points might be poorly ordinated. A possible way to overcome this issue would be to check whether the other dimensions are more appropriate for the representation, even though the sensible thing to do would be to remove these outliers from the original contingency table and to study them separately. Practical examples of outliers are rare species, for instance rows with a few non-zero values. Rare species should not be studied with CA, unless the table only contains rare species, with comparable values. As @baxterCorrespondenceAnalysisArchaeologists2010 [p. 225] note, we should not regard this omission as "subjective and unjustified data manipulation"---there are other ways to visualise outliers along with the rest of our data, for instance boxplots.
+Correspondence analysis is appropriate for exploring non-negative data (*e.g.* relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship [@baxterExploratoryMultivariateAnalysis2015, p. 101]. On a practical level, CA can be used to compare assemblages from different sites, to answer questions such as "which sites do certain finds correspond to?" or "which sites are more similar according to their assemblages?". This technique is extremely useful for archaeologists, even though its reception by the archaeological community has been slow. CA has been used by archaeologists since the mid-70s in France, although the technique was only introduced to the English-speaking audience in the 80s with a paper by @bolvikenCorrespondenceAnalysisAlternative1982, and became more popular in the 90s [@baxterCorrespondenceAnalysisArchaeologists2010; @baxterExploratoryMultivariateAnalysis2015]. One of the biggest drawbacks of CA is its sensitivity to outliers (values that are either much bigger or much smaller when compared to the others in the table). Some of the samples used in this project suffer from this problem, and the causes of outliers will be discussed in more detail later in this text[^methods-4]. The algorithm tends to place larger abundances towards the centre of the diagonal, and small or zero values away from the diagonal---it is indeed a bad idea to use CA with tables containing outliers. Outliers represent a major problem in CA, as their presence will determine the scale of the biplot, thus clustering the other points closer together, and perhaps obscuring some of the patterns we are interested in finding. In this eventuality, these points might be poorly ordinated. A possible way to overcome this issue would be to check whether the other dimensions are more appropriate for the representation, even though the sensible thing to do would be to remove these outliers from the original contingency table and to study them separately. Practical examples of outliers are rare species, for instance rows with a few non-zero values. Rare species should not be studied with CA, unless the table only contains rare species, with comparable values. As @baxterCorrespondenceAnalysisArchaeologists2010 [p. 225] note, we should not regard this omission as "subjective and unjustified data manipulation"---there are other ways to visualise outliers along with the rest of our data, for instance boxplots.
 
-[^methods-6]: Insert here link to BOT bias and ZOO bias
+[^methods-4]: Insert here link to BOT bias and ZOO bias
 
-In `R`, common implementations of correspondence analysis are included in the packages `MASS`, `FactoMineR` and `vegan`. CA has been used several times in this research using the function `cca()` from the `vegan` package, which was applied to the presence/absence archaeobotanical dataset (\*\*add where else\*\*[^methods-7]). The function `cca()` performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.
+In `R`, common implementations of correspondence analysis are included in the packages `MASS`, `FactoMineR` and `vegan`. CA has been used several times in this research using the function `cca()` from the `vegan` package, which was applied to the presence/absence archaeobotanical dataset (\*\*add where else\*\*[^methods-5]). The function `cca()` performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.
 
-[^methods-7]: remember to change this
+[^methods-5]: remember to change this
 
 ##### Interpreting a CA
 
@@ -246,7 +218,7 @@ Multidimensional scaling (MDS) is a technique to visualise the level of similari
 
 -   The location of items in the low-dimensional space.
 
-The goal of nMDS is to represent the pairwise dissimilarity between items in the matrix as closely as possible. For this reason, it is considered as a good technique for multivariate data visualisation. nMDS can be used on quantitative, qualitative and mixed data. For this project, it has been applied to a subset of the early medieval archaeobotanical dataset that included presence/absence values of cereals. The full breakdown of the process is reported in @sec-nMDS-Cereals. The `R` function [`metaMDS`](https://rdrr.io/rforge/vegan/man/metaMDS.html) from the package `vegan` allows users to select the distance metric most appropriate to their data (e.g. Bray-Curtis, Jaccard, etc.). As nMDS is an iterative approach, meaning that the the computations are run until the best solution is found, it can be quite computationally demanding for larger datasets. Although the nMDS algorithm tries to minimize the ordination stress, it is a good practice to compute the **ordination stress** value to judge the reliability of the solution found (goodness-of-fit). Ordination stress indicates how much distorted are the fitted data when compared to the original observed samples. Stress values can also be visualised with the function `stressplot()` (`vegan` package), which produces a Shepard stressplot (@fig-shepard-plot-nmds).
+The goal of nMDS is to represent the pairwise dissimilarity between items in the matrix as closely as possible. For this reason, it is considered as a good technique for multivariate data visualisation. nMDS can be used on quantitative, qualitative and mixed data. The `R` function [`metaMDS`](https://rdrr.io/rforge/vegan/man/metaMDS.html) from the package `vegan` allows users to select the distance metric most appropriate to their data (e.g. Bray-Curtis, Jaccard, etc.). As nMDS is an iterative approach, meaning that the the computations are run until the best solution is found, it can be quite computationally demanding for larger datasets. Although the nMDS algorithm tries to minimize the ordination stress, it is a good practice to compute the **ordination stress** value to judge the reliability of the solution found (goodness-of-fit). Ordination stress indicates how much distorted are the fitted data when compared to the original observed samples. Stress values can also be visualised with the function `stressplot()` (`vegan` package), which produces a Shepard stressplot (@fig-shepard-plot-nmds).
 
 ![A Shepard plot, from [R Studio Pubs](https://rpubs.com/CPEL/NMDS).](images/ShepardPlot.png){#fig-shepard-plot-nmds fig-align="center" width="600"}
 
@@ -265,15 +237,13 @@ If the solution has produced a good stress level for the number of dimensions re
 
 ![A nMDS plot with clusters, from [R Studio Pubs](https://rpubs.com/CPEL/NMDS).](images/NMDS_RPub.png){#fig-nmds-rpubs width="600"}
 
-#### NCA {#sec-NCA-methods}
+In this project, nMDS has been applied to the Roman and early Medieval cereal datasets, with the scope of dimensionality reduction. The dataset has been reduced to one dimension to show a greater degree of separation between Northern and Southern Italy in the early Middle Ages. The entire process of data preparation and processing is described in WRITE WHERE.
 
-The **Neighborhood Component Analysis** is a supervised machine learning algorithm for metric learning, developed by @goldbergerNeighbourhoodComponentsAnalysis2005 at the University of Toronto. The [documentation](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NeighborhoodComponentsAnalysis.html) for the `Python` implementation (package `sklearn.neighbors`) reports that:
+# Statistical modelling
 
-> It learns a linear transformation in a supervised fashion to improve the classification accuracy of a stochastic nearest neighbours rule in the transformed space.
+-   Appropriateness of the statistical method (Guisan et al, p. 55). Different types of data require different approaches and different probability distribution functions
 
-The algorithm optimizes the overall classification accuracy of multivariate data, and it works in a similar way to the $k$-Nearest Neighbours ($k$-NN). NCA is mostly used for distance metric learning, although it can be used as a linear dimensionality reduction technique. Both $k$-NN and NCA can be applied to non-normal distributions, as they are non-parametric methods [@cardarelliDeepVariationalConvolutional2022].
-
-In this project, NCA has been applied to the same subset used for the nMDS (which included presence/absence values of cereals), with the scope of dimensionality reduction. The dataset has been reduced to one dimension to show a greater degree of separation between Northern and Southern Italy in the early Middle Ages. The entire process of data preparation and processing is described in @sec-NCA-Cereals.
+-   Independence of observations: In the case of our type of data, this is not really possible so it is already violating this assumption
 
 ## Archaeobotanical quantifications {style="text-align:justify;"}
 
@@ -286,8 +256,6 @@ In this project, NCA has been applied to the same subset used for the nMDS (whic
 
 Write that Quantifications on the archaeobotanical dataset were affected by several biases.
 :::
-
-
 
 ### Ubiquity {style="text-align:justify;"}
 

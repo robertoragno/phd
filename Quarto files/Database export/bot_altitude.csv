@@ -111,6 +111,8 @@ Nave;Roman;Lombardia;Northern Italy;R;Necropolis;Plain;198;1.0000;1;1;10.2580559
 Cognento;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;Plain;34;0.5000;6;7;10.871068079319562;44.63471884641742;11;;;1;1;2;20;;;;3;;;;1;;;;25;1;;6;11;130;;;9;1;;2;;;3;;;694;6;219;;
 Casazza, Bergamo;Roman;Lombardia;Northern Italy;R;Rural;Mountain;349;0.2000;1;5;9.907844655639213;45.7494633116574;1;;;;116;;;;;2;;;7;;;;;1;22;4;;;;2;;;;;;;;;;;1;;;;;
 Casazza, Bergamo;Roman;Lombardia;Northern Italy;LR;Rural;Mountain;349;0.2000;1;5;9.907844655639213;45.7494633116574;1;;;;116;;;;;2;;;7;;;;;1;22;4;;;;2;;;;;;;;;;;1;;;;;
+Montegibbio, Period 2, Phases II-III-IV;Late Roman;Emilia-Romagna;Northern Italy;LR;Rural site, villa;Hill;346;0.3333;4;6;10.785917381199157;44.51343035419405;7;1;;;3;;;;;4;;;;;;;;5;3;;;;;16;;;;;;;;;;;;;;;;
+Montegibbio, Period 2, Phases II-III-IV;Late Roman;Emilia-Romagna;Northern Italy;EMA;Rural site, villa;Hill;346;0.3333;4;6;10.785917381199157;44.51343035419405;7;1;;;3;;;;;4;;;;;;;;5;3;;;;;16;;;;;;;;;;;;;;;;
 Cremona, piazza Marconi, wastepit;Roman;Lombardia;Northern Italy;R;Urban;Plain;47;0.5000;-2;-1;10.022754626427878;45.13159072094098;;3;;;;;18;16;;3;;;;;;;;;1;1;;;2608;1147;;;;5;6;1;;1526;12;;9;;2;416;3;
 Cremona, piazza Marconi, Ninfeo domus;Roman;Lombardia;Northern Italy;R;Urban;Plain;47;1.0000;1;1;10.022754626427878;45.13159072094098;1682;;2;1;;1;;;;22;6;10;;162;;9;;;3;;;;;;;;;;;;;;;;;;;;;25
 Cremona, piazza Marconi, bone working craft area;Roman;Lombardia;Northern Italy;R;Urban;Plain;47;0.5000;-2;-1;10.022754626427878;45.13159072094098;;9;3;;;;;2;;156;;;;;;;;;13;11;;1;2;5;;;;;5;;;1;;;;;;1;;
@@ -159,8 +161,6 @@ Miranduolo, village phase;Lombard;Toscana;Central Italy;EMA;Rural;Hill;408;0.500
 Miranduolo, manor phase;Frankish;Toscana;Central Italy;EMA;Rural;Hill;408;0.5000;9;10;11.079989431456067;43.120523086437785;14124;147;361;116;1278;1798;306;219;2;1432;2;3;4498;4;18;31113;;36;1;;19;;;33;;4;;;;;;;;;;;;;;
 Miranduolo, castle phase;Medieval;Toscana;Central Italy;EMA;Castle;Hill;408;0.5000;10;11;11.079989431456067;43.120523086437785;11805;485;1824;292;3148;9811;933;193;;5578;;4;1973;110;33;153;22;96;;;10;4;;34;;3;;;;;;;;;13;;;;;
 Miranduolo, castle phase;Medieval;Toscana;Central Italy;Ma;Castle;Hill;408;0.5000;10;11;11.079989431456067;43.120523086437785;11805;485;1824;292;3148;9811;933;193;;5578;;4;1973;110;33;153;22;96;;;10;4;;34;;3;;;;;;;;;13;;;;;
-Montegibbio, Period 2, Phases II-III-IV;Late Roman;Toscana;Central Italy;LR;Rural site, villa;Hill;346;0.3333;4;6;10.785917381199157;44.51343035419405;7;1;;;3;;;;;4;;;;;;;;5;3;;;;;16;;;;;;;;;;;;;;;;
-Montegibbio, Period 2, Phases II-III-IV;Late Roman;Toscana;Central Italy;EMA;Rural site, villa;Hill;346;0.3333;4;6;10.785917381199157;44.51343035419405;7;1;;;3;;;;;4;;;;;;;;5;3;;;;;16;;;;;;;;;;;;;;;;
 Marzuolo, Phase 2;Roman;Toscana;Central Italy;R;Rural;Plain;115;1.0000;1;1;11.408297998931415;42.95620255964278;;7;;;21;;;;;12;4;;1;;;;;4;3;;;;;46;;;;;3;;;1;;;;;;;;
 Marzuolo, Phase 3;Roman;Toscana;Central Italy;R;Rural;Plain;115;0.5000;2;3;11.408297998931415;42.95620255964278;2;;;;;;;;;8;;;;;;;;5;1;;;;;14;;1;;;2;;;;;;;;;1;;
 Marzuolo, Phase 3;Roman;Toscana;Central Italy;LR;Rural;Plain;115;0.5000;2;3;11.408297998931415;42.95620255964278;2;;;;;;;;;8;;;;;;;;5;1;;;;;14;;1;;;2;;;;;;;;;1;;
