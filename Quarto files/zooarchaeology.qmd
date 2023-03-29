@@ -211,6 +211,10 @@ Show map
 
 ## Medians {style="text-align:justify;"}
 
+::: callout-alert
+These medians were calculated before switching to bayesian methods. The new quantifications are in the section Chronology, so this section has probably to be removed.
+:::
+
 ::: {.content-visible when-format="html"}
 The faunal dataset is large (434+ records) and diversified. Looking at the distributions of each animal, the curve is not gaussian. The best choice for non-normal curves is to use medians instead of means to come up with figures that are less dependent on outliers. The function `Medians_Chrono_Zoo()` (@sec-fun-Medians-Chrono-Zoo) can be used to return as output weighted medians for each chronology. The in-depth description of how weights are calculated for each sample can be found in @sec-chrono-fuzziness. To summarise, sites with a very large (*i.e.* fuzzy) chronology contribute less to the calculation of the median. @tbl-zoo-medians-chronology provides the median values of the main categories of faunal remains for each chronology, and @tbl-zoo-medians-centuries the median values for each century. Stronger colours in the cells indicate higher values.
 :::
@@ -374,6 +378,826 @@ knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_na
 ```
 :::
 
+# Chronology
+
+```{r}
+#| echo: false
+
+####################
+## Data pre-processing
+####################
+
+# 1. Making a copy of the original data frame
+Animals_Condensed <- zooarch_cond
+
+# 2. Calculating Total NISP
+Animals_Condensed$Tot_NISP <- rowSums(Animals_Condensed[c(15:23)], na.rm = T)
+
+Animals_by_Chronology <- Animals_Condensed
+
+# 3. Remove duplicate chronologies because we are just dealing with centuries
+Animals_Condensed <- Animals_Condensed[,-5] # Remove Chronology
+Animals_Condensed <- Animals_Condensed[!duplicated(Animals_Condensed),]
+
+## TRENDS BY CENTURY
+# 4. Replicating rows (to have breakdown by century)
+Animals_Expanded <- Animals_Condensed %>%
+  mutate(Century = map2(From.Century, To.Century, seq)) %>%
+  unnest(cols = Century) %>%
+  filter(Century != 0)
+
+# 5. Preparing the dataframe for the model
+# Removing the columns from and to century, reference
+Animals_by_Century <- Animals_Expanded[,-c(9:11)]
+Animals_by_Century <- Animals_by_Century %>% relocate(Century, .after = Site)
+
+Animals_by_Century <- subset(Animals_by_Century, Century >= -1 & Century<=11)
+
+## TRENDS BY CHRONOLOGY
+
+Animals_by_Chronology[is.na(Animals_by_Chronology)] <- 0 # Remove NAs
+Animals_by_Chronology$Chronology <- factor(Animals_by_Chronology$Chronology)
+
+# Create a list for STAN
+dat.Pigs_by_Chronology = list(
+  N = Animals_by_Chronology$Tot_NISP,
+  A = Animals_by_Chronology$Pigs,
+  Chronology = Animals_by_Chronology$Chronology,
+  J = nrow(Animals_by_Chronology)
+)
+dat.Cattle_by_Chronology = list(
+  N = Animals_by_Chronology$Tot_NISP,
+  A = Animals_by_Chronology$Cattle,
+  Chronology = Animals_by_Chronology$Chronology,
+  J = nrow(Animals_by_Chronology)
+)
+dat.Caprine_by_Chronology = list(
+  N = Animals_by_Chronology$Tot_NISP,
+  A = Animals_by_Chronology$Caprine,
+  Chronology = Animals_by_Chronology$Chronology,
+  J = nrow(Animals_by_Chronology)
+)
+dat.E_WMammals_by_Chronology = list(
+  N = Animals_by_Chronology$Tot_NISP,
+  A = Animals_by_Chronology$Edible.W..Mammals,
+  Chronology = Animals_by_Chronology$Chronology,
+  J = nrow(Animals_by_Chronology)
+)
+dat.DomFowl_by_Chronology = list(
+  N = Animals_by_Chronology$Tot_NISP,
+  A = Animals_by_Chronology$Dom..Fowl,
+  Chronology = Animals_by_Chronology$Chronology,
+  J = nrow(Animals_by_Chronology)
+)
+
+```
+
+
+## Trends by century 
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+
+library(rethinking)
+library(tidybayes)
+library(tidybayes.rethinking)
+
+
+########################################
+# Data processing for bayesian models
+########################################
+
+Animals_by_Century$Century <- factor(Animals_by_Century$Century) # Convert to factor
+Animals_by_Century[is.na(Animals_by_Century)] <- 0 # Remove NAs
+
+# Create a list for STAN
+dat.Pigs_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Century$Pigs, Century = Animals_by_Century$Century, J=nrow(Animals_by_Century))
+dat.Cattle_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Century$Cattle, Century = Animals_by_Century$Century, J=nrow(Animals_by_Century))
+dat.Caprine_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Century$Caprine, Century = Animals_by_Century$Century, J=nrow(Animals_by_Century))
+dat.E_WMammals_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Century$Edible.W..Mammals, Century = Animals_by_Century$Century, J=nrow(Animals_by_Century))
+dat.DomFowl_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Century$Dom..Fowl, Century = Animals_by_Century$Century, J=nrow(Animals_by_Century))
+
+
+
+```
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+#| eval: false
+
+
+########################################
+# Running the models
+# Saving the models
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+set.seed(24)
+
+Pigs_by_Century_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_centuries.stan",  # Stan program
+  data = dat.Pigs_by_Century,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+Cattle_by_Century_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_centuries.stan",  # Stan program
+  data = dat.Cattle_by_Century,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+Caprine_by_Century_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_centuries.stan",  # Stan program
+  data = dat.Caprine_by_Century,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+E_WMammals_by_Century_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_centuries.stan",  # Stan program
+  data = dat.E_WMammals_by_Century,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+DomFowl_by_Century_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_centuries.stan",  # Stan program
+  data = dat.DomFowl_by_Century,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+saveRDS(Pigs_by_Century_fit, "stan_models/by_century/Pigs_by_Century_fit.rds")
+saveRDS(Cattle_by_Century_fit, "stan_models/by_century/Cattle_by_Century_fit.rds")
+saveRDS(Caprine_by_Century_fit, "stan_models/by_century/Caprine_by_Century_fit.rds")
+saveRDS(E_WMammals_by_Century_fit, "stan_models/by_century/E_WMammals_by_Century_fit.rds")
+saveRDS(DomFowl_by_Century_fit, "stan_models/by_century/DomFowl_by_Century_fit.rds")
+
+
+```
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+Pigs_by_Century_fit <- readRDS("stan_models/by_century/Pigs_by_Century_fit.rds")
+Cattle_by_Century_fit <- readRDS("stan_models/by_century/Cattle_by_Century_fit.rds")
+Caprine_by_Century_fit<- readRDS("stan_models/by_century/Caprine_by_Century_fit.rds")
+E_WMammals_by_Century_fit<- readRDS("stan_models/by_century/E_WMammals_by_Century_fit.rds")
+DomFowl_by_Century_fit<- readRDS("stan_models/by_century/DomFowl_by_Century_fit.rds")
+
+```
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+########################################
+## Data processing for Ggplot
+########################################
+
+########
+# PIGS 
+########
+
+# Create map of centuries (the model will just give intercept from 0:12)
+pigs_centuries_map <- levels(dat.Pigs_by_Century$Century)
+names(pigs_centuries_map) <- 1:12
+
+# Get the results
+Pigs_by_Century_fit_a <- Pigs_by_Century_fit %>%
+  spread_draws(a[Century]) %>% mutate(animal = "Pigs")
+
+Pigs_by_Century_fit_phi <- Pigs_by_Century_fit %>%
+  spread_draws(theta[Century]) %>% mutate(animal = "Pigs")
+
+# Change the century code to the real century
+Pigs_by_Century_fit_a$Century <- recode(Pigs_by_Century_fit_a$Century, !!!pigs_centuries_map)
+Pigs_by_Century_fit_phi$Century <- recode(Pigs_by_Century_fit_phi$Century, !!!pigs_centuries_map)
+
+#########
+# CATTLE
+#########
+
+# Create map of centuries (the model will just give intercept from 0:12)
+Cattle_centuries_map <- levels(dat.Cattle_by_Century$Century)
+names(Cattle_centuries_map) <- 1:12
+
+# Get the results
+Cattle_by_Century_fit_a <- Cattle_by_Century_fit %>%
+  spread_draws(a[Century]) %>% mutate(animal = "Cattle")
+
+Cattle_by_Century_fit_phi <- Cattle_by_Century_fit %>%
+  spread_draws(theta[Century]) %>% mutate(animal = "Cattle")
+
+# Change the century code to the real century
+Cattle_by_Century_fit_a$Century <- recode(Cattle_by_Century_fit_a$Century, !!!Cattle_centuries_map)
+Cattle_by_Century_fit_phi$Century <- recode(Cattle_by_Century_fit_phi$Century, !!!Cattle_centuries_map)
+
+#########
+# CAPRINE
+#########
+
+# Create map of centuries (the model will just give intercept from 0:20)
+Caprine_centuries_map <- levels(dat.Caprine_by_Century$Century)
+names(Caprine_centuries_map) <- 1:12
+
+# Get the results
+Caprine_by_Century_fit_a <- Caprine_by_Century_fit %>%
+  spread_draws(a[Century]) %>% mutate(animal = "Caprine")
+
+Caprine_by_Century_fit_phi <- Caprine_by_Century_fit %>%
+  spread_draws(theta[Century]) %>% mutate(animal = "Caprine")
+
+# Change the century code to the real century
+Caprine_by_Century_fit_a$Century <- recode(Caprine_by_Century_fit_a$Century, !!!Caprine_centuries_map)
+Caprine_by_Century_fit_phi$Century <- recode(Caprine_by_Century_fit_phi$Century, !!!Caprine_centuries_map)
+
+###########################
+# Edible Wild Mammals
+###########################
+
+# Get the results
+E_WMammals_by_Century_fit_a <- E_WMammals_by_Century_fit %>%
+  spread_draws(a[Century]) %>% mutate(animal = "W_Mammals")
+
+E_WMammals_by_Century_fit_phi <- E_WMammals_by_Century_fit %>%
+  spread_draws(theta[Century]) %>% mutate(animal = "W_Mammals")
+
+# Change the century code to the real century
+E_WMammals_by_Century_fit_a$Century <- recode(E_WMammals_by_Century_fit_a$Century, !!!Caprine_centuries_map)
+E_WMammals_by_Century_fit_phi$Century <- recode(E_WMammals_by_Century_fit_phi$Century, !!!Caprine_centuries_map)
+
+###########################
+# Domestic Fowl
+###########################
+
+# Get the results
+DomFowl_by_Century_fit_a <- DomFowl_by_Century_fit %>%
+  spread_draws(a[Century]) %>% mutate(animal = "Dom_Fowl")
+
+DomFowl_by_Century_fit_phi <- DomFowl_by_Century_fit %>%
+  spread_draws(theta[Century]) %>% mutate(animal = "Dom_Fowl")
+
+# Change the century code to the real century
+DomFowl_by_Century_fit_a$Century <- recode(DomFowl_by_Century_fit_a$Century, !!!Caprine_centuries_map)
+DomFowl_by_Century_fit_phi$Century <- recode(DomFowl_by_Century_fit_phi$Century, !!!Caprine_centuries_map)
+
+
+## Bind dataframes
+
+Animals_by_Century_a_fit <- bind_rows(
+  Pigs_by_Century_fit_a,
+  Cattle_by_Century_fit_a,
+  Caprine_by_Century_fit_a,
+  E_WMammals_by_Century_fit_a,
+  DomFowl_by_Century_fit_a
+      )
+
+# Means for each animal
+Animals_by_Century_a_means_fit <- data.frame(
+  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  means=c(
+   inv_logit(mean(Pigs_by_Century_fit_a$a)),
+    inv_logit(mean(Cattle_by_Century_fit_a$a)),
+    inv_logit(mean(Caprine_by_Century_fit_a$a)),
+    inv_logit(mean(E_WMammals_by_Century_fit_a$a)),
+    inv_logit(mean(DomFowl_by_Century_fit_a$a))
+    )
+)
+
+
+Animals_by_Century_phi_fit <- bind_rows(
+  Pigs_by_Century_fit_phi,
+  Cattle_by_Century_fit_phi,
+  Caprine_by_Century_fit_phi,
+  E_WMammals_by_Century_fit_phi,
+  DomFowl_by_Century_fit_phi
+)
+
+# Means for each animal
+Animals_by_Century_phi_means_fit <- data.frame(
+  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  means=c(
+    (mean(Pigs_by_Century_fit_phi$theta)),
+    (mean(Cattle_by_Century_fit_phi$theta)),
+    (mean(Caprine_by_Century_fit_phi$theta)),
+    (mean(E_WMammals_by_Century_fit_phi$theta)),
+    (mean(DomFowl_by_Century_fit_phi$theta))
+  )
+)
+
+```
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+########################################
+# Plot: Intercept
+########################################
+
+Animals_by_Century_a.plot <- Animals_by_Century_a_fit %>%
+  ggplot(aes(
+    y = factor(Century, levels = pigs_centuries_map),
+    x = inv_logit(a)
+  )) +
+  stat_interval(.width = c(.50, .80, .95, .99),
+                linewidth = 3) +
+  geom_vline(
+    data = Animals_by_Century_a_means_fit,
+    aes(xintercept = means),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys", name = "Credibility interval") +
+  labs(
+    y = "Predicted probability",
+    x = "Century",
+    title = "Animals",
+    subtitle = "Century",
+    caption = "The dashed line indicates the diachronical average of occurrence for each animal."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) + facet_wrap(factor(
+    animal,
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+  ) ~ .,
+  ncol = 1,
+  strip.position = "right")
+
+
+########################################
+# Plot: Precision parameter
+########################################
+
+Animals_by_Century_phi.plot <- Animals_by_Century_phi_fit %>%
+  ggplot(aes(
+    y = factor(Century, levels = pigs_centuries_map),
+    x = theta
+  )) +
+  stat_halfeye() +
+  geom_vline(
+    data = Animals_by_Century_phi_means_fit,
+    aes(xintercept = means),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys") +
+  labs(
+    x = expression(paste("Precision parameter (", phi, ")")),
+    y = "Century",
+    title = "Animals",
+    subtitle = "Century",
+    caption = "The dashed line indicates the average precision for each animal dataset."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) + facet_wrap(factor(
+    animal,
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+  ) ~ .,
+  ncol = 1,
+  strip.position = "right")
+
+
+```
+
+```{r}
+#| echo: false
+#| fig-height: 14
+
+Animals_by_Century_a.plot
+Animals_by_Century_phi.plot
+```
+
+
+## Trends by traditional chronologies
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+#| eval: false
+
+
+########################################
+# Running the models
+# Saving the models
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+set.seed(24)
+
+Pigs_by_Chronology_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_chronologies.stan",  # Stan program
+  data = dat.Pigs_by_Chronology,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+Cattle_by_Chronology_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_chronologies.stan",  # Stan program
+  data = dat.Cattle_by_Chronology,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+Caprine_by_Chronology_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_chronologies.stan",  # Stan program
+  data = dat.Caprine_by_Chronology,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+E_WMammals_by_Chronology_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_chronologies.stan",  # Stan program
+  data = dat.E_WMammals_by_Chronology,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+DomFowl_by_Chronology_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_chronologies.stan",  # Stan program
+  data = dat.DomFowl_by_Chronology,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+
+saveRDS(Pigs_by_Chronology_fit, "stan_models/by_Chronology/Pigs_by_Chronology_fit.rds")
+saveRDS(Cattle_by_Chronology_fit, "stan_models/by_Chronology/Cattle_by_Chronology_fit.rds")
+saveRDS(Caprine_by_Chronology_fit, "stan_models/by_Chronology/Caprine_by_Chronology_fit.rds")
+saveRDS(E_WMammals_by_Chronology_fit, "stan_models/by_Chronology/E_WMammals_by_Chronology_fit.rds")
+saveRDS(DomFowl_by_Chronology_fit, "stan_models/by_Chronology/DomFowl_by_Chronology_fit.rds")
+
+```
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+Pigs_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Pigs_by_Chronology_fit.rds")
+Cattle_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Cattle_by_Chronology_fit.rds")
+Caprine_by_Chronology_fit<- readRDS("stan_models/by_Chronology/Caprine_by_Chronology_fit.rds")
+E_WMammals_by_Chronology_fit<- readRDS("stan_models/by_Chronology/E_WMammals_by_Chronology_fit.rds")
+DomFowl_by_Chronology_fit<- readRDS("stan_models/by_Chronology/DomFowl_by_Chronology_fit.rds")
+
+```
+
+```{r}
+#| echo: false
+
+########################################
+## Data processing for Ggplot
+########################################
+
+
+Pigs_by_Chronology_fit_a <- Pigs_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>%   
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Pigs")
+
+Pigs_by_Chronology_fit_phi <- Pigs_by_Chronology_fit %>%
+  spread_draws(theta[Chronology]) %>% 
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Pigs")
+
+Cattle_by_Chronology_fit_a <- Cattle_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>%   
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Cattle")
+
+Cattle_by_Chronology_fit_phi <- Cattle_by_Chronology_fit %>%
+  spread_draws(theta[Chronology]) %>% 
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Cattle")
+
+Caprine_by_Chronology_fit_a <- Caprine_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>%   
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Caprine")
+
+Caprine_by_Chronology_fit_phi <- Caprine_by_Chronology_fit %>%
+  spread_draws(theta[Chronology]) %>% 
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Caprine")
+
+E_WMammals_by_Chronology_fit_a <- E_WMammals_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>%   
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "W_Mammals")
+
+E_WMammals_by_Chronology_fit_phi <- E_WMammals_by_Chronology_fit %>%
+  spread_draws(theta[Chronology]) %>% 
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "W_Mammals")
+
+
+DomFowl_by_Chronology_fit_a <- DomFowl_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>%   
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Dom_Fowl")
+
+DomFowl_by_Chronology_fit_phi <- DomFowl_by_Chronology_fit %>%
+  spread_draws(theta[Chronology]) %>% 
+  mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  )) %>% 
+  mutate(animal = "Dom_Fowl")
+
+
+Animals_by_Chronology_a_fit <- bind_rows(
+  Pigs_by_Chronology_fit_a,
+  Cattle_by_Chronology_fit_a,
+  Caprine_by_Chronology_fit_a,
+  E_WMammals_by_Chronology_fit_a,
+  DomFowl_by_Chronology_fit_a
+)
+
+# Means for each animal
+Animals_by_Chronology_a_means_fit <- data.frame(
+  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  means=c(
+    inv_logit(mean(Pigs_by_Chronology_fit_a$a)),
+    inv_logit(mean(Cattle_by_Chronology_fit_a$a)),
+    inv_logit(mean(Caprine_by_Chronology_fit_a$a)),
+    inv_logit(mean(E_WMammals_by_Chronology_fit_a$a)),
+    inv_logit(mean(DomFowl_by_Chronology_fit_a$a))
+  )
+)
+
+
+Animals_by_Chronology_phi_fit <- bind_rows(
+  Pigs_by_Chronology_fit_phi,
+  Cattle_by_Chronology_fit_phi,
+  Caprine_by_Chronology_fit_phi,
+  E_WMammals_by_Chronology_fit_phi,
+  DomFowl_by_Chronology_fit_phi
+)
+
+# Means for each animal
+Animals_by_Chronology_phi_means_fit <- data.frame(
+  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  means=c(
+    (mean(Pigs_by_Chronology_fit_phi$theta)),
+    (mean(Cattle_by_Chronology_fit_phi$theta)),
+    (mean(Caprine_by_Chronology_fit_phi$theta)),
+    (mean(E_WMammals_by_Chronology_fit_phi$theta)),
+    (mean(DomFowl_by_Chronology_fit_phi$theta))
+  )
+)
+
+```
+
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+
+########################################
+# Plot: Intercept
+########################################
+
+chrono_levels <- c("R", "LR", "EMA", "Ma")
+
+
+Animals_by_Chronology_a.plot <- Animals_by_Chronology_a_fit %>%
+  ggplot(aes(
+    y = factor(Chronology, levels = chrono_levels),
+    x = inv_logit(a)
+  )) +
+  stat_interval(.width = c(.50, .80, .95, .99),
+                linewidth = 3) +
+  geom_vline(
+    data = Animals_by_Chronology_a_means_fit,
+    aes(xintercept = means),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys", name = "Credibility interval") +
+  labs(
+    y = "Predicted probability",
+    x = "Chronology",
+    title = "Animals",
+    subtitle = "Chronology",
+    caption = "The dashed line indicates the diachronical average of occurrence for each animal."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) + facet_wrap(factor(
+    animal,
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+  ) ~ .,
+  ncol = 1,
+  strip.position = "right")
+
+
+########################################
+# Plot: Precision parameter
+########################################
+
+Animals_by_Chronology_phi.plot <- Animals_by_Chronology_phi_fit %>%
+  ggplot(aes(
+    y = factor(Chronology, levels = chrono_levels),
+    x = theta
+  )) +
+  stat_halfeye() +
+  geom_vline(
+    data = Animals_by_Chronology_phi_means_fit,
+    aes(xintercept = means),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys") +
+  labs(
+    x = expression(paste("Precision parameter (", phi, ")")),
+    y = "Chronology",
+    title = "Animals",
+    subtitle = "Chronology",
+    caption = "The dashed line indicates the average precision for each animal dataset."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) + facet_wrap(factor(
+    animal,
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+  ) ~ .,
+  ncol = 1,
+  strip.position = "right")
+
+
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 14
+
+Animals_by_Chronology_a.plot
+Animals_by_Chronology_phi.plot
+
+```
+
+
 # Context type
 
 ## Pigs
@@ -465,10 +1289,6 @@ Animals_Df_Rel <- droplevels(Animals_Df_Rel)
 ########################################
 # Data processing for bayesian models
 ########################################
-
-library(rethinking)
-library(tidybayes)
-library(tidybayes.rethinking)
 
 set.seed(24)
 
@@ -872,7 +1692,6 @@ Pigs_BB_Merge_a$TC_text <- factor(Pigs_BB_Merge_a$TC_text)
 # Creating the plots
 ################################
 
-chrono_levels <- c("R", "LR", "EMA", "Ma")
 
 Pigs_BB.plot <- Pigs_BB_Merge_a %>%
   ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +

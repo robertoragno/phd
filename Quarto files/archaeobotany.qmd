@@ -355,7 +355,7 @@ Ubiquity_HM
 
 ### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
 
-::: alert
+::: callout-alert
 Probably delete, in favor of the bayesian predictions. If this section is kept, make sure to explain that ubiquity was calculated by macroregion only because it was more reliable etc etc
 :::
 
@@ -2092,44 +2092,49 @@ m_berries_type.plot
 ```{r}
 #| echo: false
 
+####################
+# DATA PROCESSING  #
+####################
 
-# Remove NAs
+# 1. Remove NAs
 Df_Cond_Plants[is.na(Df_Cond_Plants)] <-0 
 
-# Generate a dataframe with the relative proportions and round the results
+# 2. Generate a dataframe with the relative proportions and round the results
 Df_Cond_Plants_Rel <- decostand(Df_Cond_Plants[11:50], method = "total")
 Df_Cond_Plants_Rel <- round(Df_Cond_Plants_Rel, digits=2)
 
-Df_Cond_Plants_RichnDiv <- data.frame("Geo" = Df_Cond_Plants$Geo,
-                                                 "Chronology" = Df_Cond_Plants$Chronology,
-                                                 "Type"= Df_Cond_Plants$Type, 
-                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
-                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel), #All plants
-                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
-                                                 Df_Cond_Plants_Rel
+# 3. Create a dataframe with the variables of interest
+Df_Cond_Plants_RichnDiv <- data.frame(
+  "Geo" = Df_Cond_Plants$Geo,
+  "Chronology" = Df_Cond_Plants$Chronology,
+  "Type"= Df_Cond_Plants$Type, 
+  "Macroregion" = Df_Cond_Plants$name_macroreg,
+  "Specnumber" = specnumber(Df_Cond_Plants_Rel), #All plants
+  "Shannon Div" = diversity(Df_Cond_Plants_Rel),
+  Df_Cond_Plants_Rel
 )
 
-#Simplify categories
+# 4. Simplify some categories
 Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Religious, monastery", "Religious")    
 Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Castle", "Fortified")    
 Df_Cond_Plants_RichnDiv$Type <- str_replace(Df_Cond_Plants_RichnDiv$Type, "Castrum", "Fortified")  
 
-# Let's plot the diversity by type
+# PLOTS BY TYPE
 
-# Creating the dataframes for R and EMA age 
+# Dataframes filtered by Chronology 
 Df_Cond_Plants_RichnDiv.R <- filter(Df_Cond_Plants_RichnDiv, Chronology == "R")
 Df_Cond_Plants_RichnDiv.LR <- filter(Df_Cond_Plants_RichnDiv, Chronology == "LR")
 Df_Cond_Plants_RichnDiv.EMA <- filter(Df_Cond_Plants_RichnDiv, Chronology == "EMA")
 Df_Cond_Plants_RichnDiv.Ma <- filter(Df_Cond_Plants_RichnDiv, Chronology == "Ma")
 
 
-##########################################
-## CORRECTION FOR INCOMPLETE SAMPLES
-##########################################
+############################################################################
+## CORRECTION FOR INCOMPLETE SAMPLES                                       #
+# Need to filter out sites that did not provide legumes or fruits at all   #
+# Need to compare these rows to see if there are some indexes in common    #
+############################################################################
 
-#ROMAN 
-# Need to filter out sites that did not provide legumes or fruits at all
-# Need to compare these rows to see if there are some indexes in common 
+# Chronology: R 
 CompleteSamples.R <- data.frame(
 Cereals = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(7:16)]) > 0),
 Legumes = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(17:30)]) > 0),
@@ -2138,7 +2143,7 @@ Fruits = (rowSums(Df_Cond_Plants_RichnDiv.R[,c(31:46)]) > 0)
 
 IncompleteSamplesIndexes.R <- which(rowSums(CompleteSamples.R) < 3)
 
-# LR 
+# Chronology: LR 
 CompleteSamples.LR <- data.frame(
 Cereals = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(7:16)]) > 0),
 Legumes = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(17:30)]) > 0),
@@ -2147,7 +2152,7 @@ Fruits = (rowSums(Df_Cond_Plants_RichnDiv.LR[,c(31:46)]) > 0)
 
 IncompleteSamplesIndexes.LR <- which(rowSums(CompleteSamples.LR) < 3)
 
-# EMA 
+# Chronology: EMA 
 CompleteSamples.EMA <- data.frame(
 Cereals = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(7:16)]) > 0),
 Legumes = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(17:30)]) > 0),
@@ -2156,7 +2161,7 @@ Fruits = (rowSums(Df_Cond_Plants_RichnDiv.EMA[,c(31:46)]) > 0)
 
 IncompleteSamplesIndexes.EMA <- which(rowSums(CompleteSamples.EMA) < 3)
 
-# Ma 
+# Chronology: Ma 
 CompleteSamples.Ma <- data.frame(
 Cereals = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(7:16)]) > 0),
 Legumes = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(17:30)]) > 0),
@@ -2165,113 +2170,354 @@ Fruits = (rowSums(Df_Cond_Plants_RichnDiv.Ma[,c(31:46)]) > 0)
 
 IncompleteSamplesIndexes.Ma <- which(rowSums(CompleteSamples.Ma) < 3)
 
+#############################################
+## END OF CORRECTION FOR INCOMPLETE SAMPLES #
+#############################################
 
-##########################################
-## END OF CORRECTION
-##########################################
-
-plot_RichnessType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, aes(x = Type, y = Specnumber, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n=12)", "Villa \n (n=4)", "Urban \n (n=44)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+plot_RichnessType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, 
+                              aes(x = Type, y = Specnumber, fill = Type)) +
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.R$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
+  geom_jitter(alpha = 0.3) +
+  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n = 12)", "Villa \n (n = 4)", "Urban \n (n = 44)")) +
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Number of species per site",
-       title = "R - Plant richness")
+       title = "R - Plant Richness")
 
 plot_DiversityType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, aes(x = Type, y = Shannon.Div, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.R$Shannon.Div),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n=12)", "Villa \n (n=4)", "Urban \n (n=44)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Site diversity",
        title = "R - Shannon diversity")
 
 plot_RichnessType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Specnumber, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.LR$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Number of species per site",
        title = "LR - Plant richness")
 
 plot_DiversityType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Shannon.Div, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.LR$Shannon.Div),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Site diversity",
        title = "LR - Shannon diversity")
 
 plot_RichnessType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Specnumber, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.EMA$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Number of species per site",
        title = "EMA - Plant richness")
 
 plot_DiversityType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Shannon.Div, fill = Type)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.EMA$Shannon.Div),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 11, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Site type",
        y = "Site diversity",
        title = "EMA - Shannon Diversity")
 
+plot_RichnessType.Ma <- ggplot(Df_Cond_Plants_RichnDiv.Ma, aes(x = Type, y = Specnumber, fill = Type)) +
+  geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.Ma$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n = 3)", "Religious \n (n=1)", "Rural \n (n=6)", "Urban \n (n=8)" )) +
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
+  labs(x = "Site type",
+       y = "Number of species per site",
+       title = "Ma - Plant richness")
+
+plot_DiversityType.Ma <- ggplot(Df_Cond_Plants_RichnDiv.Ma, aes(x = Type, y = Shannon.Div, fill = Type)) +
+  geom_hline(
+    yintercept = mean(Df_Cond_Plants_RichnDiv.Ma$Shannon.Div),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
+  geom_jitter(alpha=0.3)+
+  scale_x_discrete(labels = c("Fortified \n (n = 3)", "Religious \n (n=1)", "Rural \n (n=6)", "Urban \n (n=8)" )) +
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
+  labs(x = "Site type",
+       y = "Site diversity",
+       title = "Ma - Shannon Diversity")
 
 ```
 
@@ -2301,14 +2547,16 @@ mean((filter(Df_Cond_Plants_RichnDiv.Ma[-IncompleteSamplesIndexes.Ma,], Type=="U
 #| warning: false
 #| layout: "[[100,100], [100,100]], [100,100]"
 #| label: fig-type-richness-div
-#| fig-cap: "Violin plots of plant richness and diversity in different site types. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| fig-cap: "Boxplots of plant richness and diversity in different site types. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
 #| fig-subcap: 
 #|   - "Roman plant richness" 
 #|   - "Roman plant diversity."
 #|   - "Late Roman plant richness" 
 #|   - "Late Roman plant diversity."
-#|   - "EMA plant richness" 
-#|   - "EMA plant diversity."
+#|   - "Early medieval plant richness" 
+#|   - "Early medieval plant diversity."
+#|   - "Medieval (11th c.) plant richness" 
+#|   - "Medieval (11th c.) plant diversity."
 #| fig-height: 4
 #| fig-width: 6
 #| fig-dpi: 600
@@ -2319,6 +2567,8 @@ plot_RichnessType.LR
 plot_DiversityType.LR
 plot_RichnessType.EMA
 plot_DiversityType.EMA
+plot_RichnessType.Ma
+plot_DiversityType.Ma
 
 ```
 
@@ -2399,37 +2649,87 @@ Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroreg
 pal_RichnessvsGeo <- c("cadetblue3", "gold1",  "bisque4", "palegreen4")
 
 plot_RichnessMacroReg.R <- ggplot(Df_Cond_Plants_Rel_withMacroregion.R, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
-  scale_fill_manual(values = pal_RichnessvsGeo) +
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_Rel_withMacroregion.R$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Central Italy \n (n = 5)", "Northern Italy \n (n = 41)", "Southern Italy \n (n=34)")) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 12, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+  scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Macroregion",
        y = "Number of species per site",
        title = "R - Cereal richness")
 
 plot_RichnessMacroReg.EMA <- ggplot(Df_Cond_Plants_Rel_withMacroregion.EMA, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-  geom_violin(trim=FALSE) + 
-  geom_boxplot(width=0.1, fill="white")+
-  scale_fill_manual(values = pal_RichnessvsGeo) +
+    geom_hline(
+    yintercept = mean(Df_Cond_Plants_Rel_withMacroregion.EMA$Specnumber),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_fill_brewer(palette = "Greys") +
   geom_jitter(alpha=0.3)+
   scale_x_discrete(labels = c("Central Italy \n (n = 11)", "Northern Italy \n (n = 36)", "Southern Italy \n (n=17)")) +
-  theme(legend.position = "none",
-        plot.background = element_rect("white"),
-        panel.background = element_rect("white"),
-        panel.grid = element_line("grey90"),
-        axis.line = element_line("gray25"),
-        axis.text = element_text(size = 12, color = "gray25"),
-        axis.title = element_text(color = "gray25"),
-        legend.text = element_text(size = 12)) + 
+    scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10)
+  ) +
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.major.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    ),
+    panel.grid.minor.y = element_line(
+      color = "grey50",
+      linewidth = 0.05,
+      linetype = 2
+    )
+  ) +
   labs(x = "Macroregion",
        y = "Number of species per site",
        title = "EMA - Cereal richness")
@@ -2454,7 +2754,7 @@ Cereals share similar presence values in Roman Northern and Southern Italian sit
 #| echo: false
 #| layout: "[[100,100], [1]]"
 #| label: fig-cereal-richness-RvsEMA
-#| fig-cap: "Violin plots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| fig-cap: "Boxplots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
 #| fig-subcap: 
 #|   - "Roman age." 
 #|   - "Early Medieval age."
@@ -4460,9 +4760,9 @@ m_Grape_alt.plot <- as.data.frame(dat.Grape_Altitude) %>%
         axis.title.x.top = element_blank()
   )+
   labs(
-    y="P (Common Wheat | 1)",
+    y="P (Grape | 1)",
     x="Altitude (km)",
-    title="Common Wheat",
+    title="Grape",
     subtitle="Altitude"
   )+
   facet_wrap(~ factor(Chronology, levels=chrono_levels))
