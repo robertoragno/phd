@@ -751,6 +751,208 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
+# Site diversity by chronology
+
+The diversity of sites has been calculated using the package `vegan` and the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce credible results. The graph shows extended Credible levels for groups with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11th century. Consequently, its credible range is very wide.
+
+```{r}
+#| echo: false
+
+##################
+# SITE DIVERSITY #
+##################
+
+Plants_Diversity <- Archaeobot_Condensed[,-c(2:4,9:13)]
+
+# Subset only complete cases (rows with cereals, fruits, legumes)
+# This takes down the counts from 234 to 138, but at least it is more valid
+Plants_Diversity <- Plants_Diversity[(Plants_Diversity$Tot..Cereals > 0) & (Plants_Diversity$Tot..Pulses > 0) & (Plants_Diversity$Tot..Fruits.Nuts > 0),]
+
+Plants_Diversity[is.na(Plants_Diversity)] <- 0
+
+# Create two diversity indexes 
+Plants_Diversity$Diversity_Simpson = diversity(Plants_Diversity[,c(6:ncol(Plants_Diversity))], 
+                                               equalize.groups = T,
+                                               MARGIN = 1,
+                                               index="simpson"
+                                               )
+# Calculate the Equitability index so that is normalised to 0-1 as the Simpson
+Plants_Diversity$Diversity_Shannon_Eq = diversity(Plants_Diversity[,c(6:ncol(Plants_Diversity))], 
+                                               equalize.groups = T,
+                                               MARGIN = 1,
+                                               index="shannon"
+                                               )/log(
+                                                 specnumber(Plants_Diversity[,c(6:ncol(Plants_Diversity))])
+                                               )
+```
+
+
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+#| output: false
+
+library(rethinking)
+library(tidybayes.rethinking)
+library(tidybayes)
+
+# Create a list for ULAM
+
+# Create a list for STAN
+dat.Plants_Diversity = list(
+  Diversity_Shannon_Eq = Plants_Diversity$Diversity_Shannon_Eq,
+  Diversity_Simpson = Plants_Diversity$Diversity_Simpson,
+  Chronology = factor(Plants_Diversity$Chronology),
+  Observations = (1:nrow(Plants_Diversity))
+)
+
+
+```
+
+```{r}
+#| message: false
+#| output: false
+#| echo: false
+#| eval: false
+
+
+########################################
+# Running the models
+# Saving the models
+# Setting code chunk to eval: false
+# To save up on rendering time
+########################################
+
+set.seed(24)
+
+Plants_Diversity_Shannon_by_Chronology_fit <- 
+  ulam(
+   alist(
+        Diversity_Shannon_Eq ~ dnorm( mu , sigma ),
+        mu <- Intercept[Chronology],
+        Intercept[Chronology] ~ dnorm(0,1.5),
+        sigma ~ dexp(1)
+    ), data=dat.Plants_Diversity , chains=4, iter = 4000
+    )
+
+Plants_Diversity_Simpson_by_Chronology_fit <- 
+  ulam(
+   alist(
+        Diversity_Simpson ~ dnorm( mu , sigma ),
+        mu <- Intercept[Chronology],
+        Intercept[Chronology] ~ dnorm(0,1.5),
+        sigma ~ dexp(1)
+    ), data=dat.Plants_Diversity , chains=4, iter = 4000
+    )
+
+saveRDS(Plants_Diversity_Shannon_by_Chronology_fit, "stan_models/by_Chronology/Plants_Diversity_Shannon_by_Chronology_fit.rds")
+saveRDS(Plants_Diversity_Simpson_by_Chronology_fit, "stan_models/by_Chronology/Plants_Diversity_Simpson_by_Chronology_fit.rds")
+
+
+```
+
+
+```{r}
+#| echo: false
+
+# Read RDS
+Plants_Diversity_Shannon_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Plants_Diversity_Shannon_by_Chronology_fit.rds")
+Plants_Diversity_Simpson_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Plants_Diversity_Simpson_by_Chronology_fit.rds")
+
+# Plots
+chrono_levels <- c("R", "LR", "EMA", "Ma")
+
+Plants_Diversity_Shannon_by_Chronology_fit_Intercept <- Plants_Diversity_Shannon_by_Chronology_fit %>%
+  spread_draws(Intercept[Chronology]) %>% 
+    mutate(Index="Shannon_Eq") %>% 
+    mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  ))
+
+Plants_Diversity_Simpson_by_Chronology_fit_Intercept <- Plants_Diversity_Simpson_by_Chronology_fit %>%
+  spread_draws(Intercept[Chronology]) %>% 
+    mutate(Index="Simpson") %>% 
+    mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  ))
+
+Plants_Diversity_Indices_by_Chronology_Means <- data.frame(
+  Index=c("Shannon_Eq", "Simpson"),
+  means=c(
+   mean(Plants_Diversity_Shannon_by_Chronology_fit_Intercept$Intercept),
+   mean(Plants_Diversity_Simpson_by_Chronology_fit_Intercept$Intercept)
+    )
+)
+
+Plants_Diversity_Indices_by_Chronology_fit_Intercept <- bind_rows(Plants_Diversity_Shannon_by_Chronology_fit_Intercept,Plants_Diversity_Simpson_by_Chronology_fit_Intercept)
+```
+
+
+```{r}
+#| echo: false
+
+
+Plants_Diversity_Indices_by_Chronology_fit_Intercept %>%
+  ggplot(aes(
+    y = factor(Chronology, levels = chrono_levels),
+    x = Intercept
+  )) +
+  stat_interval(.width = c(.50, .80, .95, .99),
+                linewidth = 3) +
+  stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+    geom_vline(
+    data = Plants_Diversity_Indices_by_Chronology_Means,
+    aes(xintercept = means),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys", name = "Credible interval") +
+  labs(
+    x = "Predicted probability",
+    y = "Chronology",
+    title = "Plant Diversity"
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) + facet_wrap(Index~.,
+  ncol = 1,
+  strip.position = "right")
+
+
+```
+
+
 # Context type {style="text-align:justify"}
 
 ::: callout-note
@@ -1395,6 +1597,13 @@ m_ng_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_ng_type.df$TypeChr)),
     linetype = "twodash",
@@ -1430,7 +1639,7 @@ m_ng_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -1473,6 +1682,13 @@ m_mg_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_mg_type.df$TypeChr)),
     linetype = "twodash",
@@ -1508,7 +1724,7 @@ m_mg_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -1549,6 +1765,13 @@ m_leg_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_leg_type.df$TypeChr)),
     linetype = "twodash",
@@ -1584,7 +1807,7 @@ m_leg_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -1623,6 +1846,13 @@ m_grape_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_grape_type.df$TypeChr)),
     linetype = "twodash",
@@ -1658,7 +1888,7 @@ m_grape_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -1702,6 +1932,13 @@ m_olives_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_olives_type.df$TypeChr)),
     linetype = "twodash",
@@ -1737,7 +1974,7 @@ m_olives_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -1779,6 +2016,13 @@ m_nuts_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_nuts_type.df$TypeChr)),
     linetype = "twodash",
@@ -1814,7 +2058,7 @@ m_nuts_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -1948,6 +2192,13 @@ m_dfruit_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_dfruit_type.df$TypeChr)),
     linetype = "twodash",
@@ -1983,7 +2234,7 @@ m_dfruit_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -2018,6 +2269,13 @@ m_berries_type.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_berries_type.df$TypeChr)),
     linetype = "twodash",
@@ -2053,7 +2311,7 @@ m_berries_type.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each site type and chronology."
+    caption = "The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -2062,7 +2320,7 @@ m_berries_type.plot <- ggplot(
 #| echo: false
 #| warning: false
 #| label: fig-bayes-glm-site-type
-#| fig-cap: "Bayesian probability estimates for main plant taxa, divided by site type and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credibility intervals are provided."
+#| fig-cap: "Bayesian probability estimates for main plant taxa, divided by site type and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 #| fig-subcap: 
 #|  - "Noble grains (wheat and barley)."
 #|  - "Minor grains."
@@ -2768,7 +3026,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|------------|------------|------------|------------|------------|------------|
+|-----------|--------------------|-----------|-----------|-----------|-----------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -3178,6 +3436,13 @@ m_ng_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_ng_reg.df$RegChr)),
     linetype = "twodash",
@@ -3214,7 +3479,7 @@ m_ng_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3222,7 +3487,7 @@ m_ng_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-ng-macroregion
-#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_ng_reg.plot
 ```
@@ -3295,6 +3560,13 @@ m_mg_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
     linetype = "twodash",
@@ -3331,7 +3603,7 @@ m_mg_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3339,7 +3611,7 @@ m_mg_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-mg-macroregion
-#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_mg_reg.plot
 ```
@@ -3417,6 +3689,13 @@ m_leg_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_leg_reg.df$RegChr)),
     linetype = "twodash",
@@ -3453,7 +3732,7 @@ m_leg_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3461,7 +3740,7 @@ m_leg_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-legumes-macroregion
-#| fig-cap: "Bayesian probability estimates for legumes, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for legumes, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_leg_reg.plot
 
@@ -3533,6 +3812,13 @@ m_grape_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_grape_reg.df$RegChr)),
     linetype = "twodash",
@@ -3569,7 +3855,7 @@ m_grape_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3577,7 +3863,7 @@ m_grape_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-grape-macroregion
-#| fig-cap: "Bayesian probability estimates for grape, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for grape, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_grape_reg.plot
 
@@ -3649,6 +3935,13 @@ m_olive_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_olive_reg.df$RegChr)),
     linetype = "twodash",
@@ -3685,7 +3978,7 @@ m_olive_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3693,7 +3986,7 @@ m_olive_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-olive-macroregion
-#| fig-cap: "Bayesian probability estimates for olive, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for olive, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_olive_reg.plot
 
@@ -3770,6 +4063,13 @@ m_nuts_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_nuts_reg.df$RegChr)),
     linetype = "twodash",
@@ -3806,7 +4106,7 @@ m_nuts_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -3814,7 +4114,7 @@ m_nuts_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-nuts-macroregion
-#| fig-cap: "Bayesian probability estimates for nuts, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for nuts, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_nuts_reg.plot
 
@@ -3900,6 +4200,13 @@ m_berries_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_berries_reg.df$RegChr)),
     linetype = "twodash",
@@ -3936,7 +4243,7 @@ m_berries_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 
@@ -3967,6 +4274,13 @@ m_dfruit_reg.plot <- ggplot(
     .width = c(.50, .80, .95, .99),
     linewidth = 3
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(m_dfruit_reg.df$RegChr)),
     linetype = "twodash",
@@ -4003,7 +4317,7 @@ m_dfruit_reg.plot <- ggplot(
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology."
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
   )
 
 ```
@@ -4011,7 +4325,7 @@ m_dfruit_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-domfruits-macroregion
-#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_dfruit_reg.plot
 
@@ -4020,7 +4334,7 @@ m_dfruit_reg.plot
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-berries-macroregion
-#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology. The prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for domestic fruits, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_berries_reg.plot
 
@@ -4028,7 +4342,7 @@ m_berries_reg.plot
 
 # Altitude
 
-The creation of altitude models was not possible for every plant investigated in this study. As the process is very time consuming, it was necessary to select only plants that are most likely to be either positively or negatively impacted by altitude, or taxa that are cultivated for economic reasons. Primary importance was thus given to cereals. Since not every cereal can be cultivated at high altitudes, it was more appropriate to model them individually instead of grouping them into noble and minor grains. 
+The creation of altitude models was not possible for every plant investigated in this study. As the process is very time consuming, it was necessary to select only plants that are most likely to be either positively or negatively impacted by altitude, or taxa that are cultivated for economic reasons. Primary importance was thus given to cereals. Since not every cereal can be cultivated at high altitudes, it was more appropriate to model them individually instead of grouping them into noble and minor grains.
 
 ### Model specification and priors
 
@@ -4052,7 +4366,6 @@ $$
 \phi \sim Exponential(1)
 $$
 
-
 ```{r}
 #| echo: false
 
@@ -4065,7 +4378,6 @@ bot_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quar
 bot_altitude[,c(14:ncol(bot_altitude))] <- decostand(bot_altitude[,c(14:ncol(bot_altitude))], method = "pa")
 bot_altitude[is.na(bot_altitude)] <- 0
 ```
-
 
 ```{r}
 #| echo: false
@@ -4080,7 +4392,6 @@ plot(
     ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)+Normal(0,1.5)*Altitude(km))"
   )
 ```
-
 
 ## Cereals
 
@@ -4144,7 +4455,6 @@ dat.Sorghum_Altitude = list(
   J = nrow(bot_altitude)
   )
 ```
-
 
 ```{r}
 #| echo: false
@@ -4230,7 +4540,6 @@ saveRDS(m_Sorghum_alt, "stan_models/m_Sorghum_alt.rds")
 #| warning: false
 
 library(modelr)
-chrono_levels <- c("R", "LR", "EMA", "Ma")
 
 # Read models
 m_cwheat_alt <- readRDS("stan_models/m_cwheat_alt.rds")
@@ -4605,6 +4914,7 @@ Cereals_Alt_post.plot
 ```
 
 ## Legumes
+
 ```{r}
 #| echo: false
 
@@ -4622,7 +4932,6 @@ dat.Legumes_Altitude = list(
   )
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -4688,7 +4997,6 @@ m_Legumes_altitude.plot
 
 ```
 
-
 ## Fruits
 
 ```{r}
@@ -4705,7 +5013,6 @@ dat.Grape_Altitude = list(
   )
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -4769,15 +5076,14 @@ m_Grape_alt.plot <- as.data.frame(dat.Grape_Altitude) %>%
 
 ```
 
-
 ### Grape
+
 ```{r}
 #| echo: false
 
 m_Grape_alt.plot
 
 ```
-
 
 ### Olives
 
@@ -4837,8 +5143,6 @@ m_Olive_altitude.plot <- as.data.frame(dat.Olive_altitude) %>%
 
 m_Olive_altitude.plot
 ```
-
-
 
 # Model comparisons
 
@@ -5376,7 +5680,7 @@ plot(
 
 ### Performance and comparisons
 
-The creation of models for each plant is extremely time consuming, and for the purposes of this comparison I chose to compare only taxa that are known to be more sensitive to temperature and that have economic implications. 
+The creation of models for each plant is extremely time consuming, and for the purposes of this comparison I chose to compare only taxa that are known to be more sensitive to temperature and that have economic implications.
 
 #### Common wheat
 
@@ -5501,7 +5805,6 @@ plot( coeftab(m_Rye_temperature,m_Rye_altitude, m_Rye_temperature_alt), par=c(24
 
 The comparison of the three models using the WAIC is not significant enough to justify the introduction of another predictor in the model.
 
-
 ```{r}
 #| echo: false
 #| eval: false
@@ -5553,10 +5856,9 @@ plot( coeftab(m_Legumes_temperature,m_Legumes_altitude, m_Legumes_temperature_al
 
 ```
 
-
 #### Grape
 
-The combination of temperature and altitude as predictors for grape occurrence did not produce any strong enough difference that would favour the use of a predictor in place of the other. 
+The combination of temperature and altitude as predictors for grape occurrence did not produce any strong enough difference that would favour the use of a predictor in place of the other.
 
 ```{r}
 #| echo: false
@@ -5595,7 +5897,6 @@ compare(m_Grape_temperature, m_grape_altitude, m_Grape_temperature_alt, func = "
 
 ```
 
-
 ```{r}
 #| echo: false
 #| label: fig-coef-temp-alt-Grape-models
@@ -5609,7 +5910,6 @@ plot( coeftab(m_Grape_temperature,m_grape_altitude, m_Grape_temperature_alt), pa
 plot( coeftab(m_Grape_temperature,m_grape_altitude, m_Grape_temperature_alt), par=c(243:246) )
 
 ```
-
 
 #### Olive
 
@@ -5682,7 +5982,7 @@ Given that the model which used temperature and altitude performed better than t
 
 -   elevation (km).
 
-The chronological differences seem to be consistent until the 11th century. Sites with higher temperatures have a higher likelihood of consuming/producing olives. Likewise, sites with higher altitudes have a reduced probability of consuming or producing the same plant. 
+The chronological differences seem to be consistent until the 11th century. Sites with higher temperatures have a higher likelihood of consuming/producing olives. Likewise, sites with higher altitudes have a reduced probability of consuming or producing the same plant.
 
 ```{r}
 #| echo: false
@@ -5724,7 +6024,6 @@ m_Olive_temperature.plot <- as.data.frame(dat.Olive_temperature) %>%
 
 
 ```
-
 
 ```{r}
 #| echo: false

@@ -192,7 +192,6 @@ italy_zoo_map <- leaflet(data=italy) %>%
         })
     }")
 
-
 ```
 
 ::: {.content-visible when-format="html"}
@@ -452,9 +451,7 @@ dat.DomFowl_by_Chronology = list(
 
 ```
 
-
-## Trends by century 
-
+## Trends by century
 
 ```{r}
 #| message: false
@@ -484,7 +481,6 @@ dat.DomFowl_by_Century = list(N=Animals_by_Century$Tot_NISP, A=Animals_by_Centur
 
 
 ```
-
 
 ```{r}
 #| message: false
@@ -567,7 +563,6 @@ E_WMammals_by_Century_fit<- readRDS("stan_models/by_century/E_WMammals_by_Centur
 DomFowl_by_Century_fit<- readRDS("stan_models/by_century/DomFowl_by_Century_fit.rds")
 
 ```
-
 
 ```{r}
 #| message: false
@@ -711,7 +706,6 @@ Animals_by_Century_phi_means_fit <- data.frame(
 
 ```
 
-
 ```{r}
 #| message: false
 #| output: false
@@ -728,6 +722,13 @@ Animals_by_Century_a.plot <- Animals_by_Century_a_fit %>%
   )) +
   stat_interval(.width = c(.50, .80, .95, .99),
                 linewidth = 3) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     data = Animals_by_Century_a_means_fit,
     aes(xintercept = means),
@@ -738,13 +739,13 @@ Animals_by_Century_a.plot <- Animals_by_Century_a_fit %>%
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
                      sec.axis = dup_axis()) +
   scale_y_discrete(limits = rev) +
-  scale_color_brewer(palette = "Greys", name = "Credibility interval") +
+  scale_color_brewer(palette = "Greys", name = "Credible interval") +
   labs(
     y = "Predicted probability",
     x = "Century",
     title = "Animals",
     subtitle = "Century",
-    caption = "The dashed line indicates the diachronical average of occurrence for each animal."
+    caption = "The dashed line indicates the diachronical average of occurrence for each animal. The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -796,7 +797,7 @@ Animals_by_Century_phi.plot <- Animals_by_Century_phi_fit %>%
     y = "Century",
     title = "Animals",
     subtitle = "Century",
-    caption = "The dashed line indicates the average precision for each animal dataset."
+    caption = "The dashed line indicates the average precision for each animal dataset. The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -832,16 +833,13 @@ Animals_by_Century_a.plot
 Animals_by_Century_phi.plot
 ```
 
-
 ## Trends by traditional chronologies
-
 
 ```{r}
 #| message: false
 #| output: false
 #| echo: false
 #| eval: false
-
 
 ########################################
 # Running the models
@@ -903,7 +901,6 @@ saveRDS(E_WMammals_by_Chronology_fit, "stan_models/by_Chronology/E_WMammals_by_C
 saveRDS(DomFowl_by_Chronology_fit, "stan_models/by_Chronology/DomFowl_by_Chronology_fit.rds")
 
 ```
-
 
 ```{r}
 #| message: false
@@ -1071,7 +1068,6 @@ Animals_by_Chronology_phi_means_fit <- data.frame(
 
 ```
 
-
 ```{r}
 #| message: false
 #| output: false
@@ -1091,6 +1087,13 @@ Animals_by_Chronology_a.plot <- Animals_by_Chronology_a_fit %>%
   )) +
   stat_interval(.width = c(.50, .80, .95, .99),
                 linewidth = 3) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     data = Animals_by_Chronology_a_means_fit,
     aes(xintercept = means),
@@ -1101,13 +1104,13 @@ Animals_by_Chronology_a.plot <- Animals_by_Chronology_a_fit %>%
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
                      sec.axis = dup_axis()) +
   scale_y_discrete(limits = rev) +
-  scale_color_brewer(palette = "Greys", name = "Credibility interval") +
+  scale_color_brewer(palette = "Greys", name = "Credible interval") +
   labs(
     y = "Predicted probability",
     x = "Chronology",
     title = "Animals",
     subtitle = "Chronology",
-    caption = "The dashed line indicates the diachronical average of occurrence for each animal."
+    caption = "The dashed line indicates the diachronical average of occurrence for each animal. The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -1159,7 +1162,7 @@ Animals_by_Chronology_phi.plot <- Animals_by_Chronology_phi_fit %>%
     y = "Chronology",
     title = "Animals",
     subtitle = "Chronology",
-    caption = "The dashed line indicates the average precision for each animal dataset."
+    caption = "The dashed line indicates the average precision for each animal dataset. The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -1187,7 +1190,6 @@ Animals_by_Chronology_phi.plot <- Animals_by_Chronology_phi_fit %>%
 
 ```
 
-
 ```{r}
 #| echo: false
 #| fig-height: 14
@@ -1196,7 +1198,6 @@ Animals_by_Chronology_a.plot
 Animals_by_Chronology_phi.plot
 
 ```
-
 
 # Context type
 
@@ -1699,18 +1700,25 @@ Pigs_BB.plot <- Pigs_BB_Merge_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
     )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
     geom_vline(xintercept = inv_logit(mean(Pigs_BB_Merge_a$a)),    
                linetype = "twodash",
     linewidth = 0.45,
     color = "red4")+
     scale_y_discrete(limits=rev)+
     scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-    scale_color_brewer(palette="Greys", name="Credibility interval")+
+    scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Pigs",
        subtitle = "Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -1739,7 +1747,7 @@ Pigs_BB_phi.plot <- Pigs_BB_Merge_phi %>%
        y="Chronology",
        title="Pigs",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -2162,18 +2170,25 @@ Cattle_BB.plot <- Cattle_BB_Merge_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
     )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
     geom_vline(xintercept = inv_logit(mean(Cattle_BB_Merge_a$a)), 
     linetype = "twodash",
     linewidth = 0.45,
     color = "red4")+
     scale_y_discrete(limits=rev)+
     scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-    scale_color_brewer(palette="Greys", name="Credibility interval")+
+    scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Cattle",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -2202,7 +2217,7 @@ Cattle_BB_phi.plot <- Cattle_BB_Merge_phi %>%
        y="Chronology",
        title="Cattle",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -2616,14 +2631,21 @@ Caprine_BB.plot <- Caprine_BB_Merge_a %>%
              linetype = "twodash",
     linewidth = 0.45,
     color = "red4")+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Caprine",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -2653,7 +2675,7 @@ Caprine_BB_phi.plot <- Caprine_BB_Merge_phi %>%
        y="Chronology",
        title="Caprine",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3062,18 +3084,25 @@ WMammals_BB.plot <- WMammals_BB_Merge_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(xintercept = inv_logit(mean(WMammals_BB_Merge_a$a)),     
              linetype = "twodash",
              linewidth = 0.45,
              color = "red4")+
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3103,7 +3132,7 @@ WMammals_BB_phi.plot <- WMammals_BB_Merge_phi %>%
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Site type",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3291,14 +3320,21 @@ Pigs_Reg.plot <- Pigs_Reg.fit_a %>%
     linewidth = 0.45,
     color = "red4"
   ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Pigs",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3327,7 +3363,7 @@ Pigs_Reg_phi.plot <- Pigs_Reg.fit_phi %>%
        y="Chronology",
        title="Pigs",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3495,6 +3531,13 @@ Cattle_Reg.plot <- Cattle_Reg.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
     geom_vline(
     xintercept = inv_logit(mean(Cattle_Reg.fit_a$a)),
     linetype = "twodash",
@@ -3503,12 +3546,12 @@ Cattle_Reg.plot <- Cattle_Reg.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Cattle",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3537,7 +3580,7 @@ Cattle_Reg_phi.plot <- Cattle_Reg.fit_phi %>%
        y="Chronology",
        title="Cattle",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3704,6 +3747,13 @@ Caprine_Reg.plot <- Caprine_Reg.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
     geom_vline(
     xintercept = inv_logit(mean(Caprine_Reg.fit_a$a)),
     linetype = "twodash",
@@ -3712,12 +3762,12 @@ Caprine_Reg.plot <- Caprine_Reg.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Caprine",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3746,7 +3796,7 @@ Caprine_Reg_phi.plot <- Caprine_Reg.fit_phi %>%
        y="Chronology",
        title="Caprine",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3916,6 +3966,13 @@ WMammals_Reg.plot <- WMammals_Reg.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(WMammals_Reg.fit_a$a)),
     linetype = "twodash",
@@ -3924,12 +3981,12 @@ WMammals_Reg.plot <- WMammals_Reg.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -3958,7 +4015,7 @@ WMammals_Reg_phi.plot <- WMammals_Reg.fit_phi %>%
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Macroregion",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4167,6 +4224,13 @@ Pigs_Geo.plot <- Pigs_Geo.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
     geom_vline(
     xintercept = inv_logit(mean(Pigs_Geo.fit_a$a)),
     linetype = "twodash",
@@ -4175,12 +4239,12 @@ Pigs_Geo.plot <- Pigs_Geo.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Pigs",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4209,7 +4273,7 @@ Pigs_Geo_phi.plot <- Pigs_Geo.fit_phi %>%
        y="Chronology",
        title="Pigs",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4400,6 +4464,13 @@ Cattle_Geo.plot <- Cattle_Geo.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(Cattle_Geo.fit_a$a)),
     linetype = "twodash",
@@ -4408,12 +4479,12 @@ Cattle_Geo.plot <- Cattle_Geo.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Cattle",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4442,7 +4513,7 @@ Cattle_Geo_phi.plot <- Cattle_Geo.fit_phi %>%
        y="Chronology",
        title="Cattle",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4633,6 +4704,13 @@ Caprine_Geo.plot <- Caprine_Geo.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(Caprine_Geo.fit_a$a)),
     linetype = "twodash",
@@ -4641,12 +4719,12 @@ Caprine_Geo.plot <- Caprine_Geo.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Caprine",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4675,7 +4753,7 @@ Caprine_Geo_phi.plot <- Caprine_Geo.fit_phi %>%
        y="Chronology",
        title="Caprine",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4866,6 +4944,13 @@ WMammals_Geo.plot <- WMammals_Geo.fit_a %>%
     .width = c(.50, .80, .95, .99), 
     linewidth=3
   )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
   geom_vline(
     xintercept = inv_logit(mean(WMammals_Geo.fit_a$a)),
     linetype = "twodash",
@@ -4874,12 +4959,12 @@ WMammals_Geo.plot <- WMammals_Geo.fit_a %>%
   ) +
   scale_y_discrete(limits=rev)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
-  scale_color_brewer(palette="Greys", name="Credibility interval")+
+  scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each macroregion and chronology.")+
+       caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -4908,7 +4993,7 @@ WMammals_Geo_phi.plot <- WMammals_Geo.fit_phi %>%
        y="Chronology",
        title="Edible Wild Mammals",
        subtitle="Geography",
-       caption="The dashed line indicates the mean for each site type and chronology.")+
+       caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
@@ -5336,7 +5421,6 @@ Capr_Alt_fit_reth.plot
 #| eval: false
 #| echo: false
 
-
 ###########################
 ## PLOTS WITH STAN MODEL
 ###########################
@@ -5367,7 +5451,7 @@ Capr_Alt_fit_phi.plot <- Capr_Alt_fit.phi %>%
        y="Chronology",
        title="Caprine",
        subtitle="Altitude",
-       caption="The dashed line indicates the mean for each chronology.")+
+       caption="The dashed line indicates the mean for each chronology. The circle indicates the mean for each line.")+
   theme_tidybayes()+
   theme(legend.position = "bottom", 
         strip.background = element_rect(fill = "grey",
