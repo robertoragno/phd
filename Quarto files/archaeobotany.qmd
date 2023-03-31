@@ -786,7 +786,6 @@ Plants_Diversity$Diversity_Shannon_Eq = diversity(Plants_Diversity[,c(6:ncol(Pla
                                                )
 ```
 
-
 ```{r}
 #| echo: false
 #| eval: true
@@ -852,7 +851,6 @@ saveRDS(Plants_Diversity_Simpson_by_Chronology_fit, "stan_models/by_Chronology/P
 
 ```
 
-
 ```{r}
 #| echo: false
 
@@ -893,7 +891,6 @@ Plants_Diversity_Indices_by_Chronology_Means <- data.frame(
 
 Plants_Diversity_Indices_by_Chronology_fit_Intercept <- bind_rows(Plants_Diversity_Shannon_by_Chronology_fit_Intercept,Plants_Diversity_Simpson_by_Chronology_fit_Intercept)
 ```
-
 
 ```{r}
 #| echo: false
@@ -951,7 +948,6 @@ Plants_Diversity_Indices_by_Chronology_fit_Intercept %>%
 
 
 ```
-
 
 # Context type {style="text-align:justify"}
 
@@ -3026,7 +3022,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|-----------|--------------------|-----------|-----------|-----------|-----------|
+|------------|-------------|------------|------------|------------|------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -4528,7 +4524,7 @@ saveRDS(m_barley_alt, "stan_models/m_barley_alt.rds")
 saveRDS(m_emmer_alt, "stan_models/m_emmer_alt.rds")
 saveRDS(m_einkorn_alt, "stan_models/m_einkorn_alt.rds")
 saveRDS(m_Rye_alt, "stan_models/m_Rye_alt.rds")
-saveRDS(m_Millets_alt, "stan_models/m_cwheat_alt.rds")
+saveRDS(m_Millets_alt, "stan_models/m_Millets_alt.rds")
 saveRDS(m_Sorghum_alt, "stan_models/m_Sorghum_alt.rds")
 
 
@@ -4547,7 +4543,7 @@ m_barley_alt <- readRDS("stan_models/m_barley_alt.rds")
 m_emmer_alt <- readRDS("stan_models/m_emmer_alt.rds")
 m_einkorn_alt <- readRDS("stan_models/m_einkorn_alt.rds")
 m_Rye_alt <- readRDS("stan_models/m_Rye_alt.rds")
-m_Millets_alt <- readRDS("stan_models/m_cwheat_alt.rds")
+m_Millets_alt <- readRDS("stan_models/m_Millets_alt.rds")
 m_Sorghum_alt <- readRDS("stan_models/m_Sorghum_alt.rds")
 
 ## PLOTS
@@ -4828,7 +4824,6 @@ m_Einkorn_alt.a <- as.data.frame(m_Einkorn_alt.post) %>% mutate(Plant = "Einkorn
 m_Rye_alt.a <- as.data.frame(m_Rye_alt.post) %>% mutate(Plant = "Rye")
 m_Millets_alt.a <- as.data.frame(m_Millets_alt.post) %>% mutate(Plant = "Millets")
 m_Sorghum_alt.a <- as.data.frame(m_Sorghum_alt.post) %>% mutate(Plant = "Sorghum")
-
 
 Cerals_Alt_binded <- bind_rows(
   m_cwheat_alt.a,
@@ -5358,6 +5353,12 @@ m_CWheat_precip_alt <- readRDS("stan_models/precipitation_models/m_Cwheat_precip
 
 compare(m_Cwheat_precip, m_CWheat_altitude, m_CWheat_precip_alt, func = "WAIC")
 ```
+
+```{r}
+# Test prior
+m_Cwheat_precip
+```
+
 
 ```{r}
 #| echo: false
