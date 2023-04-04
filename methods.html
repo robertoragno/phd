@@ -251,12 +251,13 @@ div.csl-indent {
   </ul></li>
   <li><a href="#statistical-modelling" id="toc-statistical-modelling" class="nav-link" data-scroll-target="#statistical-modelling"><span class="toc-section-number">7</span>  Statistical modelling</a>
   <ul class="collapse">
-  <li><a href="#archaeobotanical-quantifications" id="toc-archaeobotanical-quantifications" class="nav-link" data-scroll-target="#archaeobotanical-quantifications"><span class="toc-section-number">7.1</span>  Archaeobotanical quantifications</a>
+  <li><a href="#betabinomial" id="toc-betabinomial" class="nav-link" data-scroll-target="#betabinomial"><span class="toc-section-number">7.1</span>  Betabinomial</a></li>
+  <li><a href="#archaeobotanical-quantifications" id="toc-archaeobotanical-quantifications" class="nav-link" data-scroll-target="#archaeobotanical-quantifications"><span class="toc-section-number">7.2</span>  Archaeobotanical quantifications</a>
   <ul class="collapse">
-  <li><a href="#ubiquity" id="toc-ubiquity" class="nav-link" data-scroll-target="#ubiquity"><span class="toc-section-number">7.1.1</span>  Ubiquity</a></li>
-  <li><a href="#diversity" id="toc-diversity" class="nav-link" data-scroll-target="#diversity"><span class="toc-section-number">7.1.2</span>  Diversity</a></li>
+  <li><a href="#ubiquity" id="toc-ubiquity" class="nav-link" data-scroll-target="#ubiquity"><span class="toc-section-number">7.2.1</span>  Ubiquity</a></li>
+  <li><a href="#diversity" id="toc-diversity" class="nav-link" data-scroll-target="#diversity"><span class="toc-section-number">7.2.2</span>  Diversity</a></li>
   </ul></li>
-  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology"><span class="toc-section-number">7.2</span>  Zooarchaeology</a></li>
+  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology"><span class="toc-section-number">7.3</span>  Zooarchaeology</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -638,8 +639,26 @@ Eigenvalues and eigenvectors
 <li><p>Appropriateness of the statistical method (Guisan et al, p.&nbsp;55). Different types of data require different approaches and different probability distribution functions</p></li>
 <li><p>Independence of observations: In the case of our type of data, this is not really possible so it is already violating this assumption</p></li>
 </ul>
-<section id="archaeobotanical-quantifications" class="level2" style="text-align:justify;" data-number="7.1">
-<h2 style="text-align:justify;" data-number="7.1" class="anchored" data-anchor-id="archaeobotanical-quantifications"><span class="header-section-number">7.1</span> Archaeobotanical quantifications</h2>
+<section id="betabinomial" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="betabinomial"><span class="header-section-number">7.1</span> Betabinomial</h2>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Show the beta distribution and explain the precision values.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="methods_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="archaeobotanical-quantifications" class="level2" style="text-align:justify;" data-number="7.2">
+<h2 style="text-align:justify;" data-number="7.2" class="anchored" data-anchor-id="archaeobotanical-quantifications"><span class="header-section-number">7.2</span> Archaeobotanical quantifications</h2>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -655,8 +674,8 @@ Section in progress
 <p>Write that Quantifications on the archaeobotanical dataset were affected by several biases.</p>
 </div>
 </div>
-<section id="ubiquity" class="level3" style="text-align:justify;" data-number="7.1.1">
-<h3 style="text-align:justify;" data-number="7.1.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">7.1.1</span> Ubiquity</h3>
+<section id="ubiquity" class="level3" style="text-align:justify;" data-number="7.2.1">
+<h3 style="text-align:justify;" data-number="7.2.1" class="anchored" data-anchor-id="ubiquity"><span class="header-section-number">7.2.1</span> Ubiquity</h3>
 <p>Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward—the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:</p>
 <p><span class="math display">\[
 U_x = (\frac{N_p}{N_{tot}}) \cdot 100
@@ -669,8 +688,8 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 <p>Ubiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g.&nbsp;wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered.</p>
 <p>In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an <code>R</code> function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into–<code>Cereals</code>, <code>Pulses</code> and <code>Fruits/Nuts</code>. The results are in <a href="archaeobotany.html"><span>Chapter&nbsp;7</span></a>.</p>
 </section>
-<section id="diversity" class="level3" style="text-align:justify;" data-number="7.1.2">
-<h3 style="text-align:justify;" data-number="7.1.2" class="anchored" data-anchor-id="diversity"><span class="header-section-number">7.1.2</span> Diversity</h3>
+<section id="diversity" class="level3" style="text-align:justify;" data-number="7.2.2">
+<h3 style="text-align:justify;" data-number="7.2.2" class="anchored" data-anchor-id="diversity"><span class="header-section-number">7.2.2</span> Diversity</h3>
 <div id="species-richness-notes" class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -689,8 +708,8 @@ Notes:
 <p>Shannon-W</p>
 </section>
 </section>
-<section id="zooarchaeology" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="zooarchaeology"><span class="header-section-number">7.2</span> Zooarchaeology</h2>
+<section id="zooarchaeology" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="zooarchaeology"><span class="header-section-number">7.3</span> Zooarchaeology</h2>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

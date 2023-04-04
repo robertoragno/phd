@@ -43,6 +43,7 @@ The **knitr** engine enables the integration of R with HTML, Markdown and LaTeX.
 The **vegan** package [@oksanenVeganCommunityEcology2022] is designed for ordination methods, diversity analysis and multivariate analysis in ecology.
 
 ##### rethinking
+
 INSERT
 
 ## GitHub: hosting the project
@@ -244,6 +245,22 @@ In this project, nMDS has been applied to the Roman and early Medieval cereal da
 -   Appropriateness of the statistical method (Guisan et al, p. 55). Different types of data require different approaches and different probability distribution functions
 
 -   Independence of observations: In the case of our type of data, this is not really possible so it is already violating this assumption
+
+## Betabinomial
+
+::: callout-tip
+Show the beta distribution and explain the precision values.
+:::
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(rethinking)
+pbar <- 0.5
+theta <- 5
+curve( dbeta2( x, pbar, theta), from=0, to=1, xlab="probability", ylab="Density")
+```
 
 ## Archaeobotanical quantifications {style="text-align:justify;"}
 

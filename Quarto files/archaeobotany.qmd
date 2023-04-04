@@ -753,6 +753,10 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 # Site diversity by chronology
 
+::: callout-tip
+Make sure to cite @nagendra2002 to explain why the indices show different results.
+:::
+
 The diversity of sites has been calculated using the package `vegan` and the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce credible results. The graph shows extended Credible levels for groups with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11th century. Consequently, its credible range is very wide.
 
 ```{r}
@@ -6123,9 +6127,8 @@ m14.8nc <- ulam(
 
 
 
+
 ```
-
-
 
 # To do:
 

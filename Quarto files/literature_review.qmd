@@ -10,8 +10,8 @@ Intro to chapter
 
 ## The Roman Agricultural Economy
 
-::: {.callout-alert}
-Should I divide the economy and agriculture sections? 
+::: callout-alert
+Should I divide the economy and agriculture sections?
 :::
 
 -   The primitive economy or the modern one?
@@ -22,7 +22,7 @@ Should I divide the economy and agriculture sections?
 
 -   Cite Kron's works here?
 
-## Late Roman Phase: Continuity or Rupture? 
+## Late Roman Phase: Continuity or Rupture?
 
 -   Introduce debates on the transformation of the Roman world as opposed to 'collapse'.
 
@@ -38,7 +38,7 @@ Should I divide the economy and agriculture sections?
 
 ## Studies on Medieval economy
 
--   The 11th century, the incastellamento, the agricultural revival. 
+-   The 11th century, the incastellamento, the agricultural revival.
 
 ## Environmental archaeology
 
@@ -64,7 +64,11 @@ For palinology: @lechterbeckExploringPotentialPalynology2020
 
 For the bias in the archaeobotanical research in Italy read Heinrich 2017
 
-Neolithic founder crops -> history of agrarian evolution in Italy?
+Neolithic founder crops -\> history of agrarian evolution in Italy?
+
+Discuss this: "However, both disciplines are slowly coming of age in Italy. The first important steps in this process were taken in the 1970s and early 1980s, when archaeobotanical research concentrated on the need to catalogue the finds, and create a general image of the available species (e.g. Castelletti 1972; 1976; Follieri 1971; 1973; 1975; LaCroix Phippen 1975; Hjelmqvist 1977; Barker 1977; Follieri and Coccolini 1979; Costantini 1979; 1980; 1983a; 1983b; 1983c; Scali 1983; Steele 1983)." 
+from: Groot, M., Lentjes, D., Zeiler, J. (Eds.), 2013. Barely surviving or more than enough? the environmental archaeology of subsistence, specialisation and surplus food production. Sidestone Press, Leiden. [PAGE 104]
+
 
 ### Zooarchaeology
 
