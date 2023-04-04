@@ -1231,7 +1231,9 @@ stonefruits_by_type <- ggplot(data=Ubiquity_All_Chrono_Type,
 library(dplyr)
 
 Df_Cond_Plants.pa <- Df_Cond_Plants
-Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa")
+Df_Cond_Plants.pa[,c(11:50)] <- decostand(Df_Cond_Plants.pa[,c(11:50)], method="pa", na.rm = T)
+
+Df_Cond_Plants.pa[is.na(Df_Cond_Plants.pa)] <- 0
 
 #Simplify categories
 Df_Cond_Plants.pa$Type <- str_replace(Df_Cond_Plants.pa$Type, "Religious, monastery", "Religious")    
@@ -3022,7 +3024,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|------------|-------------|------------|------------|------------|------------|
+|------------|------------|------------|------------|------------|------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -5359,7 +5361,6 @@ compare(m_Cwheat_precip, m_CWheat_altitude, m_CWheat_precip_alt, func = "WAIC")
 m_Cwheat_precip
 ```
 
-
 ```{r}
 #| echo: false
 #| label: fig-coef-prec-alt-wheat-models
@@ -6038,6 +6039,93 @@ m_Olive_temperature.plot <- as.data.frame(dat.Olive_temperature) %>%
 m_Olive_temperature.plot
 m_Olive_altitude.plot
 ```
+
+# Test: Gaussian processes
+
+```{r}
+#| eval: false
+#| echo: false
+
+# 1. Load the dataset
+Bot_Sites_for_GPR <- Archaeobot_Condensed
+
+# 2. See which Chronology has more data
+table(Bot_Sites_for_GPR$Chronology)
+# It is the Roman. 
+
+# 3. Let's check for imbalances in macroregions
+table((subset(Bot_Sites_for_GPR, Chronology=="EMA"))$Macroregion)
+Bot_Sites_for_GPR<-subset(Bot_Sites_for_GPR, Chronology=="EMA" & Macroregion=="Northern Italy")
+# Central Italy has only 5 sites. N and S are kind of balanced
+# Decide later whether to remove C Italy
+
+library(geosphere)
+
+# I want an index so I know which sites are which
+Bot_Sites_for_GPR$Incremental_Index = 1:nrow(Bot_Sites_for_GPR)
+
+Bot_Sites_for_GPR_Coords <- data.frame(X= Bot_Sites_for_GPR$X, Y= Bot_Sites_for_GPR$Y, row.names = Bot_Sites_for_GPR$Incremental_Index)
+
+Bot_Sites_for_GPR_DistMatrix <- distm(Bot_Sites_for_GPR_Coords, fun = distHaversine)/1000
+Bot_Sites_for_GPR_DistMatrix <- round(Bot_Sites_for_GPR_DistMatrix,1)
+
+rownames(Bot_Sites_for_GPR_DistMatrix) <- Bot_Sites_for_GPR$Site
+colnames(Bot_Sites_for_GPR_DistMatrix) <- Bot_Sites_for_GPR$Site
+head(Bot_Sites_for_GPR_DistMatrix)
+
+# Ok distance matrix is ready
+# Now let's decide a covariation curve
+curve( exp(-1*x) , from=0 , to=4 , lty=2 )
+curve( exp(-1*x^2) , add=TRUE )
+
+names(Bot_Sites_for_GPR)
+
+Bot_Sites_for_GPR.EMA_MG <- subset(Minor_Grains, Chronology=="EMA" & Macroregion=="Northern Italy")
+Bot_Sites_for_GPR.EMA_MG$ID <- Bot_Sites_for_GPR$ID
+Bot_Sites_for_GPR.EMA_MG$Observation <- 1:nrow(Bot_Sites_for_GPR.EMA_MG)
+
+dat.Bot_Sites_for_GPR.EMA_MG <- list(
+    MG_Found = Bot_Sites_for_GPR.EMA_MG$Grain_Count, 
+    Tot_MG_Grains = Bot_Sites_for_GPR.EMA_MG$All_Grain_Count,
+    Observation=Bot_Sites_for_GPR.EMA_MG$Observation,
+    Dmat=Bot_Sites_for_GPR_DistMatrix)
+        
+        
+m14.8 <- ulam(
+    alist(
+        MG_Found ~ dbinom(7, p),
+        logit(p) <- Intercept * exp(Site[Observation]),
+        vector[42]:Site ~ multi_normal( 0 , SIGMA ),
+        matrix[42,42]:SIGMA <- cov_GPL2( Dmat , 
+                                         etasq , 
+                                         rhosq , 
+                                         0.01 ),
+        Intercept ~ dexp(1),
+        etasq ~ dexp( 2 ),
+        rhosq ~ dexp( 0.5 )
+    ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
+
+
+m14.8nc <- ulam(
+    alist(
+        MG_Found ~ dbinom(7, p),
+        logit(p) <- a*exp(Site[Observation]),
+        # non-centered Gaussian Process prior
+        transpars> vector[42]: Site <<- L_SIGMA * z,
+        vector[42]: z ~ normal( 0 , 1 ),
+        transpars> matrix[42,42]: L_SIGMA <<- cholesky_decompose( SIGMA ),
+        transpars> matrix[42,42]: SIGMA <- cov_GPL2( Dmat , 
+                                                     etasq , rhosq , 0.01 ),
+        a ~ dexp( 1 ),
+        etasq ~ dexp( 2 ),
+        rhosq ~ dexp( 0.5 )
+ ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
+
+
+
+```
+
+
 
 # To do:
 

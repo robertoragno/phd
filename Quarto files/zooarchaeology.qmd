@@ -377,6 +377,35 @@ knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_na
 ```
 :::
 
+# Precision plots
+The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible. 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| layout-ncol: 3
+
+library(rethinking)
+
+pbar <- 0.5
+theta <- 1
+curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
+    xlab="Probability" , ylab="Density", main="phi < 2" )
+
+pbar <- 0.5
+theta <- 2
+curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
+    xlab="probability" , ylab="Density" , main="phi = 2" )
+
+pbar <- 0.5
+theta <- 5
+curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
+    xlab="probability" , ylab="Density", main="phi > 2"  )
+
+```
+
+
 # Chronology
 
 ```{r}
@@ -1198,6 +1227,63 @@ Animals_by_Chronology_a.plot
 Animals_by_Chronology_phi.plot
 
 ```
+
+### Community plot
+```{r}
+#| echo: false
+
+Animals_by_Chronology_fit_comm <-  tibble(Animals_by_Chronology_a_fit, theta= Animals_by_Chronology_phi_fit$theta)
+
+Animals_by_Chronology_fit_comm <- slice_sample(
+  Animals_by_Chronology_fit_comm,
+  n=4000
+)
+```
+
+
+```{r}
+#| echo: false
+#| fig-height: 10
+
+ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = animal)) +
+  geom_point(alpha = .4) +
+  theme_tidybayes() +
+  scale_color_brewer(palette = "Spectral") +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +  
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  labs(
+    x = "Predicted occurrence",
+    y = "Precision",
+    color = "Animal",
+    title = "Animals",
+    subtitle = "Chronological occurrence against precision"
+  )+
+  facet_grid(factor(Chronology, levels=chrono_levels)~., scales="free")
+
+```
+
 
 # Context type
 
@@ -3156,6 +3242,80 @@ WMammals_BB.plot
 WMammals_BB_phi.plot
 ```
 
+## Community plot
+
+```{r}
+#| echo: false
+
+Animals_by_SiteType_fit_comm <- bind_rows(
+(Pigs_BB_Merge_a %>% 
+  bind_cols(Precis = Pigs_BB_Merge_phi$theta) %>%
+  mutate(animal = "Pigs")),
+(Cattle_BB_Merge_a %>% 
+  bind_cols(Precis = Cattle_BB_Merge_phi$theta) %>%
+  mutate(animal = "Cattle")),
+(Caprine_BB_Merge_a %>% 
+  bind_cols(Precis = Caprine_BB_Merge_phi$theta) %>%
+  mutate(animal = "Caprine")),
+(WMammals_BB_Merge_a %>% 
+  bind_cols(Precis = WMammals_BB_Merge_phi$theta) %>%
+  mutate(animal = "W_Mammals"))
+)
+
+
+Animals_by_SiteType_fit_comm <- subset(Animals_by_SiteType_fit_comm, Type=="Rural" | Type=="Urban" | Type=="Rural villa" | Type=="Fortified")
+
+Animals_by_SiteType_fit_comm <- slice_sample(
+  Animals_by_SiteType_fit_comm,
+  n=4000
+)
+
+```
+
+```{r}
+#| echo: false
+#| fig-height: 10
+#| fig-width: 12
+
+ggplot(Animals_by_SiteType_fit_comm, aes(x = inv_logit(a), y = Precis, color = Type)) +
+  geom_point(alpha = .4) +
+  theme_tidybayes() +
+  scale_color_brewer(palette = "Spectral") +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +  
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 8),
+    sec.axis = dup_axis()
+  ) +
+  scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 8),
+    sec.axis = dup_axis()
+  ) +
+  labs(
+    x = "Predicted occurrence",
+    y = "Precision",
+    color = "Animal",
+    title = "Animals",
+    subtitle = "Chronological occurrence against precision"
+  )+
+  facet_grid(factor(Chronology, levels=chrono_levels)~animal, scales="free")
+
+```
+
 # Macroregion
 
 ```{r}
@@ -3187,6 +3347,7 @@ dat.WMammals_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Edible.W..Mamm
 # To save up on rendering time
 ########################################
 
+
 Pigs_Reg.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_reg.stan",  # Stan program
   data = dat.Pigs_Reg,    # named list of data
@@ -3195,7 +3356,7 @@ Pigs_Reg.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_Reg.fit, "stan_models/Pigs_Reg_fit.rds")
+saveRDS(Pigs_Reg.fit, "stan_models/Pigs_Reg_fit.rds")
 
 ```
 
@@ -3386,6 +3547,7 @@ Pigs_Reg_phi.plot <- Pigs_Reg.fit_phi %>%
 
 Pigs_Reg.plot
 Pigs_Reg_phi.plot
+
 ```
 
 ## Cattle
@@ -5624,3 +5786,4 @@ Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = a, y = b, color = an
 
 Domestic_Alt_post.plot
 ```
+

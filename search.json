@@ -4,7 +4,7 @@
     "href": "zooarchaeology.html",
     "title": "8  Zooarchaeology",
     "section": "",
-    "text": "9 Chronology\nProposed model:\n\\[\nP_{i} \\sim BetaBinomial(NISP_{i}, \\bar{p}_{i} , \\phi_{i})\n\\]\n\\[\nlogit(\\bar{p}_{i}) = \\alpha_{[ChrID]} + \\beta_{[ChrID]}\\cdot Alt_{i}\n\\]\n\\[\n\\alpha_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\beta_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\phi \\sim Exponential(1)\n\\]"
+    "text": "9 Precision plots\nThe following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter \\(\\phi\\), that shapes the beta curve. What is the correct way to interpret it? A \\(\\phi\\) value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a \\(\\phi\\) value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if \\(\\phi\\) equals 2 every probability between 0 and 1 is likely possible.\nProposed model:\n\\[\nP_{i} \\sim BetaBinomial(NISP_{i}, \\bar{p}_{i} , \\phi_{i})\n\\]\n\\[\nlogit(\\bar{p}_{i}) = \\alpha_{[ChrID]} + \\beta_{[ChrID]}\\cdot Alt_{i}\n\\]\n\\[\n\\alpha_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\beta_{ChrID} \\sim Normal(0,1.5)\n\\]\n\\[\n\\phi \\sim Exponential(1)\n\\]"
   },
   {
     "objectID": "zooarchaeology.html#case-studies",
@@ -563,8 +563,8 @@
     "objectID": "archaeobotany.html#wineolive-oil-production-in-italy",
     "href": "archaeobotany.html#wineolive-oil-production-in-italy",
     "title": "7  Archaeobotany",
-    "section": "13.1 Wine/Olive oil production in Italy",
-    "text": "13.1 Wine/Olive oil production in Italy\nQuestions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.\nAvailable data:\n\nSeed remains\nWine presses in Roman Italy (1st to 6th c. ca) -> Dodd\nWine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/\nDodd: “a notable increase in size from around the first century BCE.” No quantitative data provided."
+    "section": "14.1 Wine/Olive oil production in Italy",
+    "text": "14.1 Wine/Olive oil production in Italy\nQuestions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.\nAvailable data:\n\nSeed remains\nWine presses in Roman Italy (1st to 6th c. ca) -> Dodd\nWine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/\nDodd: “a notable increase in size from around the first century BCE.” No quantitative data provided."
   },
   {
     "objectID": "literature_review.html#studies-on-roman-economy",
@@ -605,8 +605,8 @@
     "objectID": "archaeobotany.html#fruit-consumption",
     "href": "archaeobotany.html#fruit-consumption",
     "title": "7  Archaeobotany",
-    "section": "13.2 Fruit consumption",
-    "text": "13.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
+    "section": "14.2 Fruit consumption",
+    "text": "14.2 Fruit consumption\n\nThe domesticated and the wild\nWhat fruits arrive on the Roman table?\nCan we see a decreased consumption of figs during the LALIA in the north?\n\n\n\n\n\nAnderson, M.J., 2017. Permutational Multivariate Analysis of Variance (PERMANOVA). In: Wiley StatsRef: Statistics Reference Online. John Wiley & Sons, Ltd, pp. 1–15.\n\n\nBowes, K.D., University of Pennsylvania (Eds.), 2020. The Roman Peasant Project 2009-2014: Excavating the Roman rural poor, First edition. ed, University museum monograph. University of Pennsylvania, Museum of Archaeology and Anthropology, Philadelphia.\n\n\nKosub, S., 2019. A note on the triangle inequality for the Jaccard distance. Pattern Recognition Letters 120, 36–38.\n\n\nOksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. Vegan: Community ecology package."
   },
   {
     "objectID": "zooarchaeology.html#in-progress",
@@ -633,85 +633,85 @@
     "objectID": "zooarchaeology.html#pigs",
     "href": "zooarchaeology.html#pigs",
     "title": "8  Zooarchaeology",
-    "section": "10.1 Pigs",
-    "text": "10.1 Pigs\n\n\n\n\n\n\nQuestion: Is the animal X - let’s say Pigs - more strongly associated to a particular settlement type during a certain chronology?\nExpectation 1: Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.\nExpectation 2: Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).\nExpectation 3: If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?"
+    "section": "11.1 Pigs",
+    "text": "11.1 Pigs\n\n\n\n\n\n\nQuestion: Is the animal X - let’s say Pigs - more strongly associated to a particular settlement type during a certain chronology?\nExpectation 1: Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.\nExpectation 2: Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).\nExpectation 3: If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?"
   },
   {
     "objectID": "zooarchaeology.html#cattle",
     "href": "zooarchaeology.html#cattle",
     "title": "8  Zooarchaeology",
-    "section": "10.2 Cattle",
-    "text": "10.2 Cattle\n\n\n\n\n\n\n\n\n\n\n\nWarning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.\nℹ Please use the `linewidth` argument instead."
+    "section": "11.2 Cattle",
+    "text": "11.2 Cattle\n\n\n\n\n\n\n\n\n\n\n\nWarning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.\nℹ Please use the `linewidth` argument instead."
   },
   {
     "objectID": "zooarchaeology.html#caprine",
     "href": "zooarchaeology.html#caprine",
     "title": "8  Zooarchaeology",
-    "section": "10.3 Caprine",
-    "text": "10.3 Caprine"
+    "section": "11.3 Caprine",
+    "text": "11.3 Caprine"
   },
   {
     "objectID": "zooarchaeology.html#cattle-1",
     "href": "zooarchaeology.html#cattle-1",
     "title": "8  Zooarchaeology",
-    "section": "11.2 Cattle",
-    "text": "11.2 Cattle"
+    "section": "12.2 Cattle",
+    "text": "12.2 Cattle"
   },
   {
     "objectID": "zooarchaeology.html#pigs-1",
     "href": "zooarchaeology.html#pigs-1",
     "title": "8  Zooarchaeology",
-    "section": "11.1 Pigs",
-    "text": "11.1 Pigs"
+    "section": "12.1 Pigs",
+    "text": "12.1 Pigs"
   },
   {
     "objectID": "zooarchaeology.html#edible-w.-mammals",
     "href": "zooarchaeology.html#edible-w.-mammals",
     "title": "8  Zooarchaeology",
-    "section": "10.4 Edible W. Mammals",
-    "text": "10.4 Edible W. Mammals"
+    "section": "11.4 Edible W. Mammals",
+    "text": "11.4 Edible W. Mammals"
   },
   {
     "objectID": "zooarchaeology.html#caprine-1",
     "href": "zooarchaeology.html#caprine-1",
     "title": "8  Zooarchaeology",
-    "section": "11.3 Caprine",
-    "text": "11.3 Caprine"
+    "section": "12.3 Caprine",
+    "text": "12.3 Caprine"
   },
   {
     "objectID": "zooarchaeology.html#edible-w.-mammals-1",
     "href": "zooarchaeology.html#edible-w.-mammals-1",
     "title": "8  Zooarchaeology",
-    "section": "11.4 Edible W. Mammals",
-    "text": "11.4 Edible W. Mammals"
+    "section": "12.4 Edible W. Mammals",
+    "text": "12.4 Edible W. Mammals"
   },
   {
     "objectID": "zooarchaeology.html#pigs-2",
     "href": "zooarchaeology.html#pigs-2",
     "title": "8  Zooarchaeology",
-    "section": "12.1 Pigs",
-    "text": "12.1 Pigs"
+    "section": "13.1 Pigs",
+    "text": "13.1 Pigs"
   },
   {
     "objectID": "zooarchaeology.html#cattle-2",
     "href": "zooarchaeology.html#cattle-2",
     "title": "8  Zooarchaeology",
-    "section": "12.2 Cattle",
-    "text": "12.2 Cattle"
+    "section": "13.2 Cattle",
+    "text": "13.2 Cattle"
   },
   {
     "objectID": "zooarchaeology.html#caprine-2",
     "href": "zooarchaeology.html#caprine-2",
     "title": "8  Zooarchaeology",
-    "section": "12.3 Caprine",
-    "text": "12.3 Caprine"
+    "section": "13.3 Caprine",
+    "text": "13.3 Caprine"
   },
   {
     "objectID": "zooarchaeology.html#edible-w.-mammals-2",
     "href": "zooarchaeology.html#edible-w.-mammals-2",
     "title": "8  Zooarchaeology",
-    "section": "12.4 Edible W. Mammals",
-    "text": "12.4 Edible W. Mammals"
+    "section": "13.4 Edible W. Mammals",
+    "text": "13.4 Edible W. Mammals"
   },
   {
     "objectID": "archaeobotany.html#cereals-1",
@@ -752,29 +752,29 @@
     "objectID": "zooarchaeology.html#pigs-3",
     "href": "zooarchaeology.html#pigs-3",
     "title": "8  Zooarchaeology",
-    "section": "13.1 Pigs",
-    "text": "13.1 Pigs"
+    "section": "14.1 Pigs",
+    "text": "14.1 Pigs"
   },
   {
     "objectID": "zooarchaeology.html#caprine-3",
     "href": "zooarchaeology.html#caprine-3",
     "title": "8  Zooarchaeology",
-    "section": "13.3 Caprine",
-    "text": "13.3 Caprine"
+    "section": "14.3 Caprine",
+    "text": "14.3 Caprine"
   },
   {
     "objectID": "zooarchaeology.html#cattle-3",
     "href": "zooarchaeology.html#cattle-3",
     "title": "8  Zooarchaeology",
-    "section": "13.2 Cattle",
-    "text": "13.2 Cattle"
+    "section": "14.2 Cattle",
+    "text": "14.2 Cattle"
   },
   {
     "objectID": "zooarchaeology.html#edible-w.-mammals-3",
     "href": "zooarchaeology.html#edible-w.-mammals-3",
     "title": "8  Zooarchaeology",
-    "section": "13.4 Edible W. Mammals",
-    "text": "13.4 Edible W. Mammals"
+    "section": "14.4 Edible W. Mammals",
+    "text": "14.4 Edible W. Mammals"
   },
   {
     "objectID": "zooarchaeology.html#community-plot",
@@ -864,14 +864,28 @@
     "objectID": "zooarchaeology.html#trends-by-century",
     "href": "zooarchaeology.html#trends-by-century",
     "title": "8  Zooarchaeology",
-    "section": "9.1 Trends by century",
-    "text": "9.1 Trends by century"
+    "section": "10.1 Trends by century",
+    "text": "10.1 Trends by century"
   },
   {
     "objectID": "zooarchaeology.html#trends-by-traditional-chronologies",
     "href": "zooarchaeology.html#trends-by-traditional-chronologies",
     "title": "8  Zooarchaeology",
-    "section": "9.2 Trends by traditional chronologies",
-    "text": "9.2 Trends by traditional chronologies"
+    "section": "10.2 Trends by traditional chronologies",
+    "text": "10.2 Trends by traditional chronologies\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n10.2.1 Community plot"
+  },
+  {
+    "objectID": "zooarchaeology.html#community-plot-1",
+    "href": "zooarchaeology.html#community-plot-1",
+    "title": "8  Zooarchaeology",
+    "section": "11.5 Community plot",
+    "text": "11.5 Community plot"
+  },
+  {
+    "objectID": "zooarchaeology.html#community-plot-2",
+    "href": "zooarchaeology.html#community-plot-2",
+    "title": "8  Zooarchaeology",
+    "section": "14.5 Community plot",
+    "text": "14.5 Community plot\n\n\n\n\n\n\n\n\nFigure 14.1: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation."
   }
 ]
