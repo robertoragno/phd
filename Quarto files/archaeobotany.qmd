@@ -961,6 +961,26 @@ Important: This section has to be rewritten as now the approach is not frequenti
 
 It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
 
+::: callout-note
+Important: The new section will start from here.
+:::
+
+To estimate the probability of occurrence of one (or more) taxa in each chronology and context, I used a Binomial distribution. The $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. For instance, in the case of 'Noble Grains', the model is trying to assess the probability that common wheat and barley will be on a site type in a certain chronology. The $T$ value for noble grains will then be 2. The outcome variable $F$ indicates the number of types of noble grains found on a particular site $i$, and it can have values ranging from 0 (no noble grains found) to 2 (the site has both barley and common wheat). Although this is not the common way to use a binomial distribution, it was a necessary adjustment as I am working with presence/absence data. 
+The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[TCid]}$ as the model will provide estimates for each context type and chronology under examination.
+
+$$
+F_{i} \sim Binomial(T, \bar{p}_{i} )
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[TCid]}
+$$
+
+$$
+\alpha_{[TCid]} \sim Normal(0,1)
+$$
+
+
 ```{r}
 #| echo: false
 #| eval: false
@@ -3371,6 +3391,21 @@ mds_EMA.boxplot
 :::
 
 ### Noble grains
+
+The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled.
+The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+
+$$
+F_{i} \sim Binomial(T, \bar{p}_{i} )
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[REGid]}
+$$
+
+$$
+\alpha_{[REGid]} \sim Normal(0,1)
+$$
 
 ```{r}
 #| echo: false
