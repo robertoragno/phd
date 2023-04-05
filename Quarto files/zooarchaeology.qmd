@@ -1428,7 +1428,7 @@ Pigs_RurUrb.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_RurUrb.fit, "stan_models/Pigs_RurUrb_fit.rds")
+saveRDS(Pigs_RurUrb.fit, "stan_models/Pigs_RurUrb_fit.rds")
 
 Pigs_Rel.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
@@ -1438,7 +1438,7 @@ Pigs_Rel.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_Rel.fit, "stan_models/Pigs_Rel_fit.rds")
+saveRDS(Pigs_Rel.fit, "stan_models/Pigs_Rel_fit.rds")
 
 Pigs_Necr_Amph.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
@@ -1448,7 +1448,7 @@ Pigs_Necr_Amph.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_Necr_Amph.fit, "stan_models/Pigs_Necr_Amph_fit.rds")
+saveRDS(Pigs_Necr_Amph.fit, "stan_models/Pigs_Necr_Amph_fit.rds")
 
 Pigs_Fort.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -1458,7 +1458,7 @@ Pigs_Fort.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_Fort.fit, "stan_models/Pigs_Fort_fit.rds")
+saveRDS(Pigs_Fort.fit, "stan_models/Pigs_Fort_fit.rds")
 
 Pigs_Villas_fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -1468,7 +1468,7 @@ Pigs_Villas_fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Pigs_Villas_fit, "stan_models/Pigs_Villas_fit.rds")
+saveRDS(Pigs_Villas_fit, "stan_models/Pigs_Villas_fit.rds")
 
 
 
@@ -1909,7 +1909,7 @@ Cattle_RurUrb.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_RurUrb.fit, "stan_models/Cattle_RurUrb_fit.rds")
+saveRDS(Cattle_RurUrb.fit, "stan_models/Cattle_RurUrb_fit.rds")
 
 Cattle_Rel.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
@@ -1919,7 +1919,7 @@ Cattle_Rel.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_Rel.fit, "stan_models/Cattle_Rel_fit.rds")
+saveRDS(Cattle_Rel.fit, "stan_models/Cattle_Rel_fit.rds")
 
 Cattle_Necr_Amph.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
@@ -1929,7 +1929,7 @@ Cattle_Necr_Amph.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_Necr_Amph.fit, "stan_models/Cattle_Necr_Amph_fit.rds")
+saveRDS(Cattle_Necr_Amph.fit, "stan_models/Cattle_Necr_Amph_fit.rds")
 
 Cattle_Fort.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -1939,7 +1939,7 @@ Cattle_Fort.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_Fort.fit, "stan_models/Cattle_Fort_fit.rds")
+saveRDS(Cattle_Fort.fit, "stan_models/Cattle_Fort_fit.rds")
 
 Cattle_Villas_fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -1949,7 +1949,7 @@ Cattle_Villas_fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_Villas_fit, "stan_models/Cattle_Villas_fit.rds")
+saveRDS(Cattle_Villas_fit, "stan_models/Cattle_Villas_fit.rds")
 
 ```
 
@@ -2369,7 +2369,7 @@ Caprine_RurUrb.fit <- stan(
   cores = 4,              # number of cores (could use one per chain
 )
 
-#saveRDS(Caprine_RurUrb.fit, "stan_models/Caprine_RurUrb_fit.rds")
+saveRDS(Caprine_RurUrb.fit, "stan_models/Caprine_RurUrb_fit.rds")
 
 Caprine_Rel.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Relig.stan",  # Stan program
@@ -2379,7 +2379,7 @@ Caprine_Rel.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Caprine_Rel.fit, "stan_models/Caprine_Rel_fit.rds")
+saveRDS(Caprine_Rel.fit, "stan_models/Caprine_Rel_fit.rds")
 
 Caprine_Necr_Amph.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_NecrAmph.stan",  # Stan program
@@ -2389,7 +2389,7 @@ Caprine_Necr_Amph.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Caprine_Necr_Amph.fit, "stan_models/Caprine_Necr_Amph_fit.rds")
+saveRDS(Caprine_Necr_Amph.fit, "stan_models/Caprine_Necr_Amph_fit.rds")
 
 Caprine_Fort.fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -2399,7 +2399,7 @@ Caprine_Fort.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Caprine_Fort.fit, "stan_models/Caprine_Fort_fit.rds")
+saveRDS(Caprine_Fort.fit, "stan_models/Caprine_Fort_fit.rds")
 
 Caprine_Villas_fit <- stan(
   file = "stan_models/stan_models_codes/beta_binomial_model_Fort.stan",  # Stan program
@@ -2409,7 +2409,7 @@ Caprine_Villas_fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Caprine_Villas_fit, "stan_models/Caprine_Villas_fit.rds")
+saveRDS(Caprine_Villas_fit, "stan_models/Caprine_Villas_fit.rds")
 
 ```
 
@@ -3574,7 +3574,7 @@ Cattle_Reg.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Cattle_Reg.fit, "stan_models/Cattle_Reg_fit.rds")
+saveRDS(Cattle_Reg.fit, "stan_models/Cattle_Reg_fit.rds")
 
 ```
 
@@ -3790,7 +3790,7 @@ Caprine_Reg.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-#saveRDS(Caprine_Reg.fit, "stan_models/Caprine_Reg_fit.rds")
+saveRDS(Caprine_Reg.fit, "stan_models/Caprine_Reg_fit.rds")
 
 ```
 
@@ -4007,7 +4007,6 @@ WMammals_Reg.fit <- stan(
   iter = 4000,            # total number of iterations per chain
   cores = 4,              # number of cores (could use one per chain
 )
-
 
 saveRDS(WMammals_Reg.fit, "stan_models/WMammals_Reg_fit.rds")
 
@@ -4243,7 +4242,7 @@ Pigs_Geo.fit <- stan(
   cores = 4,              # number of cores (could use one per chain
 )
 
-#saveRDS(Pigs_Geo.fit, "stan_models/Pigs_Geo_fit.rds")
+saveRDS(Pigs_Geo.fit, "stan_models/Pigs_Geo_fit.rds")
 
 ```
 
@@ -4483,7 +4482,7 @@ Cattle_Geo.fit <- stan(
   cores = 4,              # number of cores (could use one per chain
 )
 
-#saveRDS(Cattle_Geo.fit, "stan_models/Cattle_Geo_fit.rds")
+saveRDS(Cattle_Geo.fit, "stan_models/Cattle_Geo_fit.rds")
 
 ```
 
@@ -4723,7 +4722,7 @@ Caprine_Geo.fit <- stan(
   cores = 4,              # number of cores (could use one per chain
 )
 
-#saveRDS(Caprine_Geo.fit, "stan_models/Caprine_Geo_fit.rds")
+saveRDS(Caprine_Geo.fit, "stan_models/Caprine_Geo_fit.rds")
 
 ```
 
