@@ -977,8 +977,26 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 $$
 
 $$
-\alpha_{[TCid]} \sim Normal(0,1)
+\alpha_{[TCid]} \sim Normal(0,1.5)
 $$
+The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior. 
+
+
+```{r}
+#| echo: false
+#| label: fig-prior-pred-context-type
+#| fig-cap: "Prior predictive simulation for the binomial models used in this section."
+
+# Prior predictive simulation:
+plot(
+  density(inv_logit(
+    rnorm(1e4, 0, 1.5)
+    )
+    ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)"
+  )
+```
+
+
 
 
 ```{r}
@@ -1502,7 +1520,7 @@ m_ng_type <- ulam(
    alist(
         NG_Found ~ dbinom( 2 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Noble_Grain.list , chains=4
     )
 
@@ -1514,7 +1532,7 @@ m_mg_type <- ulam(
     alist(
         MG_Found ~ dbinom( 7 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Minor_Grains_Type.list , chains=4
     )
 
@@ -1527,7 +1545,7 @@ m_leg_type <- ulam(
     alist(
         Leg_Found ~ dbinom( 7 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Legumes.list , chains=4
     )
 
@@ -1539,7 +1557,7 @@ m_grape_type <- ulam(
     alist(
         Grape_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Grape.list , chains=4
     )
 
@@ -1551,7 +1569,7 @@ m_olives_type <- ulam(
     alist(
         Olive_Found ~ dbinom( 1 , p ), # Basically a bernoulli dist
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,2)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Olive.list , chains=4
     )
 
@@ -1564,7 +1582,7 @@ m_nuts_type <- ulam(
     alist(
         Nuts_Found ~ dbinom( 3 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Nuts.list , chains=4
     )
 saveRDS(m_nuts_type, "stan_models/m_nuts_type.rds")
@@ -1575,7 +1593,7 @@ m_berries_type <- ulam(
     alist(
         Berries_Found ~ dbinom( 9 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=Berries_type.list , chains=4
     )
 
@@ -2173,7 +2191,7 @@ m_dfruit_type <- ulam(
     alist(
         DF_Found ~ dbinom( 7 , p ),
         logit(p) <- TypeChr[TC_ID],
-        TypeChr[TC_ID] ~ dnorm(0,1)
+        TypeChr[TC_ID] ~ dnorm(0,1.5)
     ), data=DomFruit.list , chains=4
     )
 
@@ -2873,6 +2891,284 @@ see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in 
 
 ## Cereals
 
+### Noble grains
+
+The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled.
+The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+
+$$
+F_{i} \sim Binomial(T, \bar{p}_{i} )
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[REGid]}
+$$
+
+$$
+\alpha_{[REGid]} \sim Normal(0,1.5)
+$$
+
+```{r}
+#| echo: false
+
+# Convert to list
+Noble_Grains.list <- list(
+    NG_Found = Noble_Grains_Reg$Grain_Count,
+    MG_Tot = 2, # Barley + Common Wheat
+    RC_ID = as.factor((interaction(Noble_Grains_Reg$Chronology, 
+                                   Noble_Grains_Reg$Macroregion)))
+   )
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+
+
+# Create a binomial model, where N is 2 because that is the total number of noble 
+# grains studied in this research
+m_ng_reg <- ulam(
+    alist(
+        NG_Found ~ dbinom( 2 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1.5)
+    ), data=Noble_Grains.list , chains=4
+    )
+
+saveRDS(m_ng_reg, "stan_models/m_ng_reg.rds")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+
+m_ng_reg <- readRDS("stan_models/m_ng_reg.rds")
+
+m_ng_reg.df <- m_ng_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_ng_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_ng_reg.df
+
+m_ng_reg.plot <- ggplot(
+  data = m_ng_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+  geom_vline(
+    xintercept = inv_logit(mean(m_ng_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Noble Grains",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-ng-macroregion
+#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_ng_reg.plot
+```
+
+### Minor grains
+The model for minor grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on minor grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only minor grain found among other cereals in a context. Modelling the presence of more minor grains in a site can give insights on the rural economy. 
+The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+
+$$
+F_{i} \sim Binomial(7, \bar{p}_{i} )
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[REGid]}
+$$
+
+$$
+\alpha_{[REGid]} \sim Normal(0,1.5)
+$$
+
+```{r}
+#| echo: false
+#| eval: true
+#| code-fold: true
+
+# Convert to list
+Minor_Grains.list <- list(
+    MG_Found = Minor_Grains$Grain_Count,
+    MG_Tot = 7,
+    RC_ID = as.factor((interaction(Minor_Grains$Chronology, 
+                                   Minor_Grains$Macroregion)))
+   )
+```
+
+```{r}
+#| echo: false
+#| eval: false
+#| code-fold: true
+
+# Create a binomial model, where N is 7 because that is the total number of minor 
+# grains studied in this thesis
+m_mg_reg <- ulam(
+    alist(
+        MG_Found ~ dbinom( 7 , p ),
+        logit(p) <- RegChr[RC_ID],
+        RegChr[RC_ID] ~ dnorm(0,1.5)
+    ), data=Minor_Grains.list , chains=4
+    )
+
+saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| output: false
+
+m_mg_reg <- readRDS("stan_models/m_mg_reg.rds")
+
+m_mg_reg.df <- m_mg_reg %>%
+  spread_draws(RegChr[RC_ID])
+
+m_mg_reg.df %>% mutate(Region = case_when(
+  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
+  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
+  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
+))  %>% mutate(Chrono = case_when(
+    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
+    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
+    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
+    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
+)) -> m_mg_reg.df
+
+m_mg_reg.plot <- ggplot(
+  data = m_mg_reg.df,
+  aes(
+    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
+    x = inv_logit(RegChr)
+  )
+) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99),
+    linewidth = 3
+  ) +
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+  geom_vline(
+    xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_color_brewer(palette = "Greys") +
+  scale_y_discrete(limits = rev) +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 10),
+    sec.axis = dup_axis()
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  ) +
+  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
+  labs(
+    title = "Minor Grains",
+    subtitle = "Macroregional distribution",
+    x = "Probability",
+    y = "Chronology",
+    color = "Credible interval",
+    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
+  )
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-bayes-glm-mg-macroregion
+#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+
+m_mg_reg.plot
+```
+
+
 ### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
 
 ::: callout-important
@@ -3094,16 +3390,19 @@ The suggestion of an Early Medieval shift in cereal farming stated in @sec-macro
 #| code-summary: "Show the code: Pre-processing"
 #| code-overflow: wrap
 # Testing the results: Regionality in the dataset? 
-library(vegan)
 
+# Load libraries and set seed
+library(vegan)
 set.seed(29)
 
 # Pre processing: remove empty rows
-
 # Note: The input table is the CONDENSED table without totals
 
 # Selecting all the cereals columns of the plant remains table, keeping some categorical variables 
 cer_macroreg_ubiquity_transp.tot <- Df_Cond_Plants[c(4,5,6,7,11:19)]
+
+# Set NAs to 0
+cer_macroreg_ubiquity_transp.tot[is.na(cer_macroreg_ubiquity_transp.tot)]<- 0
 
 # Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
 cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer_macroreg_ubiquity_transp.tot[5:13])>0,]
@@ -3111,15 +3410,34 @@ cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer
 # Assigning a column name "Macroregion"
 colnames(cer_macroreg_ubiquity_transp.tot)[1] = "Macroregion"
 
-# Selecting the Chronology of interest (EMA) and excluding Central Italy
-cer_macroreg_ubiquity_transp.tot<- filter(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
+# SUBSETTING DATA
 
-# dividing categorical and numerical columns
+# ROMAN
+# Selecting the Chronology of interest (R) and excluding Central Italy
+cer_macroreg_ubiquity_transp.tot.Roman <- subset(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="R")
+
+# Creating two dataframes for categorical and numerical columns (Roman)
+cer_macroreg_ubiquity_transp.categ.Roman <- cer_macroreg_ubiquity_transp.tot.Roman[1:4]
+cer_macroreg_ubiquity_transp.data.Roman <- cer_macroreg_ubiquity_transp.tot.Roman[5:13]
+
+# Converting the numerical columns into a presence/absence matrix (using method=pa)
+cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
+cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
+
+
+## EMA
+cer_macroreg_ubiquity_transp.tot<- subset(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
+
+# Creating two dataframes for categorical and numerical columns (EMA)
 cer_macroreg_ubiquity_transp.categ <- cer_macroreg_ubiquity_transp.tot[1:4]
 cer_macroreg_ubiquity_transp.data <- cer_macroreg_ubiquity_transp.tot[5:13]
 
 # Converting the numerical columns into a presence/absence matrix (using method=pa)
+# Roman
+cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
+# EMA
 cer_macroreg_ubiquity_transp.dist <- decostand(cer_macroreg_ubiquity_transp.data, method="pa", na.rm=TRUE)
+
 
 
 ```
@@ -3142,12 +3460,25 @@ cer_macroreg_ubiquity_transp.div <- adonis2(
   permutations = 10000, method="jaccard"
   )
 
+cer_macroreg_ubiquity_transp.div.Roman <- adonis2(
+  cer_macroreg_ubiquity_transp.dist.Roman ~ Macroregion, 
+  data = cer_macroreg_ubiquity_transp.categ.Roman,
+  permutations = 10000, method="jaccard"
+  )
+
 ```
 :::
 
+*Roman*
 ```{r}
 #| echo: false
+cer_macroreg_ubiquity_transp.div.Roman
+```
 
+
+*Early Medieval*
+```{r}
+#| echo: false
 cer_macroreg_ubiquity_transp.div
 
 ```
@@ -3198,8 +3529,9 @@ anova(cer_macroreg_ubiquity_transp.betadisper) # This should not be significant!
 #| fid-dpi: 300
 
 # Now we can plot and see that group dispersions (distances from centroids) are very similar, but compositions seem to be very different. Let's go to adonis to test that.
-plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot")
-boxplot(cer_macroreg_ubiquity_transp.betadisper)
+plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot", col=c("#90a955", "#212529"))
+
+boxplot(cer_macroreg_ubiquity_transp.betadisper, col="khaki4", xlab="Macroregion")
 
 ```
 
@@ -3253,8 +3585,8 @@ Df_Cond_Plants_simplified$Type <- str_replace_all(
 Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)] <- decostand(Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)], method="pa")
 
 # Creating dataframes for the chronologies R and EMA
-Df_Cereals_R <- filter(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
-Df_Cereals_EMA <- filter(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
+Df_Cereals_R <- subset(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
+Df_Cereals_EMA <- subset(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
 
 # Selecting only cereals from both dataframes
 Df_Cereals_R <- Df_Cereals_R[1:14]
@@ -3285,22 +3617,25 @@ mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Df_Cereals_EMA$Macroregio
 # Create dataframes to calculate wasserstein distance
 library(transport)
 
-MDS_Scores_R_SI <- (filter(mds_df_R, Macroregion=="Southern Italy"))$MDS1
-MDS_Scores_R_NI <- (filter(mds_df_R, Macroregion=="Northern Italy"))$MDS1
+MDS_Scores_R_SI <- (subset(mds_df_R, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_R_NI <- (subset(mds_df_R, Macroregion=="Northern Italy"))$MDS1
 
-MDS_Scores_EMA_SI <- (filter(mds_df_EMA, Macroregion=="Southern Italy"))$MDS1
-MDS_Scores_EMA_NI <- (filter(mds_df_EMA, Macroregion=="Northern Italy"))$MDS1
+MDS_Scores_EMA_SI <- (subset(mds_df_EMA, Macroregion=="Southern Italy"))$MDS1
+MDS_Scores_EMA_NI <- (subset(mds_df_EMA, Macroregion=="Northern Italy"))$MDS1
 
        
 # Create the plots
 mds_R.plot <- ggplot(
   data=mds_df_R, 
-  aes(x=MDS1, group=Macroregion, color=Macroregion, fill=Macroregion)) +
+  aes(x=MDS1, 
+      group=Macroregion, 
+      color=Macroregion, 
+      fill=Macroregion)) +
     geom_density(adjust=1.5, alpha=.2) +
       geom_vline(aes(xintercept=mean(MDS_Scores_R_SI)),
-            color="#90a955", linetype="dashed", size=.8)+ #South
+            color="#90a955", linetype="dashed", linewidth=.8)+ #South
       geom_vline(aes(xintercept=mean(MDS_Scores_R_NI)),
-            color="#212529", linetype="dashed", size=.8)+ #North
+            color="#212529", linetype="dashed", linewidth=.8)+ #North
   scale_fill_manual(values=c("#212529","#90a955"))+
   scale_color_manual(values=c("#212529","#90a955"))+
   theme_pubclean()+
@@ -3321,10 +3656,10 @@ mds_EMA.plot <- ggplot(
   geom_density(adjust=1.5, alpha=.2) +
   geom_vline(
     aes(xintercept=mean(MDS_Scores_EMA_SI), color="mean"),
-    color="#90a955", linetype="dashed", size=.8)+ #South
+    color="#90a955", linetype="dashed", linewidth=.8)+ #South
   geom_vline(
     aes(xintercept=mean(MDS_Scores_EMA_NI)),
-    color="#212529", linetype="dashed", size=.8)+ #North
+    color="#212529", linetype="dashed", linewidth=.8)+ #North
   scale_fill_manual(values=c("#212529","#90a955"))+
   scale_color_manual(values=c("#212529","#90a955"))+
   theme_pubclean()+
@@ -3388,270 +3723,25 @@ mds_R.boxplot
 mds_EMA.boxplot
 
 ```
+
+```{r}
+#| echo: false
+#| label: fig-stressplots-nMDS-R-EMA
+#| fig-cap: "Shepards stressplots showing the goodness of fit between ordination distances and observed dissimilarities for both Chronologies."
+#| fig-subcap: 
+#|  - "Roman age."
+#|  - "Early Medieval age."
+#| layout-nrow: 1
+#| layout-ncol: 2
+
+stressplot(mds_R, p.col="khaki4", l.col="#212529")
+
+stressplot(mds_EMA, p.col="khaki4", l.col="#212529")
+
+```
+
+
 :::
-
-### Noble grains
-
-The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled.
-The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
-
-$$
-F_{i} \sim Binomial(T, \bar{p}_{i} )
-$$
-
-$$
-logit(\bar{p}_{i}) = \alpha_{[REGid]}
-$$
-
-$$
-\alpha_{[REGid]} \sim Normal(0,1)
-$$
-
-```{r}
-#| echo: false
-
-# Convert to list
-Noble_Grains.list <- list(
-    NG_Found = Noble_Grains_Reg$Grain_Count,
-    MG_Tot = 2, # Barley + Common Wheat
-    RC_ID = as.factor((interaction(Noble_Grains_Reg$Chronology, 
-                                   Noble_Grains_Reg$Macroregion)))
-   )
-```
-
-```{r}
-#| echo: false
-#| eval: false
-#| code-fold: true
-
-
-# Create a binomial model, where N is 2 because that is the total number of noble 
-# grains studied in this research
-m_ng_reg <- ulam(
-    alist(
-        NG_Found ~ dbinom( 2 , p ),
-        logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
-    ), data=Noble_Grains.list , chains=4
-    )
-
-saveRDS(m_ng_reg, "stan_models/m_ng_reg.rds")
-
-```
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| output: false
-
-
-m_ng_reg <- readRDS("stan_models/m_ng_reg.rds")
-
-m_ng_reg.df <- m_ng_reg %>%
-  spread_draws(RegChr[RC_ID])
-
-m_ng_reg.df %>% mutate(Region = case_when(
-  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
-  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
-  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
-))  %>% mutate(Chrono = case_when(
-    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
-    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
-    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
-    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
-)) -> m_ng_reg.df
-
-m_ng_reg.plot <- ggplot(
-  data = m_ng_reg.df,
-  aes(
-    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
-    x = inv_logit(RegChr)
-  )
-) +
-  stat_interval(
-    .width = c(.50, .80, .95, .99),
-    linewidth = 3
-  ) +
-    stat_summary(
-    geom = "point",
-    fun = "mean",
-    col = "white",
-    size = 2,
-    shape = 1
-  )+
-  geom_vline(
-    xintercept = inv_logit(mean(m_ng_reg.df$RegChr)),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  scale_color_brewer(palette = "Greys") +
-  scale_y_discrete(limits = rev) +
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 10),
-    sec.axis = dup_axis()
-  ) +
-  theme_tidybayes() +
-  theme(
-    legend.position = "bottom",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.25,
-      linetype = 2
-    ),
-    axis.title.x.top = element_blank()
-  ) +
-  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
-  labs(
-    title = "Noble Grains",
-    subtitle = "Macroregional distribution",
-    x = "Probability",
-    y = "Chronology",
-    color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
-  )
-
-```
-
-```{r}
-#| echo: false
-#| label: fig-bayes-glm-ng-macroregion
-#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
-
-m_ng_reg.plot
-```
-
-### Minor grains
-
-```{r}
-#| echo: false
-#| eval: true
-#| code-fold: true
-
-# Convert to list
-Minor_Grains.list <- list(
-    MG_Found = Minor_Grains$Grain_Count,
-    MG_Tot = 7,
-    RC_ID = as.factor((interaction(Minor_Grains$Chronology, 
-                                   Minor_Grains$Macroregion)))
-   )
-```
-
-```{r}
-#| echo: false
-#| eval: false
-#| code-fold: true
-
-# Create a binomial model, where N is 7 because that is the total number of minor 
-# grains studied in this thesis
-m_mg_reg <- ulam(
-    alist(
-        MG_Found ~ dbinom( 7 , p ),
-        logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
-    ), data=Minor_Grains.list , chains=4
-    )
-
-saveRDS(m_mg_reg, "stan_models/m_mg_reg.rds")
-
-```
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| output: false
-
-m_mg_reg <- readRDS("stan_models/m_mg_reg.rds")
-
-m_mg_reg.df <- m_mg_reg %>%
-  spread_draws(RegChr[RC_ID])
-
-m_mg_reg.df %>% mutate(Region = case_when(
-  RC_ID >= 9 &  RC_ID <=12 ~ "SI",
-  RC_ID >= 1 & RC_ID <= 4 ~ "CI",
-  RC_ID >= 5 & RC_ID <= 8  ~ "NI"
-))  %>% mutate(Chrono = case_when(
-    RC_ID == 4 |  RC_ID == 8 | RC_ID==12  ~ "R",
-    RC_ID == 2 |  RC_ID == 6 | RC_ID == 10  ~ "LR",
-    RC_ID == 1 |  RC_ID == 5 | RC_ID == 9  ~ "EMA",
-    RC_ID == 3 |  RC_ID == 7 | RC_ID == 11 ~ "Ma"
-)) -> m_mg_reg.df
-
-m_mg_reg.plot <- ggplot(
-  data = m_mg_reg.df,
-  aes(
-    y = (factor(Chrono, levels = c("R", "LR", "EMA", "Ma"))),
-    x = inv_logit(RegChr)
-  )
-) +
-  stat_interval(
-    .width = c(.50, .80, .95, .99),
-    linewidth = 3
-  ) +
-    stat_summary(
-    geom = "point",
-    fun = "mean",
-    col = "white",
-    size = 2,
-    shape = 1
-  )+
-  geom_vline(
-    xintercept = inv_logit(mean(m_mg_reg.df$RegChr)),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  scale_color_brewer(palette = "Greys") +
-  scale_y_discrete(limits = rev) +
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 10),
-    sec.axis = dup_axis()
-  ) +
-  theme_tidybayes() +
-  theme(
-    legend.position = "bottom",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.25,
-      linetype = 2
-    ),
-    axis.title.x.top = element_blank()
-  ) +
-  facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
-  labs(
-    title = "Minor Grains",
-    subtitle = "Macroregional distribution",
-    x = "Probability",
-    y = "Chronology",
-    color = "Credible interval",
-    caption = "The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line."
-  )
-
-```
-
-```{r}
-#| echo: false
-#| label: fig-bayes-glm-mg-macroregion
-#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
-
-m_mg_reg.plot
-```
 
 ## Legumes
 
@@ -3685,7 +3775,7 @@ m_leg_reg <- ulam(
     alist(
         Leg_Found ~ dbinom( 7 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=Legumes_reg.list , chains=4
     )
 
@@ -3807,7 +3897,7 @@ m_grape_reg <- ulam(
     alist(
         Grape_Found ~ dbinom( 1 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=Grape_reg.list , chains=4
     )
 
@@ -3931,7 +4021,7 @@ m_olive_reg <- ulam(
     alist(
         Olive_Found ~ dbinom( 1 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=Olive_reg.list , chains=4
     )
 
@@ -4058,7 +4148,7 @@ m_nuts_reg <- ulam(
     alist(
         Nuts_Found ~ dbinom( 3 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=Nuts_reg.list , chains=4
     )
 
@@ -4186,7 +4276,7 @@ m_dfruit_reg <- ulam(
     alist(
         DF_Found ~ dbinom( 7 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=DomFruit_reg.list , chains=4
     )
 
@@ -4194,7 +4284,7 @@ m_berries_reg <- ulam(
     alist(
         Berries_Found ~ dbinom( 9 , p ),
         logit(p) <- RegChr[RC_ID],
-        RegChr[RC_ID] ~ dnorm(0,1)
+        RegChr[RC_ID] ~ dnorm(0,1.5)
     ), data=Berries_reg.list , chains=4
     )
 
