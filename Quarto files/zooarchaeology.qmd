@@ -4277,6 +4277,76 @@ WMammals_Reg_phi.plot
 ```
 
 # Geography
+
+Animals distributions can vary across different geographical features. This research has considered plain, coast, hill and mountains as the most common geographical features in the Italian peninsula. Archaeological excavations where zooarchaeological remains have been analysed are located at low altitudes. Although as expected there are more mountain sites in Northern Italy, sampled sites are evenly placed on plains, coastlands and hills across the three Italian macroregions. 
+
+
+```{r}
+#| echo: false
+#| message: false
+
+library(waffle)
+
+geo_waffle_tbl_North <- table((subset(Animals_Df2, Macroregion=="Northern Italy"))$Geo) %>% 
+  as.data.frame() %>% 
+  mutate(Macroregion= "Northern Italy")
+
+geo_waffle_tbl_South <- table((subset(Animals_Df2, Macroregion=="Southern Italy"))$Geo) %>% as.data.frame()%>% 
+  mutate(Macroregion= "Southern Italy")
+
+geo_waffle_tbl_Central <- table((subset(Animals_Df2, Macroregion=="Central Italy"))$Geo) %>% as.data.frame() %>% 
+  mutate(Macroregion= "Central Italy")
+
+geo_waffle_tbl <- rbind(geo_waffle_tbl_North, geo_waffle_tbl_South, geo_waffle_tbl_Central) %>% as_tibble()
+colnames(geo_waffle_tbl) <- c("Geography", "Frequency", "Macroregion")
+
+```
+
+```{r}
+#| echo: false
+#| fig-cap: "Distribution of sites on different geographical features."
+#| label: fig-waffle-zoo-geo
+
+
+ggplot(geo_waffle_tbl, aes(fill = factor(
+  Geography, levels = c("Coast", "Plain", "Hill", "Mountain")
+), values = Frequency)) +
+  geom_waffle(
+    n_rows = 10,
+    size = 0.33,
+    colour = "white",
+    flip = TRUE,
+    make_proportional = TRUE
+  ) +
+  scale_fill_brewer(palette = "Spectral", direction = -1) +
+ # coord_equal() +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    aspect.ratio = 1,
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey100"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  labs(fill = "Geography",
+       title = "Geographical distribution of sites") +
+  facet_wrap(factor(
+    Macroregion,
+    levels = c("Southern Italy", "Central Italy", "Northern Italy")
+  ) ~ .)
+```
+
+
 To estimate the animals' occurrences probability in each chronology and geography, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[GEOid]}$ as the model will provide estimates for each geography and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and geography.
 
 $$

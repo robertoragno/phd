@@ -6281,7 +6281,6 @@ m14.8 <- ulam(
         rhosq ~ dexp( 0.5 )
     ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
 
-
 m14.8nc <- ulam(
     alist(
         MG_Found ~ dbinom(7, p),
