@@ -6,9 +6,16 @@ always_allow_html: true
 
 ```{r}
 #| echo: false
+#| message: false
+#| output: false
 
 # Load functions
 source('functions_bot.R')
+
+# Libraries
+library(rethinking)
+library(tidybayes.rethinking)
+library(tidybayes)
 ```
 
 ::: callout-important
@@ -751,13 +758,41 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
-# Site diversity by chronology
+# Site richness and diversity by chronology
 
 ::: callout-tip
 Make sure to cite @nagendra2002 to explain why the indices show different results.
 :::
 
-The diversity of sites has been calculated using the package `vegan` and the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce credible results. The graph shows extended Credible levels for groups with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11th century. Consequently, its credible range is very wide.
+The richness of sites across the chronologies was calculated . For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce credible results. The graph shows extended credible intervals for groups with fewer observations. The mean plants richness has been calculated using a Poisson distribution. The model uses each site ${i}$ richness ($R_{i}$) as the outcome variable, calculated as follows
+
+$$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$
+where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to modelling four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation. This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean (intercept). The formula for the Poisson regression is as follows, where the priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
+
+$$
+R_{i} \sim Poisson({\lambda}_{i})
+$$
+
+$$
+log {\lambda}_{i} = Intercept_{[ChrID]} + Slope_{[Observations]}
+$$
+
+$$
+Intercept_{[ChrID]} \sim Normal(3,0.5)
+$$
+
+$$
+Slope_{[Observations]} \sim Normal(0,0.2)
+$$
+
+
+
+```{r}
+#| echo: false
+
+plot(density(exp(rnorm(1e4,3,0.5)+rnorm(1e4,0,0.2))), main="Prior Predictive Simulation", col=rangi2)
+```
+
 
 ```{r}
 #| echo: false
@@ -796,10 +831,6 @@ Plants_Diversity$Diversity_Shannon_Eq = diversity(Plants_Diversity[,c(6:ncol(Pla
 #| message: false
 #| output: false
 
-library(rethinking)
-library(tidybayes.rethinking)
-library(tidybayes)
-
 # Create a list for ULAM
 
 # Create a list for STAN
@@ -808,6 +839,19 @@ dat.Plants_Diversity = list(
   Diversity_Simpson = Plants_Diversity$Diversity_Simpson,
   Chronology = factor(Plants_Diversity$Chronology),
   Observations = (1:nrow(Plants_Diversity))
+)
+
+# Creating a dataframe to count the richness
+Plants_Diversity_for_Richness <- Plants_Diversity
+Plants_Diversity_for_Richness <- Plants_Diversity_for_Richness[, -c(15,16,25,24,48:50)]
+Plants_Diversity_for_Richness[,6:43] <- decostand(Plants_Diversity_for_Richness[,6:43], method="pa")
+Plants_Diversity_for_Richness$Richness = rowSums(Plants_Diversity_for_Richness[, c(6:43)])
+
+  
+dat.Plants_Richness = list(
+  Richness = Plants_Diversity_for_Richness$Richness,
+  Chronology = factor(Plants_Diversity_for_Richness$Chronology),
+  Observations = (1:nrow(Plants_Diversity_for_Richness))
 )
 
 
@@ -829,6 +873,15 @@ dat.Plants_Diversity = list(
 
 set.seed(24)
 
+Plants_Richness_by_Chronology_fit <- 
+  ulam(
+    alist(
+        Richness ~ dpois( p ),
+        log(p) <- Intercept[Chronology] + Slope[Observations],
+        Intercept[Chronology] ~ dnorm(3,0.5),
+        Slope[Observations] ~ dnorm(0,0.2)
+    ), data=dat.Plants_Richness , chains=4 , log_lik=TRUE )
+
 Plants_Diversity_Shannon_by_Chronology_fit <- 
   ulam(
    alist(
@@ -849,9 +902,9 @@ Plants_Diversity_Simpson_by_Chronology_fit <-
     ), data=dat.Plants_Diversity , chains=4, iter = 4000
     )
 
+saveRDS(Plants_Richness_by_Chronology_fit, "stan_models/by_Chronology/Plants_Richness_by_Chronology_fit.rds")
 saveRDS(Plants_Diversity_Shannon_by_Chronology_fit, "stan_models/by_Chronology/Plants_Diversity_Shannon_by_Chronology_fit.rds")
 saveRDS(Plants_Diversity_Simpson_by_Chronology_fit, "stan_models/by_Chronology/Plants_Diversity_Simpson_by_Chronology_fit.rds")
-
 
 ```
 
@@ -859,11 +912,34 @@ saveRDS(Plants_Diversity_Simpson_by_Chronology_fit, "stan_models/by_Chronology/P
 #| echo: false
 
 # Read RDS
+Plants_Richness_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Plants_Richness_by_Chronology_fit.rds")
 Plants_Diversity_Shannon_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Plants_Diversity_Shannon_by_Chronology_fit.rds")
 Plants_Diversity_Simpson_by_Chronology_fit <- readRDS("stan_models/by_Chronology/Plants_Diversity_Simpson_by_Chronology_fit.rds")
 
 # Plots
 chrono_levels <- c("R", "LR", "EMA", "Ma")
+
+Plants_Richness_by_Chronology_fit_Intercept <- Plants_Richness_by_Chronology_fit %>%
+  spread_draws(Intercept[Chronology]) %>% 
+    mutate(Chronology = case_when(
+    Chronology == 1 ~ "EMA",
+    Chronology == 2 ~ "LR",
+    Chronology == 3 ~ "Ma",
+    Chronology == 4 ~ "R"
+  ))
+
+Plants_Richness_by_Chronology_fit_Slope <- Plants_Richness_by_Chronology_fit %>%
+  spread_draws(Slope[Observations])
+
+Plants_Richness_by_Chronology_fit_Slope_Means <- aggregate(Plants_Richness_by_Chronology_fit_Slope$Slope, 
+                   by = list(Plants_Richness_by_Chronology_fit_Slope$Observations), 
+                   FUN = mean)
+
+Plants_Richness_by_Chronology_fit_Slope_Means$x <- exp(Plants_Richness_by_Chronology_fit_Slope_Means$x)
+
+Plants_Richness_by_Chronology_fit_Slope_Means$Chronology <- Plants_Diversity_for_Richness$Chronology
+
+colnames(Plants_Richness_by_Chronology_fit_Slope_Means) <- c("Observation", "Slope", "Chronology")
 
 Plants_Diversity_Shannon_by_Chronology_fit_Intercept <- Plants_Diversity_Shannon_by_Chronology_fit %>%
   spread_draws(Intercept[Chronology]) %>% 
@@ -894,8 +970,96 @@ Plants_Diversity_Indices_by_Chronology_Means <- data.frame(
 )
 
 Plants_Diversity_Indices_by_Chronology_fit_Intercept <- bind_rows(Plants_Diversity_Shannon_by_Chronology_fit_Intercept,Plants_Diversity_Simpson_by_Chronology_fit_Intercept)
+
 ```
 
+```{r}
+#| echo: false
+
+Plants_Richness_by_Chronology_fit_Intercept %>%
+  ggplot(aes(
+    y = factor(Chronology, levels = chrono_levels),
+    x = exp(Intercept)
+  )) +
+  stat_interval(.width = c(.50, .80, .95, .99),
+                linewidth = 3) +
+  stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+    geom_vline(
+    aes(xintercept = exp(mean( Plants_Richness_by_Chronology_fit_Intercept$Intercept))),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys", name = "Credible interval") +
+  labs(
+    x = "Predicted number of taxa",
+    y = "Chronology",
+    title = "Plant Richness"
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  )
+
+Plants_Richness_by_Chronology_fit_Slope_Means %>%
+  ggplot(aes(
+    y = factor(Chronology, levels = chrono_levels),
+    x = Slope
+  )) +
+  geom_boxplot(width = 0.2, alpha = 0.6) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
+                     sec.axis = dup_axis()) +
+  scale_y_discrete(limits = rev) +
+  scale_color_brewer(palette = "Greys", name = "Credible interval") +
+  labs(
+    x = "Slope (deviation from the mean)",
+    y = "Chronology",
+    title = "Plant Richness - Varying effect",
+    caption = "Predicted mean sites deviation from the intercept, plotted by chronology."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  )
+
+```
+
+The diversity of sites has been calculated using the package `vegan` and the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). Only complete cases have been used in the calculations as for the sites richness. The graph shows extended credible intervals for groups with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11th century. Consequently, its credible range is very wide.
 ```{r}
 #| echo: false
 
@@ -965,8 +1129,7 @@ It is possible to examine the distribution of plants across different site types
 Important: The new section will start from here.
 :::
 
-To estimate the probability of occurrence of one (or more) taxa in each chronology and context, I used a Binomial distribution. The $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. For instance, in the case of 'Noble Grains', the model is trying to assess the probability that common wheat and barley will be on a site type in a certain chronology. The $T$ value for noble grains will then be 2. The outcome variable $F$ indicates the number of types of noble grains found on a particular site $i$, and it can have values ranging from 0 (no noble grains found) to 2 (the site has both barley and common wheat). Although this is not the common way to use a binomial distribution, it was a necessary adjustment as I am working with presence/absence data. 
-The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[TCid]}$ as the model will provide estimates for each context type and chronology under examination.
+To estimate the probability of occurrence of one (or more) taxa in each chronology and context, I used a Binomial distribution. The $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. For instance, in the case of 'Noble Grains', the model is trying to assess the probability that common wheat and barley will be on a site type in a certain chronology. The $T$ value for noble grains will then be 2. The outcome variable $F$ indicates the number of types of noble grains found on a particular site $i$, and it can have values ranging from 0 (no noble grains found) to 2 (the site has both barley and common wheat). Although this is not the common way to use a binomial distribution, it was a necessary adjustment as I am working with presence/absence data. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[TCid]}$ as the model will provide estimates for each context type and chronology under examination.
 
 $$
 F_{i} \sim Binomial(T, \bar{p}_{i} )
@@ -978,9 +1141,8 @@ $$
 
 $$
 \alpha_{[TCid]} \sim Normal(0,1.5)
-$$
-The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior. 
-
+$$ 
+The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
 
 ```{r}
 #| echo: false
@@ -995,9 +1157,6 @@ plot(
     ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)"
   )
 ```
-
-
-
 
 ```{r}
 #| echo: false
@@ -2893,8 +3052,7 @@ see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in 
 
 ### Noble grains
 
-The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled.
-The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
 
 $$
 F_{i} \sim Binomial(T, \bar{p}_{i} )
@@ -3031,8 +3189,8 @@ m_ng_reg.plot
 ```
 
 ### Minor grains
-The model for minor grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on minor grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only minor grain found among other cereals in a context. Modelling the presence of more minor grains in a site can give insights on the rural economy. 
-The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+
+The model for minor grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on minor grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only minor grain found among other cereals in a context. Modelling the presence of more minor grains in a site can give insights on the rural economy. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
 
 $$
 F_{i} \sim Binomial(7, \bar{p}_{i} )
@@ -3167,7 +3325,6 @@ m_mg_reg.plot <- ggplot(
 
 m_mg_reg.plot
 ```
-
 
 ### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
 
@@ -3470,13 +3627,14 @@ cer_macroreg_ubiquity_transp.div.Roman <- adonis2(
 :::
 
 *Roman*
+
 ```{r}
 #| echo: false
 cer_macroreg_ubiquity_transp.div.Roman
 ```
 
-
 *Early Medieval*
+
 ```{r}
 #| echo: false
 cer_macroreg_ubiquity_transp.div
@@ -3739,8 +3897,6 @@ stressplot(mds_R, p.col="khaki4", l.col="#212529")
 stressplot(mds_EMA, p.col="khaki4", l.col="#212529")
 
 ```
-
-
 :::
 
 ## Legumes
@@ -4473,8 +4629,6 @@ The creation of altitude models was not possible for every plant investigated in
 
 The probability of occurrence of the most common cereal remains can be modelled against the elevation of sites in the four time periods under consideration. It is worth noting that the sites where the archaeobotanical remains have been found are not evenly distributed. In the Roman age, most sites investigated are located between 0 and 100 MSL, whereas after there is an increasing number of remains from sites between at higher elevations. Whether this reflects a real shift in settlement patterns is outside the aims of this study, but it might still be informative to visualise the different distribution of sites across elevations.
 
-
-
 ```{r}
 #| echo: false
 
@@ -4490,7 +4644,6 @@ bot_altitude[is.na(bot_altitude)] <- 0
 # Create a chronology table for the map
 bot_altitude.chronotable <- table(factor(bot_altitude$Chronology, levels = chrono_levels))
 ```
-
 
 ```{r}
 #| echo: false
@@ -4528,8 +4681,6 @@ bot_altitude %>%
 
 
 ```
-
-
 
 ### Model specification and priors
 

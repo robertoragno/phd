@@ -5592,6 +5592,10 @@ Pigs_Alt_fit.reth <- ulam(
 
 saveRDS(Pigs_Alt_fit.reth, "stan_models/Pigs_Alt_fit_rethinking.rds")
 
+# CODE WITH STAN MODEL
+
+
+
 ```
 
 ```{r}
@@ -5721,7 +5725,7 @@ Cattle_Alt_fit_reth.plot
 # CODE WITH STAN MODEL
 # THIS GIVES A THETA FOR EACH CHRONOLOGY
 Capr_Alt_fit <- stan(
-  file = "stan_models/stan_models_codes/beta_binomial_model_capr_altitude2.stan",  # Stan program
+  file = "stan_models/stan_models_codes/beta_binomial_model_animals_altitude.stan",  # Stan program
   data = dat.Caprine_Altitude,    # named list of data
   chains = 4,             # number of Markov chains
   warmup = 1000,          # number of warmup iterations per chain
