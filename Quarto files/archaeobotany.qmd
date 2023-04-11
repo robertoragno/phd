@@ -764,33 +764,31 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 Make sure to cite @nagendra2002 to explain why the indices show different results.
 :::
 
-The richness of sites across the chronologies was calculated . For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce credible results. The graph shows extended credible intervals for groups with fewer observations. The mean plants richness has been calculated using a Poisson distribution. The model uses each site ${i}$ richness ($R_{i}$) as the outcome variable, calculated as follows
+Species richness is a measure used in ecology consisting simply in the counts of species found at a certain location. In archaeology, it can be informative for assessing how many different plants were found at a site. For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce more credible and comparable results. The graph shows extended credible intervals for groups with fewer observations. 
+
+The aim of the following model was to calculate the mean plant richness in each chronology. The distribution chosen for the model is a Poisson distribution, used when counts do not have a fixed upper boundary (as it is the case of a binomial distribution, for instance). The outcome variable is the richness ($R_{i}$) for each site ${i}$, calculated as follows
 
 $$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$
-where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to modelling four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation. This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean (intercept). The formula for the Poisson regression is as follows, where the priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
+where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to calculating four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation ($\beta_{[Observations]}$). This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean ($\alpha_{[ChrID]}$). The formula for the Poisson regression is as follows, where priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
 
-$$
-R_{i} \sim Poisson({\lambda}_{i})
-$$
+$$R_{i} \sim Poisson({\lambda}_{i})$$
 
-$$
-log {\lambda}_{i} = Intercept_{[ChrID]} + Slope_{[Observations]}
-$$
-
-$$
-Intercept_{[ChrID]} \sim Normal(3,0.5)
-$$
-
-$$
-Slope_{[Observations]} \sim Normal(0,0.2)
-$$
-
+$$log {\lambda}_{i} = \alpha_{[ChrID]} + \beta_{[Observations]}$$
+$$\alpha_{[ChrID]} \sim Normal(3,0.5)$$
+$$\beta_{[Observations]} \sim Normal(0,0.2)$$
 
 
 ```{r}
 #| echo: false
 
-plot(density(exp(rnorm(1e4,3,0.5)+rnorm(1e4,0,0.2))), main="Prior Predictive Simulation", col=rangi2)
+plot(
+  density(
+rpois(1000, exp(rnorm(1e4, 3, 0.5)+rnorm(1e4,0,0.2)))
+    ), 
+main="Prior Predictive Simulation", 
+sub="Exponential(Normal(3,05)+Normal(0,0.2))",
+col=rangi2, xlim=c(0,100))
+
 ```
 
 
@@ -877,27 +875,40 @@ Plants_Richness_by_Chronology_fit <-
   ulam(
     alist(
         Richness ~ dpois( p ),
-        log(p) <- Intercept[Chronology] + Slope[Observations],
-        Intercept[Chronology] ~ dnorm(3,0.5),
-        Slope[Observations] ~ dnorm(0,0.2)
+        log(p) <- a[Chronology] + b[Observations],
+        a[Chronology] ~ dnorm(3,0.5),
+        b[Observations] ~ dnorm(0,0.2)
     ), data=dat.Plants_Richness , chains=4 , log_lik=TRUE )
 
 Plants_Diversity_Shannon_by_Chronology_fit <- 
   ulam(
    alist(
         Diversity_Shannon_Eq ~ dnorm( mu , sigma ),
-        mu <- Intercept[Chronology],
-        Intercept[Chronology] ~ dnorm(0,1.5),
+        mu <- a[Chronology],
+        a[Chronology] ~ dnorm(0,1.5),
         sigma ~ dexp(1)
-    ), data=dat.Plants_Diversity , chains=4, iter = 4000
+    ), data=dat.Plants_Diversity , chains=4, iter = 4000, log_lik = T
     )
+
+# TESTS 
+Plants_Diversity_Shannon_by_Chronology_fit_BETA <- 
+  quap(
+   alist(
+        Diversity_Shannon_Eq ~ dbeta2( mu , phi ),
+        mu <- a[Chronology],
+        a[Chronology] ~ dunif(0,1),
+        phi ~ dexp(1)
+    ), data=dat.Plants_Diversity
+    )
+
+# END TESTS
 
 Plants_Diversity_Simpson_by_Chronology_fit <- 
   ulam(
    alist(
         Diversity_Simpson ~ dnorm( mu , sigma ),
-        mu <- Intercept[Chronology],
-        Intercept[Chronology] ~ dnorm(0,1.5),
+        mu <- a[Chronology],
+        a[Chronology] ~ dnorm(0,1.5),
         sigma ~ dexp(1)
     ), data=dat.Plants_Diversity , chains=4, iter = 4000
     )
@@ -919,8 +930,8 @@ Plants_Diversity_Simpson_by_Chronology_fit <- readRDS("stan_models/by_Chronology
 # Plots
 chrono_levels <- c("R", "LR", "EMA", "Ma")
 
-Plants_Richness_by_Chronology_fit_Intercept <- Plants_Richness_by_Chronology_fit %>%
-  spread_draws(Intercept[Chronology]) %>% 
+Plants_Richness_by_Chronology_fit_a <- Plants_Richness_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>% 
     mutate(Chronology = case_when(
     Chronology == 1 ~ "EMA",
     Chronology == 2 ~ "LR",
@@ -928,21 +939,21 @@ Plants_Richness_by_Chronology_fit_Intercept <- Plants_Richness_by_Chronology_fit
     Chronology == 4 ~ "R"
   ))
 
-Plants_Richness_by_Chronology_fit_Slope <- Plants_Richness_by_Chronology_fit %>%
-  spread_draws(Slope[Observations])
+Plants_Richness_by_Chronology_fit_b <- Plants_Richness_by_Chronology_fit %>%
+  spread_draws(b[Observations])
 
-Plants_Richness_by_Chronology_fit_Slope_Means <- aggregate(Plants_Richness_by_Chronology_fit_Slope$Slope, 
-                   by = list(Plants_Richness_by_Chronology_fit_Slope$Observations), 
+Plants_Richness_by_Chronology_fit_b_Means <- aggregate(Plants_Richness_by_Chronology_fit_b$b, 
+                   by = list(Plants_Richness_by_Chronology_fit_b$Observations), 
                    FUN = mean)
 
-Plants_Richness_by_Chronology_fit_Slope_Means$x <- exp(Plants_Richness_by_Chronology_fit_Slope_Means$x)
+Plants_Richness_by_Chronology_fit_b_Means$x <- exp(Plants_Richness_by_Chronology_fit_b_Means$x)
 
-Plants_Richness_by_Chronology_fit_Slope_Means$Chronology <- Plants_Diversity_for_Richness$Chronology
+Plants_Richness_by_Chronology_fit_b_Means$Chronology <- Plants_Diversity_for_Richness$Chronology
 
-colnames(Plants_Richness_by_Chronology_fit_Slope_Means) <- c("Observation", "Slope", "Chronology")
+colnames(Plants_Richness_by_Chronology_fit_b_Means) <- c("Observation", "b", "Chronology")
 
-Plants_Diversity_Shannon_by_Chronology_fit_Intercept <- Plants_Diversity_Shannon_by_Chronology_fit %>%
-  spread_draws(Intercept[Chronology]) %>% 
+Plants_Diversity_Shannon_by_Chronology_fit_a <- Plants_Diversity_Shannon_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>% 
     mutate(Index="Shannon_Eq") %>% 
     mutate(Chronology = case_when(
     Chronology == 1 ~ "EMA",
@@ -951,8 +962,8 @@ Plants_Diversity_Shannon_by_Chronology_fit_Intercept <- Plants_Diversity_Shannon
     Chronology == 4 ~ "R"
   ))
 
-Plants_Diversity_Simpson_by_Chronology_fit_Intercept <- Plants_Diversity_Simpson_by_Chronology_fit %>%
-  spread_draws(Intercept[Chronology]) %>% 
+Plants_Diversity_Simpson_by_Chronology_fit_a <- Plants_Diversity_Simpson_by_Chronology_fit %>%
+  spread_draws(a[Chronology]) %>% 
     mutate(Index="Simpson") %>% 
     mutate(Chronology = case_when(
     Chronology == 1 ~ "EMA",
@@ -964,22 +975,22 @@ Plants_Diversity_Simpson_by_Chronology_fit_Intercept <- Plants_Diversity_Simpson
 Plants_Diversity_Indices_by_Chronology_Means <- data.frame(
   Index=c("Shannon_Eq", "Simpson"),
   means=c(
-   mean(Plants_Diversity_Shannon_by_Chronology_fit_Intercept$Intercept),
-   mean(Plants_Diversity_Simpson_by_Chronology_fit_Intercept$Intercept)
+   mean(Plants_Diversity_Shannon_by_Chronology_fit_a$a),
+   mean(Plants_Diversity_Simpson_by_Chronology_fit_a$a)
     )
 )
 
-Plants_Diversity_Indices_by_Chronology_fit_Intercept <- bind_rows(Plants_Diversity_Shannon_by_Chronology_fit_Intercept,Plants_Diversity_Simpson_by_Chronology_fit_Intercept)
+Plants_Diversity_Indices_by_Chronology_fit_a <- bind_rows(Plants_Diversity_Shannon_by_Chronology_fit_a,Plants_Diversity_Simpson_by_Chronology_fit_a)
 
 ```
 
 ```{r}
 #| echo: false
 
-Plants_Richness_by_Chronology_fit_Intercept %>%
+Plants_Richness_by_Chronology_fit_a %>%
   ggplot(aes(
     y = factor(Chronology, levels = chrono_levels),
-    x = exp(Intercept)
+    x = exp(a)
   )) +
   stat_interval(.width = c(.50, .80, .95, .99),
                 linewidth = 3) +
@@ -991,7 +1002,7 @@ Plants_Richness_by_Chronology_fit_Intercept %>%
     shape = 1
   )+
     geom_vline(
-    aes(xintercept = exp(mean( Plants_Richness_by_Chronology_fit_Intercept$Intercept))),
+    aes(xintercept = exp(mean( Plants_Richness_by_Chronology_fit_a$a))),
     linetype = "twodash",
     linewidth = 0.45,
     color = "red4"
@@ -1023,10 +1034,10 @@ Plants_Richness_by_Chronology_fit_Intercept %>%
     axis.title.x.top = element_blank()
   )
 
-Plants_Richness_by_Chronology_fit_Slope_Means %>%
+Plants_Richness_by_Chronology_fit_b_Means %>%
   ggplot(aes(
     y = factor(Chronology, levels = chrono_levels),
-    x = Slope
+    x = b
   )) +
   geom_boxplot(width = 0.2, alpha = 0.6) +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
@@ -1034,10 +1045,10 @@ Plants_Richness_by_Chronology_fit_Slope_Means %>%
   scale_y_discrete(limits = rev) +
   scale_color_brewer(palette = "Greys", name = "Credible interval") +
   labs(
-    x = "Slope (deviation from the mean)",
+    x = "B (Slope)",
     y = "Chronology",
     title = "Plant Richness - Varying effect",
-    caption = "Predicted mean sites deviation from the intercept, plotted by chronology."
+    caption = "Predicted deviations from the mean, plotted by chronology."
   ) +
   theme_tidybayes() +
   theme(
@@ -1059,15 +1070,23 @@ Plants_Richness_by_Chronology_fit_Slope_Means %>%
 
 ```
 
-The diversity of sites has been calculated using the package `vegan` and the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). Only complete cases have been used in the calculations as for the sites richness. The graph shows extended credible intervals for groups with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11th century. Consequently, its credible range is very wide.
+In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a normal distribution as follows
+$$ D_{i} \sim Normal(\mu_{i}, \sigma_{i}) $$
+$$\mu_{i} = Intercept_{[ChrID]}$$
+$$Intercept_{[ChrID]} \sim Normal(0,1.5)$$
+$$\sigma_{i} \sim Exp(1)$$
+
+The graph shows extended credible intervals for groups (chronologies) with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11^th^ century. Consequently, its credible range is very wide.
+
+
 ```{r}
 #| echo: false
 
 
-Plants_Diversity_Indices_by_Chronology_fit_Intercept %>%
+Plants_Diversity_Indices_by_Chronology_fit_a %>%
   ggplot(aes(
     y = factor(Chronology, levels = chrono_levels),
-    x = Intercept
+    x = a
   )) +
   stat_interval(.width = c(.50, .80, .95, .99),
                 linewidth = 3) +
@@ -1113,7 +1132,6 @@ Plants_Diversity_Indices_by_Chronology_fit_Intercept %>%
   ) + facet_wrap(Index~.,
   ncol = 1,
   strip.position = "right")
-
 
 ```
 
