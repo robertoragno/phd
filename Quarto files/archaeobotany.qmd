@@ -764,19 +764,15 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 Make sure to cite @nagendra2002 to explain why the indices show different results.
 :::
 
-Species richness is a measure used in ecology consisting simply in the counts of species found at a certain location. In archaeology, it can be informative for assessing how many different plants were found at a site. For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce more credible and comparable results. The graph shows extended credible intervals for groups with fewer observations. 
+Species richness is a measure used in ecology consisting simply in the counts of species found at a certain location. In archaeology, it can be informative for assessing how many different plants were found at a site. For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce more credible and comparable results. The graph shows extended credible intervals for groups with fewer observations.
 
 The aim of the following model was to calculate the mean plant richness in each chronology. The distribution chosen for the model is a Poisson distribution, used when counts do not have a fixed upper boundary (as it is the case of a binomial distribution, for instance). The outcome variable is the richness ($R_{i}$) for each site ${i}$, calculated as follows
 
-$$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$
-where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to calculating four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation ($\beta_{[Observations]}$). This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean ($\alpha_{[ChrID]}$). The formula for the Poisson regression is as follows, where priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
+$$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$ where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to calculating four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation ($\beta_{[Observations]}$). This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean ($\alpha_{[ChrID]}$). The formula for the Poisson regression is as follows, where priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
 
 $$R_{i} \sim Poisson({\lambda}_{i})$$
 
-$$log {\lambda}_{i} = \alpha_{[ChrID]} + \beta_{[Observations]}$$
-$$\alpha_{[ChrID]} \sim Normal(3,0.5)$$
-$$\beta_{[Observations]} \sim Normal(0,0.2)$$
-
+$$log {\lambda}_{i} = \alpha_{[ChrID]} + \beta_{[Observations]}$$ $$\alpha_{[ChrID]} \sim Normal(3,0.5)$$ $$\beta_{[Observations]} \sim Normal(0,0.2)$$
 
 ```{r}
 #| echo: false
@@ -790,7 +786,6 @@ sub="Exponential(Normal(3,05)+Normal(0,0.2))",
 col=rangi2, xlim=c(0,100))
 
 ```
-
 
 ```{r}
 #| echo: false
@@ -880,37 +875,27 @@ Plants_Richness_by_Chronology_fit <-
         b[Observations] ~ dnorm(0,0.2)
     ), data=dat.Plants_Richness , chains=4 , log_lik=TRUE )
 
+
 Plants_Diversity_Shannon_by_Chronology_fit <- 
   ulam(
    alist(
-        Diversity_Shannon_Eq ~ dnorm( mu , sigma ),
-        mu <- a[Chronology],
-        a[Chronology] ~ dnorm(0,1.5),
-        sigma ~ dexp(1)
-    ), data=dat.Plants_Diversity , chains=4, iter = 4000, log_lik = T
+        Diversity_Shannon_Eq ~ dbeta2( mu , theta ),
+        logit(mu) <- a[Chronology],
+        a[Chronology] ~ dnorm( 0 , 1.5),
+        transpars> theta <<- phi + 2.0,
+        phi ~ dexp(0.1)
+    ), data=dat.Plants_Diversity, iter=4000, chains=4
     )
-
-# TESTS 
-Plants_Diversity_Shannon_by_Chronology_fit_BETA <- 
-  quap(
-   alist(
-        Diversity_Shannon_Eq ~ dbeta2( mu , phi ),
-        mu <- a[Chronology],
-        a[Chronology] ~ dunif(0,1),
-        phi ~ dexp(1)
-    ), data=dat.Plants_Diversity
-    )
-
-# END TESTS
 
 Plants_Diversity_Simpson_by_Chronology_fit <- 
   ulam(
    alist(
-        Diversity_Simpson ~ dnorm( mu , sigma ),
-        mu <- a[Chronology],
-        a[Chronology] ~ dnorm(0,1.5),
-        sigma ~ dexp(1)
-    ), data=dat.Plants_Diversity , chains=4, iter = 4000
+        Diversity_Simpson ~ dbeta2( mu , theta ),
+        logit(mu) <- a[Chronology],
+        a[Chronology] ~ dnorm( 0 , 1.5),
+        transpars> theta <<- phi + 2.0,
+        phi ~ dexp(0.1)
+     ), data=dat.Plants_Diversity , chains=4, iter = 4000
     )
 
 saveRDS(Plants_Richness_by_Chronology_fit, "stan_models/by_Chronology/Plants_Richness_by_Chronology_fit.rds")
@@ -1070,14 +1055,30 @@ Plants_Richness_by_Chronology_fit_b_Means %>%
 
 ```
 
-In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a normal distribution as follows
-$$ D_{i} \sim Normal(\mu_{i}, \sigma_{i}) $$
-$$\mu_{i} = Intercept_{[ChrID]}$$
-$$Intercept_{[ChrID]} \sim Normal(0,1.5)$$
-$$\sigma_{i} \sim Exp(1)$$
+In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows 
+$$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ 
+$$logit(\mu_{i}) = a_{[ChrID]}$$ 
+$$a_{[ChrID]} \sim Normal(0,1.5)$$ 
+$$\phi_{i} \sim Exp(0.1)+2$$
+
+
+```{r}
+#| echo: false
+plot(
+  density(
+  rbeta2(1000, 
+         inv_logit(rnorm(1e4,0,1.5)), 
+         rexp(1000, 0.1)+2
+         )
+  ),
+  main="Prior Predictive Simulation", 
+col=rangi2, xlim=c(0,1)
+)
+
+```
+
 
 The graph shows extended credible intervals for groups (chronologies) with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11^th^ century. Consequently, its credible range is very wide.
-
 
 ```{r}
 #| echo: false
@@ -1086,7 +1087,7 @@ The graph shows extended credible intervals for groups (chronologies) with fewer
 Plants_Diversity_Indices_by_Chronology_fit_a %>%
   ggplot(aes(
     y = factor(Chronology, levels = chrono_levels),
-    x = a
+    x = inv_logit(a)
   )) +
   stat_interval(.width = c(.50, .80, .95, .99),
                 linewidth = 3) +
@@ -1099,7 +1100,7 @@ Plants_Diversity_Indices_by_Chronology_fit_a %>%
   )+
     geom_vline(
     data = Plants_Diversity_Indices_by_Chronology_Means,
-    aes(xintercept = means),
+    aes(xintercept = inv_logit(means)),
     linetype = "twodash",
     linewidth = 0.45,
     color = "red4"
@@ -1159,21 +1160,20 @@ $$
 
 $$
 \alpha_{[TCid]} \sim Normal(0,1.5)
-$$ 
-The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
+$$ The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
 
 ```{r}
 #| echo: false
 #| label: fig-prior-pred-context-type
-#| fig-cap: "Prior predictive simulation for the binomial models used in this section."
+#| fig-cap: "Prior predictive simulation for the binomial models used in this section. If for instance we want to know how many minor grains (out of seven types) each site was adopting, this prior is weakly informative because it shows no trends."
 
-# Prior predictive simulation:
-plot(
-  density(inv_logit(
-    rnorm(1e4, 0, 1.5)
-    )
-    ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)"
-  )
+simplehist(rbinom(1000, size=7, inv_logit(rnorm(1e4, 0, 1.5))),
+           xlab="Taxa", 
+           main="Prior Predictive Simulation", 
+           sub="rbinom(size=2, inv_logit(rnorm(1e4, 0, 1.5))",
+           col=rangi2)
+
+
 ```
 
 ```{r}
@@ -5512,9 +5512,6 @@ $$
 bPrecip_{ChrID} \sim Normal(0,1.3)
 $$
 
-$$
-\phi \sim Exponential(1)
-$$
 
 #### Model 2: Altitude only
 
@@ -5534,10 +5531,6 @@ $$
 
 $$
 bAlt_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-\phi \sim Exponential(1)
 $$
 
 #### Model 3: Altitude and Precipitation
@@ -5564,9 +5557,6 @@ $$
 bPrecip_{ChrID} \sim Normal(0,1.3)
 $$
 
-$$
-\phi \sim Exponential(1)
-$$
 
 ```{r}
 #| echo: false
@@ -5628,24 +5618,29 @@ We also want to make sure that the priors are weakly informative and are not dee
 #| layout-ncol: 2
 
 # Prior predictive simulation:
-plot(
-  density(inv_logit(
-    rnorm(1e4, 0, 1.3)+rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$Precip_Mean, size=1e4, replace=T)
-    )
-    ), main="Prior Predictive Simulation: One coefficient slope models", sub="inv_logit(Normal(0,1.3)+Normal(0,1.3)*Mean_Precipitation (std))"
-  )
 
-plot(
-  density(
-    inv_logit(
-    rnorm(1e4, 0, 1.3) + 
+simplehist(rbern(1000, 
+                  inv_logit(
+                    rnorm(1e4, 0, 1.3)+
+                    rnorm(1e4, 0,1.3)*sample(bot_altitude_precip$Precip_Mean, size=1e4, replace=T)
+    )
+                  ),
+           xlab="Taxa", 
+  main="Prior Predictive Simulation: One coefficient",
+           col=rangi2)
+
+simplehist(rbern(1000, 
+                 inv_logit(
+                    rnorm(1e4, 0, 1.3) + 
     rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$Precip_Mean, 
                               size=1e4, replace=T)+
     rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$site_altitude/1000, 
                               size=1e4, replace=T)
     )
-    ), main="Prior Predictive Simulation: Two coefficients slope model", sub="inv_logit(Normal(0,1.3)+Normal(0,1.5)*Mean_Precipitation (std)+Normal(0,1.3)*Altitude (km)"
-  )
+                  ),
+           xlab="Taxa", 
+ main="Prior Predictive Simulation: Two coefficients",
+           col=rangi2)
 
 ```
 
@@ -6004,24 +5999,30 @@ We also want to make sure that the priors are weakly informative and are not dee
 #| layout-ncol: 2
 
 # Prior predictive simulation:
-plot(
-  density(inv_logit(
-    rnorm(1e4, 0, 1.3)+rnorm(1e4, 0, 1.3)*sample(bot_altitude_temperature$temperature_Mean, size=1e4, replace=T)
-    )
-    ), main="Prior Predictive Simulation: One coefficient slope models", sub="inv_logit(Normal(0,1.3)+Normal(0,1.3)*MeanAnnualTemperature (std))"
-  )
 
-plot(
-  density(
-    inv_logit(
-    rnorm(1e4, 0, 1.3) + 
-    rnorm(1e4, 0, 1.3)*sample(bot_altitude_temperature$temperature_Mean, 
-                              size=1e4, replace=T) +
+simplehist(rbern(1000, 
+                  inv_logit(
+                    rnorm(1e4, 0, 1.3)+
+                    rnorm(1e4, 0,1.3)*sample(bot_altitude_precip$Precip_Mean, size=1e4, replace=T)
+    )
+                  ),
+           xlab="Taxa", 
+  main="Prior Predictive Simulation: One coefficient",
+           col=rangi2)
+
+simplehist(rbern(1000, 
+                 inv_logit(
+                    rnorm(1e4, 0, 1.3) + 
+    rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$Precip_Mean, 
+                              size=1e4, replace=T)+
     rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$site_altitude/1000, 
                               size=1e4, replace=T)
     )
-    ), main="Prior Predictive Simulation: Two coefficients slope model", sub="inv_logit(Normal(0,1.3)+Normal(0,1.3)*MeanAnnualTemperature (std)+Normal(0,1.3)*Altitude (km)"
-  )
+                  ),
+           xlab="Taxa", 
+ main="Prior Predictive Simulation: Two coefficients",
+           col=rangi2)
+
 
 ```
 

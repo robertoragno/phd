@@ -378,7 +378,8 @@ knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_na
 :::
 
 # Precision plots
-The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible. 
+
+The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible.
 
 ```{r}
 #| echo: false
@@ -405,9 +406,7 @@ curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
 
 ```
 
-
 # Chronology
-
 
 ```{r}
 #| echo: false
@@ -500,8 +499,6 @@ $$
 $$
 \phi_{[Century]} \sim Exponential(1)
 $$
-
-
 
 ```{r}
 #| message: false
@@ -901,7 +898,6 @@ $$
 \phi_{[ChrID]} \sim Exponential(1)
 $$
 
-
 ```{r}
 #| message: false
 #| output: false
@@ -1267,6 +1263,7 @@ Animals_by_Chronology_phi.plot
 ```
 
 ### Community plot
+
 ```{r}
 #| echo: false
 
@@ -1277,7 +1274,6 @@ Animals_by_Chronology_fit_comm <- slice_sample(
   n=4000
 )
 ```
-
 
 ```{r}
 #| echo: false
@@ -1322,7 +1318,6 @@ ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = 
 
 ```
 
-
 # Context type
 
 ## Pigs
@@ -1354,7 +1349,6 @@ $$
 $$
 \phi_{[TCid]} \sim Exponential(1)
 $$
-
 
 ```{r}
 #| echo: false
@@ -3374,6 +3368,7 @@ ggplot(Animals_by_SiteType_fit_comm, aes(x = inv_logit(a), y = Precis, color = T
 ```
 
 # Macroregion
+
 To estimate the animals' occurrences probability in each chronology and macroregion, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each macroregion and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and macroregion.
 
 $$
@@ -3391,7 +3386,6 @@ $$
 $$
 \phi_{[REGid]} \sim Exponential(1)
 $$
-
 
 ```{r}
 #| echo: false
@@ -3578,7 +3572,7 @@ Pigs_Reg.plot <- Pigs_Reg.fit_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -3607,7 +3601,7 @@ Pigs_Reg_phi.plot <- Pigs_Reg.fit_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -4278,8 +4272,7 @@ WMammals_Reg_phi.plot
 
 # Geography
 
-Animals distributions can vary across different geographical features. This research has considered plain, coast, hill and mountains as the most common geographical features in the Italian peninsula. Archaeological excavations where zooarchaeological remains have been analysed are located at low altitudes. Although as expected there are more mountain sites in Northern Italy, sampled sites are evenly placed on plains, coastlands and hills across the three Italian macroregions. 
-
+Animals distributions can vary across different geographical features. This research has considered plain, coast, hill and mountains as the most common geographical features in the Italian peninsula. Archaeological excavations where zooarchaeological remains have been analysed are located at low altitudes. Although as expected there are more mountain sites in Northern Italy, sampled sites are evenly placed on plains, coastlands and hills across the three Italian macroregions.
 
 ```{r}
 #| echo: false
@@ -4346,7 +4339,6 @@ ggplot(geo_waffle_tbl, aes(fill = factor(
   ) ~ .)
 ```
 
-
 To estimate the animals' occurrences probability in each chronology and geography, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[GEOid]}$ as the model will provide estimates for each geography and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and geography.
 
 $$
@@ -4364,7 +4356,6 @@ $$
 $$
 \phi_{[GEOid]} \sim Exponential(1)
 $$
-
 
 ```{r}
 #| echo: false
@@ -5534,7 +5525,7 @@ zoo_altitude %>%
   facet_grid(factor(Chronology, levels=chrono_levels)~.)
 ```
 
-The proposed model to estimate the probability of occurrence as related to the altitude (the slope $\beta$) and chronology (${[ChrID]}$) uses a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is a simple intercept with slope model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model  provides estimates for each chronology under examination. A single $\phi$ parameter indicates the precision in the Beta distribution. 
+The proposed model to estimate the probability of occurrence as related to the altitude (the slope $\beta$) and chronology (${[ChrID]}$) uses a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is a simple intercept with slope model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model provides estimates for each chronology under examination. A single $\phi$ parameter indicates the precision in the Beta distribution.
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -5568,6 +5559,8 @@ plot(
     )
     ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)+Normal(0,1.5)*Altitude(km))"
   )
+
+
 ```
 
 ## Pigs
@@ -6004,4 +5997,3 @@ Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = a, y = b, color = an
 
 Domestic_Alt_post.plot
 ```
-
