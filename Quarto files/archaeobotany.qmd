@@ -360,6 +360,311 @@ Ubiquity_HM
 ```
 :::
 
+### Ubiquity - Jeffreys interval
+
+Plot only the most important plants probably
+
+```{r}
+#| echo: false
+#| message: false
+#| 
+
+#Make a copy of the dataframe
+plants_pa <- plants_export
+# Presence/Absence
+library(vegan)
+plants_pa[,c(14:52)] <- decostand(plants_export[,c(14:52)], method="pa")
+plants_pa <- replace(plants_pa, is.na(plants_pa), 0)
+# Periods
+dataset.centuries = c(-1:11)
+dataset.centuries = subset(dataset.centuries, dataset.centuries!=0)
+
+# Create a list to store the tables
+plant_tables <- list()
+
+# Loop through each plant column in the original dataframe
+for (plant_col in colnames(plants_pa)[14:52]) {
+
+  # Create a new tibble for the current plant
+  plant_table <- tibble(
+    Century = dataset.centuries,
+    Beta1 = NA_real_,
+    Beta2 = NA_real_,
+    Tot_Pres = NA_real_,
+    Tot_Sites = NA_real_
+  )
+
+  # Loop through each century
+  for (i in seq_along(dataset.centuries)) {
+    century = dataset.centuries[i]
+    tmp = filter(plants_pa, 
+               data_valid_start <= century & data_valid_end >= century & 
+               !is.na(data_valid_start) & !is.na(data_valid_end))
+    
+    
+    # Count the number of presences for the current plant and century
+    presences <- sum(tmp[[plant_col]])
+    
+    # Count the total number of rows for the current century
+    total_rows <- nrow(tmp)
+    
+    # Calculate the beta1 and beta2 values for the current plant and century
+    beta1 <- 0.5 + presences
+    beta2 <- 0.5 + total_rows - presences
+    Tot_Sites <- total_rows
+    Tot_Pres <- presences
+    
+    # Add the beta1 and beta2 values to the plant table
+    plant_table$Beta1[i] <- beta1
+    plant_table$Beta2[i] <- beta2
+    plant_table$Tot_Sites[i] <- Tot_Sites
+    plant_table$Tot_Pres[i] <- Tot_Pres
+  }
+  
+  # Add the plant table to the list
+  plant_tables[[plant_col]] <- plant_table
+  plant_tables[[plant_col]]$Century <- as.factor(plant_tables[[plant_col]]$Century)
+
+}
+
+
+# Adds Violin-plot for Posterior estimates of Binomial using conjugate Beta prior
+# x ... x coordinate  of the violin plot
+# w ... width of the violin
+# beta1,beta2 ... parameters of the beta distribution
+# col ... fill color
+# hpd ... quantile percentage range for region to be color filled
+
+
+addBetaDens  <- function(x,beta1,beta2,w,col,hpd=0.9,betaprior=0.5)
+{
+	xx  <- round(seq(0,1,length.out=1000),3)
+	dens  <- dbeta(xx,beta1,beta2)
+	dens999lo  <- round(qbeta(0.001,beta1,beta2),3)
+	dens999hi  <- round(qbeta(0.999,beta1,beta2),3)
+	denshpdlo  <- round(qbeta(1-hpd,beta1,beta2),3)
+	denshpdhi  <- round(qbeta(hpd,beta1,beta2),3)
+
+	d999i  <- which(xx>=dens999lo&xx<=dens999hi)
+	dhpdi  <- which(xx>=denshpdlo&xx<=denshpdhi) 
+	
+	maxLeft = x-w
+	maxRight= x+w
+	leftVals.999 = (dens[d999i]/(max(dens[d999i]))) * (maxLeft - x) + x
+	rightVals.999 = (dens[d999i]/(max(dens[d999i]))) * (maxRight - x) + x 
+	leftVals.hpd = (dens[dhpdi]/(max(dens[dhpdi]))) * (maxLeft - x) + x
+	rightVals.hpd = (dens[dhpdi]/(max(dens[dhpdi]))) * (maxRight - x) + x 
+	polygon(c(leftVals.999,rev(rightVals.999)),c(xx[d999i],rev(xx[d999i])),col=NULL,border = 'lightgrey')
+	polygon(c(leftVals.hpd,rev(rightVals.hpd)),c(xx[dhpdi],rev(xx[dhpdi])),col=col,border=col)
+	lines(c(maxLeft,maxRight),rep((beta1-betaprior)/(beta1+beta2-betaprior*2),2),lwd=2,col=1)
+}
+
+colors = gray(seq(0.7, 0.15, length.out = 12))
+```
+
+#### Cereals
+```{r}
+#| echo: false
+#| label: fig-ubiquity-triticum-aest-jeffrey-int
+#| fig-cap: "Posterior probability distribution of samples with cereal remains. The observed ubiquity is represented by the horizontal bar, while the highlighted areas represent the 90% Jeffreys interval."
+#| fig-subcap: 
+#|  - "Triticum aestivum/durum"
+#|  - "Hordeum vulgare"
+#|  - "Triticum monococcum"
+#|  - "Triticum dicoccum"
+#|  - "Panicum milliaceum"
+#|  - "Setaria italica"
+#|  - "Secale cereale"
+#|  - "Sorghum bicolor"
+#| layout-ncol: 2
+#| layout-nrow: 4
+#| fig-height: 4
+
+# 1. T. aest. durum.
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum aestivum / durum')
+
+for (i in seq_along(dataset.centuries)) {
+	addBetaDens(x=i,
+	            beta1=plant_tables[["Triticum.aestivum.durum"]]$Beta1[i],
+	            beta2=plant_tables[["Triticum.aestivum.durum"]]$Beta2[i],
+	            w=0.3, 
+	            col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+
+# 2. Hordeum
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Hordeum v.')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Hordeum.vulgare"]]$Beta1[i],
+              beta2=plant_tables[["Hordeum.vulgare"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+
+# 3. Monococcum
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum monococcum')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Triticum.monococcum"]]$Beta1[i],
+              beta2=plant_tables[["Triticum.monococcum"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+# 4. dicoccum
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum dicoccum')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Triticum.dicoccum"]]$Beta1[i],
+              beta2=plant_tables[["Triticum.dicoccum"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+# 5. Panicum m.
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Panicum milliaceum')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Panicum.milliaceum"]]$Beta1[i],
+              beta2=plant_tables[["Panicum.milliaceum"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+# 6. Setaria italica
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
+     main='Setaria italica')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Setaria.italica"]]$Beta1[i],
+              beta2=plant_tables[["Setaria.italica"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+# 7. Rye
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
+     main='Secale cereale')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Secale.cereale"]]$Beta1[i],
+              beta2=plant_tables[["Secale.cereale"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+# 8. Sorghum
+par(mar=c(3,4,5,1))
+plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
+     main='Sorghum bicolor')
+
+for (i in seq_along(dataset.centuries)) {
+  addBetaDens(x=i,
+              beta1=plant_tables[["Sorghum.bicolor"]]$Beta1[i],
+              beta2=plant_tables[["Sorghum.bicolor"]]$Beta2[i],
+              w=0.3, 
+              col=colors[i])
+}
+
+axis(side=1,at=c(1:12),
+     labels=dataset.centuries,
+     tick=FALSE,
+     cex=1.2)
+abline(v = c(1:12 +0.5),lty=2)
+axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
+
+```
+
+```{r}
+test2 <- data.frame(
+  x= seq(0,1, length.out=500),
+  Distribution=rbeta(
+  seq(0,1,length.out=500),
+  shape1=plant_tables[["Vitis.vinifera"]]$Beta1[5],
+  shape2=plant_tables[["Vitis.vinifera"]]$Beta2[5]
+))
+
+plot(density(test2$Distribution))
+
+ggplot(test2, aes(y=Distribution)) +
+    stat_summary(fun.data = quantiles_95, geom="boxplot")
+
+```
+
+#### Macroregion
+
 ### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
 
 ::: callout-alert
@@ -757,6 +1062,7 @@ Olive and grape are two essential cultivations in the Italian peninsula. Olive p
 FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
+
 
 # Site richness and diversity by chronology
 
