@@ -377,7 +377,7 @@ knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_na
 ```
 :::
 
-# Precision plots
+## Precision plots
 
 The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible.
 
@@ -406,7 +406,7 @@ curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
 
 ```
 
-# Chronology
+## Chronology
 
 ```{r}
 #| echo: false
@@ -480,7 +480,7 @@ dat.DomFowl_by_Chronology = list(
 
 ```
 
-## Trends by century
+### Trends by century
 
 To estimate the animals' occurrences probability in each century, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an index ${[Century]}$ as the model will provide estimates for each century under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by century.
 
@@ -497,8 +497,44 @@ $$
 $$
 
 $$
-\phi_{[Century]} \sim Exponential(1)
+\phi_{[Century]} \sim Exponential(1) + 2
 $$
+```{r}
+#| echo: false
+#| layout-ncol: 2
+#| label: fig-betabin-zoo-prior
+#| fig-cap: "Prior predictive simulation for the betabinomial distribution."
+#| fig-subcap: 
+#|  - "The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution."
+#|  - "Conjugate beta distribution."
+
+set.seed(21)
+
+simplehist(rbetabinom(1e4, 
+                      size=20, 
+                      prob=inv_logit(
+                      rnorm(1e4, 0, 1.5)
+                                ), 
+                      theta = dexp(1e4, 1)+2
+                      ),  main="Prior predictive simulation - Betabinomial distribution", 
+col=rangi2
+           )
+
+plot(
+  density(
+  rbeta2(1000, 
+         inv_logit(rnorm(1e4,0,1.5)), 
+         rexp(1000, 1)+2
+         )
+  ),
+  main="Prior predictive simulation - Beta distribution", 
+col=rangi2, xlim=c(0,1)
+)
+
+
+```
+
+
 
 ```{r}
 #| message: false
@@ -878,7 +914,7 @@ Animals_by_Century_a.plot
 Animals_by_Century_phi.plot
 ```
 
-## Trends by traditional chronologies
+### Trends by traditional chronologies
 
 To estimate the animals' occurrences probability in each chronology, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model will provide estimates for each chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology.
 
@@ -895,7 +931,7 @@ $$
 $$
 
 $$
-\phi_{[ChrID]} \sim Exponential(1)
+\phi_{[ChrID]} \sim Exponential(1)+2
 $$
 
 ```{r}
@@ -1318,9 +1354,9 @@ ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = 
 
 ```
 
-# Context type
+## Context type
 
-## Pigs
+### Pigs
 
 ::: callout-alert
 **Question:** Is the animal X - let's say Pigs - more strongly associated to a particular settlement type during a certain chronology?
@@ -1347,7 +1383,7 @@ $$
 $$
 
 $$
-\phi_{[TCid]} \sim Exponential(1)
+\phi_{[TCid]} \sim Exponential(1) + 2
 $$
 
 ```{r}
@@ -1520,8 +1556,6 @@ Pigs_Villas_fit <- stan(
   cores = 4,              # number of cores (could use one per chain
 )
 saveRDS(Pigs_Villas_fit, "stan_models/Pigs_Villas_fit.rds")
-
-
 
 ```
 
@@ -1909,7 +1943,7 @@ Pigs_BB_phi.plot
 
 ```
 
-## Cattle
+### Cattle
 
 ```{r}
 #| echo: false
@@ -2379,7 +2413,7 @@ Cattle_BB_phi.plot
 
 ```
 
-## Caprine
+### Caprine
 
 ```{r}
 #| echo: false
@@ -2836,7 +2870,7 @@ Caprine_BB.plot
 Caprine_BB_phi.plot
 ```
 
-## Edible W. Mammals
+### Edible W. Mammals
 
 ```{r}
 #| echo: false
@@ -3293,7 +3327,7 @@ WMammals_BB.plot
 WMammals_BB_phi.plot
 ```
 
-## Community plot
+### Community plot
 
 ```{r}
 #| echo: false
@@ -3367,7 +3401,7 @@ ggplot(Animals_by_SiteType_fit_comm, aes(x = inv_logit(a), y = Precis, color = T
 
 ```
 
-# Macroregion
+## Macroregion
 
 To estimate the animals' occurrences probability in each chronology and macroregion, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each macroregion and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and macroregion.
 
@@ -3384,7 +3418,7 @@ $$
 $$
 
 $$
-\phi_{[REGid]} \sim Exponential(1)
+\phi_{[REGid]} \sim Exponential(1)+2
 $$
 
 ```{r}
@@ -3400,7 +3434,7 @@ dat.WMammals_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Edible.W..Mamm
 
 ```
 
-## Pigs
+### Pigs
 
 ```{r}
 #| echo: false
@@ -3619,7 +3653,7 @@ Pigs_Reg_phi.plot
 
 ```
 
-## Cattle
+### Cattle
 
 ```{r}
 #| echo: false
@@ -3836,7 +3870,7 @@ Cattle_Reg.plot
 Cattle_Reg_phi.plot
 ```
 
-## Caprine
+### Caprine
 
 ```{r}
 #| echo: false
@@ -4052,7 +4086,7 @@ Caprine_Reg.plot
 Caprine_Reg_phi.plot
 ```
 
-## Edible W. Mammals
+### Edible W. Mammals
 
 ```{r}
 #| echo: false
@@ -4270,7 +4304,7 @@ WMammals_Reg.plot
 WMammals_Reg_phi.plot
 ```
 
-# Geography
+## Geography
 
 Animals distributions can vary across different geographical features. This research has considered plain, coast, hill and mountains as the most common geographical features in the Italian peninsula. Archaeological excavations where zooarchaeological remains have been analysed are located at low altitudes. Although as expected there are more mountain sites in Northern Italy, sampled sites are evenly placed on plains, coastlands and hills across the three Italian macroregions.
 
@@ -4354,7 +4388,7 @@ $$
 $$
 
 $$
-\phi_{[GEOid]} \sim Exponential(1)
+\phi_{[GEOid]} \sim Exponential(1)+2
 $$
 
 ```{r}
@@ -4371,7 +4405,7 @@ dat.WMammals_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Edible.W..Mamm
 
 ```
 
-## Pigs
+### Pigs
 
 ```{r}
 #| echo: false
@@ -4611,7 +4645,7 @@ Pigs_Geo.plot
 Pigs_Geo_phi.plot
 ```
 
-## Cattle
+### Cattle
 
 ```{r}
 #| echo: false
@@ -4851,7 +4885,7 @@ Cattle_Geo.plot
 Cattle_Geo_phi.plot
 ```
 
-## Caprine
+### Caprine
 
 ```{r}
 #| echo: false
@@ -5091,7 +5125,7 @@ Caprine_Geo.plot
 Caprine_Geo_phi.plot
 ```
 
-## Edible W. Mammals
+### Edible W. Mammals
 
 ```{r}
 #| echo: false
@@ -5331,7 +5365,7 @@ WMammals_Geo.plot
 WMammals_Geo_phi.plot
 ```
 
-# Altitude
+## Altitude
 
 ```{r}
 #| echo: false
@@ -5544,7 +5578,7 @@ $$
 $$
 
 $$
-\phi \sim Exponential(1)
+\phi \sim Exponential(1)+2
 $$
 
 ```{r}
@@ -5553,17 +5587,19 @@ $$
 #| fig-cap: "Prior predictive simulation for the altitude models used in this section."
 
 # Prior predictive simulation:
-plot(
-  density(inv_logit(
-    rnorm(1e4, 0, 1.5)+rnorm(1e4, 0, 1.5)*sample(zoo_altitude$Altitude/1000, size=1e4, replace=T)
-    )
-    ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)+Normal(0,1.5)*Altitude(km))"
-  )
-
+simplehist(rbetabinom(1e4, 
+                      size=20, 
+                      prob=
+                      inv_logit(
+    rnorm(1e4, 0, 1.5)+rnorm(1e4, 0, 1.5)*sample(zoo_altitude$Altitude/1000, size=1e4, replace=T)), 
+                      theta = dexp(1e4, 1)+2
+                      ),  main="Prior predictive simulation - Betabinomial distribution", 
+col=rangi2
+           )
 
 ```
 
-## Pigs
+### Pigs
 
 ```{r}
 #| eval: false
@@ -5637,7 +5673,7 @@ Pigs_Alt_fit_reth.plot
 
 ```
 
-## Cattle
+### Cattle
 
 ```{r}
 #| eval: false
@@ -5707,7 +5743,7 @@ Cattle_Alt_fit_reth.plot
 
 ```
 
-## Caprine
+### Caprine
 
 ```{r}
 #| eval: false
@@ -5839,7 +5875,7 @@ Capr_Alt_fit_phi.plot <- Capr_Alt_fit.phi %>%
 
 ```
 
-## Edible W. Mammals
+### Edible W. Mammals
 
 ```{r}
 #| eval: false
@@ -5908,7 +5944,7 @@ WMammals_Alt_fit_reth.plot
 
 ```
 
-## Community plot
+### Community plot
 
 ```{r}
 #| echo: false
@@ -5947,7 +5983,7 @@ Domestic_Alt_post <- bind_rows(Domestic_Alt_R, Domestic_Alt_LR, Domestic_Alt_EMA
 
 # end reshape
 
-Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = a, y = b, color = animal)) +
+Domestic_Alt_post.plot <- ggplot(Domestic_Alt_post, aes(x = inv_logit(a), y = b, color = animal)) +
   geom_point(alpha = .4) +
   theme_tidybayes() +
   scale_color_brewer(palette = "Spectral") +

@@ -7,7 +7,7 @@ data{
 parameters{
      vector[16] a;
      // real<lower=0> phi;
-     array[16] real<lower=0> theta;
+     array[16] real<lower=2> theta;
 }
 model{
     vector[J] pbar;

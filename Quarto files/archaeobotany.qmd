@@ -238,6 +238,10 @@ italy_bot_map
 
 ## Ubiquity {style="text-align:justify;"}
 
+::: {.callout-note}
+I need to justify in this section why I have used a frequentist approach. Using Jeffreys interval would be ideal, but the amount of plots needed to graphically show the results would simply be ridiculous. This decision will probably be justified by saying that these are simply exploratory introductory figures, and maybe I can plot some important taxa using Jeffreys interval.  
+:::
+
 ::: {.content-visible when-format="html"}
 In @sec-methods, ubiquity has been described as the best solution to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (@fig-heatmap-ubiquity) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.
 :::
@@ -360,14 +364,14 @@ Ubiquity_HM
 ```
 :::
 
-### Ubiquity - Jeffreys interval
 
-Plot only the most important plants probably
 
 ```{r}
 #| echo: false
+#| eval: false
 #| message: false
-#| 
+
+# JEFFREY S INTERVAL 
 
 #Make a copy of the dataframe
 plants_pa <- plants_export
@@ -375,6 +379,7 @@ plants_pa <- plants_export
 library(vegan)
 plants_pa[,c(14:52)] <- decostand(plants_export[,c(14:52)], method="pa")
 plants_pa <- replace(plants_pa, is.na(plants_pa), 0)
+
 # Periods
 dataset.centuries = c(-1:11)
 dataset.centuries = subset(dataset.centuries, dataset.centuries!=0)
@@ -459,12 +464,179 @@ addBetaDens  <- function(x,beta1,beta2,w,col,hpd=0.9,betaprior=0.5)
 	lines(c(maxLeft,maxRight),rep((beta1-betaprior)/(beta1+beta2-betaprior*2),2),lwd=2,col=1)
 }
 
-colors = gray(seq(0.7, 0.15, length.out = 12))
+colors = gray(seq(0.7, 0.15, length.out = 20))
+
 ```
 
-#### Cereals
 ```{r}
 #| echo: false
+#| eval: false
+
+
+# Get lower and upper confidence interval
+library("ratesci")
+
+test <- jeffreysci(
+  x=plant_tables[["Vitis.vinifera"]]$Tot_Pres,
+  n=plant_tables[["Vitis.vinifera"]]$Tot_Sites,
+  level=0.90
+  )
+
+test_dist <- data.frame(
+  Distribution = rbeta(1000, 
+                   shape1=plant_tables[["Vitis.vinifera"]]$Beta1[1],
+                   shape2=plant_tables[["Vitis.vinifera"]]$Beta2[1]
+                     ),
+  Century=plant_tables[["Vitis.vinifera"]]$Century[1]
+  )
+
+# Create an empty data frame to store the results
+all_dists <- data.frame()
+
+# Loop through all centuries (from 1 to 12)
+for (i in 1:12) {
+  # Generate the data for the current century using rbeta
+  dist <- data.frame(
+    Distribution = rbeta(1000,
+shape1=plant_tables[["Vitis.vinifera"]]$Beta1[i],
+shape2=plant_tables[["Vitis.vinifera"]]$Beta2[i]),
+Century=plant_tables[["Vitis.vinifera"]]$Century[i]
+  )
+  
+  # Add the data to the all_dists data frame
+  all_dists <- rbind(all_dists, dist)
+}
+
+ggplot(all_dists, aes(x=Century, y=Distribution))+
+  geom_boxplot(
+    lower=test[,1], 
+    upper=test[,2],
+    middle=test[,3],
+    alpha=.8,
+    width=.5,
+    outlier.colour = "red4",
+    outlier.size=0.9,
+    outlier.alpha=0.4
+    )+ 
+    geom_hline(
+    yintercept = mean(all_dists$Distribution),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    labs(
+    x = "Century",
+    y = "Ubiquity",
+    title = "Vitis Vinifera",
+    caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  )
+
+  
+
+```
+
+```{r}
+#| eval: false
+#| echo: false
+# TEST AUTOMATION
+
+# Define the column names
+plant_tables.col_names <- names(plant_tables)
+
+# Create an empty data frame to store the results
+all_dists <- data.frame()
+
+# Loop through all columns
+for (col_name in plant_tables.col_names) {
+  # Calculate the 90% Jeffreys interval for the column
+  test <- jeffreysci(
+    x = plant_tables[[col_name]]$Tot_Pres,
+    n = plant_tables[[col_name]]$Tot_Sites,
+    level = 0.90
+  )
+  
+  # Loop through all centuries (from 1 to 12)
+  for (i in 1:12) {
+    # Generate the data for the current century using rbeta
+    dist <- data.frame(
+      Distribution = rbeta(1000,
+        shape1 = plant_tables[[col_name]]$Beta1[i],
+        shape2 = plant_tables[[col_name]]$Beta2[i]),
+      Century = plant_tables[[col_name]]$Century[i]
+    )
+  
+    # Add the data to the all_dists data frame
+    all_dists <- rbind(all_dists, dist)
+  }
+  
+  # Create a boxplot with the calculated Jeffreys interval
+  ggplot(all_dists, aes(x = Century, y = Distribution)) +
+    geom_boxplot(
+      lower = test[, 1], 
+      upper = test[, 2],
+      middle = test[, 3],
+      alpha = 0.8,
+      width = 0.5,
+      outlier.colour = "red4",
+      outlier.size = 0.9
+    ) + 
+    geom_hline(
+      yintercept = mean(all_dists$Distribution),
+      linetype = "twodash",
+      linewidth = 0.45,
+      color = "red4"
+    ) +
+    labs(
+      x = "Century",
+      y = "Ubiquity",
+      title = col_name,
+      caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
+    ) +
+    theme_tidybayes() +
+    theme(
+      legend.position = "bottom",
+      strip.background = element_rect(
+        fill = "grey",
+        linewidth = 0.1,
+        colour = "black"
+      ),
+      panel.background = element_rect(fill = "grey90"),
+      panel.border = element_rect(fill = NA, linewidth = 0.1),
+      panel.grid.major.x = element_line(
+        color = "grey50",
+        linewidth = 0.25,
+        linetype = 2
+      ),
+      axis.title.x.top = element_blank()
+    )
+  
+  # Clear the all_dists data frame for the next column
+  all_dists <- data.frame()
+}
+
+```
+
+
+
+```{r}
+#| echo: false
+#| eval: false
 #| label: fig-ubiquity-triticum-aest-jeffrey-int
 #| fig-cap: "Posterior probability distribution of samples with cereal remains. The observed ubiquity is represented by the horizontal bar, while the highlighted areas represent the 90% Jeffreys interval."
 #| fig-subcap: 
@@ -648,22 +820,141 @@ axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
 ```
 
 ```{r}
-test2 <- data.frame(
-  x= seq(0,1, length.out=500),
-  Distribution=rbeta(
-  seq(0,1,length.out=500),
-  shape1=plant_tables[["Vitis.vinifera"]]$Beta1[5],
-  shape2=plant_tables[["Vitis.vinifera"]]$Beta2[5]
-))
+#| echo: false
+#| eval: false
 
-plot(density(test2$Distribution))
+# MACROREGION
+#Make a copy of the dataframe
+plants_pa_mr <- Df_Cond_Plants
 
-ggplot(test2, aes(y=Distribution)) +
-    stat_summary(fun.data = quantiles_95, geom="boxplot")
+# Presence/Absence
+plants_pa_mr[,c(11:50)] <- decostand(plants_pa_mr[,c(11:50)], method="pa")
+plants_pa_mr <- replace(plants_pa_mr, is.na(plants_pa_mr), 0)
+
+# Macroregions
+dataset.macroregions = c("Southern Italy", "Central Italy", "Northern Italy")
+
+# Chronologies
+plants_pa_mr.R = subset(plants_pa_mr, Chronology=="R")
+plants_pa_mr.LR = subset(plants_pa_mr, Chronology=="LR")
+plants_pa_mr.EMA = subset(plants_pa_mr, Chronology=="EMA")
+plants_pa_mr.Ma = subset(plants_pa_mr, Chronology=="Ma")
+
+# Create a list to store the tables
+plant_tables_mr.R <- list()
+
+# Loop through each plant column in the original dataframe
+for (plant_col in colnames(plants_pa_mr.R)[11:50]) {
+
+  # Create a new tibble for the current plant
+  plant_table_mr.R <- tibble(
+    Macroregion = dataset.macroregions,
+    Beta1 = NA_real_,
+    Beta2 = NA_real_,
+    Tot_Pres = NA_real_,
+    Tot_Sites = NA_real_
+  )
+
+  # Loop through each century
+  for (i in seq_along(dataset.macroregions)) {
+    macroregion = dataset.macroregions[i]
+    tmp = filter(plants_pa_mr.R, name_macroreg==macroregion)
+    
+    # Count the number of presences for the current plant and century
+    presences <- sum(tmp[[plant_col]])
+    
+    # Count the total number of rows for the current century
+    total_rows <- nrow(tmp)
+    
+    # Calculate the beta1 and beta2 values for the current plant and macroregion
+    beta1 <- 0.5 + presences
+    beta2 <- 0.5 + total_rows - presences
+    Tot_Sites <- total_rows
+    Tot_Pres <- presences
+    
+    # Add the beta1 and beta2 values to the plant table
+    plant_table_mr.R$Beta1[i] <- beta1
+    plant_table_mr.R$Beta2[i] <- beta2
+    plant_table_mr.R$Tot_Sites[i] <- Tot_Sites
+    plant_table_mr.R$Tot_Pres[i] <- Tot_Pres
+  }
+  
+  # Add the plant table to the list
+  plant_tables_mr.R[[plant_col]] <- plant_table_mr.R
+  plant_tables_mr.R[[plant_col]]$Macroregion <- as.factor(plant_tables_mr.R[[plant_col]]$Macroregion)
+
+}
+
+# Get lower and upper confidence interval
+
+test <- jeffreysci(
+  x=plant_tables_mr.R[["Grape"]]$Tot_Pres,
+  n=plant_tables_mr.R[["Grape"]]$Tot_Sites,
+  level=0.90
+  )
+
+# Create an empty data frame to store the results
+all_dists <- data.frame()
+
+# Loop through all centuries (from 1 to 12)
+for (i in 1:3) {
+  # Generate the data for the current century using rbeta
+  dist <- data.frame(
+    Distribution = rbeta(1000,
+shape1=plant_tables_mr.R[["Grape"]]$Beta1[i],
+shape2=plant_tables_mr.R[["Grape"]]$Beta2[i]),
+Macroregion=plant_tables_mr.R[["Grape"]]$Macroregion[i]
+  )
+  
+  # Add the data to the all_dists data frame
+  all_dists <- rbind(all_dists, dist)
+}
+
+ggplot(all_dists, aes(x=Macroregion, y=Distribution))+
+  geom_boxplot(
+    lower=test[,1], 
+    upper=test[,2],
+    middle=test[,3],
+    alpha=.8,
+    width=.5,
+    outlier.colour = "red4",
+    outlier.size=0.9,
+    outlier.alpha=0.4
+    )+ 
+    geom_hline(
+    yintercept = mean(all_dists$Distribution),
+    linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    labs(
+    x = "Macroregion",
+    y = "Ubiquity",
+    title = "Vitis Vinifera",
+    caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
+  ) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey90"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_line(
+      color = "grey50",
+      linewidth = 0.25,
+      linetype = 2
+    ),
+    axis.title.x.top = element_blank()
+  )
+
+  
+
 
 ```
 
-#### Macroregion
 
 ### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
 
@@ -3415,7 +3706,7 @@ m_ng_reg <- ulam(
         NG_Found ~ dbinom( 2 , p ),
         logit(p) <- RegChr[RC_ID],
         RegChr[RC_ID] ~ dnorm(0,1.5)
-    ), data=Noble_Grains.list , chains=4
+    ), data=Noble_Grains.list , chains=4, log_lik = T
     )
 
 saveRDS(m_ng_reg, "stan_models/m_ng_reg.rds")
@@ -5034,12 +5325,14 @@ $$
 #| fig-cap: "Prior predictive simulation for the altitude models used in this section."
 
 # Prior predictive simulation:
-plot(
-  density(inv_logit(
-    rnorm(1e4, 0, 1.5)+rnorm(1e4, 0, 1.5)*sample(bot_altitude$site_altitude/1000, size=1e4, replace=T)
+simplehist(rbern(1000, 
+                  inv_logit(
+                    rnorm(1e4, 0, 1.5)+rnorm(1e4, 0, 1.5)*sample(bot_altitude$site_altitude/1000, size=1e4, replace=T)
     )
-    ), main="Prior Predictive Simulation", sub="inv_logit(Normal(0,1.5)+Normal(0,1.5)*Altitude(km))"
-  )
+                  ),
+           xlab="Taxa", 
+  main="Prior Predictive Simulation: Altitude",
+           col=rangi2)
 ```
 
 ## Cereals
@@ -5511,7 +5804,7 @@ Cereals_Alt_post <- bind_rows(Cereals_Alt_R, Cereals_Alt_LR, Cereals_Alt_EMA, Ce
 
 # end reshape
 
-Cereals_Alt_post.plot <- ggplot(Cereals_Alt_post, aes(x = a, y = b, color = Plant)) +
+Cereals_Alt_post.plot <- ggplot(Cereals_Alt_post, aes(x = inv_logit(a), y = b, color = Plant)) +
   geom_point(alpha = .3) +
   theme_tidybayes() +
   scale_color_brewer(palette = "Accent") +
