@@ -26,8 +26,6 @@ zooarch_cond <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quar
 
 ## Case studies {style="text-align:justify;"}
 
-The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right.
-
 ```{r}
 #| echo: false
 #| output: false
@@ -197,7 +195,7 @@ italy_zoo_map <- leaflet(data=italy) %>%
 ::: {.content-visible when-format="html"}
 ```{r}
 #| echo: false
-#| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
+#| fig-cap: "The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right. **Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
 
 italy_zoo_map
 
@@ -205,215 +203,128 @@ italy_zoo_map
 :::
 
 ::: {.content-visible when-format="pdf"}
-Show map
+Insert a map here
 :::
 
-## Medians {style="text-align:justify;"}
+The faunal dataset used in this study is both extensive and diverse, containing over 466 records. While NISP is a useful proxy for historical animal farming, it is not without its limitations, as previously discussed in the methods section. What is crucial to emphasize here, however, is the presence of overdispersion within the data, which necessitates more sophisticated and nuanced approaches than simply calculating overall means for each animal species. Overdispersion is a common occurrence when analyzing datasets of this nature, given the unique factors at play in each context, including historical and depositional influences. Nevertheless, data modeling requires simplification and causal reasoning, and the best approach is to start with straightforward models that can account for overdispersion and generate credible distributions. To this end, Bayesian hierarchical models were developed for each chronology, context type, macroregion, and geography. As a further step, an additional analysis was conducted that solely focused on altitude and chronology as predictors. By examining the specific contributions of altitude and chronology in predicting animal farming/consumption patterns, this analysis provides valuable insights that complement the earlier models. These findings underscore the importance of considering multiple factors when studying the probability of occurrence of farmed and wild animals in historical contexts. They also demonstrate the potential benefits of simplified models to focus on key predictors. Moreover, several attempts were made to create a coherent understanding of the likelihood of economically valuable animals occurring during the first millennium, in order to provide a more comprehensive perspective on the role of animal farming in shaping historical societies.
 
-::: callout-alert
-These medians were calculated before switching to bayesian methods. The new quantifications are in the section Chronology, so this section has probably to be removed.
-:::
+## Data exploration
 
-::: {.content-visible when-format="html"}
-The faunal dataset is large (434+ records) and diversified. Looking at the distributions of each animal, the curve is not gaussian. The best choice for non-normal curves is to use medians instead of means to come up with figures that are less dependent on outliers. The function `Medians_Chrono_Zoo()` (@sec-fun-Medians-Chrono-Zoo) can be used to return as output weighted medians for each chronology. The in-depth description of how weights are calculated for each sample can be found in @sec-chrono-fuzziness. To summarise, sites with a very large (*i.e.* fuzzy) chronology contribute less to the calculation of the median. @tbl-zoo-medians-chronology provides the median values of the main categories of faunal remains for each chronology, and @tbl-zoo-medians-centuries the median values for each century. Stronger colours in the cells indicate higher values.
-:::
-
-::: {.content-visible when-format="pdf"}
-The faunal dataset is large (434+ records) and diversified. Looking at the distributions of each animal, the curve is not gaussian. The best choice for non-normal curves is to use medians instead of means to come up with figures that are less dependent on outliers. The function `Medians_Chrono_Zoo()` (@sec-fun-Medians-Chrono-Zoo) can be used to return as output weighted medians for each chronology. The in-depth description of how weights are calculated for each sample can be found in @sec-chrono-fuzziness. To summarise, sites with a very large (*i.e.* fuzzy) chronology contribute less to the calculation of the median. @tbl-zoo-medians-chronology-pdf provides the median values of the main categories of faunal remains for each chronology, and @tbl-zoo-medians-centuries-pdf the median values for each century.
-:::
+As previously mentioned, the faunal dataset used in this study exhibits overdispersion, which is a common issue when analysing datasets of this type. The term 'overdispersion' refers to the presence of greater variability in the data than expected based on a normal curve (@fig-curves-dispersion-example). In this section, I will present the distribution of the animals of interest to provide a visual representation of the dispersion within the dataset. By examining the distribution curves, we can better understand the variability that exist within the dataset, and can use this information to develop more accurate models. In @fig-faunal-rem-distributions, it is evident that the distribution of animal remains in the faunal dataset is not symmetrical and does not conform to a normal curve. This non-normal distribution indicates that the standard measures of central tendency, such as mean and median, may not accurately capture the overall distribution of the data. Traditional statistical measures, such as measures of central tendency and dispersion, are commonly used in frequentist approaches to analyse data. However, these measures may not be appropriate for analysing the complex patterns of animal farming and consumption in the faunal dataset due to the presence of overdispersion. As an alternative, Bayesian multilevel models can account for overdispersion by incorporating appropriate probability distributions, such as the betabinomial distribution.
 
 ```{r}
 #| echo: false
-#| output: false
+#| label: fig-curves-dispersion-example
+#| fig-cap: "Probability density curves of three simulated normal distributions, representing underdispersed (sd = 0.5), normal (sd = 1), and overdispersed (sd = 2) data." 
 
-library(knitr)
-library(kableExtra)
-library(formattable)
-library(dplyr)
+plot(seq(0, 10, length.out = 100), 
+     dnorm(seq(0, 10, length.out = 100), mean = 5, sd = 0.5), 
+     type = "l", col = "#838B8B",
+     xlab = "x", ylab = "Density", ylim = c(0, 1.5), yaxs = "i", lty=3)
+lines(seq(0, 10, length.out = 100), 
+      dnorm(seq(0, 10, length.out = 100), mean = 5, sd = 1), 
+      col = "#00688B")
+lines(seq(0, 10, length.out = 100), dnorm(seq(0, 10, length.out = 100), mean = 5, sd = 2), col = "#8B1A1A", lty=5)
+legend("topright", legend = c("Underdispersed", "Normal", "Overdispersed"),
+       col = c("#838B8B", "#00688B", "#8B1A1A"), lty = 1)
 
-```
-
-::: {.content-visible when-format="html"}
-```{r}
-#| code-fold: true
-#| output: false
-#| code-summary: "Show the code"
-#| code-overflow: wrap
-
-Medians_Categorised_per_Chronology_ZOO <- 
-  data.frame(
-    Medians_Chrono_Zoo(zooarch_cond, "R")*100,
-    Medians_Chrono_Zoo(zooarch_cond, "LR")*100,
-    Medians_Chrono_Zoo(zooarch_cond, "EMA")*100,
-    Medians_Chrono_Zoo(zooarch_cond, "Ma")*100
-  )
-
-# Round to 2 digits
-Medians_Categorised_per_Chronology_ZOO <- round(Medians_Categorised_per_Chronology_ZOO, 2)
-
-## Weighted medians per century ##
-Medians_ZOO_Centuries <- data.frame(
-  "I BCE" = zooarch_tables(zooarch_cond, -1)$Medians,  
-  "I CE" = zooarch_tables(zooarch_cond, 1)$Medians,
-  "II CE" = zooarch_tables(zooarch_cond, 2)$Medians,
-  "III CE" = zooarch_tables(zooarch_cond, 3)$Medians,
-  "IV CE" = zooarch_tables(zooarch_cond, 4)$Medians,
-  "V CE" = zooarch_tables(zooarch_cond, 5)$Medians,
-  "VI CE" = zooarch_tables(zooarch_cond, 6)$Medians,
-  "VII CE" = zooarch_tables(zooarch_cond, 7)$Medians,
-  "VIII CE" = zooarch_tables(zooarch_cond, 8)$Medians,
-  "IX CE" = zooarch_tables(zooarch_cond, 9)$Medians,
-  "X CE" = zooarch_tables(zooarch_cond, 10)$Medians,
-  "XI CE" = zooarch_tables(zooarch_cond, 11)$Medians
-)
-
-# Assigning the colnames (optional - instead of roman numerals)
-colnames(Medians_ZOO_Centuries) <- c("1st c. BCE", "1st c. CE", "2nd c.", "3rd c.", "4th c.", "5th c.", "6th c.", "7th c.", "8th c.", "9th c.", "10th c.", "11th c.")
-
-# Rounding the medians
-Medians_ZOO_Centuries <- round(Medians_ZOO_Centuries, digits=2)
-
-# Removing categories that are not necessary
-Medians_ZOO_Centuries <- Medians_ZOO_Centuries[-c(6:9),]
 
 ```
-:::
 
-::: {.content-visible when-format="html"}
 ```{r}
-#| label: tbl-zoo-medians-chronology
-#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by chronology."
 #| echo: false
 
-Medians_Categorised_per_Chronology_ZOO.tbl <- (Medians_Categorised_per_Chronology_ZOO[-10,])
+library(tidybayes)
 
-Medians_Categorised_per_Chronology_ZOO.tbl$R <- color_tile("white", "#bb4734")(Medians_Categorised_per_Chronology_ZOO.tbl$R)
-Medians_Categorised_per_Chronology_ZOO.tbl$LR <- color_tile("white", "#ef8f7f")(Medians_Categorised_per_Chronology_ZOO.tbl$LR)
-Medians_Categorised_per_Chronology_ZOO.tbl$EMA <- color_tile("white", "#a3a3a3")(Medians_Categorised_per_Chronology_ZOO.tbl$EMA)
-Medians_Categorised_per_Chronology_ZOO.tbl$Ma <- color_tile("white", "#c4ef81")(Medians_Categorised_per_Chronology_ZOO.tbl$Ma)
+# Create a copy of the dataframe
+zooarch_cond_densityplot <- zooarch_cond 
 
-Medians_Categorised_per_Chronology_ZOO.tbl %>%
-  kable("html", escape = F, digits = 2) %>%
-  kable_styling("hover", full_width = T) %>%  
-  column_spec(1, image = spec_image(
-    c("https://cdn-icons-png.flaticon.com/512/776/776487.png", "https://cdn-icons-png.flaticon.com/512/4455/4455466.png", "https://cdn-icons-png.flaticon.com/512/1676/1676821.png", "https://cdn-icons-png.flaticon.com/512/6678/6678092.png", "https://cdn-icons-png.flaticon.com/512/1063/1063448.png", "https://cdn-icons-png.flaticon.com/512/1728/1728751.png", "https://cdn-icons-png.flaticon.com/512/7591/7591559.png", "https://cdn-icons-png.flaticon.com/512/91/91536.png", "https://cdn-icons-png.flaticon.com/512/616/616519.png"), 70, 70)) %>%
-  add_header_above(c(" ", "Chronologies" = 4))
+# Remove NAs
+zooarch_cond_densityplot[is.na(zooarch_cond_densityplot)]<-0
+
+# Create a total column (to create proportions)
+zooarch_cond_densityplot$Tot_NISP = rowSums(zooarch_cond_densityplot[,15:23])
+
+# Remove not needed animals
+zooarch_cond_densityplot = zooarch_cond_densityplot[,-c(20:23)]
+
+# Rename columns for plot
+colnames(zooarch_cond_densityplot)[18:19] <- c("Dom.Fowl", "Ed.Wild")
+
+# Remove duplicates (caused by chronology column)
+zooarch_cond_densityplot <- zooarch_cond_densityplot[,-5] 
+zooarch_cond_densityplot <- zooarch_cond_densityplot[!duplicated(zooarch_cond_densityplot),]
+
+# Reshape: Wide -> Longer
+zooarch_cond_densityplot = zooarch_cond_densityplot %>%
+  pivot_longer(cols = c("Pigs", "Cattle", "Caprine", "Dom.Fowl", "Ed.Wild"),
+               names_to = "animal",
+               values_to = "Value") %>%
+  mutate(Value_Type="NISP")
+
+# Create a proportions database
+zooarch_cond_densityplot_props=zooarch_cond_densityplot %>%
+  mutate(Value=zooarch_cond_densityplot$Value/zooarch_cond_densityplot$Tot_NISP)  %>%
+  mutate(Value_Type="Proportions")
+
+# Bind the dataframe to the previous one
+zooarch_cond_densityplot = rbind(zooarch_cond_densityplot, zooarch_cond_densityplot_props)
+
+# Just keep columns of interest
+zooarch_cond_densityplot = zooarch_cond_densityplot[,c(15:17)]
+
+# No need to keep the temporary dataframe for proportions anymore
+rm(zooarch_cond_densityplot_props)
 
 ```
-:::
 
-::: {.content-visible when-format="pdf"}
 ```{r}
-#| label: tbl-zoo-medians-chronology-pdf
-#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by chronology."
 #| echo: false
-Medians_Categorised_per_Chronology_ZOO.tbl <- (Medians_Categorised_per_Chronology_ZOO[-10,])
+#| fig-height: 7
+#| label: fig-faunal-rem-distributions
+#| fig-cap: "Distribution of animal remains in the dataset, displayed both by NISP raw value and NISP proportions."
 
-knitr::kable(Medians_Categorised_per_Chronology_ZOO.tbl, format="latex", booktabs=TRUE) %>% 
-  kable_styling(latex_options = "HOLD_position") %>%
-  add_header_above(c(" ", "Chronologies" = 4))
+zooarch_cond_densityplot %>% 
+  ggplot(aes(x=Value)) +
+  geom_density(aes(y=after_stat(ndensity)), adjust=1, color = "red4", linewidth=0.75)+
+  facet_grid(factor(animal, levels = c("Pigs", "Cattle", "Caprine", "Dom.Fowl", "Ed.Wild"))~Value_Type, scales="free_x")+
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 5),
+    sec.axis = dup_axis()
+  ) +
+  scale_fill_brewer(palette = "Greys")+ 
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1,
+                                        colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+    labs(
+       y="Density",
+       x="Value",
+       title="Distribution of main faunal remains"
+       )
 
 ```
-:::
 
-Pigs' medians from the Italian peninsula are the highest in each chronology, although their values decrease after the Roman age peak. Cattle medians slightly decrease after the Roman age, even though surprisingly (*put a reference here to literature review to explain why surprisingly*) the values increase again (18--19.71%) during the early Medieval and Medieval age. The trends for sheeps and goats are also interesting. During the Roman age the Italian median is 25%, slightly decreasing in the 3^rd^ to the 5^th^ century, and increasing again after. When discussing sheep-farming, one must always consider the geographical features from which the data is being collected. This will be discussed later on in the chapter, where more regional and geographical trends will be provided. Domestic fowl (chickens and geese) has quite stable values of 4-5%, with a peak of 7.68% in the 11^th^ century. Wild game peaks during the Roman age, with a median value of 5%, reaching a minimum in the early Middle ages (2%) and rising again in the 11^th^ century. Two considerations must be made for game consumption. The first is that as we will see later on, game consumption is strongly related to the site typology. Secondly, the Roman age value is pulled up by assemblages from the 1^st^ century BCE. After that, the values strongly decrease and by looking at the individual centuries the medians from the 7^th^ century onwards are much higher (ranging from 1.42% to 2.09%).
-
-::: {.content-visible when-format="html"}
-```{r}
-#| label: tbl-zoo-medians-centuries
-#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by century."
-#| echo: false
-
-Medians_ZOO_Centuries.tbl <- Medians_ZOO_Centuries
-
-# Coloring the rows according to Chronology (R = Red, LR = Light red, EMA = gray, Ma = light green)
-for(i in 1:3) {
-Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#bb4734")(Medians_ZOO_Centuries.tbl[,i])
-}
-
-for(i in 4:6) {
- Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#ef8f7f")(Medians_ZOO_Centuries.tbl[,i])
-}
- 
-for(i in 7:11) {
-  Medians_ZOO_Centuries.tbl[,i] <- color_tile("white", "#a3a3a3")(Medians_ZOO_Centuries.tbl[,i])
-}
-  
-Medians_ZOO_Centuries.tbl[,12] <- color_tile("white", "#c4ef81")(Medians_ZOO_Centuries.tbl[,12])
-
-Medians_ZOO_Centuries.tbl<- t(Medians_ZOO_Centuries.tbl)
-
-Medians_ZOO_Centuries.tbl_names_spaced <- c(
-  'Pigs', 'Cattle', 'Caprine', 
-  'Domestic fowl',
-  'Wild game')
-
-Medians_ZOO_Centuries.tbl %>%
-  kable("html", escape = F, col.names = Medians_ZOO_Centuries.tbl_names_spaced) %>%
-  kable_styling(bootstrap_options = "hover", full_width = T) %>%
-  footnote(symbol = "The color gradients in this table are used to indicate the chronologies.") %>%
-  add_header_above(c(" ", "Faunal remains" = 5))
-
-```
-:::
-
-::: {.content-visible when-format="pdf"}
-```{r}
-#| label: tbl-zoo-medians-centuries-pdf
-#| tbl-cap: "Weighted medians of zooarchaeological remains, divided by century."
-#| echo: false
-
-Medians_ZOO_Centuries.tbl <- Medians_ZOO_Centuries
-Medians_ZOO_Centuries.tbl<- t(Medians_ZOO_Centuries.tbl)
-
-Medians_ZOO_Centuries.tbl_names_spaced <- c(
-  'Pigs', 'Cattle', 'Caprine', 
-  'Domestic fowl',
-  'Wild game')
-
-knitr::kable(Medians_ZOO_Centuries.tbl, col.names = Medians_ZOO_Centuries.tbl_names_spaced, format="latex", booktabs=TRUE) %>% 
-  kable_styling(latex_options = "HOLD_position") %>%
-  add_header_above(c(" ", "Faunal remains" = 5))
-```
-:::
-
-## Precision plots
-
-The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible.
+## Chronology {style="text-align:justify;"}
 
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
-#| layout-ncol: 3
-
-library(rethinking)
-
-pbar <- 0.5
-theta <- 1
-curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
-    xlab="Probability" , ylab="Density", main="phi < 2" )
-
-pbar <- 0.5
-theta <- 2
-curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
-    xlab="probability" , ylab="Density" , main="phi = 2" )
-
-pbar <- 0.5
-theta <- 5
-curve( dbeta2(x,pbar,theta) , from=0 , to=1 ,
-    xlab="probability" , ylab="Density", main="phi > 2"  )
-
-```
-
-## Chronology
-
-```{r}
-#| echo: false
 
 ####################
 ## Data pre-processing
 ####################
+
+library(rethinking)
 
 # 1. Making a copy of the original data frame
 Animals_Condensed <- zooarch_cond
@@ -482,7 +393,7 @@ dat.DomFowl_by_Chronology = list(
 
 ### Trends by century
 
-To estimate the animals' occurrences probability in each century, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an index ${[Century]}$ as the model will provide estimates for each century under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by century.
+The proposed model uses a betabinomial distribution to model overdispersion in the data and estimates the precision (or shape) parameter $\phi$ in the Beta distribution. The $A$ on the left side of the formula is the outcome variable, which represents the animal NISP count for each observed sample $i$. The model is intercept-only, meaning that there are no further predictors included in the model. The average probability of success $\bar{p}_{i}$ is modelled through a logit link function, and is assumed to equal the intercept $\alpha$. The model is also indexed with ${[Century]}$ so that separate estimates can be obtained for each century (1^st^ BCE to 11^th^ CE).
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -498,7 +409,12 @@ $$
 
 $$
 \phi_{[Century]} \sim Exponential(1) + 2
-$$
+$$ The prior distributions selected for the model are weakly informative. Specifically, the prior chosen for the intercept $\alpha$ is a normal distribution with a mean of 0 and a standard deviation of 1.5. Given that $logit(\bar{p}) = \alpha$ is modelled using the logit link, a mean of 0 corresponds to a probability of 0.50 on the logit scale. With a standard deviation of 1.5, the prior is flat and only slightly informative.
+
+As for the shape parameter $\phi$, the prior was selected to ensure that the parameter was at least 2, which corresponds to a flat distribution. This value (2) was then added to an exponential distribution with rate 1 to produce a weakly informative prior.
+
+A prior predictive simulation (@fig-betabin-zoo-prior) shows how when no information is provided to the model, counts on the extremes of the binomial histogram are more likely, while all other counts have similar probabilities. Bimodal priors are common practice with Beta distributions as they are non-informative enough. However, updating a bimodal prior even with one observation rapidly changes the posterior.
+
 ```{r}
 #| echo: false
 #| layout-ncol: 2
@@ -534,7 +450,14 @@ col=rangi2, xlim=c(0,1)
 
 ```
 
+The model for pigs' NISP counts shows a positive trend above the millennium average (0.36) for predicted high density intervals (HDIs) from the 1^st^ century BCE to the 3^rd^ century CE. The probability intervals exhibit a steady decrease that begins in the 3^rd^ century and continues until the 8^th^ century, when the mean of the probability distribution coincides with the first millennium average. Despite positive trends reported in the 8^th^ and 9^th^ centuries, interpretation of these values requires caution since the credible intervals are wider due to fewer observed samples dated to these centuries. The HDIs mean for the 10^th^ and 11^th^ centuries is again around the millennium average, indicating a decrease in the probability of pig occurrence.
 
+Cattle, on the other hand, exhibit different trends, with a HDI interval in the 1^st^ century BCE above the millennium average (0.20), although with a large credible interval, and a negative trend from the 1^st^ to the 3^rd^ century CE. HDIs are again increasingly positive between the 4^th^ and 7^th^ centuries, but decrease in the 8^th^ century. As for pigs, HDIs means are close to the millennium average in the 10^th^ and 11^th^ centuries.
+
+The modelled probability of occurrence of caprine reveals a positive trend in the 1^st^ century BCE, followed by a negative trend (below the average of 0.28) from the 1^st^ to the 3^rd^ century CE. The probability of occurrence then increases around the 4^th^/5^th^ centuries up to the 6^th^/7^th^ centuries, with HDIs stable around the mean from the 8^th^ to the 11^th^ century.
+The edible wild animals that were included in the analysis are Sus scrofa ferus (boar), Cervus elaphus (red deer), Dama Dama L. (fallow deer), Capreolus c. (roe deer), Lepus sp. (hare), Glis glis (dormouse), and unspecified birds. The domestic fowl species that were analysed are Gallus g. (chicken) and Anser A. (goose). Edible wild animals and domestic fowl predicted probabilities are relatively stable trends throughout the analysed period, with HDI means consistently below 0.10. Domestic fowl HDIs remain below the millennium mean of 0.06 from the 1^st^ century BCE to the 2^nd^ century CE, and then increase steadily from the 3^rd^ century to remain around the mean until the 7^th^ century. From the 7^th^ to the 11^th^ century, the HDIs remain positive, but with a much larger credible interval. Similarly, wild animals' HDIs are positive in the 1^st^ century BCE and remain stable around the millennium average (0.05) until the 6^th^ century CE, after which they also show a slight increase until the 11^th^ century.
+
+In addition to plotting the probabilities of occurrence extracted by the models, the distributions of the precision parameter $\phi$ are plotted for samples in each century. Each line is plotted with two probability intervals 0.65 (shorter thicker line) and 0.99 (longer thinner line). The probability density functions are also added to the top of the bar.
 
 ```{r}
 #| message: false
@@ -542,7 +465,6 @@ col=rangi2, xlim=c(0,1)
 #| echo: false
 
 
-library(rethinking)
 library(tidybayes)
 library(tidybayes.rethinking)
 
@@ -712,7 +634,7 @@ Caprine_by_Century_fit_a$Century <- recode(Caprine_by_Century_fit_a$Century, !!!
 Caprine_by_Century_fit_phi$Century <- recode(Caprine_by_Century_fit_phi$Century, !!!Caprine_centuries_map)
 
 ###########################
-# Edible Wild Mammals
+# Edible Wild Animals
 ###########################
 
 # Get the results
@@ -816,7 +738,7 @@ Animals_by_Century_a.plot <- Animals_by_Century_a_fit %>%
     linetype = "twodash",
     linewidth = 0.45,
     color = "red4"
-  ) +
+  )+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
                      sec.axis = dup_axis()) +
   scale_y_discrete(limits = rev) +
@@ -826,7 +748,7 @@ Animals_by_Century_a.plot <- Animals_by_Century_a_fit %>%
     x = "Century",
     title = "Animals",
     subtitle = "Century",
-    caption = "The dashed line indicates the diachronical average of occurrence for each animal. The circle indicates the mean for each line."
+    caption = "The dashed line indicates the probability of occurrence for each animal.\n The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -861,14 +783,14 @@ Animals_by_Century_phi.plot <- Animals_by_Century_phi_fit %>%
     y = factor(Century, levels = pigs_centuries_map),
     x = theta
   )) +
-  stat_halfeye() +
+  stat_halfeye(.width = c(0.66, 0.95)) +
   geom_vline(
     data = Animals_by_Century_phi_means_fit,
     aes(xintercept = means),
     linetype = "twodash",
     linewidth = 0.45,
     color = "red4"
-  ) +
+)+
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10),
                      sec.axis = dup_axis()) +
   scale_y_discrete(limits = rev) +
@@ -904,6 +826,7 @@ Animals_by_Century_phi.plot <- Animals_by_Century_phi_fit %>%
   strip.position = "right")
 
 
+
 ```
 
 ```{r}
@@ -914,9 +837,9 @@ Animals_by_Century_a.plot
 Animals_by_Century_phi.plot
 ```
 
-### Trends by traditional chronologies
+### Trends by phase
 
-To estimate the animals' occurrences probability in each chronology, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model will provide estimates for each chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology.
+The relationship between animal NISP counts and chronological phases is similar to the previous one, but with a different indexing variable for the intercept. Instead of being indexed by century, the intercept $\alpha$ is now indexed by phase (${[ChrID]}$). While a phase can span several centuries, this modification allows the model to estimate separate intercepts for each phase, providing more specific insight into potential differences in the outcome variable and the average probability of animals occurrences over time. The rest of the model structure and distributional assumptions remain the same as the previous model, which uses a betabinomial distribution to model overdispersion in the data and an intercept-only structure.
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -1090,7 +1013,7 @@ E_WMammals_by_Chronology_fit_a <- E_WMammals_by_Chronology_fit %>%
     Chronology == 3 ~ "Ma",
     Chronology == 4 ~ "R"
   )) %>% 
-  mutate(animal = "W_Mammals")
+  mutate(animal = "W_Animals")
 
 E_WMammals_by_Chronology_fit_phi <- E_WMammals_by_Chronology_fit %>%
   spread_draws(theta[Chronology]) %>% 
@@ -1100,7 +1023,7 @@ E_WMammals_by_Chronology_fit_phi <- E_WMammals_by_Chronology_fit %>%
     Chronology == 3 ~ "Ma",
     Chronology == 4 ~ "R"
   )) %>% 
-  mutate(animal = "W_Mammals")
+  mutate(animal = "W_Animals")
 
 
 DomFowl_by_Chronology_fit_a <- DomFowl_by_Chronology_fit %>%
@@ -1134,7 +1057,7 @@ Animals_by_Chronology_a_fit <- bind_rows(
 
 # Means for each animal
 Animals_by_Chronology_a_means_fit <- data.frame(
-  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  animal=c("Pigs", "Cattle", "Caprine", "W_Animals", "Dom_Fowl"),
   means=c(
     inv_logit(mean(Pigs_by_Chronology_fit_a$a)),
     inv_logit(mean(Cattle_by_Chronology_fit_a$a)),
@@ -1155,7 +1078,7 @@ Animals_by_Chronology_phi_fit <- bind_rows(
 
 # Means for each animal
 Animals_by_Chronology_phi_means_fit <- data.frame(
-  animal=c("Pigs", "Cattle", "Caprine", "W_Mammals", "Dom_Fowl"),
+  animal=c("Pigs", "Cattle", "Caprine", "W_Animals", "Dom_Fowl"),
   means=c(
     (mean(Pigs_by_Chronology_fit_phi$theta)),
     (mean(Cattle_by_Chronology_fit_phi$theta)),
@@ -1209,7 +1132,7 @@ Animals_by_Chronology_a.plot <- Animals_by_Chronology_a_fit %>%
     x = "Chronology",
     title = "Animals",
     subtitle = "Chronology",
-    caption = "The dashed line indicates the diachronical average of occurrence for each animal. The circle indicates the mean for each line."
+    caption = "The dashed line indicates the probability of occurrence for each animal.\n The circle indicates the mean for each line."
   ) +
   theme_tidybayes() +
   theme(
@@ -1229,7 +1152,7 @@ Animals_by_Chronology_a.plot <- Animals_by_Chronology_a_fit %>%
     axis.title.x.top = element_blank()
   ) + facet_wrap(factor(
     animal,
-    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Animals")
   ) ~ .,
   ncol = 1,
   strip.position = "right")
@@ -1281,13 +1204,15 @@ Animals_by_Chronology_phi.plot <- Animals_by_Chronology_phi_fit %>%
     axis.title.x.top = element_blank()
   ) + facet_wrap(factor(
     animal,
-    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Mammals")
+    levels = c("Pigs", "Cattle", "Caprine", "Dom_Fowl", "W_Animals")
   ) ~ .,
   ncol = 1,
   strip.position = "right")
 
 
 ```
+
+As anticipated, the phase-level trends exhibit posterior distributions similar to the more detailed century-level results. However, the phase-level model offers an advantage - the credible intervals are considerably narrower than those of the previous model. Since each phase spans several centuries, except for the medieval phase that only includes the 11^th^ century, there are more data points available to provide more reliable probabilities. Pigs' NISP are at their highest point during the Roman phase, whereas they decrease in the Late Roman and Early Medieval phase, only to be slightly below the millennium average (of 0.37) in the 11^th^ century. The predicted millennium average is comparable to the previous century-level model (0.36), with a small difference which can be due to the grouping of the observations. The diachronical means for the other animals are also very comparable to the other with a maximum difference of ±1 for each animal. Cattle's NISP probabilities of occurrence increase throughout the millennium, although in the 11^th^ century (marked as Ma on the plot) the 99% credible interval is larger, spanning from 0.15 to 0.26. Conversely, the century-level model for this period indicated a small increase towards the millennium average. As for the century-level model, the caprine are the second most represented animal in the millennium. Their probability of occurrence shows HDIs just below the millennium mean (of 0.27) in the Roman and Late Roman age, and positive HDIs values for the Early Medieval and Medieval phase, a situation not so different than the century-level model. The phase-level trends for domestic fowl and wild animals show perhaps clearer trends than the century-level models. The HDI for domestic fowl, which is below the millennium mean of 0.05 in the Roman age, slightly increases in the later phases, with a peak in the 11^th^ century. This peak is however less reliable than other phases, as the credible interval range is much larger. Wild animals posterior probabilities on the other hand are stable around the mean (0.04) with a small increase in probability during the Early Medieval and Medieval phases. In addition to improved credible intervals as opposed to the century-level model, the probability intervals for the $\phi$ shape parameter are also more reliable, as the PDFs are more narrow and most of the values are around the mean. Unfortunately, a smaller amount of samples for the 11^th^ century produced more dispersed curves.
 
 ```{r}
 #| echo: false
@@ -1298,7 +1223,9 @@ Animals_by_Chronology_phi.plot
 
 ```
 
-### Community plot
+#### Community plot
+
+After estimating the intercepts for each animal separately, they were compiled together to get a cohesive view of the probability of occurrence of the four animals. This approach is not ideal, but it can still be informative with regards to the patterns of animal exploitation in the archaeological record. The joint community plot allows to visually compare the probability of occurrence of each animal species over time and identify trends in their occurrence. For instance, the plot below shows how the predicted probability values for the three main domesticates---pigs, cattle and caprine vary across the four phases. Pigs have higher probabilities during the Roman phase, while already in the Late Roman period they get closer to other domesticates. It is in this period that the inter-sample variability of $\phi$ seem to decrease, although the values are not very high. The precision $\phi$ is instead very variable for edible wild animals and domestic fowl, as it can be expected given that it is much rarer to find these animals in a sample for various reasons already discussed in the methods. The high variability in the precision of the medieval (11^th^ century) intercept and $\phi$ estimates can be explained by the lower number of samples. Overall, the most noticeable trends in the plot are the increased number of cattle in the early medieval period and the decreased number of pigs from the Late Roman phase. Modelling each animal species separately does not fully capture the complex interactions that exist among them, and future work should explore more advanced modelling approaches that account for the co-occurrence of multiple animal species in the same samples.
 
 ```{r}
 #| echo: false
@@ -1354,21 +1281,48 @@ ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = 
 
 ```
 
-## Context type
+## Context type {style="text-align:justify;"}
+Chronological models provide a broad overview of the trends in domestic and wild animal husbandry and consumption. However, it is important to consider the context where the animal remains are found because different site types can influence the NISP of a particular animal. We can stratify the dataset by site type, but there is a challenge: the four chronologies we are studying also affect the availability, frequency, and economic dynamics of the site types. For example, the agricultural strategies employed by rural villas during the Roman and Late Roman periods could differ based on political and economic events, which could affect the relative amount of animal NISP. To better understand how the context where animal remains were found affects our outcome variable, the `NISP`, we can use a Directed Acyclic Graph (DAG). In this DAG, the `Chronology` node is a parent of the `Site_Type` node, and it affects the `NISP` count directly and indirectly through `Site_Type`. To account for this backdoor path, we block by `Chronology` and stratify the dataset by `Site_Type`. Since we have two categorical predictors of interest, we can use an interaction index variable to generate distinct intercepts for each chronology and context type. For instance, the `Roman:Rural` context type could be assigned an index of 1, while `Roman:Urban` could be assigned an index of 2, and so on. This interaction dummy index (${[TCid]}$) will determine the variation in intercepts ($\alpha$) across different context types.
 
-### Pigs
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(dagitty)
+library(ggdag)
+```
 
-::: callout-alert
-**Question:** Is the animal X - let's say Pigs - more strongly associated to a particular settlement type during a certain chronology?
 
-**Expectation 1:** Pigs % should be higher in urban and fortified settlements, as they are animals which are only used for meat and can sustain large populations or the military.
+```{r}
+#| echo: false
+#| label: fig-site-type-dag-animals
+#| fig-cap: "This is a Directed Acyclic Graph (DAG) that represents the relationship between Chronology, Site_Type, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Site_Type. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology."
 
-**Expectation 2:** Possibly pigs would increase in villas in the Late Roman age, as their production shifts to a more extensive agriculture (Source: Historical literature).
+DAG_site_type <- dagitty('dag {
+NISP [outcome]
+Chronology [collider,dagitty.stratum="1"]
+Site_Type [exposure,dagitty.stratum="2"]
+Chronology -> NISP
+Chronology -> Site_Type
+Site_Type -> NISP
+}')
 
-**Expectation 3:** If urban density decreases during the late Roman and early Medieval phase, but increases in the Medieval age, do the pigs % follow similar trends?
-:::
+DAG_site_type <- tidy_dagitty(DAG_site_type)
 
-To estimate the animals' occurrences probability in each chronology and context, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[TCid]}$ as the model will provide estimates for each context type and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and context type.
+ggdag_paths(DAG_site_type, 
+      text = FALSE, 
+      use_labels = "name", 
+      shadow = TRUE) +
+  theme_dag(base_size = 14)+
+  theme(legend.position = "none", strip.text = element_blank())+
+  scale_color_manual(values = "#0072B2", na.value = "grey80") + 
+  scale_fill_manual(values = "#0072B2", na.value = "grey80")+
+   ggraph::scale_edge_color_manual(values = "#0072B2", na.value = "grey80")
+
+
+```
+
+The approach for the proposed model for estimating the posterior likelihood of animal occurrence in various chronological phases and context types is very to the models discussed earlier. The only modification is the interaction index. The model structure and priors remain the same as in the previous models. There are several contexts that have been recorded in the database (see @tbl-site-type-db for a full list), but the model required some simplifications in order to avoid extremely small categories. For instance, religious monasteries have been grouped with other `Religious` sites, or Roman *mansiones* have been classified as `Rural` for these models. Categorical simplifications can obscure the nuances of data, but tiny sample sizes produce very uninformative posterior distributions.
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -1385,6 +1339,10 @@ $$
 $$
 \phi_{[TCid]} \sim Exponential(1) + 2
 $$
+
+### Pigs
+
+As previously noted, pig remains are consistently the most frequently found type of faunal remains in first millennium Italian excavations. However, this study reveals divergent patterns in the presence of pigs depending on the site type and function. We will first discuss categories with narrower credible intervals before moving on to those with smaller sample sizes and wider credible intervals. Urban sites are the most common category, where the probability of finding pig remains follows patterns similar to the chronological trends presented earlier. During the Roman phase, the probability of finding pig remains in urban contexts is very high compared to other animals or categories, with a mean probability of almost 0.5. The consumption of pork in cities appears to have decreased during the Late Roman and Early Medieval phase, with similar credible intervals, only to increase again in the 11^th^ century. Possible hypotheses will be discussed later on. Although the precision of the pig beta posterior in urban contexts is slightly below the across-contexts mean of 5, the curves are not too dispersed, at least in the Roman and Late Roman periods, and we can be confident in these results. On the other hand, the 95% HDIs for pigs in rural contexts are lower than those in urban contexts during the Roman and Late Roman periods. In the Early Medieval phase, the mean probabilities are comparable to urban contexts, with both categories having a mean of around 0.31, which then increases to 0.37 in the 11^th^ century (0.39 in urban contexts). In general, while the decline in pig presence appears to be significant in urban areas, rural contexts exhibit only a slight increase. Rural villas have been analyzed separately from other rural sites due to their potential implications for the production and consumption of meat, given their status as elite sites. Although the sample size is not large enough to provide highly confident posterior predictions, the results suggest that pork was likely an important component of the diet in these sites, with a mean of approximately 0.4 in the Roman period and an increase in the Late Roman phase. However, the Early Medieval phase is characterized by greater uncertainty, as the sample size is reduced and rural estates often changed function or were abandoned. The credible interval for this period ranges from 0.25 to 0.62. The suggested increase in pigs NISP in the Late Roman period will be discussed further later, as the historical debate might provide helpful hypotheses. It is worth noting that there is no sample from the 11^th^ century for rural villas, which is why that line is not included in the graph. Fortified sites were also large consumers of pigs, with the probabilities of occurrence sticking around the mean value and a minor increase in the Early Medieval-Medieval periods. However, there are no significant changes in trends to observe. The probabilities of occurrence in the Late Roman phase are not so trustworthy as the credible interval is large. It is worth noting that there is no Roman posterior prediction on the graph because there were not fortified Roman sites in the sample except for one, the *castrum* of Ostia [@mackinnon2014], which has not been included in the observed data for this model as it was one single sample. The *castrum* had a 71.9% NISP proportion of pigs, out of a sample of 121 total NISP. The religious category has fewer observations than the site types presented before, and the credible intervals are wider. The Roman and Late Roman religious sites mostly include temples such as the temples C and D of Grumentum, the Demetra temple in Macchia delle Valli, the Mithraeum of Crypta Balbi, and more. In the Medieval phases, religious sites are mostly monasteries including the well-studied ones of Monte Gelato, Farfa, San Salvo, S. Giulia of Brescia, and San Vincenzo al Volturno. The range of credible intervals can span probabilities of 0.40, so we must be cautious in our considerations. If we look at the mean of the HDIs, a precise pattern does not emerge. However, in every chronology, the probability of occurrence of pig's NISP is over the across-contexts average of 0.41. The credible intervals for necropolis sites are too large - spanning almost the entire probability range - to trace any clear patterns. With only nine samples from seven sites, including the Roman and Late Roman *necropoleis* of Cantone, Otranto, San Cassiano (Riva del Garda), Trieste (loc. Crosada), Poggio Gramignano, San Lorenzo di Sebato, and the Early Medieval necropolis of Baggiovara, the sample size is small. As a result, it is best to draw only qualitative conclusions in the later discussion. Finally, the last category includes only one well-known site, the Flavium amphitheater in Rome, which provided 29 zooarchaeological samples. The 95% HDIs for this site show very high probabilities, with mean values of 0.65 for the Roman and Late Roman periods and 0.49 for the Early Medieval period. However, the credible interval is quite wide for the Early Medieval phase, making it less certain. This type of site was not grouped with the other urban observations as it was too unique.
 
 ```{r}
 #| echo: false
@@ -1944,6 +1902,11 @@ Pigs_BB_phi.plot
 ```
 
 ### Cattle
+The probabilities of occurrence of cattle remains in different context types have thinner credible intervals compared to pig remains credible intervals. In urban sites, no significant changing pattern can be observed, as the means of the 95% HDIs mostly lay on the mean probability of 0.20 across contexts, with the exception of the Roman period where it was below mean. Medieval urban sites exhibit increased variability, possibly due to higher uncertainty associated with less data. The mean precision ($\bar{\phi}$ = 7 ca.) in medieval urban sites is the highest of any category. Rural contexts show more variability in probability trends and are more in line with the results of the chronological models. The credible intervals are slightly wider than urban contexts, but can still be interpreted and discussed later. In the Roman age, the probability of cattle occurrence is highest in rural sites, increasing after the 2^nd^ century and slightly decreasing in the Medieval phases.
+Rural villas show stronger trends than rural sites, but with even more uncertainty. If in rural sites probabilities of occurrence of cattle NISP remains increases in the Late Roman period, in villas there is an opposite trend with cattle probabilities going below the mean. 
+As previously mentioned, data on Early Medieval rural villas are scarcer due to the changing functions of these sites and their lower continuity. Only six sites provided nine samples in this period: Ficarolo (loc. Gaiba-Chiunsano), Monte Torto di Osimo, Santa Marta, Villa Magna, S. Giovanni di Ruoti, and Faragola. Consequently, the resulting analysis for this category has higher uncertainty and wider credible intervals. However, the probabilities suggest a small increase again in this phase.
+The posterior precision parameter ($\bar{\phi}$) in this phase is the lowest, indicating both less data available and contradictory information in the data, contributing to the uncertainty. Fortified sites, while exhibiting more uncertainty during the Late Roman period, do not show significant changes in cattle NISP occurrences. The mean values of the 95% HDIs remain consistently above the overall mean of 0.20 in all chronologies, but only show a slight increase to around 0.25 in the Medieval period, with a higher precision. The trends in religious sites show similarities to those in villas, with mean probabilities dipping below the across-contexts average in the Late Roman period and a steady increase in the Early Medieval and Medieval phases. In *necropoleis*, the probabilities of cattle NISP are below the mean in the Roman-Late Roman periods. However, in the Early Medieval phase, due to limited data availability (only one sample from the necropolis of Baggiovara, where cattle NISP is 74/316), the uncertainty is high, and the credible interval is too wide to draw any meaningful conclusions. This extended credible interval is due to the flat prior, indicating that the model is too uncertain to provide reliable probabilities. The final category consists of only one site, the Flavium amphitheater. The probability of occurrence of cattle NISP remains in this category is relatively low and does not follow the same patterns as urban sites. There is a small decrease in the Late Roman period and a potentially uncertain increase in the Early Medieval phase. However, the 50% HDI probabilities are consistently below the across-contexts mean.
+
 
 ```{r}
 #| echo: false
@@ -2415,6 +2378,8 @@ Cattle_BB_phi.plot
 
 ### Caprine
 
+Among the contexts analyzed, the probability of finding caprine remains is the second highest with a mean of 0.29, following pig remains. In Roman and Late Roman urban sites caprine probabilities are below the mean, although there is a positive trend until the Early Middle Ages. The Medieval phases (6^th^ to 11^th^ century) show mean probabilities of 0.31. Rural sites exhibit a decreasing trend, with the 50% HDIs always above mean. However, even with this decreasing trend, the probabilities in rural sites are still higher than those in urban sites. In the Roman period, the caprine probability of occurrence is particularly high (0.35) in rural sites and decreases in the following phases, until the 11^th^ century, when there is a strong increase in caprine probabilities (associated with more uncertainty and variability). Rural villas show a decreasing trend in the probabilities of caprine remains: the 50% HDI probabilities in rural villas remain lower than the average, with a slight decrease in the Late Roman phase and a strong increase in the Early Medieval period, when uncertainty is also high. Although the number of samples is not as high as other categories, the mean precision ($\bar{\phi}$ = 8.5 ca.) is high in the Late Roman phase, indicating consistency in the samples. In fortified sites, there is a decreasing trend in caprine probability, starting from a high point of 0.37 in the Late Roman phase and reaching below the average of all contexts in the 11^th^ century. As for the case of most categories (except urban sites), there is a decreasing trend in caprine probability until the 11^th^ century in religious sites. However, for this category the credible intervals are quite wide, and the precision is always below average, making it challenging to draw reliable conclusions. In the case of *necropoleis*, the credible intervals are too large to provide any meaningful insight. Finally, in the Flavium amphitheater samples the 50% HDIs probabilities are below average, decreasing in the Late Roman period and increasing (with extreme uncertainty) above average in the Early Medieval phase. 
+
 ```{r}
 #| echo: false
 #| message: false
@@ -2824,7 +2789,7 @@ Caprine_BB.plot <- Caprine_BB_Merge_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -2854,7 +2819,7 @@ Caprine_BB_phi.plot <- Caprine_BB_Merge_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -2870,7 +2835,9 @@ Caprine_BB.plot
 Caprine_BB_phi.plot
 ```
 
-### Edible W. Mammals
+### Edible W. Animals
+
+The trends in edible wild animals are similar between urban and rural sites, with mean probabilities below the average of 0.07 during the Roman and Late Roman periods. The means for urban sites are around 0.03, while those for rural sites are approximately 0.05. In the Early Medieval period, both urban and rural sites show a small increase, with probabilities of 0.05 and 0.06, respectively. In the Medieval period, the 50% HDIs are above the mean for both urban and rural sites, reaching a peak of 0.11 in rural areas. However, caution is required for the 11^th^ century, as the credible interval is larger and the mean precision ($\bar{\phi}$) is low, indicating increased variability. While the credible intervals are wider, rural villas consistently have means above the average and higher than other site types. In the Roman period, the mean probability is 0.11, which decreases to 0.09 in the Late Roman phase and 0.05 in the Early Middle Ages. Similarly, fortified sites display 50% HDIs above the across-context mean, with a small decrease in the Early Medieval phase and an increase in the 11^th^ century. Both sites show a positive correlation between game consumption and elite lifeways. Religious sites show probabilities above the mean in the Roman and Late Roman periods, when these sites mostly include temples or ritual contexts. However, in the Medieval phases, the probabilities decrease below the mean instead. The credible intervals for the *necropoleis* are too wide to draw any reliable conclusion, but it is noteworthy that there is evidence of wild game consumption in these contexts. The Flavium amphitheater also exhibits probabilities below the mean, although the full credible interval extends above the mean as well. In the Early Medieval phase, the mean probability rises above 0.10, but the credible interval remains too wide for confident interpretation.
 
 ```{r}
 #| echo: false
@@ -3271,7 +3238,7 @@ WMammals_BB.plot <- WMammals_BB_Merge_a %>%
   scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Site type",
        caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -3281,7 +3248,7 @@ WMammals_BB.plot <- WMammals_BB_Merge_a %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -3301,7 +3268,7 @@ WMammals_BB_phi.plot <- WMammals_BB_Merge_phi %>%
   scale_color_brewer(palette="Greys")+
   labs(x=expression(paste("Precision parameter (", phi, ")")),
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Site type",
        caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -3311,7 +3278,7 @@ WMammals_BB_phi.plot <- WMammals_BB_Merge_phi %>%
         panel.background = element_rect(fill = "grey90"),
         panel.border = element_rect(fill=NA, linewidth = 0.1),
         panel.grid.major.x = element_line(color = "grey50",
-                                          size = 0.25,
+                                          linewidth = 0.25,
                                           linetype = 2),
         axis.title.x.top = element_blank()
   )+
@@ -3328,6 +3295,7 @@ WMammals_BB_phi.plot
 ```
 
 ### Community plot
+To examine the overall trends across all context types and chronologies, the probabilities of occurrence for the four animals were compiled and plotted against the precision. The resulting plot shows different context types and chronologies for each animal. Since these are separate models, multinomial regressions would be informative in this sense. These models could be explored further in future research. In the Roman period, the probabilities for pigs and wild animals show clear separation among urban, rural, and villa sites. Pigs are mostly predicted in urban sites, followed by villas and rural sites. Conversely, wild animals have higher probabilities in villas, then rural and urban sites. For pigs, most of the $\phi$ values range between 3 and 8 across all contexts, while the wild animals model shows low precision values for villas and greater variability in urban and rural sites. Additionally, wild mammal probabilities in villa sites vary widely, ranging from 0.05 to as high as 0.20. In contrast, the probabilities of wild mammal occurrence in urban and rural sites are more consistent. The probabilities of cattle and caprine in different contexts are less clear. Rural sites have higher probabilities for both animals than urban sites, and the probabilities for villas have wider ranges. However, adding a fourth site type in the Late Roman period complicates the reading. As for the Roman period, pigs and wild animals show a separation, with pigs being more likely in urban sites and wild animals in villas, but there is a shift in probabilities in the Late Roman period. Pigs are now more likely in villas, whereas wild animals remain similarly distributed. Fortified sites have variable probabilities for all animals. Cattle is more present in rural sites, followed by urban and villa sites, while caprine is most likely to occur in fortified sites (with high variability), followed by rural, urban, and villa sites. The latter show a higher degree of precision. In the Early Medieval period, there is less distinction between the different context types for all animals, except for cattle, which is more likely to occur in rural sites, followed by urban and villa sites. There are no clear trends for the other animals. In the 11^th^ century, there is a lot of variability for all animals, possibly due to the smaller sample size. Pigs appear to be more common on urban and fortified sites, while cattle and caprine are more likely to occur on rural sites. The patterns of probabilities for wild animals are highly inconsistent.
 
 ```{r}
 #| echo: false
@@ -3344,7 +3312,7 @@ Animals_by_SiteType_fit_comm <- bind_rows(
   mutate(animal = "Caprine")),
 (WMammals_BB_Merge_a %>% 
   bind_cols(Precis = WMammals_BB_Merge_phi$theta) %>%
-  mutate(animal = "W_Mammals"))
+  mutate(animal = "W_Animals"))
 )
 
 
@@ -3362,7 +3330,8 @@ Animals_by_SiteType_fit_comm <- slice_sample(
 #| fig-height: 10
 #| fig-width: 12
 
-ggplot(Animals_by_SiteType_fit_comm, aes(x = inv_logit(a), y = Precis, color = Type)) +
+ggplot(Animals_by_SiteType_fit_comm, 
+       aes(x = inv_logit(a), y = Precis, color = Type)) +
   geom_point(alpha = .4) +
   theme_tidybayes() +
   scale_color_brewer(palette = "Spectral") +
@@ -3397,13 +3366,44 @@ ggplot(Animals_by_SiteType_fit_comm, aes(x = inv_logit(a), y = Precis, color = T
     title = "Animals",
     subtitle = "Chronological occurrence against precision"
   )+
-  facet_grid(factor(Chronology, levels=chrono_levels)~animal, scales="free")
+  facet_grid(factor(Chronology, levels=chrono_levels)~factor(animal, levels = c("Pigs", "Cattle", "Caprine", "W_Animals")), scales="free")
 
 ```
 
-## Macroregion
+## Macroregion {style="text-align:justify;"}
 
-To estimate the animals' occurrences probability in each chronology and macroregion, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each macroregion and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and macroregion.
+In addition to considering chronological and context type models, another important variable that has been examined in this study is `Macroregion`. This allows us to divide the Italian peninsula into three regions (Southern, Central, and Northern) and investigate more specific geographic questions. Due to the limited amount of data available, it is not however feasible to build on the previous model and incorporate this variable into the analysis. Additionally, including three categorical predictors would make it difficult to interpret the results. To account for the influence of Macroregion, we can stratify the dataset by Southern, Central, and Northern Italy, similar to how we stratified by `Site_Type`. It is important to also consider chronological stratification as different dynamics were occurring in the areas under observation. Therefore, we can block by `Chronology` and stratify by `Macroregion` to investigate the influence of geographic location on animal husbandry and consumption patterns.
+
+```{r}
+#| echo: false
+#| label: fig-macroregion-dag-animals
+#| fig-cap: "The DAG that represents the relationship between Chronology, Macroregion, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Macroregion. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology."
+
+DAG_macroregion <- dagitty('dag {
+NISP [outcome]
+Chronology [collider,dagitty.stratum="1"]
+Macroregion [exposure,dagitty.stratum="2"]
+Chronology -> NISP
+Chronology -> Macroregion
+Macroregion -> NISP
+}')
+
+DAG_macroregion <- tidy_dagitty(DAG_macroregion)
+
+ggdag_paths(DAG_macroregion, 
+      text = FALSE, 
+      use_labels = "name", 
+      shadow = TRUE) +
+  theme_dag(base_size = 14)+
+  theme(legend.position = "none", strip.text = element_blank())+
+  scale_color_manual(values = "#0072B2", na.value = "grey80") + 
+  scale_fill_manual(values = "#0072B2", na.value = "grey80")+
+   ggraph::scale_edge_color_manual(values = "#0072B2", na.value = "grey80")
+
+
+```
+
+To account for the double stratification by `Chronology` and `Macroregion` as categorical predictors, an interaction index must be used, just as in the previous model. This allows to stratify the data by both variables and generate distinct intercepts for each combination of the two predictors. The interaction dummy index (${[REGid]}$) will determine the variation in intercepts ($\alpha$) across different macroregions and chronologies. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and macroregion.
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -3435,6 +3435,9 @@ dat.WMammals_Reg = list(N=d.Animals_Reg$Tot_NISP, A=d.Animals_Reg$Edible.W..Mamm
 ```
 
 ### Pigs
+
+The credible intervals of the resulting probabilities of pig occurrence show variability, making it challenging to describe the results. However, some observations can still be made. Firstly, it's noticeable that Southern and Central Italy share similar trends, albeit with different estimated probabilities. In the Roman period, Central Italy has the highest 95% HDI for pigs, with a mean probability of 0.51, well above the across-regions mean of 0.36. Although 50 out of 99 samples from this period are from urban contexts, the 30 samples from rural contexts are sufficient to avoid suspicions of biases. Similarly, the credible interval is wider in Southern Italy, with a mean probability of around 0.43. For both regions, the trend shows a decreasing probability of pig occurrence in the Late Roman and Early Medieval periods. In Central Italy, the 95% HDI mean values reach the across-regions mean in the Early Middle Ages, while in Southern Italy, most probabilities are already below the mean in the Late Roman period. The analysis reveals a different pattern for Northern Italy compared to Southern and Central Italy. The probability of pigs in Northern Italy shows only a slight decrease in the Late Roman period, from 0.27 to 0.26. However, there is an apparent increase in the probability of pigs during the Medieval phases, although the 11^th^ century remains uncertain due to limited observations. Conversely, in Southern and Central Italy, the trend is decreasing in the Late Roman and Early Medieval periods. While the 11^th^ century shows a slight increase in both regions, the credible interval for Southern Italy is too wide to draw any meaningful conclusions.
+
 
 ```{r}
 #| echo: false
@@ -3654,7 +3657,7 @@ Pigs_Reg_phi.plot
 ```
 
 ### Cattle
-
+Similar patterns are observed for the occurrence probabilities of cattle in Southern and Central Italy. In the Roman and Late Roman periods, the 50% HDIs for Southern and Central Italy are lower than the across-regions mean of 0.23. However, in the Early Middle Ages, the probabilities increase in both regions and go above the mean. In contrast, Northern Italy shows much higher mean probabilities in the Roman (0.27) and Late Roman (0.32) periods compared to the other regions, but the mean decreases to 0.24 in the Early Middle Ages. Due to wide credible intervals, it is difficult to provide accurate estimates for the 11^th^ century.
 ```{r}
 #| echo: false
 #| eval: false
@@ -3872,6 +3875,8 @@ Cattle_Reg_phi.plot
 
 ### Caprine
 
+There are distinct patterns in caprine occurrence probability across the three regions examined. In Central Italy, the probability of caprines is consistently lower than the across-regions mean of 0.31, ranging from 0.24 to 0.26 in the Roman age to the Early Middle Ages. While the 11^th^ century credible interval is wide, most probabilities are above the mean. The model precision is particularly good in Roman and Late Roman Central Italy, with a peak of around 8. Roman Northern Italy has the highest probability of caprine occurrence in the Roman age, with a mean value of 0.36. However, after this period, the mean probabilities decrease below the mean, only to increase again in the 11^th^ century. Nevertheless, the probability distribution for this period is not reliable. Southern Italy, on the other hand, shows a steady increase in probability from the Roman age, with the 50% HDI around the mean, to a peak of 0.41 in the Early Middle Ages. However, the wide credible interval and low model precision in the 11^th^ century prevent definitive conclusions.
+
 ```{r}
 #| echo: false
 #| eval: false
@@ -4086,7 +4091,8 @@ Caprine_Reg.plot
 Caprine_Reg_phi.plot
 ```
 
-### Edible W. Mammals
+### Edible W. Animals
+The distribution of edible wild animals in the Roman and Late Roman periods is below the across-regions mean of 0.05. In Central Italy, there is an increase in the probability of game consumption from the Roman to the Medieval age, with an uncertain trend in the 11^th^ century. The precision parameter $\bar{\phi}$ is also high in the Medieval phase. Similarly, Northern Italy shows an increase in the probability of game consumption in the Medieval phases, while the mean probabilities decrease after the Roman age. Southern Italy, on the other hand, has a stable trend from the Roman to the Early Medieval period, with an uncertain increase in the 11^th^ century. The credible interval is wide, and the model might have produced estimates in agreement with the other regions. However, there is evidence of an increase in game consumption in the 11^th^ century in every macroregion.
 
 ```{r}
 #| echo: false
@@ -4248,7 +4254,7 @@ WMammals_Reg.plot <- WMammals_Reg.fit_a %>%
   scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Macroregion",
        caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -4277,7 +4283,7 @@ WMammals_Reg_phi.plot <- WMammals_Reg.fit_phi %>%
   scale_color_brewer(palette="Greys")+
   labs(x=expression(paste("Precision parameter (", phi, ")")),
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Macroregion",
        caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -4304,9 +4310,9 @@ WMammals_Reg.plot
 WMammals_Reg_phi.plot
 ```
 
-## Geography
+## Geography {style="text-align:justify;"}
 
-Animals distributions can vary across different geographical features. This research has considered plain, coast, hill and mountains as the most common geographical features in the Italian peninsula. Archaeological excavations where zooarchaeological remains have been analysed are located at low altitudes. Although as expected there are more mountain sites in Northern Italy, sampled sites are evenly placed on plains, coastlands and hills across the three Italian macroregions.
+Animals distributions can vary across different geographical features. This research has considered plains, coasts, hills and mountains as the most common geographical features in the Italian peninsula. The majority of excavations that returned faunal samples are located at low altitudes. Although - as can be expected - Northern Italy provided more samples from mountain sites when compared to the other parts of mainland Italy, the other samples seem to be evenly located on on plains, coastlands and hills.
 
 ```{r}
 #| echo: false
@@ -4343,10 +4349,10 @@ ggplot(geo_waffle_tbl, aes(fill = factor(
     size = 0.33,
     colour = "white",
     flip = TRUE,
-    make_proportional = TRUE
+    make_proportional = TRUE,
+    na.rm = T
   ) +
   scale_fill_brewer(palette = "Spectral", direction = -1) +
- # coord_equal() +
   theme_tidybayes() +
   theme(
     legend.position = "bottom",
@@ -4371,9 +4377,12 @@ ggplot(geo_waffle_tbl, aes(fill = factor(
     Macroregion,
     levels = c("Southern Italy", "Central Italy", "Northern Italy")
   ) ~ .)
+
 ```
 
-To estimate the animals' occurrences probability in each chronology and geography, I used a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[GEOid]}$ as the model will provide estimates for each geography and chronology under examination. The $\phi$ parameter indicates the precision in the Beta distribution, modelled by chronology and geography.
+The proposed model includes two categorical predictors---`Chronology` and `Geography`. As for the previous cases, the interaction between the two variables is obtained through a dummy index (${[GEOid]}$) that is used to estimate intercepts for each period and geography. The remaining parts of the model are the same as before. Geographical features can influence the differential distribution of animals: one for instance can expect more caprine NISP remains in mountain sites, but it is also important to stratify by `Chronology` as certain political event can change the settlement patterns and economic strategies. 
+
+The proposed model includes two categorical predictors: `Chronology` and `Geography`. The interaction between these two variables is obtained through a dummy index (${[GEOid]}$) that is used to estimate intercepts for each period and geography. Geographical features can influence the differential distribution of animal remains. For instance, we might expect to find more caprine NISP remains in mountain sites. It is however also important to consider the time factor, as changes in settlement patterns and economic strategies over time may have been driven by political events. We do this by stratifying again by chronology in addition to geographical features. The priors used for this model are the same as in the previous models. 
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -4406,6 +4415,7 @@ dat.WMammals_Geo = list(N=d.Animals_Geo$Tot_NISP, A=d.Animals_Geo$Edible.W..Mamm
 ```
 
 ### Pigs
+The data suggests that the probabilities of finding pig remains are generally higher in lowland areas, including coasts, plains, and hills, with mean probability values above the overall mean of 0.35 during the Roman period. However, there appears to be a general decrease in the 95% HDIs during the Late Roman period, with the decline being more pronounced in plains where the mean probability drops from 0.49 to 0.34. In plains, probabilities increase above the mean only in the 11^th^ century, whereas on coastal sites, the credible interval becomes wider in the 11^th^ century, and the mean remains below the average. Although the association between hills and pig remains probabilities seems to be always above average, there are no major patterns of chronological change. In mountains, pig remains are always below the mean, but there seems to be an increase (associated with a good amount of uncertainty, as indicated by the low precision parameter and wide credible interval) in the Early Medieval Age. Unfortunately, no clear indication can be given for the Medieval phase on mountains, given the wide credible interval that spans the entire probability range. This is due to the limited availability of samples for this period and geographical feature: the castrum of Rocca di Asolo (pigs NISP: 220/698 and 529/1837), the Toblburg Castle (94/346) and Rocchetta Nuova of Vacchereccia (60/258).
 
 ```{r}
 #| echo: false
@@ -4647,6 +4657,8 @@ Pigs_Geo_phi.plot
 
 ### Cattle
 
+In this model, the overall predicted probabilities of cattle are consistently lower than those of other animals, with an average of 0.25. However, mountain sites show a higher mean probability for cattle compared to other geographical features. On the coasts, there is a chronological increase in cattle probabilities, with a mean value going above the overall mean in the 11^th^ century, albeit with higher uncertainty due to the fewer available sites. Conversely, on hills and plains, the probabilities of cattle increase only slightly. What is particularly noteworthy is the trend observed in mountain sites, despite the higher uncertainty due to the lower number of available sites. Here, there is an increase in probabilities during the Late Roman period, from a mean of 0.25 to 0.35, followed by a decrease in the Early Medieval period, although with a wider credible interval. In the 11^th^ century, the credible interval again spans across the entire probability range, with no clear indication of the trend. Four samples from three sites are available for this period: the castrum of Rocca di Asolo (cattle NISP: 265/698 and 395/1837), the Toblburg Castle (204/346) and Rocchetta Nuova of Vacchereccia (120/258).
+
 ```{r}
 #| echo: false
 #| eval: false
@@ -4887,6 +4899,8 @@ Cattle_Geo_phi.plot
 
 ### Caprine
 
+The average probability for the occurrence of caprine remains is 0.34 across all geographical features. On coastal sites, the mean probabilities are below average in the Roman-Late Roman periods, but increase slightly in the Early Medieval phase and go above mean in the 11^th^ century, although the credible interval is high and the $\bar\phi$ is below mean. This increase is also seen on hills, where mean probabilities are below mean until the Early Medieval phase and decrease slightly below mean again in the 11^th^ century. On plains, the mean probabilities are always below mean - as can be expected - but generally increase. Credible intervals for mountain sites are very wide, and thus require caution in interpretation. The general trend seems to be in decline from the Roman to the Early Medieval phase from a mean of 0.55 to 0.45. Again, it is impossible to draw conclusions for the 11^th^ century phase on mountains as only four samples from three sites are available: the castrum of Rocca di Asolo (caprine NISP: 164/698 and 523/1837), the Toblburg Castle (48/346) and Rocchetta Nuova of Vacchereccia (68/258).  
+
 ```{r}
 #| echo: false
 #| eval: false
@@ -5125,7 +5139,9 @@ Caprine_Geo.plot
 Caprine_Geo_phi.plot
 ```
 
-### Edible W. Mammals
+### Edible W. Animals
+
+NISP from wild animals is always low, and the probabilities of occurrence show little variation, as most mean probability values lay around the mean of 0.09. Overall, there is a positive association between 11^th^ century sites and game consumption in all geographical features. On plains, mean probabilities are above mean already in the Early Medieval period. Again, it is hard to draw conclusions for medieval mountain sites as there are only four samples available: the castrum of Rocca di Asolo (NISP: 12/698 and 39/1837), the Toblburg Castle (0/346) and Rocchetta Nuova of Vacchereccia (0/258). 
 
 ```{r}
 #| echo: false
@@ -5311,7 +5327,7 @@ WMammals_Geo.plot <- WMammals_Geo.fit_a %>%
   scale_color_brewer(palette="Greys", name="Credible interval")+
   labs(x="Predicted probability",
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Geography",
        caption="The dashed line indicates the mean for each macroregion and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -5340,7 +5356,7 @@ WMammals_Geo_phi.plot <- WMammals_Geo.fit_phi %>%
   scale_color_brewer(palette="Greys")+
   labs(x=expression(paste("Precision parameter (", phi, ")")),
        y="Chronology",
-       title="Edible Wild Mammals",
+       title="Edible Wild Animals",
        subtitle="Geography",
        caption="The dashed line indicates the mean for each site type and chronology.\nThe circle indicates the mean for each line.")+
   theme_tidybayes()+
@@ -5875,7 +5891,7 @@ Capr_Alt_fit_phi.plot <- Capr_Alt_fit.phi %>%
 
 ```
 
-### Edible W. Mammals
+### Edible W. Animals
 
 ```{r}
 #| eval: false
@@ -5932,9 +5948,9 @@ WMammals_Alt_fit_reth.plot <- as.data.frame(dat.WMammals_Altitude) %>%
         axis.title.x.top = element_blank()
   )+
   labs(
-    y="P (Edible Wild Mammals | Total NISP)",
+    y="P (Edible Wild Animals | Total NISP)",
     x="Altitude (km)",
-    title="Edible Wild Mammals",
+    title="Edible Wild Animals",
     subtitle="Altitude",
     caption = bquote("Precision parameter ("~phi~"): " ~ .(round(mean(WMammals_Alt_fit.reth.post$theta), 2)))
   )+
@@ -5949,7 +5965,7 @@ WMammals_Alt_fit_reth.plot
 ```{r}
 #| echo: false
 
-WMamm_post.a <- as.data.frame(WMammals_Alt_fit.reth.post) %>% mutate(animal = "W_Mammals")
+WMamm_post.a <- as.data.frame(WMammals_Alt_fit.reth.post) %>% mutate(animal = "W_Animals")
 Pigs_post.a <- as.data.frame(Pigs_Alt_fit.reth.post) %>% mutate(animal = "Pigs")
 Cattle_post.a <- as.data.frame(Cattle_Alt_fit.reth.post) %>% mutate(animal = "Cattle")
 Caprine_post.a <- as.data.frame(Capr_Alt_fit.reth.post) %>% mutate(animal = "Caprine")

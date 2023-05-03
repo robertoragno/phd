@@ -238,8 +238,8 @@ italy_bot_map
 
 ## Ubiquity {style="text-align:justify;"}
 
-::: {.callout-note}
-I need to justify in this section why I have used a frequentist approach. Using Jeffreys interval would be ideal, but the amount of plots needed to graphically show the results would simply be ridiculous. This decision will probably be justified by saying that these are simply exploratory introductory figures, and maybe I can plot some important taxa using Jeffreys interval.  
+::: callout-note
+I need to justify in this section why I have used a frequentist approach. Using Jeffreys interval would be ideal, but the amount of plots needed to graphically show the results would simply be ridiculous. This decision will probably be justified by saying that these are simply exploratory introductory figures, and maybe I can plot some important taxa using Jeffreys interval.
 :::
 
 ::: {.content-visible when-format="html"}
@@ -363,8 +363,6 @@ ggplotly(Ubiquity_HM, tooltip="text")
 Ubiquity_HM
 ```
 :::
-
-
 
 ```{r}
 #| echo: false
@@ -631,8 +629,6 @@ for (col_name in plant_tables.col_names) {
 }
 
 ```
-
-
 
 ```{r}
 #| echo: false
@@ -954,7 +950,6 @@ ggplot(all_dists, aes(x=Macroregion, y=Distribution))+
 
 
 ```
-
 
 ### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
 
@@ -1354,8 +1349,7 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
-
-# Site richness and diversity by chronology
+## Site richness and diversity by chronology
 
 ::: callout-tip
 Make sure to cite @nagendra2002 to explain why the indices show different results.
@@ -1652,12 +1646,7 @@ Plants_Richness_by_Chronology_fit_b_Means %>%
 
 ```
 
-In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows 
-$$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ 
-$$logit(\mu_{i}) = a_{[ChrID]}$$ 
-$$a_{[ChrID]} \sim Normal(0,1.5)$$ 
-$$\phi_{i} \sim Exp(0.1)+2$$
-
+In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows $$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ $$logit(\mu_{i}) = a_{[ChrID]}$$ $$a_{[ChrID]} \sim Normal(0,1.5)$$ $$\phi_{i} \sim Exp(0.1)+2$$
 
 ```{r}
 #| echo: false
@@ -1673,7 +1662,6 @@ col=rangi2, xlim=c(0,1)
 )
 
 ```
-
 
 The graph shows extended credible intervals for groups (chronologies) with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11^th^ century. Consequently, its credible range is very wide.
 
@@ -1733,7 +1721,9 @@ Plants_Diversity_Indices_by_Chronology_fit_a %>%
 
 ```
 
-# Context type {style="text-align:justify"}
+
+
+## Context type {style="text-align:justify"}
 
 ::: callout-note
 Important: This section has to be rewritten as now the approach is not frequentist anymore.
@@ -3661,11 +3651,11 @@ The richness of plants in urban contexts has been calculated for every phase. As
 
 see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in Hamerow and McKerracher 2022, p. 153
 
-# Macroregion {style="text-align: justify;"}
+## Macroregion {style="text-align: justify;"}
 
-## Cereals
+### Cereals
 
-### Noble grains
+#### Noble grains
 
 The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
 
@@ -3803,7 +3793,7 @@ m_ng_reg.plot <- ggplot(
 m_ng_reg.plot
 ```
 
-### Minor grains
+#### Minor grains
 
 The model for minor grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on minor grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only minor grain found among other cereals in a context. Modelling the presence of more minor grains in a site can give insights on the rural economy. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
 
@@ -3941,7 +3931,7 @@ m_mg_reg.plot <- ggplot(
 m_mg_reg.plot
 ```
 
-### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
+#### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
 
 ::: callout-important
 ## Section in progress {style="text-align:justify;"}
@@ -4116,7 +4106,7 @@ plot_RichnessMacroReg.EMA
 ```
 
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|------------|------------|------------|------------|------------|------------|
+|-----|----------------------------------------|------------|--------------|--------------|-------------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -4137,7 +4127,7 @@ plot_RichnessMacroReg.EMA
 
 : List of Southern Italian sites with chronology EMA {#tbl-southern-ema-sites}
 
-### Assessing the difference {#sec-permanova-cereals}
+#### Assessing the difference {#sec-permanova-cereals}
 
 ::: callout-note
 ## Notes on terminology: PERMANOVA {style="text-align:justify;"}
@@ -4312,7 +4302,7 @@ The `betadisper()` graphs (@fig-betadisper) show similar distances from the cent
 
 Running the same tests on the Roman sites failed to separate the two groups of sites, confirming that there was not a significant difference in the types of cereals cultivated during the Roman age between Northern and Southern Italy.
 
-### Quantifying the separation: nMDS {#sec-nMDS-Cereals style="text-align:justify"}
+#### Quantifying the separation: nMDS {#sec-nMDS-Cereals style="text-align:justify"}
 
 ::: callout-note
 ## Notes on terminology: Wasserstein metric {style="text-align:justify;"}
@@ -4514,7 +4504,7 @@ stressplot(mds_EMA, p.col="khaki4", l.col="#212529")
 ```
 :::
 
-## Legumes
+### Legumes
 
 ```{r}
 #| echo: false
@@ -4644,9 +4634,9 @@ m_leg_reg.plot
 
 ```
 
-## Fruits
+### Fruits
 
-### Grape
+#### Grape
 
 ```{r}
 #| echo: false
@@ -4767,7 +4757,7 @@ m_grape_reg.plot
 
 ```
 
-### Olives
+#### Olives
 
 ```{r}
 #| echo: false
@@ -4890,7 +4880,7 @@ m_olive_reg.plot
 
 ```
 
-### Nuts
+#### Nuts
 
 ```{r}
 #| echo: false
@@ -5018,7 +5008,7 @@ m_nuts_reg.plot
 
 ```
 
-### Domestic and wild fruits
+#### Domestic and wild fruits
 
 ```{r}
 #| echo: false
@@ -5238,7 +5228,7 @@ m_berries_reg.plot
 
 ```
 
-# Altitude
+## Altitude
 
 The creation of altitude models was not possible for every plant investigated in this study. As the process is very time consuming, it was necessary to select only plants that are most likely to be either positively or negatively impacted by altitude, or taxa that are cultivated for economic reasons. Primary importance was thus given to cereals. Since not every cereal can be cultivated at high altitudes, it was more appropriate to model them individually instead of grouping them into noble and minor grains. For reference, below is a breakdown of the elevation of sites during the four chronologies under investigation.
 
@@ -5335,7 +5325,7 @@ simplehist(rbern(1000,
            col=rangi2)
 ```
 
-## Cereals
+### Cereals
 
 ```{r}
 #| echo: false
@@ -5854,7 +5844,7 @@ Cereals_Alt_post.plot <- ggplot(Cereals_Alt_post, aes(x = inv_logit(a), y = b, c
 Cereals_Alt_post.plot
 ```
 
-## Legumes
+### Legumes
 
 ```{r}
 #| echo: false
@@ -5938,7 +5928,7 @@ m_Legumes_altitude.plot
 
 ```
 
-## Fruits
+### Fruits
 
 ```{r}
 #| echo: false
@@ -6017,7 +6007,7 @@ m_Grape_alt.plot <- as.data.frame(dat.Grape_Altitude) %>%
 
 ```
 
-### Grape
+#### Grape
 
 ```{r}
 #| echo: false
@@ -6026,7 +6016,7 @@ m_Grape_alt.plot
 
 ```
 
-### Olives
+#### Olives
 
 ```{r}
 #| echo: false
@@ -6085,13 +6075,13 @@ m_Olive_altitude.plot <- as.data.frame(dat.Olive_altitude) %>%
 m_Olive_altitude.plot
 ```
 
-# Model comparisons
+## Model comparisons
 
-## Precipitation
+### Precipitation
 
-### Model specification and priors
+#### Model specification and priors
 
-#### Model 1: Precipitation only
+##### Model 1: Precipitation only
 
 The following model uses standardized mean annual precipitation values as a coefficient for the slope and weakly informative priors for both the intercept and the slope.
 
@@ -6111,8 +6101,7 @@ $$
 bPrecip_{ChrID} \sim Normal(0,1.3)
 $$
 
-
-#### Model 2: Altitude only
+##### Model 2: Altitude only
 
 The following model uses altitude values (in km) as a coefficient for the slope and weakly informative priors for both the intercept and the slope. It is the same model presented before.
 
@@ -6132,7 +6121,7 @@ $$
 bAlt_{ChrID} \sim Normal(0,1.3)
 $$
 
-#### Model 3: Altitude and Precipitation
+##### Model 3: Altitude and Precipitation
 
 The following model uses altitude (in km) and standardized mean annual precipitation values as coefficients for the slope, and weakly informative priors for both the intercept and the slope.
 
@@ -6155,7 +6144,6 @@ $$
 $$
 bPrecip_{ChrID} \sim Normal(0,1.3)
 $$
-
 
 ```{r}
 #| echo: false
@@ -6203,7 +6191,7 @@ dat.CWheat_Precip = list(
 
 ```
 
-#### Prior predictive simulations
+##### Prior predictive simulations
 
 We also want to make sure that the priors are weakly informative and are not deeply impacting the models.
 
@@ -6243,7 +6231,7 @@ simplehist(rbern(1000,
 
 ```
 
-### Performance and comparisons
+#### Performance and comparisons
 
 ```{r}
 #| echo: false
@@ -6506,7 +6494,6 @@ dat.Grape_temperature = list(
 
 ```
 
-### Model specification and priors
 
 #### Model 1: Temperature only
 
@@ -6985,7 +6972,205 @@ m_Olive_temperature.plot
 m_Olive_altitude.plot
 ```
 
-# Test: Gaussian processes
+
+## Cereal proportions
+The computations on the archaeobotanical dataset that have been done so far are based on presence/absence values. The reasons relate to the numerous biases present in the samples, which skew the distributions. However, this approach does not allow to draw any quantitative conclusion. From a qualitative standpoint, it can be informative to see which sites are producing different results by calculating the ratio of single cereal taxa on the total of cereal grains found in a certain sample. For the sake of exploring the quantitative trends, keeping in mind that these results are heavily biased by outliers and sample sizes, summary tables grouped by chronology were produced. In particular, two tables are presented here. The first (@tbl-Cereals-Ratios-Means) takes into account missing values, so that if a particular taxon was not found in a sample the missing value was converted to 0. The second table (@tbl-Cereals-Ratios-Means-Pres-Only) calculates the means only based on true presences, and missing values are ignored from the computation. In addition to these two tables, a different approach has also been presented. Raw data has been converted into relative ranks, which assigns increasing ranks to the count values (excluding zeros) on a scale of 0 to 1, thus minimizing the impact of extreme outliers and reducing the effects of large differences in values. @tbl-Cereals-Ranks-ratios-means displays the means of the relative ranks, grouped by chronology. In all three approaches, the computations have been based only on totals of cereals attributed to a species. Although these tables allow some considerations on the proportions of cereals in the sites under investigation, it is important to remember that the results might be biased by the quality of the samples.  
+
+```{r}
+#| echo: false
+
+###################
+## CEREAL RATIOS ##
+###################
+
+# Calculate the ratio of each cereal on the total of cereals by site
+# Just for qualitative purposes
+
+Cereals_Ratios = Archaeobot_Condensed
+Cereals_Ratios[is.na(Cereals_Ratios)] = 0
+
+# Only select sites with cereals
+Cereals_Ratios = subset(Cereals_Ratios, Tot..Cereals>0)
+
+# Only select cereal columns
+Cereals_Ratios = Cereals_Ratios[,1:24]
+
+# Get TOT without Unsp..
+Cereals_Ratios$Tot_Grains = Cereals_Ratios$Tot..Cereals - Cereals_Ratios$Unsp..cereals
+
+# Remove Unsp..Cereals
+Cereals_Ratios = Cereals_Ratios[,-23]
+
+# Remove rows that only have Unsp..Cereals (that are now NAs)
+Cereals_Ratios = Cereals_Ratios[rowSums(Cereals_Ratios[,14:22], na.rm = T) > 0, ]
+
+# Calculate ratios
+Cereals_Ratios[,14:22] =  Cereals_Ratios[,14:22] / Cereals_Ratios$Tot_Grains
+Cereals_Ratios[,14:22] = round(Cereals_Ratios[,14:22],2)
+
+# Remove the Tot..Cereals column
+Cereals_Ratios = Cereals_Ratios[,-23]
+
+#########################
+## CEREAL RATIOS MEANS ##
+#########################
+
+# Just for explorative purposes, group by Chronology
+
+# Get the number of observations/chronology to attach to the dataframe
+Cereals_Obs_Chrono_Counts = Cereals_Ratios %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise(Tot_Samples=n())
+
+# Get the sample size to attach to the dataframe
+Cereals_Obs_Chrono_Size = Cereals_Ratios %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise(Sample_Size=sum(Tot_Grains))
+Cereals_Obs_Chrono_Size$Sample_Size = round(Cereals_Obs_Chrono_Size$Sample_Size)
+
+# This mean includes the 0 values
+Cereals_Ratios_Means = Cereals_Ratios %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise_at(vars(Common.Wheat:Sorghum), mean) %>%
+  ungroup()
+
+Cereals_Ratios_Means[,-1] = round(Cereals_Ratios_Means[,-1],2)
+
+Cereals_Ratios_Means = cbind(Cereals_Ratios_Means, 
+                             Sample_Size = Cereals_Obs_Chrono_Size$Sample_Size,
+                             Tot_Samples=Cereals_Obs_Chrono_Counts$Tot_Samples)
+colnames(Cereals_Ratios_Means)[1] = "Chronology"
+
+# This mean does not include the 0 values
+Cereals_Ratios_Pres_Only = Cereals_Ratios
+Cereals_Ratios_Pres_Only[Cereals_Ratios_Pres_Only==0] = NA
+
+Cereals_Ratios_Means_Pres_Only = Cereals_Ratios_Pres_Only %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise_at(vars(Common.Wheat:Sorghum), mean, na.rm = TRUE) %>%
+  ungroup()
+
+Cereals_Ratios_Means_Pres_Only[,-1] = round(Cereals_Ratios_Means_Pres_Only[,-1],2)
+
+colnames(Cereals_Ratios_Means_Pres_Only)[1] = "Chronology"
+Cereals_Ratios_Means_Pres_Only = cbind(Cereals_Ratios_Means_Pres_Only, 
+                                       Sample_Size = Cereals_Obs_Chrono_Size$Sample_Size,
+                                       Tot_Samples=Cereals_Obs_Chrono_Counts$Tot_Samples)
+
+## Relative ranks
+
+Cereals_Ranks_ratios = Archaeobot_Condensed
+#Cereals_Ranks_ratios[is.na(Cereals_Ranks_ratios)] = 0
+
+# Only select sites with cereals
+Cereals_Ranks_ratios = subset(Cereals_Ranks_ratios, Tot..Cereals>0)
+
+# Only select cereal columns, without Unsp.. Cereals
+Cereals_Ranks_ratios = Cereals_Ranks_ratios[,1:24]
+Cereals_Ranks_ratios = Cereals_Ranks_ratios[,-23]
+
+# Remove rows that only have Unsp..Cereals (that are now NAs)
+Cereals_Ranks_ratios = Cereals_Ranks_ratios[rowSums(Cereals_Ranks_ratios[,14:22], na.rm = T) > 0, ]
+
+# Get the number of observations/chronology to attach to the dataframe
+Cereals_Obs_Chrono_Counts_Ranks = Cereals_Ranks_ratios %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise(Tot_Samples=n())
+
+# Calculate relative ranks
+Cereals_Ranks_ratios[,14:22] = decostand(Cereals_Ranks_ratios[,14:22], 
+                                         method = "rrank", 
+                                         na.rm = T)
+
+Cereals_Ranks_ratios_means = Cereals_Ranks_ratios %>% 
+  group_by(factor(Chronology, levels=(c("R", "LR", "EMA", "Ma")))) %>%
+  summarise_at(vars(Common.Wheat:Sorghum), mean, na.rm = TRUE) %>%
+  ungroup()
+
+Cereals_Ranks_ratios_means[,-1] = round(Cereals_Ranks_ratios_means[,-1],2)
+
+colnames(Cereals_Ranks_ratios_means)[1] = "Chronology"
+Cereals_Ranks_ratios_means = cbind(Cereals_Ranks_ratios_means, 
+                                   Sample_Size = Cereals_Obs_Chrono_Size$Sample_Size,
+                                   Tot_Samples=Cereals_Obs_Chrono_Counts_Ranks$Tot_Samples)
+
+```
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| echo: false
+#| message: false
+#| label: tbl-Cereals-Ratios-Means
+#| tbl-cap: "Means of the proportions of cereals, calculated on the total of cereals. The means have been calculated including missing values. Results grouped by chronology."
+
+library(knitr)
+library(kableExtra)
+
+kable(t(Cereals_Ratios_Means)) %>%
+  kable_styling() %>% 
+  row_spec(11, bold = T, extra_css = "border-top: 1px solid") %>% 
+  row_spec(12, bold = T) %>% 
+  row_spec(1, bold = T, extra_css = "border-bottom: 1px solid") 
+
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Cereals-Ratios-Means-Pres-Only
+#| tbl-cap: "Means of the proportions of cereals, calculated on the total of cereals. The means have been calculated only on true presences, excluding missing values. Results grouped by chronology."
+
+kable(t(Cereals_Ratios_Means_Pres_Only)) %>%
+  kable_styling() %>% 
+  row_spec(11, bold = T, extra_css = "border-top: 1px solid") %>% 
+  row_spec(12, bold = T) %>% 
+  row_spec(1, bold = T, extra_css = "border-bottom: 1px solid") 
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Cereals-Ranks-ratios-means
+#| tbl-cap: "Relative ranks means, grouped by chronology. The ranks have been calculated only on cereals attributed to a species (excluding the category of unspecified cereals)."
+
+Cereals_Ranks_ratios_means=t(Cereals_Ranks_ratios_means)
+
+kable(Cereals_Ranks_ratios_means) %>%
+  kable_styling() %>% 
+  row_spec(11, bold = T, extra_css = "border-top: 1px solid") %>% 
+  row_spec(12, bold = T) %>% 
+  row_spec(1, bold = T, extra_css = "border-bottom: 1px solid") 
+
+
+```
+:::
+
+## To do:
+
+### Wine/Olive oil production in Italy
+
+Questions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.
+
+Available data:
+
+-   Seed remains
+
+-   Wine presses in Roman Italy (1st to 6th c. ca) -\> Dodd
+
+-   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
+
+-   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided.
+
+### Fruit consumption
+
+-   The domesticated and the wild
+
+-   What fruits arrive on the Roman table?
+
+-   Can we see a decreased consumption of figs during the LALIA in the north?
+
+## Test: Gaussian processes
 
 ```{r}
 #| eval: false
@@ -7066,30 +7251,4 @@ m14.8nc <- ulam(
  ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
 
 
-
-
 ```
-
-# To do:
-
-## Wine/Olive oil production in Italy
-
-Questions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.
-
-Available data:
-
--   Seed remains
-
--   Wine presses in Roman Italy (1st to 6th c. ca) -\> Dodd
-
--   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
-
--   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided.
-
-## Fruit consumption
-
--   The domesticated and the wild
-
--   What fruits arrive on the Roman table?
-
--   Can we see a decreased consumption of figs during the LALIA in the north?
