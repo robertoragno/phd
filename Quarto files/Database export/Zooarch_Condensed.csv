@@ -446,8 +446,7 @@ ID;Site;Culture;Type;Chronology;Geo;weight;Region;Macroregion;From Century;To Ce
 273;Castrum Sancti Pauli, 11th-12th c.;Medieval;Castrum;Ma;Plain;0.5000;Lazio;Central Italy;11;12;De Grossi Mazzorin and Minniti 2022;12.47624027112187;41.858301112210704;23;33;29;0;3;0;;1;0
 273;Castrum Sancti Pauli, 8th-9th c.;Early Medieval;Castrum;EMA;Plain;0.5000;Lazio;Central Italy;8;9;De Grossi Mazzorin and Minniti 2022;12.47624027112187;41.858301112210704;27;4;8;0;0;0;1;0;0
 249;Villa Magna, monastic village, 10th-13th c.;Medieval;Rural;Ma;Hill;0.2500;Lazio;Central Italy;9;13;Holt 2016b;13.112407048036301;41.68141381604245;125;41;65;9;3;1;;6;0
-249;Villa Magna, Roman slave barracks;Roman;Rural site, villa;R;Hill;0.3333;Lazio;Central Italy;2;4;Holt 2016d;13.112407048036301;41.68141381604245;54;1;11;0;1;0;;1;1
-249;Villa Magna, Roman slave barracks;Roman;Rural site, villa;LR;Hill;0.3333;Lazio;Central Italy;2;4;Holt 2016d;13.112407048036301;41.68141381604245;54;1;11;0;1;0;;1;1
+249;Villa Magna, Roman slave barracks;Late Roman;Rural site, villa;LR;Hill;0.3333;Lazio;Central Italy;3;5;Holt 2016d;13.112407048036301;41.68141381604245;54;1;11;0;1;0;;1;1
 301;Lugnano, 1st-3rd c. CE;Roman;Rural site, villa;R;Hill;0.3333;Umbria;Central Italy;1;3;Trentacoste et al 2021;12.332254789041455;42.5761807820264;13;3;5;0;0;0;;0;0
 301;Lugnano, 1st-3rd c. CE;Roman;Rural site, villa;LR;Hill;0.3333;Umbria;Central Italy;1;3;Trentacoste et al 2021;12.332254789041455;42.5761807820264;13;3;5;0;0;0;;0;0
 301;Lugnano, 4th-5th c. CE;Late Roman;Rural site, villa;LR;Hill;0.5000;Umbria;Central Italy;4;5;Trentacoste et al 2021;12.332254789041455;42.5761807820264;296;50;86;0;0;0;;0;0

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Long-term Dynamics and Peasant Autonomy in the Italian Countryside - 5&nbsp; The database</title>
+<title>Peasants, Agriculture, and Environment in the 1st Millennium CE Italian Countryside: A Bayesian approach - 5&nbsp; The database</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -103,7 +103,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Long-term Dynamics and Peasant Autonomy in the Italian Countryside</a> 
+      <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
     </div>
       </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
@@ -178,12 +178,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
+  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
   </div>
 </li>
       </ul>
@@ -681,8 +681,8 @@ Page under construction
 <table class="table">
 <caption>Table&nbsp;5.6: Macroregions of Italy.</caption>
 <colgroup>
-<col style="width: 18%">
-<col style="width: 81%">
+<col style="width: 22%">
+<col style="width: 77%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -842,6 +842,9 @@ Page under construction
 <li><p><code>reference_id</code>: foreign key (linked to the table <code>bibliography</code>), referring to the bibliographical source that contained information about the sample. See <a href="#sec-bibliography-db"><span>Section&nbsp;5.4.1.2</span></a> for details of the input values.</p></li>
 <li><p><code>volume</code>: an integer value reporting the volume (in litres) of the sample. Whenever more samples from the same location and with the same chronology have been reported by the author, they have been merged together and the volume represents the total of each sample. The volumes of the individual samples are reported in the field <code>extra_notes</code>.</p></li>
 <li><p><code>sampling_type</code>: foreign key (linked to the table <code>bot_sampling_type</code>), referring to the sampling methodology used by the author. See <a href="#tbl-bot-sampling-type">Table&nbsp;<span>5.9</span></a> for details of the input values.</p></li>
+<li><p><code>pres_charred</code>: a binary field which takes the value of 1 if the macroremains in the sample are preserved by charring, 0 if the seeds were preserved any other way.</p></li>
+<li><p><code>pres_mineralised</code>: a binary field which takes the value of 1 if the macroremains in the sample are preserved by mineralisation, 0 if the seeds were preserved any other way.</p></li>
+<li><p><code>pres_waterlogged</code>: a binary field which takes the value of 1 if the macroremains in the sample are preserved by waterlogging, 0 if the seeds were preserved any other way.</p></li>
 <li><p><code>no_of_samples</code>: an integer indicating the number of samples collected from the context recorded in the entry. As for the <code>volume</code> field, whenever more samples from the same location and with the same chronology have been reported by the author, they have been merged together.</p></li>
 <li><p>Fields for the absolute counts of the taxa: <code>Triticum aestivum/durum</code>, <code>Triticum dicoccum</code>, <code>Triticum monococcum</code>, <code>Avena sp</code>, <code>Hordeum vulgare</code>, <code>Panicum milliaceum</code>, <code>Secale cereale</code>, <code>Setaria italica</code>, <code>Sorghum bicolor</code>, <code>Cerealia ind</code>, <code>Leguminosae</code>, <code>Lens culinaris</code>, <code>Pisum sativum</code>,<code>Vicia faba</code>, <code>Vicia sativa</code>, <code>Vicia sp</code>, <code>Lathyrus cicera/sativus</code>, <code>Cicer aretinum</code>, <code>Cornus mas</code>, <code>Corylus avellana</code>, <code>Ficus carica</code>, <code>Fragaria vesca</code>, <code>Juglans regia</code>, <code>Castanea sativa</code>, <code>Malus domestica</code>, <code>Olea europaea L</code>, <code>Prunus cerasus</code>, <code>Prunus avium</code>, <code>Prunus sp</code>, <code>Prunus persica</code>, <code>Prunus domestica</code>, <code>Prunus spinosa</code>, <code>Rubus fruticosus</code>, <code>Pyrus communis</code>, <code>Sambucus nigra</code>, <code>Cucumis melo</code>, <code>Vitis vinifera</code>, <code>Linum usatissimus</code>, <code>Sorbus sp</code>. The fields are of the type <code>int(11)</code> and are filled with the absolute count copied from the author’s report.</p></li>
 </ul>
@@ -905,22 +908,6 @@ Page under construction
 </ul>
 <p>Information concerning the way the weight is calculated can be found in the methodology chapter.</p>
 </section>
-</section>
-<section id="pollen" class="level4" data-number="5.4.2.2">
-<h4 data-number="5.4.2.2" class="anchored" data-anchor-id="pollen"><span class="header-section-number">5.4.2.2</span> Pollen</h4>
-<div class="callout-important callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-MISSING
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pollen has not been stored in the database yet. Methodology is missing.</p>
-</div>
-</div>
 </section>
 </section>
 <section id="zooarchaeology" class="level3" data-number="5.4.3">

@@ -14,6 +14,9 @@ always_allow_html: true
 
 # Load functions
 source('functions_zoo.R')
+library(tidyverse)
+library(fontawesome) 
+library(vegan)
 
 ```
 
@@ -24,187 +27,6 @@ zooarch_cond <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quar
 
 ```
 
-## Case studies {style="text-align:justify;"}
-
-```{r}
-#| echo: false
-#| output: false
-
-# Load libraries
-library(sp)
-library(rgdal)
-library(leaflet)
-library(leaflet.extras)
-library(htmltools)
-library(tidyverse)
-library(fontawesome) 
-library(vegan)
-
-# Get an Italy shapefile
-#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
-            #  destfile = 'italy.zip')
-#unzip(zipfile = 'italy.zip')
-
-italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
-
-# Grouping
-zoo_map_R <- filter(zooarch_cond, Chronology=="R")
-zoo_map_LR<- filter(zooarch_cond, Chronology=="LR")
-zoo_map_EMA<- filter(zooarch_cond, Chronology=="EMA")
-zoo_map_Ma<- filter(zooarch_cond, Chronology=="Ma")
-
-#Icon for the map
-
-Icon_red_zoo <- awesomeIcons(
-  text = fa("cow"),
-  iconColor = 'yellow',
-  library = 'fa',
-  markerColor = "red"
-)
-
-Icon_lightred_zoo <- awesomeIcons(
-  text = fa("cow"),
-  iconColor = 'white',
-  library = 'glyphicon',
-  markerColor = "lightred"
-)
-
-Icon_lightgray_zoo <- awesomeIcons(
-  text = fa("cow"),
-  iconColor = 'white',
-  library = 'glyphicon',
-  markerColor = "lightgray"
-)
-
-Icon_green_zoo <- awesomeIcons(
-  text = fa("cow"),
-  iconColor = 'darkgreen',
-  library = 'glyphicon',
-  markerColor = "lightgreen"
-)
-
-# Build the map
-italy_zoo_map <- leaflet(data=italy) %>%
-  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
-  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(weight = 1, 
-              smoothFactor = 0.5,
-              opacity = 0.2, 
-              fillOpacity = 0.5,
-              fillColor = "#F9F5EB",
-              color="#D7A86E"
-              ) %>%
-  addAwesomeMarkers(data=zoo_map_R, lng = zoo_map_R$X, lat = zoo_map_R$Y,
-                    group="R", 
-                    icon = Icon_red_zoo,
-                    popup = paste(
-                      "<b>", zoo_map_R$Site, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", zoo_map_R$ID,"<br>",
-                           "<b>Type:</b>", zoo_map_R$Type, "<br>",
-                           "<b>Centuries:</b>", zoo_map_R$From.Century,
-                           "-", zoo_map_R$To.Century, "<br>",
-                           "<b>Chronology:</b>", zoo_map_R$Chronology, "<br>",
-                           "<b>Reference:</b><i>", zoo_map_R$Reference, "</i><br>",
-                           "<b>NISP</b>:", rowSums(zoo_map_R[,c(15:23)], na.rm=T), "<br>",
-                           "<br><b>Domestic %:</b> <br>",
-                           "Pigs:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
-                           "Cattle:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
-                           "Sheep/Goat:", round(decostand(zoo_map_R[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
-                           ), 
-             label=~htmlEscape(zoo_map_R$Site)
- ) %>%
-    addAwesomeMarkers(data=zoo_map_LR, lng = zoo_map_LR$X, lat = zoo_map_LR$Y,
-                    group="LR",
-                    icon = Icon_lightred_zoo,
-                    popup = paste(
-                      "<b>", zoo_map_LR$Site, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", zoo_map_LR$ID,"<br>",
-                           "<b>Type:</b>", zoo_map_LR$Type, "<br>",
-                           "<b>Centuries:</b>", zoo_map_LR$From.Century,
-                           "-", zoo_map_LR$To.Century, "<br>",
-                           "<b>Chronology:</b>", zoo_map_LR$Chronology, "<br>",
-                           "<b>Reference:</b><i>", zoo_map_LR$Reference, "</i> <br>",
-                      "<b>NISP</b>:", rowSums(zoo_map_LR[,c(15:23)], na.rm=T), "<br>",
-                           "<br><b>Domestic %:</b> <br>",
-                           "Pigs:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
-                           "Cattle:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
-                           "Sheep/Goat:", round(decostand(zoo_map_LR[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
-                           ), 
-             label=~htmlEscape(zoo_map_LR$Site)
- ) %>%
-      addAwesomeMarkers(data=zoo_map_EMA, lng = zoo_map_EMA$X, lat = zoo_map_EMA$Y,
-                    group="EMA",
-                    icon = Icon_lightgray_zoo,
-                    popup = paste(
-                      "<b>", zoo_map_EMA$Site, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", zoo_map_EMA$ID,"<br>",
-                           "<b>Type:</b>", zoo_map_EMA$Type, "<br>",
-                           "<b>Centuries:</b>", zoo_map_EMA$From.Century,
-                           "-", zoo_map_EMA$To.Century, "<br>",
-                           "<b>Chronology:</b>", zoo_map_EMA$Chronology, "<br>",
-                           "<b>Reference:</b><i>", zoo_map_EMA$Reference, "</i> <br>",
-                      "<b>NISP</b>:", rowSums(zoo_map_EMA[,c(15:23)], na.rm=T), "<br>",
-                           "<br><b>Domestic %:</b> <br>",
-                           "Pigs:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
-                           "Cattle:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
-                           "Sheep/Goat:", round(decostand(zoo_map_EMA[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
-                      ), 
-             label=~htmlEscape(zoo_map_EMA$Site)
- ) %>%
-        addAwesomeMarkers(data=zoo_map_Ma, lng = zoo_map_Ma$X, lat = zoo_map_Ma$Y,
-                    group="Ma",
-                    icon = Icon_green_zoo,
-                    popup = paste(
-                      "<b>", zoo_map_Ma$Site, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", zoo_map_Ma$ID,"<br>",
-                           "<b>Type:</b>", zoo_map_Ma$Type, "<br>",
-                           "<b>Centuries:</b>", zoo_map_Ma$From.Century,
-                           "-", zoo_map_Ma$To.Century, "<br>",
-                           "<b>Chronology:</b>", zoo_map_Ma$Chronology, "<br>",
-                      "<b>Reference:</b><i>", zoo_map_Ma$Reference, "</i> <br>",
-                      "<b>NISP</b>:", rowSums(zoo_map_Ma[,c(15:23)], na.rm=T), "<br><br>",
-                           "<b>Domestic %:</b> <br>",
-                           "Pigs:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Pigs*100, 2), "<br>",
-                           "Cattle:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Cattle*100, 2), "<br>",
-                           "Sheep/Goat:", round(decostand(zoo_map_Ma[,c(15:23)], method = "total", na.rm = T)$Caprine*100, 2)
-                           ), 
-             label=~htmlEscape(zoo_map_Ma$Site)
- ) %>%
-  addLayersControl(
-    overlayGroups = c("R", "LR", "EMA", "Ma"),
-    baseGroups = c("Political", "Physical"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  hideGroup(c("LR", "EMA", "Ma")) %>%
-  addResetMapButton() %>%
-  addFullscreenControl() %>%
-  htmlwidgets::onRender("
-    function(el, x) {
-      var myMap = this;
-      myMap.on('baselayerchange',
-        function (e) {
-          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
-        })
-    }")
-
-```
-
-::: {.content-visible when-format="html"}
-```{r}
-#| echo: false
-#| fig-cap: "The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right. **Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
-
-italy_zoo_map
-
-```
-:::
-
-::: {.content-visible when-format="pdf"}
-Insert a map here
-:::
 
 The faunal dataset used in this study is both extensive and diverse, containing over 466 records. While NISP is a useful proxy for historical animal farming, it is not without its limitations, as previously discussed in the methods section. What is crucial to emphasize here, however, is the presence of overdispersion within the data, which necessitates more sophisticated and nuanced approaches than simply calculating overall means for each animal species. Overdispersion is a common occurrence when analyzing datasets of this nature, given the unique factors at play in each context, including historical and depositional influences. Nevertheless, data modeling requires simplification and causal reasoning, and the best approach is to start with straightforward models that can account for overdispersion and generate credible distributions. To this end, Bayesian hierarchical models were developed for each chronology, context type, macroregion, and geography. As a further step, an additional analysis was conducted that solely focused on altitude and chronology as predictors. By examining the specific contributions of altitude and chronology in predicting animal farming/consumption patterns, this analysis provides valuable insights that complement the earlier models. These findings underscore the importance of considering multiple factors when studying the probability of occurrence of farmed and wild animals in historical contexts. They also demonstrate the potential benefits of simplified models to focus on key predictors. Moreover, several attempts were made to create a coherent understanding of the likelihood of economically valuable animals occurring during the first millennium, in order to provide a more comprehensive perspective on the role of animal farming in shaping historical societies.
 
@@ -455,7 +277,7 @@ The model for pigs' NISP counts shows a positive trend above the millennium aver
 Cattle, on the other hand, exhibit different trends, with a HDI interval in the 1^st^ century BCE above the millennium average (0.20), although with a large credible interval, and a negative trend from the 1^st^ to the 3^rd^ century CE. HDIs are again increasingly positive between the 4^th^ and 7^th^ centuries, but decrease in the 8^th^ century. As for pigs, HDIs means are close to the millennium average in the 10^th^ and 11^th^ centuries.
 
 The modelled probability of occurrence of caprine reveals a positive trend in the 1^st^ century BCE, followed by a negative trend (below the average of 0.28) from the 1^st^ to the 3^rd^ century CE. The probability of occurrence then increases around the 4^th^/5^th^ centuries up to the 6^th^/7^th^ centuries, with HDIs stable around the mean from the 8^th^ to the 11^th^ century.
-The edible wild animals that were included in the analysis are Sus scrofa ferus (boar), Cervus elaphus (red deer), Dama Dama L. (fallow deer), Capreolus c. (roe deer), Lepus sp. (hare), Glis glis (dormouse), and unspecified birds. The domestic fowl species that were analysed are Gallus g. (chicken) and Anser A. (goose). Edible wild animals and domestic fowl predicted probabilities are relatively stable trends throughout the analysed period, with HDI means consistently below 0.10. Domestic fowl HDIs remain below the millennium mean of 0.06 from the 1^st^ century BCE to the 2^nd^ century CE, and then increase steadily from the 3^rd^ century to remain around the mean until the 7^th^ century. From the 7^th^ to the 11^th^ century, the HDIs remain positive, but with a much larger credible interval. Similarly, wild animals' HDIs are positive in the 1^st^ century BCE and remain stable around the millennium average (0.05) until the 6^th^ century CE, after which they also show a slight increase until the 11^th^ century.
+The edible wild animals that were included in the analysis are Sus scrofa ferus (boar), Cervus elaphus (red deer), Dama dama (fallow deer), Capreolus capreolus (roe deer), Lepus sp. (hare), Glis glis (dormouse), and unspecified birds. The domestic fowl species that were analysed are Gallus g. (chicken) and Anser A. (goose). Edible wild animals and domestic fowl predicted probabilities are relatively stable trends throughout the analysed period, with HDI means consistently below 0.10. Domestic fowl HDIs remain below the millennium mean of 0.06 from the 1^st^ century BCE to the 2^nd^ century CE, and then increase steadily from the 3^rd^ century to remain around the mean until the 7^th^ century. From the 7^th^ to the 11^th^ century, the HDIs remain positive, but with a much larger credible interval. Similarly, wild animals' HDIs are positive in the 1^st^ century BCE and remain stable around the millennium average (0.05) until the 6^th^ century CE, after which they also show a slight increase until the 11^th^ century.
 
 In addition to plotting the probabilities of occurrence extracted by the models, the distributions of the precision parameter $\phi$ are plotted for samples in each century. Each line is plotted with two probability intervals 0.65 (shorter thicker line) and 0.99 (longer thinner line). The probability density functions are also added to the top of the bar.
 
@@ -1353,10 +1175,22 @@ As previously noted, pig remains are consistently the most frequently found type
 
 Animals_Df <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
-Animals_Df$Tot_NISP <- rowSums(Animals_Df[c(16:22)], na.rm = T)
+Animals_Df$Tot_NISP <- rowSums(Animals_Df[c(16:22)], na.rm = T) 
+
+# Separate Rome - sorry code is messy because it was a later inclusion
+# Need a dataframe just for Rome and Urban sites
+Animals_urban_sites <- Animals_Df %>%
+  filter(Type == "Urban") %>%
+  mutate(isRome = ifelse(grepl("^Roma", Site) | grepl("^Ostia", Site), "Rome", "Urban"))
+Animals_urban_sites[,c(7:9,11,12)] <- lapply(Animals_urban_sites[,c(7:9,11,12)], factor)
+Animals_urban_sites$Chronology <- factor(Animals_urban_sites$Chronology, levels = c("R", "LR", "EMA", "Ma"))
+Animals_urban_sites[is.na(Animals_urban_sites)]<-0
+
+# end of inclusion
 
 # 1. Subsetting the dataframe
 Animals_Df <- Animals_Df[c(1,16,17,18,20,25,4,5,6,7,10)]
+Animals_urban_sites = Animals_urban_sites[c(1,16,17,18,20,25,4,5,6,7,10,26)]
 
 # 2. Merge some categories in the 'Type' column
 Animals_Df$Type <- str_replace(Animals_Df$Type, "Rural site, mansio", "Rural")      
@@ -1389,8 +1223,6 @@ Animals_Df_villas <- Animals_Df
 Animals_Df_Necr_Amph <- Animals_Df
 Animals_Df_Rel <- Animals_Df
 
-# Convert to proportions just the 
-#Animals_Df[,c(2:5)] <- Animals_Df[,c(2:5)]/Animals_Df$Tot_NISP
 
 # Simplifying: Urban vs Rural
 # Because they exist in the same chronologies
@@ -1450,6 +1282,11 @@ dat.Pigs_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Pigs, Tc_id=d.A
 d.Animals_villas <- Animals_Df_villas
 d.Animals_villas$TC_id <- as.integer(interaction(d.Animals_villas$Type, d.Animals_villas$Chronology))
 dat.Pigs_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Pigs, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+# ROME, OSTIA, AND URBAN SITES
+d.Animals_urban_sites <- Animals_urban_sites
+d.Animals_urban_sites$TC_id <- as.integer(interaction(Animals_urban_sites$isRome, Animals_urban_sites$Chronology))
+dat.Pigs_Rome_Urban = list(N=d.Animals_urban_sites$Tot_NISP, A=d.Animals_urban_sites$Pigs, Tc_id=d.Animals_urban_sites$TC_id, J=nrow(d.Animals_urban_sites))
 
 
 ```
@@ -1515,6 +1352,27 @@ Pigs_Villas_fit <- stan(
 )
 saveRDS(Pigs_Villas_fit, "stan_models/Pigs_Villas_fit.rds")
 
+Pigs_RurUrb.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRur.stan",  # Stan program
+  data = dat.Pigs_RurUrb,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+saveRDS(Pigs_RurUrb.fit, "stan_models/Pigs_RurUrb_fit.rds")
+
+Pigs_RomeUrban.fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRome.stan",  # Stan program
+  data = dat.Pigs_Rome_Urban,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+saveRDS(Pigs_RomeUrban.fit, "stan_models/Pigs_RomeUrban_fit.rds")
+
+
 ```
 
 ```{r}
@@ -1531,6 +1389,7 @@ Pigs_Rel.fit <- readRDS("stan_models/Pigs_Rel_fit.rds")
 Pigs_Necr_Amph.fit <- readRDS("stan_models/Pigs_Necr_Amph_fit.rds")
 Pigs_Fort.fit <- readRDS("stan_models/Pigs_Fort_fit.rds")
 Pigs_Villas_fit <- readRDS("stan_models/Pigs_Villas_fit.rds")
+Pigs_RomeUrban.fit <- readRDS("stan_models/Pigs_RomeUrban_fit.rds")
 
 ```
 
@@ -1540,7 +1399,6 @@ Pigs_Villas_fit <- readRDS("stan_models/Pigs_Villas_fit.rds")
 ################################
 ## Data handling for ggplot
 ################################
-
 
 Pigs_BB_Merge_a_UrbRur <- Pigs_RurUrb.fit %>%
   spread_draws(a[TC_id]) %>% 
@@ -1901,6 +1759,137 @@ Pigs_BB_phi.plot
 
 ```
 
+```{r}
+#| echo: false
+
+#####################
+#   ROME VS URBAN   #
+#####################
+
+Pigs_RomeUrban.samples = extract.samples(Pigs_RomeUrban.fit)
+
+Pigs_RomeUrban.diff <- list(
+ R=inv_logit(Pigs_RomeUrban.samples$a[,1]) - inv_logit(Pigs_RomeUrban.samples$a[,2]),
+ LR= inv_logit(Pigs_RomeUrban.samples$a[,3]) - inv_logit(Pigs_RomeUrban.samples$a[,4])
+ )
+
+Pigs_a_RomeUrban <- Pigs_RomeUrban.fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rome.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rome.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rome.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rome.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+    )
+) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+    )
+) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rome",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rome",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rome",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rome",
+    TC_id == 8 ~ "Urban"
+    )
+) 
+
+Pigs_a_RomeUrban.plot <- Pigs_a_RomeUrban %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+    )+
+    stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+    geom_vline(xintercept = inv_logit(mean(Pigs_a_RomeUrban$a)),    
+               linetype = "twodash",
+    linewidth = 0.45,
+    color = "red4")+
+    scale_y_discrete(limits=rev)+
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+    scale_color_brewer(palette="Greys", name="Credible interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Pigs",
+       subtitle = "Rome vs Urban",
+       caption="The dashed line indicates the mean for the type of site and chronology.\nThe circle indicates the mean for each line.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        linewidth = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )+
+  facet_grid(Type ~ ., scales="free")
+
+Pigs_a_RomeUrban.diffplot <- as.data.frame(Pigs_RomeUrban.diff) %>% 
+  mutate(Chronology = ifelse(!is.na(R), "R", "LR")) %>%
+  gather(key = "Variable", value = "Value", -Chronology) %>%
+   ggplot(aes(x = Value, y=Variable))+
+stat_halfeye()+  
+  labs(x="Difference (Rome* - Urban sites)",
+       y="Chronology",
+       title="Pigs",
+       subtitle = "Differential probability of pig occurrence ",
+       caption="* 'Rome' also includes the neighboring port city of Ostia.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                        linewidth = 0.25,
+                                        linetype = 2),
+        axis.title.x.top = element_blank()
+        )
+
+```
+
+Pigs are recognized as indicators of urban environments since pig rearing is primarily for meat production. This dataset contains numerous samples from Rome and Ostia, which is its neighboring port city. It is possible to model the "metropolitan" influence that these cities may have on the probability of discovering pig remains in urban areas. By doing so, we can calculate the differences in probabilities between Rome and other urban sites to gain insights into their varying likelihoods. Results show how pigs were more markedly present in Rome than other Italian urban centres, although they follow the same chronological decreasing trend as other cities. 
+
+```{r}
+#| echo: false
+
+Pigs_a_RomeUrban.plot
+
+```
+
+The number of samples from Early Medieval and Medieval (11^th^ century) Rome is relatively small compared to other urban centers. Additionally, considering the historical context, the metropolitan effect of Rome is likely diminished during this time period. Therefore, the differences in probabilities were specifically computed for the Roman and Late Roman phases, focusing on these particular periods rather than encompassing the broader historical range. In the Roman phase, there is a bigger difference between Rome/Ostia and other Italian cities (with a mean probability of 0.20). Later, this difference decreases to a mean of 0.15. 
+
+```{r}
+#| echo: false
+
+Pigs_a_RomeUrban.diffplot
+
+```
+
+
 ### Cattle
 The probabilities of occurrence of cattle remains in different context types have thinner credible intervals compared to pig remains credible intervals. In urban sites, no significant changing pattern can be observed, as the means of the 95% HDIs mostly lay on the mean probability of 0.20 across contexts, with the exception of the Roman period where it was below mean. Medieval urban sites exhibit increased variability, possibly due to higher uncertainty associated with less data. The mean precision ($\bar{\phi}$ = 7 ca.) in medieval urban sites is the highest of any category. Rural contexts show more variability in probability trends and are more in line with the results of the chronological models. The credible intervals are slightly wider than urban contexts, but can still be interpreted and discussed later. In the Roman age, the probability of cattle occurrence is highest in rural sites, increasing after the 2^nd^ century and slightly decreasing in the Medieval phases.
 Rural villas show stronger trends than rural sites, but with even more uncertainty. If in rural sites probabilities of occurrence of cattle NISP remains increases in the Late Roman period, in villas there is an opposite trend with cattle probabilities going below the mean. 
@@ -1932,6 +1921,9 @@ dat.Cattle_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Cattle, Tc_id
 
 # Cattle - Villas
 dat.Cattle_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Cattle, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+# ROME, OSTIA, AND URBAN SITES
+dat.Cattle_Rome_Urban = list(N=d.Animals_urban_sites$Tot_NISP, A=d.Animals_urban_sites$Cattle, Tc_id=d.Animals_urban_sites$TC_id, J=nrow(d.Animals_urban_sites))
 
 ```
 
@@ -1999,6 +1991,16 @@ Cattle_Villas_fit <- stan(
 )
 saveRDS(Cattle_Villas_fit, "stan_models/Cattle_Villas_fit.rds")
 
+Cattle_RomeUrban_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRome.stan",  # Stan program
+  data = dat.Cattle_Rome_Urban,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+saveRDS(Cattle_RomeUrban_fit, "stan_models/Cattle_RomeUrban_fit.rds")
+
 ```
 
 ```{r}
@@ -2015,6 +2017,7 @@ Cattle_Rel.fit <- readRDS("stan_models/Cattle_Rel_fit.rds")
 Cattle_Necr_Amph.fit <- readRDS("stan_models/Cattle_Necr_Amph_fit.rds")
 Cattle_Fort.fit <- readRDS("stan_models/Cattle_Fort_fit.rds")
 Cattle_Villas_fit <- readRDS("stan_models/Cattle_Villas_fit.rds")
+Cattle_RomeUrban_fit <- readRDS("stan_models/Cattle_RomeUrban_fit.rds")
 
 ```
 
@@ -2376,6 +2379,130 @@ Cattle_BB_phi.plot
 
 ```
 
+If pigs can act as a marker of urbanization, it is also important to investigate whether the consumption patterns of other animals in Rome differ from those in other urban centers. Additionally, while pigs were primarily raised for meat consumption, cattle had further purposes beyond meat production (*e.g.* agricultural purposes, leather production, etc.). To overcome this issue, it would be ideal to control for factors such as age and wear, even though this is outside the boundaries of this research and biometric data is not stored in the database. It is essential to keep this context in mind when interpreting the graphs and drawing conclusions. In contrast to pigs, the analysis reveals notable distinctions in cattle consumption trends between Rome and other urban sites across different chronological phases. One notable observation is that cattle appears to be more commonly consumed in other urban cities compared to Rome. Additionally, while cattle consumption decreases in Rome during the Late Roman period, it concurrently increases in other cities. It is worth noting that the credible intervals in Rome are relatively high, limiting further comparisons in other periods. However, there seems to be a positive trend again in the early medieval phase. The graph depicting the differences illustrates a narrower gap between Rome/Ostia and other cities during the Roman period, whereas the disparity becomes more pronounced in the Late Roman phase.
+
+```{r}
+#| echo: false
+
+#####################
+#   ROME VS URBAN   #
+#####################
+
+Cattle_RomeUrban.samples = extract.samples(Cattle_RomeUrban_fit)
+
+Cattle_RomeUrban.diff <- list(
+  R=inv_logit(Cattle_RomeUrban.samples$a[,1]) - inv_logit(Cattle_RomeUrban.samples$a[,2]),
+  LR= inv_logit(Cattle_RomeUrban.samples$a[,3]) - inv_logit(Cattle_RomeUrban.samples$a[,4])
+)
+
+Cattle_a_RomeUrban <- Cattle_RomeUrban_fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rome.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rome.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rome.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rome.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rome",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rome",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rome",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rome",
+    TC_id == 8 ~ "Urban"
+  )
+  ) 
+
+Cattle_a_RomeUrban.plot <- Cattle_a_RomeUrban %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+  stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+  geom_vline(xintercept = inv_logit(mean(Cattle_a_RomeUrban$a)),    
+             linetype = "twodash",
+             linewidth = 0.45,
+             color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credible interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Cattle",
+       subtitle = "Rome vs Urban",
+       caption="The dashed line indicates the mean for the type of site and chronology.\nThe circle indicates the mean for each line.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Type ~ ., scales="free")
+
+Cattle_a_RomeUrban.diffplot <- as.data.frame(Cattle_RomeUrban.diff) %>% 
+  mutate(Chronology = ifelse(!is.na(R), "R", "LR")) %>%
+  gather(key = "Variable", value = "Value", -Chronology) %>%
+  ggplot(aes(x = Value, y=Variable))+
+  stat_halfeye()+  
+  labs(x="Difference (Rome* - Urban sites)",
+       y="Chronology",
+       title="Cattle",
+       subtitle = "Differential probability of cattle occurrence ",
+       caption="* 'Rome' also includes the neighboring port city of Ostia.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )
+
+```
+
+```{r}
+#| echo: false
+
+
+Cattle_a_RomeUrban.plot
+Cattle_a_RomeUrban.diffplot
+
+```
+
+
 ### Caprine
 
 Among the contexts analyzed, the probability of finding caprine remains is the second highest with a mean of 0.29, following pig remains. In Roman and Late Roman urban sites caprine probabilities are below the mean, although there is a positive trend until the Early Middle Ages. The Medieval phases (6^th^ to 11^th^ century) show mean probabilities of 0.31. Rural sites exhibit a decreasing trend, with the 50% HDIs always above mean. However, even with this decreasing trend, the probabilities in rural sites are still higher than those in urban sites. In the Roman period, the caprine probability of occurrence is particularly high (0.35) in rural sites and decreases in the following phases, until the 11^th^ century, when there is a strong increase in caprine probabilities (associated with more uncertainty and variability). Rural villas show a decreasing trend in the probabilities of caprine remains: the 50% HDI probabilities in rural villas remain lower than the average, with a slight decrease in the Late Roman phase and a strong increase in the Early Medieval period, when uncertainty is also high. Although the number of samples is not as high as other categories, the mean precision ($\bar{\phi}$ = 8.5 ca.) is high in the Late Roman phase, indicating consistency in the samples. In fortified sites, there is a decreasing trend in caprine probability, starting from a high point of 0.37 in the Late Roman phase and reaching below the average of all contexts in the 11^th^ century. As for the case of most categories (except urban sites), there is a decreasing trend in caprine probability until the 11^th^ century in religious sites. However, for this category the credible intervals are quite wide, and the precision is always below average, making it challenging to draw reliable conclusions. In the case of *necropoleis*, the credible intervals are too large to provide any meaningful insight. Finally, in the Flavium amphitheater samples the 50% HDIs probabilities are below average, decreasing in the Late Roman period and increasing (with extreme uncertainty) above average in the Early Medieval phase. 
@@ -2400,6 +2527,9 @@ dat.Caprine_fort = list(N=d.Animals_fort$Tot_NISP, A=d.Animals_fort$Caprine, Tc_
 
 # Caprine - Villas
 dat.Caprine_villas = list(N=d.Animals_villas$Tot_NISP, A=d.Animals_villas$Caprine, Tc_id=d.Animals_villas$TC_id, J=nrow(d.Animals_villas))
+
+# ROME, OSTIA, AND URBAN SITES
+dat.Caprine_Rome_Urban = list(N=d.Animals_urban_sites$Tot_NISP, A=d.Animals_urban_sites$Caprine, Tc_id=d.Animals_urban_sites$TC_id, J=nrow(d.Animals_urban_sites))
 
 ```
 
@@ -2461,6 +2591,16 @@ Caprine_Villas_fit <- stan(
 )
 saveRDS(Caprine_Villas_fit, "stan_models/Caprine_Villas_fit.rds")
 
+Caprine_RomeUrban_fit <- stan(
+  file = "stan_models/stan_models_codes/beta_binomial_model_UrbRome.stan",  # Stan program
+  data = dat.Caprine_Rome_Urban,    # named list of data
+  chains = 4,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 4000,            # total number of iterations per chain
+  cores = 4,              # number of cores (could use one per chain
+)
+saveRDS(Caprine_RomeUrban_fit, "stan_models/Caprine_RomeUrban_fit.rds")
+
 ```
 
 ```{r}
@@ -2477,6 +2617,7 @@ Caprine_Rel.fit <- readRDS("stan_models/Caprine_Rel_fit.rds")
 Caprine_Necr_Amph.fit <- readRDS("stan_models/Caprine_Necr_Amph_fit.rds")
 Caprine_Fort.fit <- readRDS("stan_models/Caprine_Fort_fit.rds")
 Caprine_Villas_fit <- readRDS("stan_models/Caprine_Villas_fit.rds")
+Caprine_RomeUrban_fit <- readRDS("stan_models/Caprine_RomeUrban_fit.rds")
 
 ```
 
@@ -2834,6 +2975,130 @@ Caprine_BB_phi.plot <- Caprine_BB_Merge_phi %>%
 Caprine_BB.plot
 Caprine_BB_phi.plot
 ```
+
+Regarding sheep and goats, similar differences were calculated between Rome/Ostia and other urban sites. The overall chronological trends in urban sites do not exhibit significant variations, while Rome and Ostia show an increasing trend, although with a larger credible interval after the Roman period. In this case as well, the differences in probabilities of finding sheep/goat remains in Rome/Ostia versus other urban sites are negative, suggesting that these animals were consumed more in other cities than in the capital. However, during the Late Roman phase, the mean probability approaches zero.
+
+```{r}
+#| echo: false
+
+#####################
+#   ROME VS URBAN   #
+#####################
+
+Caprine_RomeUrban.samples = extract.samples(Caprine_RomeUrban_fit)
+
+Caprine_RomeUrban.diff <- list(
+  R=inv_logit(Caprine_RomeUrban.samples$a[,1]) - inv_logit(Caprine_RomeUrban.samples$a[,2]),
+  LR= inv_logit(Caprine_RomeUrban.samples$a[,3]) - inv_logit(Caprine_RomeUrban.samples$a[,4])
+)
+
+Caprine_a_RomeUrban <- Caprine_RomeUrban_fit %>%
+  spread_draws(a[TC_id]) %>% 
+  mutate(TC_text = case_when(
+    TC_id == 1 ~ "Rome.R",
+    TC_id == 2 ~ "Urban.R",
+    TC_id == 3 ~ "Rome.LR",
+    TC_id == 4 ~ "Urban.LR",
+    TC_id == 5 ~ "Rome.EMA",
+    TC_id == 6 ~ "Urban.EMA",
+    TC_id == 7 ~ "Rome.Ma",
+    TC_id == 8 ~ "Urban.Ma"
+  )
+  ) %>%
+  mutate(Chronology = case_when(
+    TC_id == 1 ~ "R",
+    TC_id == 2 ~ "R",
+    TC_id == 3 ~ "LR",
+    TC_id == 4 ~ "LR",
+    TC_id == 5 ~ "EMA",
+    TC_id == 6 ~ "EMA",
+    TC_id == 7 ~ "Ma",
+    TC_id == 8 ~ "Ma"
+  )
+  ) %>% 
+  mutate(Type = case_when(
+    TC_id == 1 ~ "Rome",
+    TC_id == 2 ~ "Urban",
+    TC_id == 3 ~ "Rome",
+    TC_id == 4 ~ "Urban",
+    TC_id == 5 ~ "Rome",
+    TC_id == 6 ~ "Urban",
+    TC_id == 7 ~ "Rome",
+    TC_id == 8 ~ "Urban"
+  )
+  ) 
+
+Caprine_a_RomeUrban.plot <- Caprine_a_RomeUrban %>%
+  ggplot(aes(y = factor(Chronology, levels=chrono_levels), x = inv_logit(a))) +
+  stat_interval(
+    .width = c(.50, .80, .95, .99), 
+    linewidth=3
+  )+
+  stat_summary(
+    geom = "point",
+    fun = "mean",
+    col = "white",
+    size = 2,
+    shape = 1
+  )+
+  geom_vline(xintercept = inv_logit(mean(Caprine_a_RomeUrban$a)),    
+             linetype = "twodash",
+             linewidth = 0.45,
+             color = "red4")+
+  scale_y_discrete(limits=rev)+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = dup_axis()) +
+  scale_color_brewer(palette="Greys", name="Credible interval")+
+  labs(x="Predicted probability",
+       y="Chronology",
+       title="Caprine",
+       subtitle = "Rome vs Urban",
+       caption="The dashed line indicates the mean for the type of site and chronology.\nThe circle indicates the mean for each line.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )+
+  facet_grid(Type ~ ., scales="free")
+
+Caprine_a_RomeUrban.diffplot <- as.data.frame(Caprine_RomeUrban.diff) %>% 
+  mutate(Chronology = ifelse(!is.na(R), "R", "LR")) %>%
+  gather(key = "Variable", value = "Value", -Chronology) %>%
+  ggplot(aes(x = Value, y=Variable))+
+  stat_halfeye()+  
+  labs(x="Difference (Rome* - Urban sites)",
+       y="Chronology",
+       title="Caprine",
+       subtitle = "Differential probability of caprine occurrence ",
+       caption="* 'Rome' also includes the neighboring port city of Ostia.")+
+  theme_tidybayes()+
+  theme(legend.position = "bottom", 
+        strip.background = element_rect(fill = "grey",
+                                        linewidth = 0.1, colour="black"),
+        panel.background = element_rect(fill = "grey90"),
+        panel.border = element_rect(fill=NA, linewidth = 0.1),
+        panel.grid.major.x = element_line(color = "grey50",
+                                          linewidth = 0.25,
+                                          linetype = 2),
+        axis.title.x.top = element_blank()
+  )
+
+```
+
+```{r}
+#| echo: false
+
+
+Caprine_a_RomeUrban.plot
+Caprine_a_RomeUrban.diffplot
+
+```
+
 
 ### Edible W. Animals
 
@@ -4371,8 +4636,8 @@ ggplot(geo_waffle_tbl, aes(fill = factor(
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()
   ) +
-  labs(fill = "Geography",
-       title = "Geographical distribution of sites") +
+  labs(fill = "Topography",
+       title = "Topographical distribution of sites") +
   facet_wrap(factor(
     Macroregion,
     levels = c("Southern Italy", "Central Italy", "Northern Italy")
@@ -5399,28 +5664,6 @@ library(modelr)
 # Load dataset
 zoo_altitude <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed_with_altitude.csv", header=TRUE, sep=";")
 
-# Add distance to coast
-# Need to calculate the distance of each point from the coast
-# Load the libraries
-library(geosphere)
-library(sf)
-
-# Load a coast shapefile
-coast <- readOGR('/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Italy_SHP/ne_110m_coastline/ne_110m_coastline.shp')
-coast <- st_as_sf(coast, crs = st_crs(italy))
-
-# Convert bot_altitude to a sf object
-zoo_altitude.sf <- st_as_sf(zoo_altitude, crs=st_crs(italy), coords=c("X","Y"))
-
-zoo_coast_dists = data.frame(
-  st_distance(zoo_altitude.sf, coast) / 1000
-  )
-
-zoo_altitude_dists <- zoo_altitude.sf
-
-zoo_altitude_dists$Dist_Coast <- apply(zoo_coast_dists, 1, min)
-
-
 # End distance to coast
 
 ###########
@@ -5435,7 +5678,6 @@ caprine_altitude <- data.frame(
   Site_ID = zoo_altitude$ID,
   Macroregion = factor(zoo_altitude$Macroregion),
   Altitude = zoo_altitude$Altitude,
-  Dist_Coast = zoo_altitude_dists$Dist_Coast,
   Chronology = factor(zoo_altitude$Chronology),
   Capr_NISP = zoo_altitude$Caprine,
   Tot_NISP = rowSums(zoo_altitude[c(16:24)], na.rm = T)
@@ -5454,14 +5696,6 @@ dat.Caprine_Altitude = list(
   J = nrow(caprine_altitude)
   )
 
-dat.Caprine_Alt_Coast = list(
-  N = caprine_altitude$Tot_NISP, 
-  A = caprine_altitude$Capr_NISP, 
-  Chr_id = as.factor(as.numeric(caprine_altitude$Chronology)), 
-  Alt = caprine_altitude$Altitude,
-  Dist_Coast = caprine_altitude$Dist_Coast,
-  J = nrow(caprine_altitude)
-  )
 
 ###########
 # PIGS    #
@@ -5616,6 +5850,7 @@ col=rangi2
 ```
 
 ### Pigs
+The model shows a negative correlation between an increase in elevation and the probabilities of finding pig remains. This result was already suggested in the models with the geographical features as a predictor. In fact, although the variability increases at higher altitudes (due to the more restricted number of samples available), pig remains are more likely to be found in lowlands in all chronologies. The mean precision $\bar\phi$ for the four chronologies is 5.41.
 
 ```{r}
 #| eval: false
@@ -5690,6 +5925,7 @@ Pigs_Alt_fit_reth.plot
 ```
 
 ### Cattle
+If pigs showed a negative trend with increased elevations, cattle shows an opposite pattern. In every chronology, probabilities of finding cattle are much higher at high elevations. The Early Medieval and Medieval phases show the strongest association between higher elevations and a larger number of cattle NISP remains. However, the Medieval and Roman datasets do not include samples above 1.2km.
 
 ```{r}
 #| eval: false
@@ -5760,6 +5996,7 @@ Cattle_Alt_fit_reth.plot
 ```
 
 ### Caprine
+The correlation between sheep/goats NISP and elevation is perhaps the most interesting when stratified by chronology. In the Roman and Late Roman phases, there is a positive correlation between altitude and the probability of finding caprine NISP, meaning that caprine are more likely to be found at high altitudes. However, in the Early Middle Ages, this trend diverges. The correlation begins to become negative, although not markedly, suggesting that there are changing trends. This trend becomes increasingly negative in 11^th^ century sites. The mean precision $\bar\phi$ for the four chronologies is 7.57.
 
 ```{r}
 #| eval: false
@@ -5892,6 +6129,7 @@ Capr_Alt_fit_phi.plot <- Capr_Alt_fit.phi %>%
 ```
 
 ### Edible W. Animals
+In contrast, modeling the number of wild animal NISP remains against altitude was not very informative. The probability of occurrence of these species is always low, so elevation does not seem to be a major factor in their distribution. The prediction line appears to indicate no correlation, although if we include the 0.99 credible interval, the correlation is potentially positive in all chronologies. The model performed very poorly on 11^th^ century sites, because not many sites reported wild animal remains and the credible intervals are quite wide. In other chronologies, the credible intervals are not very large and the overall mean precision parameter $\bar\phi$ is 15.65, indicating that the data was not very dispersed.
 
 ```{r}
 #| eval: false
@@ -5961,6 +6199,12 @@ WMammals_Alt_fit_reth.plot
 ```
 
 ### Community plot
+To examine the overall trends across all phases and different elevations, the probabilities of occurrence for the four animals were compiled and plotted against the slope coefficient (which in the models is multiplied by the elevation). The resulting plot shows probabilities of occurrence of each animal at different elevations. The horizontal dashed line represents the probability of finding each animal at sea level. It is worth reminding that these are separate models, and further research should explore other models, for instance multinomial models.
+In the Roman period, pigs were the most likely remains to be found, with probabilities ranging from 0.40 to 0.45. Most of the probabilities are negative, indicating a negative correlation with altitude. This suggests that pigs were more likely to be raised in lower-lying areas. Wild animals were also negatively correlated with altitude, but the correlation was not as strong as for pigs. Caprine and cattle were the second and third most common animal remains found, respectively. They were both positively correlated with altitude.
+In the Late Roman period, the probability of finding pig remains decreased to 0.35-0.34, while the probabilities of finding wild animal, caprine, and cattle remains remained more or less the same. This suggests that pigs may have become less common in this period.
+In the Early Medieval period, the probabilities of finding cattle and caprine remains increased to 0.17-0.26 and 0.26-0.34, respectively, while the probability of finding wild animal remains decreased to 0.05-0.10. Although cattle and caprine may have become more common in this period, pigs probabilities of occurrence did not change being still the most common species found in zooarchaeological samples. It is interesting to notice how in this period caprine probabilities are negatively correlated to the elevation of sites. This correlation becomes more markedly negative in the 11^th^ century phase. In this last phase, 
+there was increased variability in the probabilities of finding all four animal remains. This may be the result of a smaller amount of samples.
+
 
 ```{r}
 #| echo: false

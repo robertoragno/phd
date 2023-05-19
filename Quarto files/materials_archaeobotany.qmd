@@ -2,15 +2,9 @@
 
 ## Introduction {style="text-align:justify"}
 
-This chapter provides an overview of the archaeobotanical materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. The database storing procedures are described in @sec-database.
+This chapter provides an overview of the archaeobotanical materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. In addition to discussing general aspects of the discipline, this chapter also provides a more detailed examination of the specific data available for this research project, which have been stored in the database. The database storing procedures are described in @sec-database.
 
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-
-Should the maps be here? Or maybe here put time slices maps
-:::
-
-The objective of archaeobotany is to recover, identify, and document plant remains from archaeological sites to reconstruct past vegetation dynamics, human-environment interactions, and food production and consumption patterns. Archaeobotany can also be referred to as "palaeoethnobotany", a term especially prevalent in North America. Although the word "palaeoethnobotany" places a stronger stress on the human and ethnic interaction with plants [@hastorfCurrentPaleoethnobotanyAnalytical1988], the two words are used mostly interchangeably [@hastorfRecentResearchPaleoethnobotany1999] as European archaeobotanists share the same objectives. It is important to emphasise that the term "palaeobotany" is not a valid synonym for archaeobotany, as it refers to the study of past evolution and adaptations of plants, and this discipline is not concerned with human-environment interactions [@fullerArchaeobotany2014]. In Classical archaeology, some of the archaeobotanical research questions can also be inferred from historical literature. This is problematic, as the evidence often contradicts what is said in texts; @pearsallPaleoethnobotanyHandbookProcedures2015a [p. 27] remarks how the discipline works using an archaeological approach, not an historical one. Furthermore, the domain of archaeology stretches far beyond the chronological range of textual history. In the archaeological record, four types of botanical remains can be identified---macroremains, pollen grains, phytoliths (inorganic elements found in leaves, stems, and other parts of plants), and starches (formed by amylose or amylopectin polymer aggregates) [@pearsallPaleoethnobotanyHandbookProcedures2015a]. As most archaeobotanical studies in Italy deal with macroremains and pollen, this research will only focus on these remains.
+The objective of archaeobotany is to recover, identify, and document plant remains from archaeological sites to reconstruct past vegetation dynamics, human-environment interactions, and food production and consumption patterns. Archaeobotany can also be referred to as "palaeoethnobotany", a term especially prevalent in North America. Although the word "palaeoethnobotany" places a stronger stress on the human and ethnic interaction with plants [@hastorfCurrentPaleoethnobotanyAnalytical1988], the two words are used mostly interchangeably [@hastorfRecentResearchPaleoethnobotany1999] as European archaeobotanists share the same objectives. It is important to emphasise that the term "palaeobotany" is not a valid synonym for archaeobotany, as it refers to the study of past evolution and adaptations of plants, and this discipline is not concerned with human-environment interactions [@fullerArchaeobotany2014]. In Classical archaeology, some of the archaeobotanical research questions can also be inferred from historical literature. This is problematic, as the evidence often contradicts what is said in texts; @pearsallPaleoethnobotanyHandbookProcedures2015a [p. 27] remarks how the discipline works using an archaeological approach, not an historical one. Furthermore, the domain of archaeology stretches far beyond the chronological range of textual history. In the archaeological record, four types of botanical remains can be identified---macroremains, pollen grains, phytoliths (inorganic elements found in leaves, stems, and other parts of plants), and starches (formed by amylose or amylopectin polymer aggregates) [@pearsallPaleoethnobotanyHandbookProcedures2015a]. Most archaeobotanical studies in Italy deal with macroremains and pollen, although this research will only focus on the former.
 
 ## Macroremains {style="text-align:justify"}
 
@@ -86,14 +80,316 @@ The imprints of seeds and plants on the wet clay can help the investigator recog
 Examples of ceramic imprints. Images after @costantiniArchaeobotanicalInvestigationsPantanello2018 [pp. 375-386].
 :::
 
-## Microremains: palinology {style="text-align:justify"}
+## Case studies {style="text-align:justify;"}
 
-Palynology deals with the study of pollen grains and spores. The former are produced by seed plants, angiosperms and gymnosperms, and are not visible to the naked eye; hence, magnification is required [@bennettPollen2002]. The grains are formed in the anther, and are used to transport the male cells to the pistil of another flower to fertilise the female eggs (pollination) [@bakelsPollenArchaeology2020]. The discipline of palynology also studies spores, micro-particles originating from fungi and algae. Prior to their deposition, pollen grains are transported in the air by wind, insects, bats and some bird species. At some point, the grains fall to the earth's surface or in water. The phenomenon is known as "pollen rain", and the accumulation of pollen deposited in a location can represent to a certain degree the collective environment that produced the sediment. Palinologists usually distinguish between off- and on- site pollen. Off-site pollen is collected from permanently waterlogged contexts as lake bottoms, bogs, etc. This approach is particularly recommended for climatic and palaeoenvironmental reconstructions, as pollen and spores are deposited and permanently sealed. On-site pollen is collected from archaeological layers and the nature of its deposit is much different than off-site samples [@pearsallPaleoethnobotanyHandbookProcedures2015a; @bennettPollen2002]. Anna Maria @mercuri2014a reports that:
+::: callout-important
+## Section in progress {style="text-align:justify;"}
 
-> People and animals transported plant parts into the site through plant harvesting, on feet and skins, or by coprolites. Pollen accumulation was, thus, mainly the 'result of human action' and a true imprint of human behaviour.
+In the PDF version, include a general map (all chronologies) or time slice maps.
+:::
 
-Off- and on- site pollen answer then different questions. If the former allows the archaeologist to draw inferences about past vegetation and land use, the latter are much more site-specific and provide us with more information about the plants in the immediate proximity of the site. An agricultural historical analysis of a single site would therefore be more appropriate with pollen collected on-site, however taking into account that the deposition of pollen grains can be the result of human and animal mobility [@mercuri2014a] or imports [@bakelsPollenArchaeology2020, p. 205]. A correct environmental reconstruction of the area surrounding an archaeological site must then always consider more factors, such as combining pollen data with carpological data.
+::: {.content-visible when-format="html"}
+The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend at the top-right of the map. Every point on the map is clickable to access reference, total seed counts, preservation mode and other details.
 
-#### Sampling and preservation
+```{r}
+#| echo: false
+#| output: false
 
-Pollen can be sampled from permanently wet sediments including---river beds, lake bottoms, peats, ponds. The catchment area of the resulting pollen diagram depends on the sampling location. The catchment area of samples from a lake bottom is wider in range, whereas a small pond has a relatively restricted range. In the latter case, it would be more appropriate to sample several locations to reconstruct the palaeo-vegetation of a region, provided the necessary funds and resources are available. In any case, almost 99% of pollen is deposited within 1 km of the original source [@armstrongMicrofossils2005]. In rare circumstances, it is also possible to sample from dry contexts as colluvia layers and buried soils. A colluvium layer is a superficial deposit produced by meteoric erosion on topographic slopes [@parry2011]. Although not usually preserved in dry buried soils, pollen grains can be found in particular conditions, as in very acidic soils, where the microbial activity is very low. Other factors leading to pollen being preserved in dry soils are not entirely known in detail yet [@bakelsPollenArchaeology2020, p. 215; @moorePollenAnalysis1991]. The sampling locations mentioned above are off-site locations. On-site locations are mostly waterlogged archaeological contexts, such as---moats, wells, and cesspits. This type of deposit is not suitable for environmental reconstructions, as it tells about local dynamics and human behaviour. The collection of pollen samples must be accurate, because the risk of contamination with upper or lower layers is high. For this reason, it is essential to avoid layers that have been in direct contact with air. There are several techniques for collecting samples, in most cases a section is sampled to obtain a pollen diagram. Sections are sampled using zinc tins that are hammered into the section. The height of the stratigraphical layers are marked on the back of the tin, which is later sealed with plastic foil and stored. When sampling a section is not possible, samples can also be obtained through cores, continuous sections of sediment stored in a plastic cylinder. The coring process is described more in detail in @stein1986. Although being more resistant to decay than seeds, thanks to an outer protective layer (the exine), pollen too is not exempt from preservation biases. Some types of pollen are not preserved at all, some decay faster and others last longer. Common causes of deterioration include---corrosion of the pollen exine (the outermost protective layer of the pollen grain) from biochemical oxidation, degradation from chemical oxidation in aerial and subaerial environments, mechanical damage (*e.g.* breaking of the pollen grain), and mineral deposition [@jones2007]. Another source of bias is taxonomic under- or over- representation. Pollens that have a slow decay rate tend to be overrepresented, for instance in the case of the *Asteraceae*. Other sources of bias are represented by differences in pollen production of individual taxa. Plants that rely on animal pollination produce less pollen than plants that can only rely on wind transportation. Light exposure also contributes to the amount of pollen produced by plants [@bakelsPollenArchaeology2020]. Cereals are likely to be under-represented in pollen spectra as their contribution to the pollen rain is limited---the largeness of the pollen grains (\> 0.40 μm) prevents them to be transported far from the wind as they fall to the ground. Even ancient and wild wheats such as emmer (*Triticum dicoccum*), which Johannes @iversenDevelopmentDenmarkNature1973 hypothesised were cross-fertilizing and releasing more pollen into the wind than modern self-pollinating wheats (*i.e.* bread wheat), seem to contribute only marginally to the pollen spectra [@bottema1992]. One notable exception is rye (*Secale cereale*), a cross-pollinating plant, which produces a large amount of pollen grains [@piotrowska2012]. For the reasons stated above, the situation illustrated by pollen diagrams does not entirely match to the reality of past environments. Several experiments with modern pollen have been conducted to attempt to correct these biasing factors using software and statistical approaches [@sugita2013; @mehl2015; @middleton2004].
+# Load libraries
+library(sp)
+library(rgdal)
+library(leaflet)
+library(leaflet.extras)
+library(htmltools)
+library(tidyverse)
+library(fontawesome) 
+
+# Get an Italy shapefile
+#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
+            #  destfile = 'italy.zip')
+#unzip(zipfile = 'italy.zip')
+
+italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
+bot_map <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/plants.csv", header=TRUE, sep=";")
+Bot_Pres_Mode = read.csv("Database export/Archaeobot_Pres_Mode.csv", header = T, sep=";")
+Bot_Pres_Mode[is.na(Bot_Pres_Mode)] = 0
+bot_map = cbind(bot_map, Bot_Pres_Mode[,14:16], Tot_Seeds = rowSums(Bot_Pres_Mode[17:19]))
+
+# Replace the 1s with an X for nicer printing
+bot_map$Charred <- ifelse(bot_map$Charred == 1, "X", bot_map$Charred)
+bot_map$Mineralised <- ifelse(bot_map$Mineralised == 1, "X", bot_map$Mineralised)
+bot_map$Waterlogged <- ifelse(bot_map$Waterlogged == 1, "X", bot_map$Waterlogged)
+
+# Grouping
+bot_map_R <- filter(bot_map, Chronology=="R")
+bot_map_LR<- filter(bot_map, Chronology=="LR")
+bot_map_EMA<- filter(bot_map, Chronology=="EMA")
+bot_map_Ma<- filter(bot_map, Chronology=="Ma")
+
+#Icon for the map
+
+Icon_red <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'yellow',
+  library = 'fa',
+  markerColor = "red"
+)
+
+Icon_lightred <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'yellow',
+  library = 'glyphicon',
+  markerColor = "lightred"
+)
+
+Icon_lightgray <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'black',
+  library = 'glyphicon',
+  markerColor = "lightgray"
+)
+
+Icon_green <- awesomeIcons(
+  text = fa("wheat-awn"),
+  iconColor = 'darkgreen',
+  library = 'glyphicon',
+  markerColor = "lightgreen"
+)
+
+# Build the map
+italy_bot_map <- leaflet(data=italy) %>%
+  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(weight = 1, 
+              smoothFactor = 0.5,
+              opacity = 0.2, 
+              fillOpacity = 0.5,
+              fillColor = "#F9F5EB",
+              color="#D7A86E"
+              ) %>%
+  addAwesomeMarkers(data=bot_map_R, lng = bot_map_R$x, lat = bot_map_R$y,
+                    group="R", 
+                    icon = Icon_red,
+                    popup = paste(
+                      "<b>", bot_map_R$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_R$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_R$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_R$data_valid_start,
+                           "-", bot_map_R$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_R$Chronology, "<br>",
+                           "<b>Reference:</b><i>", bot_map_R$short_ref, "</i><br>",
+                    "<b>Total seeds:</b>", bot_map_R$Tot_Seeds, "<br><br>",
+                   "<b>Preservation mode </b> <br>", 
+                    "<b>Charred:</b>", bot_map_R$Charred, "<br>",
+                   "<b>Waterlogged:</b>", bot_map_R$Waterlogged, "<br>",
+                    "<b>Mineralised:</b>", bot_map_R$Mineralised, "<br>"
+                           ), 
+             label=~htmlEscape(bot_map_R$site_name)
+ ) %>%
+    addAwesomeMarkers(data=bot_map_LR, lng = bot_map_LR$x, lat = bot_map_LR$y,
+                    group="LR",
+                    icon = Icon_lightred,
+                    popup = paste(
+                      "<b>", bot_map_LR$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_LR$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_LR$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_LR$data_valid_start,
+                           "-", bot_map_LR$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_LR$Chronology, "<br>",
+"<b>Reference:</b><i>", bot_map_LR$short_ref, "</i><br>",
+"<b>Total seeds:</b>", bot_map_LR$Tot_Seeds, "<br><br>",
+"<b>Preservation mode </b> <br>", 
+"<b>Charred:</b>", bot_map_LR$Charred, "<br>",
+"<b>Waterlogged:</b>", bot_map_LR$Waterlogged, "<br>",
+"<b>Mineralised:</b>", bot_map_LR$Mineralised, "<br>"
+), 
+             label=~htmlEscape(bot_map_LR$site_name)
+ ) %>%
+      addAwesomeMarkers(data=bot_map_EMA, lng = bot_map_EMA$x, lat = bot_map_EMA$y,
+                    group="EMA",
+                    icon = Icon_lightgray,
+                    popup = paste(
+                      "<b>", bot_map_EMA$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_EMA$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_EMA$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_EMA$data_valid_start,
+                           "-", bot_map_EMA$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_EMA$Chronology, "<br>",
+"<b>Reference:</b><i>", bot_map_EMA$short_ref, "</i><br>",
+"<b>Total seeds:</b>", bot_map_EMA$Tot_Seeds, "<br><br>",
+"<b>Preservation mode </b> <br>", 
+"<b>Charred:</b>", bot_map_EMA$Charred, "<br>",
+"<b>Waterlogged:</b>", bot_map_EMA$Waterlogged, "<br>",
+"<b>Mineralised:</b>", bot_map_EMA$Mineralised, "<br>"
+), 
+             label=~htmlEscape(bot_map_EMA$site_name)
+ ) %>%
+        addAwesomeMarkers(data=bot_map_Ma, lng = bot_map_Ma$x, lat = bot_map_Ma$y,
+                    group="Ma",
+                    icon = Icon_green,
+                    popup = paste(
+                      "<b>", bot_map_Ma$site_name, "</b>",
+                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+                   "<b>Site ID:</b>", bot_map_Ma$site_code,"<br>",
+                           "<b>Type:</b>", bot_map_Ma$type_name, "<br>",
+                           "<b>Centuries:</b>", bot_map_Ma$data_valid_start,
+                           "-", bot_map_Ma$data_valid_end, "<br>",
+                           "<b>Chronology:</b>", bot_map_Ma$Chronology, "<br>",
+"<b>Reference:</b><i>", bot_map_Ma$short_ref, "</i><br>",
+"<b>Total seeds:</b>", bot_map_Ma$Tot_Seeds, "<br><br>",
+"<b>Preservation mode </b> <br>", 
+"<b>Charred:</b>", bot_map_Ma$Charred, "<br>",
+"<b>Waterlogged:</b>", bot_map_Ma$Waterlogged, "<br>",
+"<b>Mineralised:</b>", bot_map_Ma$Mineralised, "<br>"
+), 
+             label=~htmlEscape(bot_map_Ma$site_name)
+ ) %>%
+  addLayersControl(
+    overlayGroups = c("R", "LR", "EMA", "Ma"),
+    baseGroups = c("Political", "Physical"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  hideGroup(c("LR", "EMA", "Ma")) %>%
+  addResetMapButton() %>%
+  addFullscreenControl() %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }")
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-archaeobot-map
+#| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
+
+italy_bot_map
+
+```
+:::
+
+The archaeobotanical data available for this project consists in 190 samples with macroremains collected from a total of 120 sites dated between the 1^st^ century BCE to the 11^th^ century CE. The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The samples chronological distribution is detailed in @tbl-Bot-Sample-Sizes.
+
+```{r}
+#| echo: false
+#| output: false
+#| message: false
+library(kableExtra)
+
+Sample_Sizes_By_Phase = read.csv("tables_exported_for_reference/Sample_Sizes_BeforeProcessing.csv")
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Bot-Sample-Sizes
+#| tbl-cap: "Number of archaeobotanical samples distributed by phase."
+
+kable(Sample_Sizes_By_Phase) %>% kable_minimal()
+
+```
+
+Most of the excavations lacked forms of probabilistic or total sampling strategies and instead used visual sampling, which occurs when archaeologists can see or expect to find macroremains in the feature they are excavating. Common features from which samples are collected include pits, hearths, and filled anforae. The pitfalls of this type of sampling have already been outlined in this chapter. In addition to differences in sampling strategies, recovery techniques also differed between reports, which can lead to some taxa being underrepresented. It was not possible to quantify how many sites used flotation or dry sieving, as this information was lacking, especially from older reports. On the other hand, the mode of preservation has been indicated in most cases, with charring being the most common. The list of samples that included the preservation mode in their reports is listed in @tbl-Bot-Preservation-Counts.
+
+```{r}
+#| echo: false
+
+# Get only unique samples, getting rid of the chronology (samples with more than one chronology are repeated)
+bot_map_unique = bot_map[-5]
+bot_map_unique = bot_map_unique[!duplicated(bot_map_unique),]
+
+Bot_Preserv_Counts = data.frame(
+ "Preservation" = c("Charred", "Waterlogged", "Mineralised"), 
+ Count = c(table(bot_map_unique$Charred)["X"],
+table(bot_map_unique$Waterlogged)["X"],
+table(bot_map_unique$Mineralised)["X"])
+)
+
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Bot-Preservation-Counts
+#| tbl-cap: "Preservation mode of the archaeobotanical samples in the database. Some samples were preserved in more than one way."
+
+kable(Bot_Preserv_Counts) %>% kable_minimal()
+
+```
+
+Geographically speaking, the distribution of archaeobotanical samples in the period under investigation exhibits certain patterns within Italy. Specifically, there is a higher representation of samples from northern Italy, indicating a greater focus on archaeological investigations in that region. Conversely, certain areas in the south of Italy show a relatively lower representation of archaeobotanical sampling. Additionally, there is a notable lack of archaeobotanical data from central Italy during the investigated period. These spatial discrepancies in the distribution of archaeobotanical samples suggest varying degrees of research emphasis and archaeological investigations across different regions of Italy. The abundance of samples from northern Italy may be attributed to a combination of factors, such as research interests and more specific factors influencing the preservation and recovery of plant remains in that region. In contrast, the lower representation of archaeobotanical sampling in specific areas of the south and center might indicate a relative scarcity of archaeobotanical investigations or limited attention paid to the study of plant remains in those regions during the studied period. These observations are based on the available archaeobotanical samples and may be influenced by various factors affecting archaeological investigations in different regions. The geographical variability in the number of available samples also concerns the different topographic features, including coasts, plains, hills, and mountains. The topographical distribution of samples can be visually explored in @fig-topography-bot-waffle and @tbl-Bot-Topography-Counts, which indicate that most samples are located at low elevations, either on plains or coasts. This suggests that archaeological investigations and archaeobotanical sampling have primarily focused on these areas. However, a more detailed examination of the relationship between altitude and plant occurrence is provided in the results chapter, where altitude is modeled against the presence of plants.
+
+```{r}
+#| echo: false
+#| message: false
+
+library(waffle)
+library(tidybayes)
+
+# Import table, remove duplicates caused by double chronology, change Hilltop to Hill
+Plants_with_Geo = read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Archaeobot_Viz.csv", header=TRUE, sep=";")
+Plants_with_Geo_unique = Plants_with_Geo[-5]
+Plants_with_Geo_unique = Plants_with_Geo_unique[!duplicated(Plants_with_Geo_unique),]
+Plants_with_Geo_unique$Geo <- ifelse(Plants_with_Geo_unique$Geo == "Hilltop", "Hill", Plants_with_Geo_unique$Geo)
+
+Plants_Topography_Samples = as.data.frame(table(Plants_with_Geo_unique$Geo))
+colnames(Plants_Topography_Samples) = c("Topography", "Samples")
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Bot-Topography-Counts
+#| tbl-cap: "Topographical distribution of archaeobotanical samples."
+
+kable(Plants_Topography_Samples) %>% kable_minimal()
+
+```
+
+```{r}
+#| echo: false
+#| fig-height: 4
+#| label: fig-topography-bot-waffle
+#| fig-cap: "Topographical distribution of the archaeobotanical samples."
+
+# Create plot
+ggplot(Plants_Topography_Samples, aes(fill = factor(
+  Topography, levels = c("Coast", "Plain", "Hill", "Mountain")
+), values = Samples)) +
+  geom_waffle(
+    n_rows = 10,
+    size = 0.33,
+    colour = "white",
+    flip = TRUE,
+    make_proportional = TRUE,
+    na.rm = T
+  ) +
+  scale_fill_brewer(palette = "Spectral", direction = -1) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    aspect.ratio = 1,
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey100"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  labs(fill = "Topography",
+       title = "Topographical distribution")
+
+```

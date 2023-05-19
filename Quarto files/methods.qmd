@@ -6,13 +6,94 @@
 
 ## Introduction
 
-This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R and Python. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section three. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.
+This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section three. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.
 
-## Statistical computing {style="text-align:justify;"}
+## Data collection
 
-Statistical computing, often referred to as computational statistics, is a branch of statistics that uses computational approaches to solving statistical problems. Traditionally, the term *statistical computing* places more emphasis on numerical methods, while *computational statistics* refer to topics such as resampling methods, exploratory data analysis, neural networks, etc. [@rizzoStatisticalComputing2019]. Specifically, computational statistics deals with methods "unthinkable before the computer age" [@lauroComputationalStatisticsStatistical1996]. In Archaeology, mainly two programming languages are used today for exploring large sets of data: R and Python. Both programming languages can be used for statistical modeling, although R was designed explicitly for statistical computing and Python as an object-oriented language for more general purposes. Python is one of the most used and fastest-growing programming languages in the world, and its package number is extremely high compared to R. While R benefits from a strong academic community, Python relies on developers to add new packages almost continuously. R was used for the majority of this project due to its familiarity, while Python was used for certain algorithms that were easier to implement.
+-   Sources of data
 
-![Logos of R and Python](images/r-python.png){style="text-align:center;" fig-align="center" width="300"}
+-   Criteria and process of site selection
+
+    -   Put periodization here?
+
+    -   Introduce here the 'site types' problem?
+
+    -   Put chronological fuzziness here?
+
+-   General protocols followed
+
+### Periodization {#sec-periodization style="text-align:justify;"}
+
+Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:
+
+-   **\[R\] Roman**: from the 1^st^ century BCE to the 2^nd^ century CE.
+
+-   **\[LR\] Late Roman**: from the 3^rd^ to the 5^th^ century CE.
+
+-   **\[EMA\] Early Middle Ages**: from the 6^th^ to the 10^th^ century CE.
+
+-   **\[Ma\] Middle Ages:** from the 11^th^ century CE onwards.
+
+In the database, the tables `faunal_chronologies` and `plants_chronologies` connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g. Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g. Sample 1 -- 2^nd^ to 3^rd^ c. CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.
+
+![Periodization schema.](images/Periodization.png){style="text-align:center;" fig-align="center"}
+
+### Chronological fuzziness {#sec-chrono-fuzziness style="text-align:justify;"}
+
+::: callout-important
+## Note {style="text-align:justify;"}
+
+Remove?
+:::
+
+One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: $$ W=\frac{1}{(C_{end}-C_{start}+1)} $$ Where:
+
+-   $C\_{end}$ is the terminus ante quem.
+
+-   $C\_{start}$ is the terminus post quem.
+
+-   1 has been summed to the denominator to avoid 0 values.
+
+The imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:
+
+-   `zooarch_tables` (custom)
+-   `Bot_mean_table` (custom)
+-   `Bot_mean_fun` (custom)
+-   `weightedMedian` (from the package `matrixStats`)
+
+The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.
+
+### Site types
+
+Write that for this project, decisions were made about how to classify archaeological sites in order to gather statistical data and store them in a database. Some sites, such as castra, are relatively easy to identify and categorize. However, there can be uncertainty when it comes to classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. In order to make these categorizations, it is important to consider the specific context and characteristics of each site, as well as the definitions and criteria being used to classify them.
+
+https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
+
+## Statistical analysis {style="text-align:justify;"}
+
+-   Statistical approaches (statistical computing)
+
+-   Software (R and packages)
+
+-   What methods are applied to this thesis, why are there frequentist bits
+
+-   Ecological analyses: ubiquity, richness, diversity
+
+-   What is hypothesis testing? ANOVA and PERMANOVA
+
+    -   Say why I used PERMANOVA
+
+    -   What are the problems of HT? Get the reader ready for the Bayesian approach and try to find a way to justify the frequentist bits of this thesis.
+
+-   Multivariate statistics
+
+    -   General introduction
+
+    -   Why they did not work in this thesis to explore the data?
+
+    -   Dimensionality reduction: nMDS - it is non parametric. Say why I used it.
+
+Statistical computing, often referred to as computational statistics, is a branch of statistics that uses computational approaches to solving statistical problems. Traditionally, the term *statistical computing* places more emphasis on numerical methods, while *computational statistics* refer to topics such as resampling methods, exploratory data analysis, neural networks, etc. [@rizzoStatisticalComputing2019]. Specifically, computational statistics deals with methods "unthinkable before the computer age" [@lauroComputationalStatisticsStatistical1996]. In archaeology, one widely used programming language for statistical computing is R, which has the advantage of relying on its strong academic community. The community actively contributes to the development of new packages, expanding the functionality and versatility of R for statistical computing. Researchers often choose R for statistical computing in archaeology due to its comprehensive statistical capabilities, flexibility, and the ability to reproduce and share analyses. The syntax and structure of R are specifically designed to facilitate data analysis and statistical modeling, allowing researchers to perform complex analyses efficiently. Additionally, R provides powerful data visualization tools, enabling researchers to create visually appealing and informative graphics to communicate their findings.
 
 ### The *R* programming language {style="text-align:justify;"}
 
@@ -22,9 +103,9 @@ R, as described on the [R-Project FAQs](https://cran.r-project.org/doc/FAQ/R-FAQ
 
 #### R Packages
 
-In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 18,452 packages[^methods-2].
+In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 19,533 packages[^methods-2].
 
-[^methods-2]: Updated on August 16th, 2022.
+[^methods-2]: Updated on May 19th, 2023.
 
 ##### tidyverse
 
@@ -44,56 +125,52 @@ The **vegan** package [@oksanenVeganCommunityEcology2022] is designed for ordina
 
 ##### rethinking
 
-INSERT
+The **rethinking** package [@rethinking] provides tools and resources for statistical modeling and data analysis in a Bayesian framework. Developed by Richard McElreath, it is specifically designed to support the concepts and techniques described in his book "Statistical Rethinking: A Bayesian Course with Examples in R and Stan" [@mcelreath2016].
 
-## GitHub: hosting the project
+### Archaeobotanical quantifications {style="text-align:justify;"}
 
 ::: callout-important
-## Section under construction {style="text-align:justify;"}
+## Section in progress {style="text-align:justify;"}
 
-This section will include a general intro to GitHub and why I chose to host data there.
+**Issues**: problems with the data and general problems in sampling
+
+**BIASES**: Talk about the biases and dataset problems here or do it in the Materials chapter?
+
+Write that Quantifications on the archaeobotanical dataset were affected by several biases.
 :::
 
-## Periodization {#sec-periodization style="text-align:justify;"}
+#### Ubiquity {style="text-align:justify;"}
 
-Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:
+Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward---the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:
 
--   **\[R\] Roman**: from the 1^st^ century BCE to the 2^nd^ century CE.
+$$
+U_x = (\frac{N_p}{N_{tot}}) \cdot 100
+$$ where $N_p$ is the number of presences, and $N_{tot}$ is the total number of contexts. The result can be multiplied by 100 to obtain a score in %.
 
--   **\[LR\] Late Roman**: from the 3^rd^ to the 5^th^ century CE.
+This approach has both advantages and drawbacks. Presence analysis minimizes the impact of outliers (overrepresented plant species) on calculations [@wrightMethodologicalIssuesPaleoethnobotany2010, pp. 51-52], but the relative importance of a plant in a particular context is lost. It is also important to keep in mind that taxa richness is influenced by factors including sample size, deposition and preservation modes, and sampling strategies (e.g. sieving methodologies) [@pearsallPaleoethnobotanyHandbookProcedures2015a, pp. 161-2].
 
--   **\[EMA\] Early Middle Ages**: from the 6^th^ to the 10^th^ century CE.
+-   Remind the reader about the sample size problem. Somewhere (maybe Pearsall 2005 chapter ubiquity) there was a graph that showed how ubiquity is influenced by sample size
 
--   **\[Ma\] Middle Ages:** from the 11^th^ century CE onwards.
+-   Write about the problems of this dataset that led to the choice of ubiquity as parameter
 
-In the database, the tables `faunal_chronologies` and `plants_chronologies` connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g. Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g. Sample 1 -- 2^nd^ to 3^rd^ c. CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.
+Ubiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered.
 
-![Periodization schema.](images/Periodization.png){style="text-align:center;" fig-align="center"}
+In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an `R` function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into--`Cereals`, `Pulses` and `Fruits/Nuts`. The results are in @sec-archaeobotany.
 
-### Chronological fuzziness {#sec-chrono-fuzziness style="text-align:justify;"}
+#### Diversity {style="text-align:justify;"}
 
-One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: $$ W=\frac{1}{(C_{end}-C_{start}+1)} $$ Where:
+::: {#species-richness-notes .callout-note}
+## Notes:
 
--   $C\_{end}$ is the terminus ante quem.
+Introduce the concept of diversity. Why is it useful?
+:::
 
--   $C\_{start}$ is the terminus post quem.
+**Species richness** ($S$) is the number of species found within a community or ecosystem. The boundaries of the region are defined by the researcher. While ecologists use sampling or census to obtain the richness value, archaeobotanists can only rely on sampling, counting the presence of species in the area under investigation [@mooreDiversityTaxonomicFunctional2013]. **Species diversity** is a measurement of species richness combined with **species** **evenness**, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.
 
--   1 has been summed to the denominator to avoid 0 values.
+There are different ways to calculate species diversity...
 
-The imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:
+Shannon-W
 
--   `zooarch_tables` (custom)
--   `Bot_mean_table` (custom)
--   `Bot_mean_fun` (custom)
--   `weightedMedian` (from the package `matrixStats`)
-
-The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.
-
-## Site types
-
-Write that for this project, decisions were made about how to classify archaeological sites in order to gather statistical data and store them in a database. Some sites, such as castra, are relatively easy to identify and categorize. However, there can be uncertainty when it comes to classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. In order to make these categorizations, it is important to consider the specific context and characteristics of each site, as well as the definitions and criteria being used to classify them.
-
-https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
 
 ## Multivariate statistics {#sec-met-multivariate-statistics style="text-align:justify;"}
 
@@ -240,17 +317,33 @@ If the solution has produced a good stress level for the number of dimensions re
 
 In this project, nMDS has been applied to the Roman and early Medieval cereal datasets, with the scope of dimensionality reduction. The dataset has been reduced to one dimension to show a greater degree of separation between Northern and Southern Italy in the early Middle Ages. The entire process of data preparation and processing is described in WRITE WHERE.
 
-# Statistical modelling
+## Bayesian approach and multilevel modeling
+
+-   Discuss the use of a Bayesian approach in the analysis.
+
+-   Modeling counts
+
+-   Intro to regression?
+
+-   Explain the principles and advantages of multilevel modeling for the research design.
 
 -   Appropriateness of the statistical method (Guisan et al, p. 55). Different types of data require different approaches and different probability distribution functions
 
+-   Describe how the beta-binomial models were applied to account for overdispersion and class imbalance in the datasets.
+
 -   Independence of observations: In the case of our type of data, this is not really possible so it is already violating this assumption
 
-## Betabinomial
+-   Why do we use credible intervals? http://doingbayesiandataanalysis.blogspot.com/2012/04/why-to-use-highest-density-intervals.html
+
+### Betabinomial
 
 ::: callout-tip
 Show the beta distribution and explain the precision values.
 :::
+
+Material: https://medium.com/@ro.mo.flo47/the-beta-binomial-model-an-introduction-to-bayesian-statistics-154395875f93
+
+https://stats.stackexchange.com/questions/297901/choosing-between-uninformative-beta-priors/298176#298176
 
 ```{r}
 #| echo: false
@@ -259,55 +352,69 @@ Show the beta distribution and explain the precision values.
 library(rethinking)
 pbar <- 0.5
 theta <- 5
-curve( dbeta2( x, pbar, theta), from=0, to=1, xlab="probability", ylab="Density")
+curve( dbeta2( x, pbar, theta), from=0, to=1, xlab="Probability", ylab="Density")
 ```
 
-## Archaeobotanical quantifications {style="text-align:justify;"}
+### Precision plots
+
+The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| layout-ncol: 3
+
+library(rethinking)
+
+# Create the plots 
+pbar <- 0.5
+theta <- 1
+curve(dbeta2(x,pbar,theta), from=0, to=1,
+      xlab="Probability", ylab="Density", main=expression(paste(phi<2)))
+
+pbar <- 0.5
+theta <- 2
+curve(dbeta2(x,pbar,theta), from=0, to=1,
+      xlab="Probability", ylab="Density", main=expression(paste(phi==2)))
+
+pbar <- 0.5
+theta <- 5
+curve(dbeta2(x,pbar,theta), from=0, to=1,
+      xlab="Probability", ylab="Density", main=expression(paste(phi>2)))
+
+
+```
+
+## Integration of Data Sources
+
+-   Explain how the integration of different data sources was carried out.
+
+-   Discuss the rationale behind integrating archaeological, environmental, and textual records for a comprehensive analysis.
+
+-   Describe any challenges or considerations encountered during the integration process.
+
+
+## Evaluation of Agricultural Strategies
+
+-   Detail the methods used to evaluate agricultural strategies during the transition from the Roman Empire to the early medieval period in Italy.
+
+-   Discuss the factors considered in assessing the role of political organization, economy, culture, and environment in shaping agricultural regimes and animal/plant husbandry selection.
+
+## Limitations and Assumptions
+
+-   Discuss any limitations or assumptions associated with the methods used.
+
+-   Address potential biases or uncertainties in the data collection or analysis process.
+
+-   Explain how these limitations were managed or considered in the interpretation of the results.
+
+## GitHub: hosting the project
 
 ::: callout-important
-## Section in progress {style="text-align:justify;"}
+## Section under construction {style="text-align:justify;"}
 
-**Issues**: problems with the data and general problems in sampling
-
-**BIASES**: Talk about the biases and dataset problems here or do it in the Materials chapter?
-
-Write that Quantifications on the archaeobotanical dataset were affected by several biases.
+This section will include a general intro to GitHub and why I chose to host data there.
 :::
 
-### Ubiquity {style="text-align:justify;"}
-
-Ubiquity, or presence analysis, is a popular approach in archaeobotanical quantitative analysis. The method is straightforward---the number of sites/contexts where a plant is present is divided by the total number of sites/contexts under examination. If, for instance, an olive pit is present in 3 sites out of 10, the ubiquity for the olive will be 30%. The formula for the calculation is at follows:
-
-$$
-U_x = (\frac{N_p}{N_{tot}}) \cdot 100
-$$ where $N_p$ is the number of presences, and $N_{tot}$ is the total number of contexts. The result can be multiplied by 100 to obtain a score in %.
-
-This approach has both advantages and drawbacks. Presence analysis minimizes the impact of outliers (overrepresented plant species) on calculations [@wrightMethodologicalIssuesPaleoethnobotany2010, pp. 51-52], but the relative importance of a plant in a particular context is lost. It is also important to keep in mind that taxa richness is influenced by factors including sample size, deposition and preservation modes, and sampling strategies (e.g. sieving methodologies) [@pearsallPaleoethnobotanyHandbookProcedures2015a, pp. 161-2].
-
--   Remind the reader about the sample size problem. Somewhere (maybe Pearsall 2005 chapter ubiquity) there was a graph that showed how ubiquity is influenced by sample size
-
--   Write about the problems of this dataset that led to the choice of ubiquity as parameter
-
-Ubiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered.
-
-In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an `R` function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into--`Cereals`, `Pulses` and `Fruits/Nuts`. The results are in @sec-archaeobotany.
-
-### Diversity {style="text-align:justify;"}
-
-::: {#species-richness-notes .callout-note}
-## Notes:
-
-Introduce the concept of diversity. Why is it useful?
-:::
-
-**Species richness** ($S$) is the number of species found within a community or ecosystem. The boundaries of the region are defined by the researcher. While ecologists use sampling or census to obtain the richness value, archaeobotanists can only rely on sampling, counting the presence of species in the area under investigation [@mooreDiversityTaxonomicFunctional2013]. **Species diversity** is a measurement of species richness combined with **species** **evenness**, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.
-
-There are different ways to calculate species diversity...
-
-Shannon-W
-
-## Zooarchaeology
-
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-:::
+The code and the datasets used to build this research will be hosted publicly on GitHub to allow reproducibility.

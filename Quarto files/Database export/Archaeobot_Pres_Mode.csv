@@ -1,0 +1,235 @@
+ID;Site;Culture;Region;Macroregion;Chronology;Type;weight;From Century;To Century;Reference;X;Y;Charred;Mineralised;Waterlogged;Tot. Cereals;Tot. Pulses;Tot. Fruits/Nuts
+4;Pompei, IX 8;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Carra 2017;14.48778106818106;40.752375998948736;1;;;1;6;395
+35;Vada Sabatia, layer V;Roman;Liguria;Northern Italy;R;Rural site, villa;0.5000;1;2;Arobba et al 2013;8.433361957253506;44.264927584208856;1;;1;1;0;144
+35;Vada Sabatia, layers III-IV;Roman;Liguria;Northern Italy;R;Rural site, villa;0.5000;2;3;Arobba et al 2013;8.433361957253506;44.264927584208856;1;;1;4;2;129
+36;Finale ligure, Pieve del Finale;Roman;Liguria;Northern Italy;R;Rural;1.0000;1;1;Arobba and Murialdo 1996;8.330560129332445;44.17330298343464;1;;;1;513;13
+37;Augusta Bagiennorum, 1st c.;Roman;Piemonte;Northern Italy;R;Urban;1.0000;1;1;Caramiello et al 2014;7.854607320406077;44.55936193040618;1;;;9;0;3
+37;Augusta Bagiennorum, 2nd-3rd c.;Roman;Piemonte;Northern Italy;R;Urban;0.5000;2;3;Caramiello et al 2014;7.854607320406077;44.55936193040618;1;;;9;1;3
+38;Mezzocorona, loc. Drei Canè;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;R;Rural;0.1429;-1;5;Castiglioni and Rottoli 1994;11.120527702600489;46.203081828249424;1;;;232;31;161
+39;Bergamo, Palazzo del Podestà;Roman;Lombardia;Northern Italy;R;Urban;0.3333;-1;1;Pini et al 2017;9.662534463874083;45.704116703419245;1;;;2203;222;59
+40;Ventimiglia, sito di Albintimilium;Roman;Liguria;Northern Italy;R;Urban;0.5000;2;3;Arobba et al 2005;7.625077832623806;43.78922984798364;1;1;;0;1;12
+60;Case Nuove, Cinigiano, Phase 1.2;Roman;Toscana;Central Italy;R;Rural;1.0000;1;1;Mercuri et al 2020a;11.34589342010911;42.89164959900157;1;;;4;5;19
+82;Aquileia, ex essiccatoio nord, 1st c. BCE - 1st c. CE;Roman;Friuli-Venezia Giulia;Northern Italy;R;Urban;0.3333;-1;1;Maselli Scotti and Rottoli 2007;13.364957834639437;45.77542746143208;1;;;500;23;468
+84;Padova, Borgomagno;Roman;Veneto;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;11.877752898477562;45.41816769710538;1;;;49;32;80
+85;Padova, Banca Etica;Roman;Veneto;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;11.879478683413282;45.41677742958558;1;;;1;0;51
+86;Verona, Porta Palio e Spianà;Roman;Veneto;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.979868712960371;45.43571710297538;1;;;71;41;17
+87;Nave;Roman;Lombardia;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.286680846651896;45.585002902041424;1;;;79;81;43
+88;Manerbio, Cascina Trebeschi;Roman;Lombardia;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.127552867925699;45.3455980250891;1;;;52;4;80
+89;Bergamo, via degli Orti;Roman;Lombardia;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;9.654994889936845;45.70648740560144;1;;;0;1;11
+90;Mariano Comense, via T. Grossi;Roman;Lombardia;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;9.172840892472001;45.70331870545088;1;;;3;0;17
+91;Como, via Benzi;Roman;Lombardia;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;9.079774205511432;45.80672803586052;1;;;1;2;35
+93;Albenga, via Pontelungo;Roman;Liguria;Northern Italy;R;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;8.21321587814639;44.053293753072694;1;;;20;1;900
+107;S. Giovanni di Ruoti, Phase 1;Roman;Basilicata;Southern Italy;R;Rural site, villa;0.3333;1;3;Monckton 2002;15.669902140170347;40.73911711017891;1;;;1;0;0
+108;Brescia, Capitolium, Flavian age;Roman;Lombardia;Northern Italy;R;Religious;1.0000;1;1;Castiglioni and Rottoli 2019;10.226541412798476;45.54030058057592;1;;;18;4;2
+112;Brescia, S. Giulia - Roman domus;Roman;Lombardia;Northern Italy;R;Urban;0.2000;1;5;Castiglioni and Rottoli 2019;10.228382817765326;45.54056461482653;1;;;8;5;26
+115;Boggiovara, pozzo romano;Roman;Emilia-Romagna;Northern Italy;R;Rural;0.2500;-2;1;Rinaldi et al 2011;10.87307229891729;44.60800742093317;;;;1;0;1
+118;Modena, ex Cinema Capitol, Imperial domus phase;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;1;2;Bosi et al 2015;10.928232455077998;44.64481839890194;1;;;6;0;61
+118;Modena, ex Cinema Capitol, post-domus phase;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;2;3;Bosi et al 2015;10.928232455077998;44.64481839890194;1;;;2;0;54
+119;Modena, viale Amendola, settling tank;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;1;2;Bosi et al 2015;10.907213064923846;44.63365857670945;;;1;0;0;74
+119;Modena, viale Amendola, channel acqueduct fill;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;1;2;Bosi et al 2015;10.907213064923846;44.63365857670945;;;1;0;0;20
+120;Modena, ex Manifattura Tabacchi, paleosol;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;1;2;Bosi et al 2015;10.929212410981;44.652549727570914;;;1;0;0;68
+123;Calcinate, loc. Villa Passa, Tomb 1;Roman;Lombardia;Northern Italy;R;Necropolis;1.0000;1;1;Castiglioni and Rottoli 2016a;9.79826672673438;45.62031310824095;1;;;17;4;1
+123;Calcinate, loc. Villa Passa, Tombs 3-4;Roman;Lombardia;Northern Italy;R;Necropolis;0.5000;1;2;Castiglioni and Rottoli 2016a;9.79826672673438;45.62031310824095;1;;;32;38;32
+124;Calcinate, loc. Campo Musna (US 168);Roman;Lombardia;Northern Italy;R;Rural site, villa;0.1250;-1;6;Castiglioni and Rottoli 2016b;9.803402572092853;45.61031712464418;1;;;18;0;118
+130;San Lorenzo di Sebato, loc. Pichlweise;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;R;Necropolis;0.2500;2;5;Negri and Tecchiati 2018;11.905785018062886;46.78644859007541;1;;;23;0;0
+154;Modena, Cassa di Risparmio;Roman;Emilia-Romagna;Northern Italy;R;Urban;1.0000;1;1;Bosi et al 2017;10.927570243724745;44.64497707978179;;;1;130;7;22781
+159;Pompei, VI, 1, Vicolo di Narciso, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.482150280709833;40.751569690620215;1;1;;3;1;29
+159;Pompei, VI, 1, Vicolo di Narciso, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.482150280709833;40.751569690620215;1;1;;6;5;206
+160;Pompei, VI, 1, via Consolare, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481919726317486;40.75143380748344;1;1;;1;0;1
+160;Pompei, VI, 1, via Consolare, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481919726317486;40.75143380748344;1;1;;0;0;3
+161;Pompei, VI, 1, 1, Domus of Triclinium;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.48146610340285;40.75196455878867;1;1;;11;5;15224
+162;Pompei, VI, 1, 19, well, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.482247528149088;40.75128122091914;1;1;;0;0;13
+162;Pompei, VI, 1, 19, well, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.482247528149088;40.75128122091914;1;1;;2;0;81
+163;Pompei, VI, 1, 17, Bar of Acisculus, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.482136829949123;40.75134252657623;1;1;;12;2;40
+163;Pompei, VI, 1, 17, Bar of Acisculus, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.482136829949123;40.75134252657623;1;1;;2;2;13
+164;Pompei, VI, 1, 18, Bar of Phoebus, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.482194036642367;40.75130282323731;1;1;;0;0;7
+165;Pompei, VI, 1, 13, Shrine, 1st c. BCE;Roman;Campania;Southern Italy;R;Religious;1.0000;-1;-1;Murphy et al 2013;14.481925455394308;40.75146352986885;1;1;;132;38;636
+165;Pompei, VI, 1, 13, Shrine, 1st c. CE;Roman;Campania;Southern Italy;R;Religious;1.0000;1;1;Murphy et al 2013;14.481925455394308;40.75146352986885;1;1;;98;43;223
+166;Pompei, VI, 1, 14, Soap factory, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.482013218627142;40.75141864656914;1;1;;13;57;879
+166;Pompei, VI, 1, 14, Soap factory, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.482013218627142;40.75141864656914;1;1;;5;2;46
+167;Pompei, VI, 1, 7, House of the Vestals, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481751497397411;40.751680118766004;1;1;;12;11;48
+167;Pompei, VI, 1, 7, House of the Vestals, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481751497397411;40.751680118766004;1;1;;15;23;1802
+168;Pompei, VI, 1, 10, House of the Surgeon, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481851060152303;40.75159883733661;1;1;;8;8;17
+168;Pompei, VI, 1, 10, House of the Surgeon, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481851060152303;40.75159883733661;1;1;;33;16;113
+169;Pompei, VI, 1, 4, Inn, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481495918664416;40.75172144517327;1;1;;9;8;1756
+169;Pompei, VI, 1, 4, Inn, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481495918664416;40.75172144517327;1;1;;13;46;54
+170;Pompei, VI, 1, 4, Inn Bar, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481558200389934;40.75169792180213;1;1;;2;0;35
+170;Pompei, VI, 1, 4, Inn Bar, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481558200389934;40.75169792180213;1;1;;4;3;61
+171;Pompei, VI, 1, 4, Vestals Bar, 1st c. BCE;Roman;Campania;Southern Italy;R;Urban;1.0000;-1;-1;Murphy et al 2013;14.481633069569275;40.751659159606305;1;1;;1;0;7
+171;Pompei, VI, 1, 4, Vestals Bar, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy et al 2013;14.481633069569275;40.751659159606305;1;1;;4;11;48
+192;Teglio, Combolo, 1st c. BCE- 2nd c. CE;Roman;Lombardia;Northern Italy;R;Urban;0.2500;-1;2;Castiglioni and Rottoli 2015;10.06732417238592;46.172234453803064;1;;;0;3;18
+194;Acquachiara, Trench 10000, Early Imperial Phase;Roman;Abruzzo;Southern Italy;R;Rural;0.5000;1;2;Shelton 2009;14.407341375639954;42.00487328893356;1;;;10;2;255
+203;Nave;Roman;Lombardia;Northern Italy;R;Necropolis;1.0000;1;1;Castelletti 1987;10.258055905657397;45.585574714128114;1;;;75;80;46
+218;Casazza, Bergamo;Roman;Lombardia;Northern Italy;R;Rural;0.2000;1;5;Castiglioni 2005;9.907844655639213;45.7494633116574;1;;;119;8;29
+220;Marzuolo, Phase 2;Roman;Toscana;Central Italy;R;Rural;1.0000;1;1;Mercuri et al 2020b;11.408297998931415;42.95620255964278;1;;;40;9;53
+220;Marzuolo, Phase 3;Roman;Toscana;Central Italy;R;Rural;0.5000;2;3;Mercuri et al 2020b;11.408297998931415;42.95620255964278;1;;;10;5;19
+223;Herculaneum, Cardo V sewer;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Rowan 2017;14.348113264181602;40.80591626652151;1;1;1;309;27;1944
+225;Cremona, piazza Marconi, wastepit;Roman;Lombardia;Northern Italy;R;Urban;0.5000;-2;-1;Castiglioni and Rottoli 2018;10.022754626427878;45.13159072094098;1;;;40;0;5737
+230;Cremona, piazza Marconi, Ninfeo domus;Roman;Lombardia;Northern Italy;R;Urban;1.0000;1;1;Castiglioni and Rottoli 2018;10.022754626427878;45.13159072094098;1;;;1708;187;28
+231;Cremona, piazza Marconi, bone working craft area;Roman;Lombardia;Northern Italy;R;Urban;0.5000;-2;-1;Castiglioni and Rottoli 2018;10.022754626427878;45.13159072094098;1;;1;170;0;39
+232;Vittorio Veneto, loc. San Rocco, period I;Roman;Veneto;Northern Italy;R;Urban;0.5000;-2;-1;Castiglioni et al 2014;12.2882577;45.9763529;1;;;409;6;12
+243;Vagnari II, Phase 2;Roman;Puglia;Southern Italy;R;Rural;1.0000;1;1;Stirn and Sgouros 2022;16.274555989653205;40.83289782302369;1;;;26;17;4
+243;Vagnari II, Phase 3;Roman;Puglia;Southern Italy;R;Rural;1.0000;2;2;Stirn and Sgouros 2022;16.274555989653205;40.83289782302369;1;;;25;5;6
+243;Vagnari II, Phase 4;Roman;Puglia;Southern Italy;R;Rural;0.5000;2;3;Stirn and Sgouros 2022;16.274555989653205;40.83289782302369;1;;;27;14;4
+251;Modena, Novi Sad - landfill;Roman;Emilia-Romagna;Northern Italy;R;Urban;0.5000;1;2;Bosi et al 2017;10.92330581318566;44.65137680131194;;;1;3;1;316
+278;Pantanello, sanctuary basin, abandonment phase, 2nd c. - 1st c. BCE;Roman;Basilicata;Southern Italy;R;Rural;0.5000;-2;-1;Costantini and Costantini Biasini 2018;16.786493772770424;40.389436907716814;1;;1;39;0;2637
+283;Aquileia, Canale Anfora, 1st-3rd c. CE;Roman;Friuli-Venezia Giulia;Northern Italy;R;Urban;0.3333;1;3;Rottoli 2017;13.3346;45.76475;1;1;1;2608;0;1325
+1;Calvatone-Bedriacum, 1st c. BCE - 1st c. CE;Roman;Lombardia;Northern Italy;R;Urban;1.0000;1;1;Rottoli 1996;10.44266062805678;45.128482674895764;;;;1402;113;0
+289;Pompei, I 9, House of Amarantus, 1st c. BCE;Roman;Campania;Southern Italy;R;Religious;1.0000;-1;-1;Robinson 2002;14.49110577296243;40.750398448830175;1;1;;1;3;4
+289;Pompei, I 9, House of Amarantus, 1st c. CE;Roman;Campania;Southern Italy;R;Religious;1.0000;1;1;Robinson 2002;14.49110577296243;40.750398448830175;1;1;;5;1;8
+69;Settefinestre, Phase 1;Roman;Toscana;Central Italy;R;Rural site, villa;0.5000;-1;1;Jones 1985;11.327089226104398;42.4308642494648;1;;;2;1;0
+69;Settefinestre, Phase 2;Roman;Toscana;Central Italy;R;Rural site, villa;0.5000;2;3;Jones 1985;11.327089226104398;42.4308642494648;1;;;2;2;2
+168;Pompei, VI, 1, 9.10.23, House of the Surgeon, 1st c. CE;Roman;Campania;Southern Italy;R;Urban;1.0000;1;1;Murphy 2018;14.481851060152305;40.75159883733663;1;1;;58;37;600
+134;San Candido, Cantiere Böden;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;R;Rural;1.0000;1;1;Castiglioni 2005;12.287541123200938;46.73358747070309;1;;;57;3;8
+290;San Candido, Casa dell'Organista, Roman age;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;R;Rural;0.3333;1;3;Castiglioni 2005;12.282496938200017;46.73325290821929;1;;;164;11;1
+2;Desenzano, loc. Faustinella;Late Roman;Lombardia;Northern Italy;LR;Rural;0.5000;5;6;Castiglioni and Rottoli 2007;10.538694;45.4694851;1;;;140;1;325
+5;Trezzo sull'Adda, Cascina S. Martino, 3rd-6th c.;Late Roman;Lombardia;Northern Italy;LR;Urban;0.2500;3;6;Castiglioni and Rottoli 2012;9.508719072826871;45.43117278804427;1;1;;11;5;5019
+6;Monte Barro;Goth;Lombardia;Northern Italy;LR;Castrum;0.5000;5;6;Castelletti and Castiglioni 1991;9.369320317683991;45.83092616011957;1;;;2195;185;10629
+7;Loppio, Isola S. Andrea;Lombard;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Castrum;0.5000;5;6;Moser 2006;10.916720914052336;45.866429428008345;1;;;374;49;4
+8;Lomello, villa Maria;Early Medieval;Lombardia;Northern Italy;LR;Rural;0.5000;5;6;Nisbet 1987;8.797278548240513;45.1221589340304;1;;;94;0;0
+9;Domagnano;Goth;San Marino;Northern Italy;LR;Rural;0.5000;5;6;Mercuri et al 2009;12.468926451003016;43.947901691490465;1;;1;6;0;2060
+28;Teglio, municipio;Late Roman;Lombardia;Northern Italy;LR;Urban;0.5000;3;4;Castiglioni and Rottoli 2015;10.066866872153222;46.17240998456696;1;;;90;0;0
+29;Teglio, via Roma;Early Medieval;Lombardia;Northern Italy;LR;Urban;0.5000;5;6;Castiglioni and Rottoli 2015;10.070032275277624;46.17100687400183;1;;;35;0;0
+30;Cislago;Late Roman;Lombardia;Northern Italy;LR;Rural site, villa;0.5000;4;5;Rottoli and Castiglioni 2015;8.974157624911557;45.660400959244946;1;;;11235;206;18
+31;Aquileia, insule quartieri nord;Early Medieval;Friuli-Venezia Giulia;Northern Italy;LR;Urban;0.5000;5;6;Rottoli 2001b;13.3632280102961;45.76843522391114;1;1;;7;6;0
+32;Campi di Riva del Garda, Monte S. Martino;Early Medieval;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Urban;0.3333;4;6;Castiglioni 2007;10.821289190934788;45.917374128067024;1;;;24;0;0
+33;Sirmione, via Antiche Mura;Early Medieval;Lombardia;Northern Italy;LR;Rural site, villa;0.5000;5;6;Rottoli 1998;10.607602299147022;45.49350727456822;1;;;345675;0;0
+34;Modena, via Nonantolana;Early Medieval;Emilia-Romagna;Northern Italy;LR;Rural;0.5000;5;6;Bosi et al 2019;10.960618877376247;44.65912805035021;1;;;158;16;0
+35;Vada Sabatia, layer II;Late Roman;Liguria;Northern Italy;LR;Rural site, villa;1.0000;3;3;Arobba et al 2013;8.433361957253506;44.264927584208856;1;;1;4;7;993
+35;Vada Sabatia, layer I;Late Roman;Liguria;Northern Italy;LR;Rural site, villa;0.5000;3;4;Arobba et al 2013;8.433361957253506;44.264927584208856;1;;1;8;0;755
+37;Augusta Bagiennorum, 2nd-3rd c.;Roman;Piemonte;Northern Italy;LR;Urban;0.5000;2;3;Caramiello et al 2014;7.854607320406077;44.55936193040618;1;;;9;1;3
+38;Mezzocorona, loc. Drei Canè;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Rural;0.1429;-1;5;Castiglioni and Rottoli 1994;11.120527702600489;46.203081828249424;1;;;232;31;161
+40;Ventimiglia, sito di Albintimilium;Roman;Liguria;Northern Italy;LR;Urban;0.5000;2;3;Arobba et al 2005;7.625077832623806;43.78922984798364;1;1;;0;1;12
+60;Case Nuove, Cinigiano, Phase 1.3;Roman;Toscana;Central Italy;LR;Rural;1.0000;3;3;Mercuri et al 2020a;11.34589342010911;42.89164959900157;1;;;0;0;3
+60;Case Nuove, Cinigiano, Phase 2;Late Roman;Toscana;Central Italy;LR;Rural;0.5000;4;5;Mercuri et al 2020a;11.34589342010911;42.89164959900157;1;;;133;16;290
+84;Padova, Borgomagno;Roman;Veneto;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;11.877752898477562;45.41816769710538;1;;;49;32;80
+85;Padova, Banca Etica;Roman;Veneto;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;11.879478683413282;45.41677742958558;1;;;1;0;51
+86;Verona, Porta Palio e Spianà;Roman;Veneto;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.979868712960371;45.43571710297538;1;;;71;41;17
+87;Nave;Roman;Lombardia;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.286680846651896;45.585002902041424;1;;;79;81;43
+88;Manerbio, Cascina Trebeschi;Roman;Lombardia;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;10.127552867925699;45.3455980250891;1;;;52;4;80
+89;Bergamo, via degli Orti;Roman;Lombardia;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;9.654994889936845;45.70648740560144;1;;;0;1;11
+90;Mariano Comense, via T. Grossi;Roman;Lombardia;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;9.172840892472001;45.70331870545088;1;;;3;0;17
+92;Cerrione;Roman;Lombardia;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;8.045738104842322;45.578320899715465;1;;;18;181;1216
+93;Albenga, via Pontelungo;Roman;Liguria;Northern Italy;LR;Necropolis;0.2000;-1;3;Rottoli and Castiglioni 2011;8.21321587814639;44.053293753072694;1;;;20;1;900
+95;Roma, Schola Praeconum;Late Roman;Lazio;Central Italy;LR;Urban;1.0000;5;5;Whitehouse et al 1985;12.485082999997013;41.88769655093908;;;;5;5;1
+107;S. Giovanni di Ruoti, Phase 1;Roman;Basilicata;Southern Italy;LR;Rural site, villa;0.3333;1;3;Monckton 2002;15.669902140170347;40.73911711017891;1;;;1;0;0
+107;S. Giovanni di Ruoti, Phase 2;Late Roman;Basilicata;Southern Italy;LR;Rural site, villa;1.0000;4;4;Monckton 2002;15.669902140170347;40.73911711017891;1;;;7;0;12
+107;S. Giovanni di Ruoti, Phase 3B;Late Roman;Basilicata;Southern Italy;LR;Rural site, villa;0.5000;5;6;Monckton 2002;15.669902140170347;40.73911711017891;1;;;19;1;9
+109;Brescia, via Alberto Mario;Goth;Lombardia;Northern Italy;LR;Urban;0.5000;5;6;Castiglioni and Rottoli 2019;10.230896521429843;45.53750757759999;1;;;21827;25;6
+112;Brescia, S. Giulia - Roman domus;Roman;Lombardia;Northern Italy;LR;Urban;0.2000;1;5;Castiglioni and Rottoli 2019;10.228382817765326;45.54056461482653;1;;;8;5;26
+112;Brescia, S. Giulia - Goth occupation;Goth;Lombardia;Northern Italy;LR;Urban;0.5000;5;6;Castiglioni and Rottoli 2019;10.228382817765326;45.54056461482653;1;;;6564;4244;134
+118;Modena, ex Cinema Capitol, post-domus phase;Roman;Emilia-Romagna;Northern Italy;LR;Urban;0.5000;2;3;Bosi et al 2015;10.928232455077998;44.64481839890194;1;;;2;0;54
+119;Modena, viale Amendola, woodland - alluvial deposit;Early Medieval;Emilia-Romagna;Northern Italy;LR;Rural;0.3333;4;6;Bosi et al 2015;10.907213064923846;44.63365857670945;;;1;0;0;99
+121;Modena, Palazzo Vaccari;Late Roman;Emilia-Romagna;Northern Italy;LR;Urban;1.0000;4;4;Bosi et al 2019;10.93169927893164;44.6437005360248;;;1;41;6;18
+122;Nago-Torbole;Late Roman;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Rural site, villa;0.2500;3;6;Rottoli 2013;10.886544590892989;45.874108029732234;;;;148;101;0
+123;Calcinate, loc. Villa Passa, pit (US 122);Late Roman;Lombardia;Northern Italy;LR;Rural site, villa;0.5000;3;4;Castiglioni and Rottoli 2016a;9.79826672673438;45.62031310824095;1;;;4;1;6
+124;Calcinate, loc. Campo Musna (US 168);Roman;Lombardia;Northern Italy;LR;Rural site, villa;0.1250;-1;6;Castiglioni and Rottoli 2016b;9.803402572092853;45.61031712464418;1;;;18;0;118
+125;Bazzano, Pozzo Casini;Late Roman;Emilia-Romagna;Northern Italy;LR;Urban;0.5000;5;6;Marchesini et al 2008;11.082577574770152;44.50819047836196;;;;0;0;30
+130;San Lorenzo di Sebato, loc. Pichlweise;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Necropolis;0.2500;2;5;Negri and Tecchiati 2018;11.905785018062886;46.78644859007541;1;;;23;0;0
+49;Filattiera-Sorano, Phase IV;Late Roman;Toscana;Central Italy;LR;Rural;0.5000;4;5;Rottoli and Negri 1998;9.92931949408495;44.333323121935315;1;;;6259;1037;26
+141;Volterra, Vallebuona;Late Roman;Toscana;Central Italy;LR;Urban;0.5000;3;4;Motta 1997;10.859498454710703;43.403984253011174;1;1;;2;1;3
+142;Volterra, podere San Mario, 5th-6th c.;Early Medieval;Toscana;Central Italy;LR;Rural;0.5000;5;6;Motta 1997;10.905322152828276;43.396751684683565;;1;;53;28;441
+198;Salapia, area botteghe, US 2463;Late Roman;Puglia;Southern Italy;LR;Urban;0.5000;4;5;Fiorentino et al 2022;15.997292733316364;41.400097003336256;1;1;;2;1;2
+198;Salapia, area botteghe, US 2439;Late Roman;Puglia;Southern Italy;LR;Urban;1.0000;5;5;Fiorentino et al 2022;15.997292733316364;41.400097003336256;1;1;;35;0;52
+199;Salapia, area conceria, US 2054;Early Medieval;Puglia;Southern Italy;LR;Urban;0.5000;5;6;Fiorentino et al 2022;15.997366453388821;41.399715738794626;1;1;;3;0;4
+218;Casazza, Bergamo;Roman;Lombardia;Northern Italy;LR;Rural;0.2000;1;5;Castiglioni 2005;9.907844655639213;45.7494633116574;1;;;119;8;29
+219;Montegibbio, Period 2, Phases II-III-IV;Late Roman;Emilia-Romagna;Northern Italy;LR;Rural site, villa;0.3333;4;6;Bandini Mazzanti et al 2010;10.785917381199157;44.51343035419405;;;;15;5;19
+220;Marzuolo, Phase 3;Roman;Toscana;Central Italy;LR;Rural;0.5000;2;3;Mercuri et al 2020b;11.408297998931415;42.95620255964278;1;;;10;5;19
+232;Vittorio Veneto, loc. San Rocco, period II;Late Roman;Veneto;Northern Italy;LR;Urban;1.0000;5;5;Castiglioni et al 2014;12.2882577;45.9763529;1;;;18;0;12
+243;Vagnari II, Phase 4;Roman;Puglia;Southern Italy;LR;Rural;0.5000;2;3;Stirn and Sgouros 2022;16.274555989653205;40.83289782302369;1;;;27;14;4
+243;Vagnari II, Phase 5;Roman;Puglia;Southern Italy;LR;Rural;1.0000;3;3;Stirn and Sgouros 2022;16.274555989653205;40.83289782302369;1;;;5;4;3
+248;Peveragno, loc. Castelvecchio;Early Medieval;Piemonte;Northern Italy;LR;Castrum;0.3333;3;6;Motella de Carlo 1995;7.647035828225136;44.31064156531865;1;;;309;39;6
+274;Lecce, piazzetta Castromediano;Late Roman;Puglia;Southern Italy;LR;Urban;0.5000;3;4;Primavera et al 2011;18.17231067896651;40.35452508937071;1;;;10;48;10
+275;Lecce, piazzetta Epulione;Late Roman;Puglia;Southern Italy;LR;Urban;0.5000;3;4;Primavera et al 2011;18.171272184642334;40.35094466749672;1;;;0;1;17
+283;Aquileia, Canale Anfora, 1st-3rd c. CE;Roman;Friuli-Venezia Giulia;Northern Italy;LR;Urban;0.3333;1;3;Rottoli 2017;13.3346;45.76475;1;1;1;2608;0;1325
+283;Aquileia, Canale Anfora, 3rd-4th c. CE;Late Roman;Friuli-Venezia Giulia;Northern Italy;LR;Urban;0.5000;3;4;Rottoli 2017;13.3346;45.76475;1;1;1;2;0;152
+283;Aquileia, Canale Anfora, 3rd-4th c. CE;Late Roman;Friuli-Venezia Giulia;Northern Italy;LR;Urban;0.5000;3;4;Rottoli 2017;13.3346;45.76475;1;1;1;2;0;152
+69;Settefinestre, Phase 2;Roman;Toscana;Central Italy;LR;Rural site, villa;0.5000;2;3;Jones 1985;11.327089226104398;42.4308642494648;1;;;2;2;2
+290;San Candido, Casa dell'Organista, Roman age;Roman;Trentino-Alto Adige/Südtirol;Northern Italy;LR;Rural;0.3333;1;3;Castiglioni 2005;12.282496938200017;46.73325290821929;1;;;164;11;1
+2;Desenzano, loc. Faustinella;Late Roman;Lombardia;Northern Italy;EMA;Rural;0.5000;5;6;Castiglioni and Rottoli 2007;10.538694;45.4694851;1;;;140;1;325
+5;Trezzo sull'Adda, Cascina S. Martino, 3rd-6th c.;Late Roman;Lombardia;Northern Italy;EMA;Urban;0.2500;3;6;Castiglioni and Rottoli 2012;9.508719072826871;45.43117278804427;1;1;;11;5;5019
+6;Monte Barro;Goth;Lombardia;Northern Italy;EMA;Castrum;0.5000;5;6;Castelletti and Castiglioni 1991;9.369320317683991;45.83092616011957;1;;;2195;185;10629
+7;Loppio, Isola S. Andrea;Lombard;Trentino-Alto Adige/Südtirol;Northern Italy;EMA;Castrum;0.5000;5;6;Moser 2006;10.916720914052336;45.866429428008345;1;;;374;49;4
+8;Lomello, villa Maria;Early Medieval;Lombardia;Northern Italy;EMA;Rural;0.5000;5;6;Nisbet 1987;8.797278548240513;45.1221589340304;1;;;94;0;0
+9;Domagnano;Goth;San Marino;Northern Italy;EMA;Rural;0.5000;5;6;Mercuri et al 2009;12.468926451003016;43.947901691490465;1;;1;6;0;2060
+10;Parma, Piazza Garibaldi/via Cavestro;Medieval;Emilia-Romagna;Northern Italy;EMA;Urban;0.5000;10;11;Bosi et al 2012;10.326509377765523;44.80082986532667;;;1;512;23;39188
+16;Ventimiglia, battistero della Cattedrale;Early Medieval;Liguria;Northern Italy;EMA;Urban;0.5000;6;7;Arobba 2000;7.6025654227118995;43.791320932545275;1;;;1360;34;9
+18;S. Antonino di Perti;Byzantine;Liguria;Northern Italy;EMA;Castrum;0.5000;6;7;Arobba and Murialdo 2001;8.32153258912255;44.19479733303203;1;;;3;0;9
+20;Luni, 8th c.;Early Medieval;Liguria;Northern Italy;EMA;Urban;1.0000;8;8;Barker 1977;10.016095356375178;44.06450201566349;1;;;69;3;10
+22;Classe, 8th c.;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;1.0000;8;8;Augenti et al 2006;12.21703592761964;44.39775375736627;1;;;972;598;2
+22;Classe, 8th-10th c.;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;0.3333;8;10;Augenti et al 2006;12.21703592761964;44.39775375736627;1;;;249;53;0
+23;Nogara, Mulino di Sotto;Medieval;Veneto;Northern Italy;EMA;Rural;0.3333;9;11;Castiglioni and Rottoli 2011;11.057640162306127;45.17845974019079;1;1;1;310;32;1567
+25;Finalborgo;Medieval;Liguria;Northern Italy;EMA;Urban;0.5000;10;11;Arobba 2003;8.329968465525209;44.175902068140466;1;;1;2;0;217
+29;Teglio, via Roma;Early Medieval;Lombardia;Northern Italy;EMA;Urban;0.5000;5;6;Castiglioni and Rottoli 2015;10.070032275277624;46.17100687400183;1;;;35;0;0
+31;Aquileia, insule quartieri nord;Early Medieval;Friuli-Venezia Giulia;Northern Italy;EMA;Urban;0.5000;5;6;Rottoli 2001b;13.3632280102961;45.76843522391114;1;1;;7;6;0
+32;Campi di Riva del Garda, Monte S. Martino;Early Medieval;Trentino-Alto Adige/Südtirol;Northern Italy;EMA;Urban;0.3333;4;6;Castiglioni 2007;10.821289190934788;45.917374128067024;1;;;24;0;0
+33;Sirmione, via Antiche Mura;Early Medieval;Lombardia;Northern Italy;EMA;Rural site, villa;0.5000;5;6;Rottoli 1998;10.607602299147022;45.49350727456822;1;;;345675;0;0
+34;Modena, via Nonantolana;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;0.5000;5;6;Bosi et al 2019;10.960618877376247;44.65912805035021;1;;;158;16;0
+96;Anguillara Sabazia, Mura di Santo Stefano, Phase 4;Medieval;Lazio;Central Italy;EMA;Urban;0.3333;9;11;Costantini et al 1983;12.258645754824592;42.07066560947221;1;;;81.94999992847443;13.020000196993351;0
+98;S. Maria in Cività, D85;Early Medieval;Molise;Southern Italy;EMA;Urban;0.2500;6;9;Van der Veen 1985;14.81559846145632;41.80352728910525;1;;;8034;173;539
+107;S. Giovanni di Ruoti, Phase 3A;Late Roman;Basilicata;Southern Italy;EMA;Rural site, villa;1.0000;5;5;Monckton 2002;15.669902140170347;40.73911711017891;1;;;13;2;43
+107;S. Giovanni di Ruoti, Phase 3B;Late Roman;Basilicata;Southern Italy;EMA;Rural site, villa;0.5000;5;6;Monckton 2002;15.669902140170347;40.73911711017891;1;;;19;1;9
+108;Brescia, Capitolium, deterioration phase;Lombard;Lombardia;Northern Italy;EMA;Urban;1.0000;7;7;Castiglioni and Rottoli 2019;10.226541412798476;45.54030058057592;1;1;;391;10;11
+109;Brescia, via Alberto Mario;Goth;Lombardia;Northern Italy;EMA;Urban;0.5000;5;6;Castiglioni and Rottoli 2019;10.230896521429843;45.53750757759999;1;;;21827;25;6
+112;Brescia, S. Giulia - Goth occupation;Goth;Lombardia;Northern Italy;EMA;Urban;0.5000;5;6;Castiglioni and Rottoli 2019;10.228382817765326;45.54056461482653;1;;;6564;4244;134
+112;Brescia, S. Giulia;Lombard;Lombardia;Northern Italy;EMA;Religious, monastery;0.5000;6;7;Castiglioni and Rottoli 2019;10.228581058805755;45.539848090918376;1;;;502;60;79
+113;Brescia, Kitchen-Garden (Ortaglia) domus;Lombard;Lombardia;Northern Italy;EMA;Urban;0.5000;6;7;Castiglioni and Rottoli 2019;10.229688034111009;45.54040837440285;1;;;601;182;3
+115;Boggiovara, necropoli;Byzantine;Emilia-Romagna;Northern Italy;EMA;Necropolis;0.5000;6;7;Rinaldi et al 2011;10.87307229891729;44.60800742093317;1;;;1;0;9
+116;Rocca degli Alberti, Village phase;Lombard;Toscana;Central Italy;EMA;Rural;0.5000;8;9;Buonincontri et al 2017;10.856876081951047;43.14567502485282;1;;;7002;102;145
+116;Rocca degli Alberti, Manorial court phase;Frankish;Toscana;Central Italy;EMA;Rural;0.5000;9;10;Buonincontri et al 2017;10.856876081951047;43.14567502485282;1;;;3060;4;12
+117;Rocchette Pannocchieschi;Frankish;Toscana;Central Italy;EMA;Castle;0.5000;10;11;Buonincontri et al 2017;10.891856593036943;43.04839767718219;1;;;212;13;0
+119;Modena, viale Amendola, woodland - alluvial deposit;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;0.3333;4;6;Bosi et al 2015;10.907213064923846;44.63365857670945;;;1;0;0;99
+122;Nago-Torbole;Late Roman;Trentino-Alto Adige/Südtirol;Northern Italy;EMA;Rural site, villa;0.2500;3;6;Rottoli 2013;10.886544590892989;45.874108029732234;;;;148;101;0
+124;Calcinate, loc. Campo Musna (US 168);Roman;Lombardia;Northern Italy;EMA;Rural site, villa;0.1250;-1;6;Castiglioni and Rottoli 2016b;9.803402572092853;45.61031712464418;1;;;18;0;118
+125;Bazzano, Pozzo Casini;Late Roman;Emilia-Romagna;Northern Italy;EMA;Urban;0.5000;5;6;Marchesini et al 2008;11.082577574770152;44.50819047836196;;;;0;0;30
+127;Montegrotto Terme, via Neroniana, elongated ditch (US 4174);Medieval;Veneto;Northern Italy;EMA;Rural;0.1667;9;14;Maritan 2012;11.793363508103882;45.3231475589978;1;1;;88;1;1216
+142;Volterra, podere San Mario, 5th-6th c.;Early Medieval;Toscana;Central Italy;EMA;Rural;0.5000;5;6;Motta 1997;10.905322152828276;43.396751684683565;;1;;53;28;441
+195;Castello di Santa Severa, Casa del Nostromo;Byzantine;Lazio;Central Italy;EMA;Urban;0.5000;7;8;Susanna 2013;11.958046918705422;42.01920241306131;1;;;805;39;3
+198;Salapia, area botteghe, US 2475;Early Medieval;Puglia;Southern Italy;EMA;Urban;1.0000;6;6;Fiorentino et al 2022;15.997292733316364;41.400097003336256;1;1;;0;2;0
+198;Salapia, area botteghe, US 2437;Early Medieval;Puglia;Southern Italy;EMA;Urban;1.0000;7;7;Fiorentino et al 2022;15.997292733316364;41.400097003336256;1;1;;24;1;4
+199;Salapia, area conceria, US 2054;Early Medieval;Puglia;Southern Italy;EMA;Urban;0.5000;5;6;Fiorentino et al 2022;15.997366453388821;41.399715738794626;1;1;;3;0;4
+199;Salapia, area conceria, US 2211-2217;Early Medieval;Puglia;Southern Italy;EMA;Urban;1.0000;7;7;Fiorentino et al 2022;15.997366453388821;41.399715738794626;1;1;;24;2;18
+199;Salapia, area conceria, 8th-9th c.;Early Medieval;Puglia;Southern Italy;EMA;Urban;0.5000;8;9;Fiorentino et al 2022;15.997366453388821;41.399715738794626;1;1;;67;10;48
+196;Faragola, wastepit 61;Lombard;Puglia;Southern Italy;EMA;Rural site, villa;1.0000;7;7;Caracuta et al 2012;15.560001469193985;41.22830663491206;1;;;15;1;17
+196;Faragola, wastepit 66;Lombard;Puglia;Southern Italy;EMA;Rural site, villa;1.0000;7;7;Caracuta et al 2012;15.560001469193985;41.22830663491206;1;;;82;77;28
+212;Cognento;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Rural;0.5000;6;7;Bandini Mazzanti et al 1999;10.871068079319562;44.63471884641742;1;;1;35;4;1107
+215;Miranduolo, village phase;Lombard;Toscana;Central Italy;EMA;Rural;0.5000;8;9;Buonincontri et al 2014;11.079989431456067;43.120523086437785;1;;;476;11;0
+215;Miranduolo, manor phase;Frankish;Toscana;Central Italy;EMA;Rural;0.5000;9;10;Buonincontri et al 2014;11.079989431456067;43.120523086437785;1;;;19783;35674;57
+215;Miranduolo, castle phase;Medieval;Toscana;Central Italy;EMA;Castle;0.5000;10;11;Buonincontri et al 2014;11.079989431456067;43.120523086437785;1;;;34069;2391;64
+219;Montegibbio, Period 2, Phases II-III-IV;Late Roman;Emilia-Romagna;Northern Italy;EMA;Rural site, villa;0.3333;4;6;Bandini Mazzanti et al 2010;10.785917381199157;44.51343035419405;;;;15;5;19
+234;Colle Castellano, Phase 3-4;Medieval;Molise;Southern Italy;EMA;Urban;0.5000;10;11;Hodges et al 2006;14.111965302686905;41.55669229775053;1;;;330;18;4
+248;Peveragno, loc. Castelvecchio;Early Medieval;Piemonte;Northern Italy;EMA;Castrum;0.3333;3;6;Motella de Carlo 1995;7.647035828225136;44.31064156531865;1;;;309;39;6
+177;San Vincenzo al Volturno, kitchen area;Early Medieval;Molise;Southern Italy;EMA;Religious, monastery;1.0000;9;9;Pinchetti 2021;14.087630727003582;41.64988907359276;1;;;125;340;1818
+101;Supersano, loc. Scorpo;Byzantine;Puglia;Southern Italy;EMA;Rural;0.5000;7;8;Grasso 2011;18.23607367470956;40.03794944922776;;;1;8;0;1247
+250;Apigliano, 9th-10th c., pits;Byzantine;Puglia;Southern Italy;EMA;Rural;0.5000;9;10;Grasso and Fiorentino 2009;18.269140461849993;40.20095884213332;;;1;2;2;0
+250;Apigliano, 10th-11th c., pits;Byzantine;Puglia;Southern Italy;EMA;Rural;0.5000;10;11;Grasso and Fiorentino 2009;18.269140461849993;40.20095884213332;;;1;3;4;0
+196;Faragola, granary A7;Lombard;Puglia;Southern Italy;EMA;Rural site, villa;0.5000;7;8;Caracuta et al 2014;15.560001469193985;41.22830663491206;1;;;466;232;0
+196;Faragola, granary A8;Lombard;Puglia;Southern Italy;EMA;Rural site, villa;0.5000;7;8;Caracuta et al 2014;15.560001469193985;41.22830663491206;1;;;1222;3;1
+252;Ferrara, Corso Porto Reno, 950-1050;Medieval;Emilia-Romagna;Northern Italy;EMA;Urban;0.5000;10;11;Goodson 2021;11.61812414224335;44.83446804629176;;;1;7;3;15
+253;Sant'Agata Bolognese, 10th-11th c.;Early Medieval;Emilia-Romagna;Northern Italy;EMA;Castrum;0.5000;10;11;Bosi et al 2014;11.162317510736269;44.691806682834574;;;1;794;225;298
+13;S. Michele di Trino, Phase IV, 10th-11th c.;Medieval;Piemonte;Northern Italy;EMA;Urban;0.5000;10;11;Nisbet 1999;8.304962373728886;45.19673507552628;1;;;1803;123;0
+13;S. Michele di Trino, Phase IVb, 9th-10th c.;Frankish;Piemonte;Northern Italy;EMA;Urban;0.5000;9;10;Nisbet 1999;8.304962373728886;45.19673507552628;1;;;3084;28;0
+249;Villa Magna, Byzantine phase, 6th-7th c.;Byzantine;Lazio;Central Italy;EMA;Rural site, villa;0.5000;6;7;Veal and Williams 2016;13.112407048036301;41.68141381604245;1;;;11;0;6
+285;San Bartolomeo de Castelàz;Frankish;Lombardia;Northern Italy;EMA;Rural;0.5000;9;10;Castiglioni 2009;10.355106611391221;46.391948698513126;1;;;6256;185;1095
+286;Chiari, piazza Zanardelli;Frankish;Lombardia;Northern Italy;EMA;Urban;0.5000;8;9;Breda et al 2011;9.928872599867887;45.53666701893512;1;;;11;0;0
+288;Collegno;Early Medieval;Piemonte;Northern Italy;EMA;Rural;0.5000;6;7;Castiglioni et al 2004;7.574410172822639;45.085015972528915;1;;;8;2;37
+291;San Candido, Municipio, Early Middle Ages;Early Medieval;Trentino-Alto Adige/Südtirol;Northern Italy;EMA;Rural;0.2000;6;10;Castiglioni 2005;12.282911634472368;46.73264513004835;1;;;9198;17;0
+290;San Candido, Casa dell'Organista, Early Medieval age;Early Medieval;Trentino-Alto Adige/Südtirol;Northern Italy;EMA;Rural;0.5000;7;8;Castiglioni 2005;12.282496938200017;46.73325290821929;1;;;126;0;0
+10;Parma, Piazza Garibaldi/via Cavestro;Medieval;Emilia-Romagna;Northern Italy;Ma;Urban;0.5000;10;11;Bosi et al 2012;10.326509377765523;44.80082986532667;;;1;512;23;39188
+23;Nogara, Mulino di Sotto;Medieval;Veneto;Northern Italy;Ma;Rural;0.3333;9;11;Castiglioni and Rottoli 2011;11.057640162306127;45.17845974019079;1;1;1;310;32;1567
+25;Finalborgo;Medieval;Liguria;Northern Italy;Ma;Urban;0.5000;10;11;Arobba 2003;8.329968465525209;44.175902068140466;1;;1;2;0;217
+26;Sarzana, Pieve di S. Andrea;Medieval;Liguria;Northern Italy;Ma;Religious;1.0000;11;11;Castelletti 1975;9.960947973721732;44.1132811531059;1;;;8;5;0
+96;Anguillara Sabazia, Mura di Santo Stefano, Phase 4;Medieval;Lazio;Central Italy;Ma;Urban;0.3333;9;11;Costantini et al 1983;12.258645754824592;42.07066560947221;1;;;81.94999992847443;13.020000196993351;0
+117;Rocchette Pannocchieschi;Frankish;Toscana;Central Italy;Ma;Castle;0.5000;10;11;Buonincontri et al 2017;10.891856593036943;43.04839767718219;1;;;212;13;0
+127;Montegrotto Terme, via Neroniana, Silos (US 4131);Medieval;Veneto;Northern Italy;Ma;Rural;1.0000;11;11;Maritan 2012;11.793363508103882;45.3231475589978;1;1;;23;1;8
+127;Montegrotto Terme, via Neroniana, hut (US 2004-2019);Medieval;Veneto;Northern Italy;Ma;Rural;0.5000;11;12;Maritan 2012;11.793363508103882;45.3231475589978;1;1;;44;3;71
+127;Montegrotto Terme, via Neroniana, elongated ditch (US 4174);Medieval;Veneto;Northern Italy;Ma;Rural;0.1667;9;14;Maritan 2012;11.793363508103882;45.3231475589978;1;1;;88;1;1216
+191;Sondrio, via Quadrio;Medieval;Lombardia;Northern Italy;Ma;Urban;0.2500;11;14;Castiglioni and Rottoli 2015;9.873043999370287;46.17176926743521;1;;;10;0;4
+215;Miranduolo, castle phase;Medieval;Toscana;Central Italy;Ma;Castle;0.5000;10;11;Buonincontri et al 2014;11.079989431456067;43.120523086437785;1;;;34069;2391;64
+234;Colle Castellano, Phase 3-4;Medieval;Molise;Southern Italy;Ma;Urban;0.5000;10;11;Hodges et al 2006;14.111965302686905;41.55669229775053;1;;;330;18;4
+250;Apigliano, 10th-11th c., pits;Byzantine;Puglia;Southern Italy;Ma;Rural;0.5000;10;11;Grasso and Fiorentino 2009;18.269140461849993;40.20095884213332;;;1;3;4;0
+252;Ferrara, Corso Porto Reno, 950-1050;Medieval;Emilia-Romagna;Northern Italy;Ma;Urban;0.5000;10;11;Goodson 2021;11.61812414224335;44.83446804629176;;;1;7;3;15
+253;Sant'Agata Bolognese, 10th-11th c.;Early Medieval;Emilia-Romagna;Northern Italy;Ma;Castrum;0.5000;10;11;Bosi et al 2014;11.162317510736269;44.691806682834574;;;1;794;225;298
+13;S. Michele di Trino, Phase IV, 10th-11th c.;Medieval;Piemonte;Northern Italy;Ma;Urban;0.5000;10;11;Nisbet 1999;8.304962373728886;45.19673507552628;1;;;1803;123;0
+13;S. Michele di Trino, Phase IV-V, 11th-12th c.;Medieval;Piemonte;Northern Italy;Ma;Urban;0.5000;11;12;Nisbet 1999;8.304962373728886;45.19673507552628;1;;;159;4;0
+249;Villa Magna, monastic village, 10th-13th c.;Medieval;Lazio;Central Italy;Ma;Rural;0.3333;10;13;Veal and Williams 2016;13.112407048036301;41.68141381604245;1;;;94;146;64

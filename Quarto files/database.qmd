@@ -249,7 +249,7 @@ The table macroregions_join is a joining table of the tables regions and macrore
 The macroregions have been divided as in @tbl-macroregions-db-join.
 
 | Macroregion name | Regions                                                                                                                                                                         |
-|-------------|-----------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | Northern Italy   | \(5\) Emilia-Romagna, (6) Friuli-Venezia Giulia, (8) Liguria, (9) Lombardia, (12) Piemonte, (15) Trentino-Alto Adige/Südtirol, (17) Valle d'Aosta, (18) Veneto, (19) San Marino |
 | Central Italy    | \(7\) Lazio, (10) Marche, (14) Toscana, (16) Umbria                                                                                                                             |
 | Southern Italy   | \(1\) Abruzzo, (2) Basilicata, (3) Campania, (4) Calabria, (11) Molise, (13) Puglia                                                                                             |
@@ -353,6 +353,12 @@ The plant remains have been stored in the master table `plant_remains`. This is 
 
 -   `sampling_type`: foreign key (linked to the table `bot_sampling_type`), referring to the sampling methodology used by the author. See @tbl-bot-sampling-type for details of the input values.
 
+-   `pres_charred`: a binary field which takes the value of 1 if the macroremains in the sample are preserved by charring, 0 if the seeds were preserved any other way.
+
+-   `pres_mineralised`: a binary field which takes the value of 1 if the macroremains in the sample are preserved by mineralisation, 0 if the seeds were preserved any other way.
+
+-   `pres_waterlogged`: a binary field which takes the value of 1 if the macroremains in the sample are preserved by waterlogging, 0 if the seeds were preserved any other way.
+
 -   `no_of_samples`: an integer indicating the number of samples collected from the context recorded in the entry. As for the `volume` field, whenever more samples from the same location and with the same chronology have been reported by the author, they have been merged together.
 
 -   Fields for the absolute counts of the taxa: `Triticum aestivum/durum`, `Triticum dicoccum`, `Triticum monococcum`, `Avena sp`, `Hordeum vulgare`, `Panicum milliaceum`, `Secale cereale`, `Setaria italica`, `Sorghum bicolor`, `Cerealia ind`, `Leguminosae`, `Lens culinaris`, `Pisum sativum`,`Vicia faba`, `Vicia sativa`, `Vicia sp`, `Lathyrus cicera/sativus`, `Cicer aretinum`, `Cornus mas`, `Corylus avellana`, `Ficus carica`, `Fragaria vesca`, `Juglans regia`, `Castanea sativa`, `Malus domestica`, `Olea europaea L`, `Prunus cerasus`, `Prunus avium`, `Prunus sp`, `Prunus persica`, `Prunus domestica`, `Prunus spinosa`, `Rubus fruticosus`, `Pyrus communis`, `Sambucus nigra`, `Cucumis melo`, `Vitis vinifera`, `Linum usatissimus`, `Sorbus sp`. The fields are of the type `int(11)` and are filled with the absolute count copied from the author's report.
@@ -395,13 +401,6 @@ The table `plants_chrono_weights` consists of two fields:
 
 Information concerning the way the weight is calculated can be found in the methodology chapter.
 
-#### Pollen
-
-::: callout-important
-## MISSING
-
-Pollen has not been stored in the database yet. Methodology is missing.
-:::
 
 ### Zooarchaeology
 

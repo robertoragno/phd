@@ -26,215 +26,6 @@ The results presented here are preliminary and the chapter has yet to be written
 
 In this chapter, I will present the macrobotanical data from 190 case studies used to carry on this research (@sec-materials-bot), along with the statistics performed on the data. The results will be first presented temporally, and a discussion of the diachronic trends will follow at the end of the chapter.
 
-## Case studies {style="text-align:justify;"}
-
-The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend at the top-right of the map.
-
-```{r}
-#| echo: false
-#| output: false
-
-# Load libraries
-library(sp)
-library(rgdal)
-library(leaflet)
-library(leaflet.extras)
-library(htmltools)
-library(tidyverse)
-library(fontawesome) 
-
-# Get an Italy shapefile
-#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip', 
-            #  destfile = 'italy.zip')
-#unzip(zipfile = 'italy.zip')
-
-italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
-bot_map <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/plants.csv", header=TRUE, sep=";")
-
-# Grouping
-bot_map_R <- filter(bot_map, Chronology=="R")
-bot_map_LR<- filter(bot_map, Chronology=="LR")
-bot_map_EMA<- filter(bot_map, Chronology=="EMA")
-bot_map_Ma<- filter(bot_map, Chronology=="Ma")
-
-#Icon for the map
-
-Icon_red <- awesomeIcons(
-  text = fa("wheat-awn"),
-  iconColor = 'yellow',
-  library = 'fa',
-  markerColor = "red"
-)
-
-Icon_lightred <- awesomeIcons(
-  text = fa("wheat-awn"),
-  iconColor = 'yellow',
-  library = 'glyphicon',
-  markerColor = "lightred"
-)
-
-Icon_lightgray <- awesomeIcons(
-  text = fa("wheat-awn"),
-  iconColor = 'black',
-  library = 'glyphicon',
-  markerColor = "lightgray"
-)
-
-Icon_green <- awesomeIcons(
-  text = fa("wheat-awn"),
-  iconColor = 'darkgreen',
-  library = 'glyphicon',
-  markerColor = "lightgreen"
-)
-
-# Build the map
-italy_bot_map <- leaflet(data=italy) %>%
-  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
-  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(weight = 1, 
-              smoothFactor = 0.5,
-              opacity = 0.2, 
-              fillOpacity = 0.5,
-              fillColor = "#F9F5EB",
-              color="#D7A86E"
-              ) %>%
-  addAwesomeMarkers(data=bot_map_R, lng = bot_map_R$x, lat = bot_map_R$y,
-                    group="R", 
-                    icon = Icon_red,
-                    popup = paste(
-                      "<b>", bot_map_R$site_name, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", bot_map_R$site_code,"<br>",
-                           "<b>Type:</b>", bot_map_R$type_name, "<br>",
-                           "<b>Centuries:</b>", bot_map_R$data_valid_start,
-                           "-", bot_map_R$data_valid_end, "<br>",
-                           "<b>Chronology:</b>", bot_map_R$Chronology, "<br>",
-                           "<b>Reference:</b><i>", bot_map_R$short_ref, "</i>"
-                           ), 
-             label=~htmlEscape(bot_map_R$site_name)
- ) %>%
-    addAwesomeMarkers(data=bot_map_LR, lng = bot_map_LR$x, lat = bot_map_LR$y,
-                    group="LR",
-                    icon = Icon_lightred,
-                    popup = paste(
-                      "<b>", bot_map_LR$site_name, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", bot_map_LR$site_code,"<br>",
-                           "<b>Type:</b>", bot_map_LR$type_name, "<br>",
-                           "<b>Centuries:</b>", bot_map_LR$data_valid_start,
-                           "-", bot_map_LR$data_valid_end, "<br>",
-                           "<b>Chronology:</b>", bot_map_LR$Chronology, "<br>",
-                           "<b>Reference:</b><i>", bot_map_LR$short_ref, "</i>"
-                           ), 
-             label=~htmlEscape(bot_map_LR$site_name)
- ) %>%
-      addAwesomeMarkers(data=bot_map_EMA, lng = bot_map_EMA$x, lat = bot_map_EMA$y,
-                    group="EMA",
-                    icon = Icon_lightgray,
-                    popup = paste(
-                      "<b>", bot_map_EMA$site_name, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", bot_map_EMA$site_code,"<br>",
-                           "<b>Type:</b>", bot_map_EMA$type_name, "<br>",
-                           "<b>Centuries:</b>", bot_map_EMA$data_valid_start,
-                           "-", bot_map_EMA$data_valid_end, "<br>",
-                           "<b>Chronology:</b>", bot_map_EMA$Chronology, "<br>",
-                           "<b>Reference:</b><i>", bot_map_EMA$short_ref, "</i>"
-                           ), 
-             label=~htmlEscape(bot_map_EMA$site_name)
- ) %>%
-        addAwesomeMarkers(data=bot_map_Ma, lng = bot_map_Ma$x, lat = bot_map_Ma$y,
-                    group="Ma",
-                    icon = Icon_green,
-                    popup = paste(
-                      "<b>", bot_map_Ma$site_name, "</b>",
-                      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
-                   "<b>Site ID:</b>", bot_map_Ma$site_code,"<br>",
-                           "<b>Type:</b>", bot_map_Ma$type_name, "<br>",
-                           "<b>Centuries:</b>", bot_map_Ma$data_valid_start,
-                           "-", bot_map_Ma$data_valid_end, "<br>",
-                           "<b>Chronology:</b>", bot_map_Ma$Chronology, "<br>",
-                           "<b>Reference:</b><i>", bot_map_Ma$short_ref, "</i>"
-                           ), 
-             label=~htmlEscape(bot_map_Ma$site_name)
- ) %>%
-  addLayersControl(
-    overlayGroups = c("R", "LR", "EMA", "Ma"),
-    baseGroups = c("Political", "Physical"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  hideGroup(c("LR", "EMA", "Ma")) %>%
-  addResetMapButton() %>%
-  addFullscreenControl() %>%
-  htmlwidgets::onRender("
-    function(el, x) {
-      var myMap = this;
-      myMap.on('baselayerchange',
-        function (e) {
-          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
-        })
-    }")
-
-```
-
-```{r}
-#| echo: false
-#| output: false
-#| eval: false
-
-# If I want a general map
-
-map_pal2 <- leaflet::colorFactor(palette = c("R" = "#283618", 
-                                           "LR" = "#3e9b1c", 
-                                           "EMA" = "#bc4749",
-                                           "Ma" = "goldenrod"
-                                           ), 
-                               domain = bot_map$Chronology)
-
-italy_bot_map2 <- leaflet(data=italy) %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(weight = 1, 
-              smoothFactor = 0.5,
-              opacity = 0.2, 
-              fillOpacity = 0.5,
-              fillColor = "#F9F5EB",
-              color="#D7A86E"
-              ) %>%
-  addCircleMarkers(
-    lng=bot_map$x, lat=bot_map$y,
-    label = ~htmlEscape(bot_map$site_name),
-    color=map_pal2(bot_map$Chronology),
-    fillOpacity = 0.5,
-    stroke = F,
-    radius=4,
-     popup = paste("ID:", bot_map$site_code, "<br>",
-                           "<b>Site:</b>", bot_map$site_name, "<br>",
-                           "Type:", bot_map$type_name, "<br>",
-                           "Chronology (c.):", bot_map$startcentury,
-                           "-", bot_map$endcentury, "<br>",
-                           "Data:", bot_map$available_data, "<br>",
-                           "ID BOT:", bot_map$bot, "<br>",
-                           "ID ZOO:", bot_map$zoo, "<br>",
-                           "ID POLL:", bot_map$poll
-                           )
-  ) %>% 
-  addLegend(position = "bottomright",
-            values = bot_map$Chronology, # data frame column for legend
-            opacity = .7, # alpha of the legend
-            pal = map_pal2, # palette declared earlier
-            title = "Data") %>%
-  addResetMapButton()
-```
-
-::: {.content-visible when-format="html"}
-```{r}
-#| echo: false
-#| label: fig-archaeobot-map
-#| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
-
-italy_bot_map
-
-```
-:::
 
 ## Ubiquity {style="text-align:justify;"}
 
@@ -255,6 +46,7 @@ In @sec-methods, ubiquity has been described as the best solution to present the
 
 # SQL file name: view_archaeobot without the Chronology column
 #plants_export <- read.csv("/Users/robertoragno/Desktop/Learn #R/PhdTests/PhdTests/DATA/Archaeobotany/PlantsExport14July.csv", header=TRUE, sep=";")
+bot_map <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/plants.csv", header=TRUE, sep=";")
 plants_export <- bot_map[-5]
 
 # SQL file name: Archaeobot_Condensed
@@ -3647,10 +3439,6 @@ The richness of plants in urban contexts has been calculated for every phase. As
 
 : Plant richness in urban contexts before and after (**\***) removing incomplete samples. {#tbl-richness-urban}
 
-## Soil types vs Crops
-
-see Rippon et al 2015, p. 81 as a comparison for results and Lodwick chapter in Hamerow and McKerracher 2022, p. 153
-
 ## Macroregion {style="text-align: justify;"}
 
 ### Cereals
@@ -3937,9 +3725,175 @@ m_mg_reg.plot
 ## Section in progress {style="text-align:justify;"}
 :::
 
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+
+
+library(knitr)
+library(kableExtra)
+library(reactable)
+
+# DATA PROCESSING
+# Keep the original data frame unchanged and separate
+Bot_PA = Archaeobot_Condensed
+# Select columns of interest
+Bot_PA = Bot_PA[,c(1,2,4:7,11:24,33,56)]
+# Create a total macroremains column
+Bot_PA$Tot_Macroremains = Bot_PA$Tot..Cereals+Bot_PA$Tot..Pulses+Bot_PA$Tot..Fruits.Nuts
+# Get rid of the tot..pulses and tot..fruits 
+Bot_PA = Bot_PA[,-c(21,22)]
+
+# Convert cereal values to presence absence
+Bot_PA[,10:18] = decostand(Bot_PA[,10:18], method = "pa")
+  
+# Convert NA to absence (0)
+Bot_PA[is.na(Bot_PA)] = 0
+
+# Get a richness column
+Bot_PA$Tot_Cereal_Taxa = rowSums(Bot_PA[,10:18])
+
+# Select only rows that have identified cereal taxa
+Bot_PA = subset(Bot_PA, Tot_Cereal_Taxa > 0)
+Bot_PA = subset(Bot_PA, Tot_Macroremains > 10)
+
+# SUBSETTING DATA
+
+# ROMAN
+# Selecting the Chronology of interest (R) and excluding Central Italy
+Bot_PA.R = subset(Bot_PA, Macroregion!="Central Italy" & Chronology=="R")
+
+# Creating two df with categorical and numerical info
+Bot_PA_categ.R = Bot_PA.R[1:9]
+Bot_PA_data.R = Bot_PA.R[10:18]
+
+# LATE ROMAN
+# Selecting the Chronology of interest (LR) and excluding Central Italy
+Bot_PA.LR = subset(Bot_PA, Macroregion!="Central Italy" & Chronology=="LR")
+
+# Creating two df with categorical and numerical info
+Bot_PA_categ.LR = Bot_PA.LR[1:9]
+Bot_PA_data.LR = Bot_PA.LR[10:18]
+
+## EMA
+Bot_PA.EMA = subset(Bot_PA, Macroregion!="Central Italy" & Chronology=="EMA")
+
+# Creating two df with categorical and numerical info
+Bot_PA_categ.EMA = Bot_PA.EMA[1:9]
+Bot_PA_data.EMA = Bot_PA.EMA[10:18]
+
+## 11th c.
+Bot_PA.Ma = subset(Bot_PA, Macroregion!="Central Italy" & Chronology=="Ma")
+
+# Creating two df with categorical and numerical info
+Bot_PA_categ.Ma = Bot_PA.Ma[1:9]
+Bot_PA_data.Ma = Bot_PA.Ma[10:18]
+
+# What is the total number of samples available if we exclude duplicates 
+# given by samples stretching more chronologies?
+Bot_unique = Archaeobot_Condensed[-6]
+Bot_unique = Bot_unique[!duplicated(Bot_unique),]
+
+# and the total number of selected samples only?
+Bot_PA_unique = Bot_PA[-5]
+Bot_PA_unique = Bot_PA_unique[!duplicated(Bot_PA_unique),]
+
+```
+
+```{r}
+#| echo: false
+#| output: false
+#| message: false
+
+Sample_Sizes = Bot_PA %>%
+  dplyr::count(Macroregion, Chronology) %>%
+  arrange(factor(Macroregion, levels = c("Northern Italy", "Central Italy", "Southern Italy"))) %>%
+  pivot_wider(names_from = Macroregion, values_from = n) %>%
+  arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+Sample_Sizes$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+
+# NOTE: use Archaeobot_Condensed instead of Bot_PA if you want to know sample size before pre-processing
+Sample_Sizes_BeforeProcessing = Archaeobot_Condensed %>%
+  dplyr::count(Macroregion, Chronology) %>%
+  arrange(factor(Macroregion, levels = c("Northern Italy", "Central Italy", "Southern Italy"))) %>%
+  pivot_wider(names_from = Macroregion, values_from = n) %>%
+  arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+Sample_Sizes_BeforeProcessing$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+write.csv(Sample_Sizes_BeforeProcessing, "tables_exported_for_reference/Sample_Sizes_BeforeProcessing.csv", row.names = F)
+
+
+# Let us calculate also the number of seeds in each chronology and macroregion
+Sample_Sizes_Seeds_Effective = Bot_PA %>%
+    group_by(Macroregion, Chronology) %>%
+    summarize(mean_Tot_Cereal_Taxa = sum(Tot_Macroremains)) %>%
+    arrange(factor(Macroregion, levels = c("Northern Italy", "Central Italy", "Southern Italy"))) %>%
+    pivot_wider(names_from = Macroregion, values_from = mean_Tot_Cereal_Taxa) %>%
+    arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+Sample_Sizes_Seeds_Effective$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+
+```
+
+
+```{r}
+#| echo: false
+#| label: tbl-Sample-Sizes-original
+#| tbl-cap: "Sample sizes before pre-processing."
+
+kable(Sample_Sizes_BeforeProcessing) %>% kable_minimal()
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Sample-Sizes
+#| tbl-cap: "Effective sample sizes."
+
+kable(Sample_Sizes) %>% kable_minimal()
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Sample-Sizes-Seeds
+#| tbl-cap: "Effective seed count for each chronology and macroregion. Some samples with very large outliers (e.g. Sirmione, via Antiche Mura) skew the distribution."
+
+kable(Sample_Sizes_Seeds_Effective, digits = 0) %>% kable_minimal()
+
+```
+```{r}
+#| echo: false
+#| output: false
+
+# Calculate the sample richness by macroregion and chronology, using tidyverse
+Sample_Richness = Bot_PA %>%
+  group_by(Macroregion, Chronology) %>%
+  summarize(mean_Tot_Cereal_Taxa = mean(Tot_Cereal_Taxa)) %>%
+  arrange(factor(Macroregion, levels = c("Northern Italy", "Central Italy", "Southern Italy"))) %>%
+  pivot_wider(names_from = Macroregion, values_from = mean_Tot_Cereal_Taxa) %>%
+  arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+Sample_Richness$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Sample-Richness
+#| tbl-cap: "Mean sample richness after pre-processing data."
+
+
+kable(Sample_Richness, digits = 2) %>% kable_minimal()
+
+```
+
 ::: {.content-visible when-format="html"}
 ```{r}
 #| echo: false
+#| eval: false
 #| output: false
 #| code-summary: "Show the code: data preparation"
 #| code-overflow: wrap
@@ -3980,6 +3934,7 @@ Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroreg
 
 ```{r}
 #| echo: false
+#| eval: false
 #| output: false
 #| code-summary: "Show the code: plots"
 #| code-overflow: wrap
@@ -4090,6 +4045,7 @@ Cereals share similar presence values in Roman Northern and Southern Italian sit
 
 ```{r}
 #| echo: false
+#| eval: false
 #| layout: "[[100,100], [1]]"
 #| label: fig-cereal-richness-RvsEMA
 #| fig-cap: "Boxplots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
@@ -4143,160 +4099,171 @@ The suggestion of an Early Medieval shift in cereal farming stated in @sec-macro
 
 -   Removing empty rows (samples that only reported seeds/fruits, but not cereals).
 
+-   Selecting only samples that had at least 10 seeds.
+
 -   Transforming the raw counts into presence/absence, using the function `decostand()` (`method=pa`) in the `R` package `vegan` [@vegan].
-
-::: {.content-visible when-format="html"}
-```{r}
-#| code-fold: true
-#| output: false
-#| code-summary: "Show the code: Pre-processing"
-#| code-overflow: wrap
-# Testing the results: Regionality in the dataset? 
-
-# Load libraries and set seed
-library(vegan)
-set.seed(29)
-
-# Pre processing: remove empty rows
-# Note: The input table is the CONDENSED table without totals
-
-# Selecting all the cereals columns of the plant remains table, keeping some categorical variables 
-cer_macroreg_ubiquity_transp.tot <- Df_Cond_Plants[c(4,5,6,7,11:19)]
-
-# Set NAs to 0
-cer_macroreg_ubiquity_transp.tot[is.na(cer_macroreg_ubiquity_transp.tot)]<- 0
-
-# Selecting all rows with data (since we selected only with cereals, and some sites only had fruits/pulses we might have empty rows)
-cer_macroreg_ubiquity_transp.tot <- cer_macroreg_ubiquity_transp.tot[rowSums(cer_macroreg_ubiquity_transp.tot[5:13])>0,]
-
-# Assigning a column name "Macroregion"
-colnames(cer_macroreg_ubiquity_transp.tot)[1] = "Macroregion"
-
-# SUBSETTING DATA
-
-# ROMAN
-# Selecting the Chronology of interest (R) and excluding Central Italy
-cer_macroreg_ubiquity_transp.tot.Roman <- subset(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="R")
-
-# Creating two dataframes for categorical and numerical columns (Roman)
-cer_macroreg_ubiquity_transp.categ.Roman <- cer_macroreg_ubiquity_transp.tot.Roman[1:4]
-cer_macroreg_ubiquity_transp.data.Roman <- cer_macroreg_ubiquity_transp.tot.Roman[5:13]
-
-# Converting the numerical columns into a presence/absence matrix (using method=pa)
-cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
-cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
-
-
-## EMA
-cer_macroreg_ubiquity_transp.tot<- subset(cer_macroreg_ubiquity_transp.tot, Macroregion!="Central Italy" & Chronology=="EMA")
-
-# Creating two dataframes for categorical and numerical columns (EMA)
-cer_macroreg_ubiquity_transp.categ <- cer_macroreg_ubiquity_transp.tot[1:4]
-cer_macroreg_ubiquity_transp.data <- cer_macroreg_ubiquity_transp.tot[5:13]
-
-# Converting the numerical columns into a presence/absence matrix (using method=pa)
-# Roman
-cer_macroreg_ubiquity_transp.dist.Roman <- decostand(cer_macroreg_ubiquity_transp.data.Roman, method="pa", na.rm=TRUE)
-# EMA
-cer_macroreg_ubiquity_transp.dist <- decostand(cer_macroreg_ubiquity_transp.data, method="pa", na.rm=TRUE)
-
-
-
-```
-:::
 
 After the pre-processing, it was possible to run the PERMANOVA using the function `adonis2()` in the package `vegan`. The function creates a distance matrix and computes an analysis of variance on the matrix. The method chosen to calculate the distance matrix is the `jaccard` distance. The Jaccard distance, based on the Jaccard similarity index, is a value of dissimilarity between sample sets [@kosubNoteTriangleInequality2019]. When compared to other dissimilarity indices, it is more appropriate for presence/absence analyses as it is not based on Euclidean distance.
 
-**Results of `adonis2()`**.
-
 ::: {.content-visible when-format="html"}
 ```{r}
 #| code-fold: true
-#| output: false
-#| code-summary: "Show the code: adonis2() "
-#| code-overflow: wrap
+#| code-summary: Permanova
+#| code-line-numbers: true
+#| message: false
 
-cer_macroreg_ubiquity_transp.div <- adonis2(
-  cer_macroreg_ubiquity_transp.dist ~ Macroregion, 
-  data = cer_macroreg_ubiquity_transp.categ,
-  permutations = 10000, method="jaccard"
-  )
+## PERMANOVA WITH adonis()
+set.seed(29)
+Permanova.Cereals.R = adonis2(
+  Bot_PA_data.R ~ Macroregion, 
+  data = Bot_PA_categ.R,
+  permutations = 10000, 
+  method="jaccard"
+)
 
-cer_macroreg_ubiquity_transp.div.Roman <- adonis2(
-  cer_macroreg_ubiquity_transp.dist.Roman ~ Macroregion, 
-  data = cer_macroreg_ubiquity_transp.categ.Roman,
-  permutations = 10000, method="jaccard"
-  )
+Permanova.Cereals.EMA = adonis2(
+  Bot_PA_data.EMA ~ Macroregion, 
+  data = Bot_PA_categ.EMA,
+  permutations = 10000, 
+  method="jaccard"
+)
+```
+
+```{r}
+#| echo: false
+
+Permanova_Results = data.frame(
+  Phase = c("Roman", "Early Medieval"),
+  R2 = c(round(Permanova.Cereals.R$R2[1], 2), round(Permanova.Cereals.EMA$R2[1],2)),
+  p_value = c(Permanova.Cereals.R$`Pr(>F)`[1], Permanova.Cereals.EMA$`Pr(>F)`[1])
+)
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Permanova-Results
+#| tbl-cap: "Results of the PERMANOVA for the Roman and Early Medieval phases."
+
+kable(Permanova_Results, col.names = c("Phase",
+                                       "R2",
+                                       "p-value"),
+      format = "html"
+      ) %>% kable_minimal()
 
 ```
 :::
-
-*Roman*
-
-```{r}
-#| echo: false
-cer_macroreg_ubiquity_transp.div.Roman
-```
-
-*Early Medieval*
-
-```{r}
-#| echo: false
-cer_macroreg_ubiquity_transp.div
-
-```
 
 The calculation of PERMANOVA on the Roman dataset using the variable `Macroregion` reported a not statistically significant p-value, suggesting a degree of homogeneity. On the other hand, when applied to the early Medieval dataset, the results were highly significant (0\<p\<0.001) with a 99.99% confidence. PERMANOVA has not been calculated on the Late Roman dataset as samples from Southern Italy were too scarce. To confirm the significance of the results of PERMANOVA applied to the EMA dataset, it is necessary to check that its assumptions are met (especially since we are dealing with small groups of data). Firstly, we check the homogeneity of variances. The function `betadisper()` from the package `vegan` provides the distances of group samples from centroids. If the variation is even, the null hypothesis of no difference in dispersion between groups is accepted. To test the variation, it is possible to use the analysis of variance (ANOVA).
 
-::: {.content-visible when-format="html"}
 ```{r}
 #| code-fold: true
-#| output: false
-#| code-summary: "Show the code: betadisper()"
-#| code-overflow: wrap
+#| code-summary: Betadisper
+#| code-line-numbers: true
+#| message: false
 
-# We do not need to calculate the distance separately, but it will be useful later for the betadisper() function
+## BETADISPER
 
-# Distance dissimilarity matrix with the Jaccard method
-cer_macroreg_ubiquity_transp.dist2 <- vegdist(cer_macroreg_ubiquity_transp.dist, method="jaccard", na.rm=TRUE)
+# Creating distance matrix for the R period
+DistMat.R <- vegdist(Bot_PA_data.R, 
+                       method="jaccard", 
+                       na.rm=TRUE)
+
+# Creating distance matrix for the EMA period
+DistMat.EMA <- vegdist(Bot_PA_data.EMA, 
+                       method="jaccard", 
+                       na.rm=TRUE)
 
 # Betadisper: distances of group samples from centroids
-cer_macroreg_ubiquity_transp.betadisper <- betadisper(cer_macroreg_ubiquity_transp.dist2, cer_macroreg_ubiquity_transp.categ$Macroregion)
-```
-:::
+Betadisper.R <- betadisper(DistMat.R, 
+                             Bot_PA_categ.R$Macroregion)
+Betadisper.EMA <- betadisper(DistMat.EMA, 
+                             Bot_PA_categ.EMA$Macroregion)
 
-**Results of `anova()` on the betadisper.**
-
-```{r}
-#| code-fold: true
-#| output: true
-#| code-summary: "Show the code: ANOVA on betadisper()"
-#| code-overflow: wrap
-
-# We will see that the ANOVA's p-value is not significant meaning that group dispersions are homogenous 
-#("Null hypothesis of no difference in dispersion between groups"; https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/betadisper).
-
-anova(cer_macroreg_ubiquity_transp.betadisper) # This should not be significant!
+# Printing distances:
+Betadisper.GroupDistances = data.frame(
+Phase = c("Roman", "Early Medieval"),
+"Northern Italy" = c(Betadisper.R$group.distances[1],Betadisper.EMA$group.distances[1]),
+"Southern Italy" = c(Betadisper.R$group.distances[2],Betadisper.EMA$group.distances[2])
+)
 ```
 
 ```{r}
 #| echo: false
-#| layout: "[[100,100], [1]]"
-#| label: fig-betadisper
-#| fig-cap: "Results of the betadisper() (groups dispersions) on the distance matrix calculated with the Jaccard method." 
-#| fig-subcap: 
-#|   - "Groups dispersions plot with confidence ellipses." 
-#|   - "Boxplot showing equal distances from centroid."
-#| fig-height: 4
-#| fig-width: 5
-#| fid-dpi: 300
+#| label: tbl-Betadisper-GroupDistances
+#| tbl-cap: "Group distances from centroids."
 
-# Now we can plot and see that group dispersions (distances from centroids) are very similar, but compositions seem to be very different. Let's go to adonis to test that.
-plot(cer_macroreg_ubiquity_transp.betadisper, hull=FALSE, ellipse=TRUE, main="Betadisper plot", col=c("#90a955", "#212529"))
+kable(Betadisper.GroupDistances, 
+      col.names=c("Phase","Northern Italy", "Southern Italy"),
+      digits = 2) %>% kable_minimal()
+```
 
-boxplot(cer_macroreg_ubiquity_transp.betadisper, col="khaki4", xlab="Macroregion")
+```{r}
+#| code-fold: true
+#| code-summary: Betadisper
+#| code-line-numbers: true
+#| message: false
+# Checking that the distance from the centroids is not significant:
+Anova.R = anova(Betadisper.R)
+Anova.EMA = anova(Betadisper.EMA)
+
+Anova_Betadisper_Results = data.frame(
+  Phase = c("Roman", "Early Medieval"),
+  p_value = c(Anova.R$`Pr(>F)`[1], Anova.EMA$`Pr(>F)`[1])
+)
+```
+
+```{r}
+#| echo: false
+#| label: tbl-Anova-Betadisper-Results
+#| tbl-cap: "p-values of the ANOVA on the betadisper for the Roman and Early Medieval phases."
+
+kable(Anova_Betadisper_Results,
+      col.names = c("Phase", "p-value")) %>% kable_minimal()
 
 ```
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+#| layout-nrow: 2
+#| label: fig-betadisper
+#| fig-cap: "Results of the betadisper() on the Roman and Early Medieval datasets."
+#| fig-subcap: 
+#| - "Roman - Groups and distances to centroids on the first two PCoA axes."
+#| - "Roman - Boxplots of distances to centroids."
+#| - "Early Medieval - Groups and distances to centroids on the first two PCoA axes."
+#| - "Early Medieval - Boxplots of distances to centroids."
+
+
+# Plotting the betadisper
+# Plot 1
+plot(Betadisper.R, 
+     hull=FALSE, 
+     ellipse=TRUE, 
+     main="R - Betadisper plot", 
+     col=c("#90a955", "#212529"))
+
+# Plot 2
+boxplot(Betadisper.R, 
+        col="khaki4", 
+        main="R - Betadisper plot",
+        xlab="Macroregion")
+
+# Plot 1
+plot(Betadisper.EMA, 
+     hull=FALSE, 
+     ellipse=TRUE, 
+     main="EMA - Betadisper plot", 
+     col=c("#90a955", "#212529"))
+
+# Plot 2
+boxplot(Betadisper.EMA, 
+        col="khaki4", 
+        main="EMA - Betadisper plot",
+        xlab="Macroregion")
+
+```
+
 
 The `betadisper()` graphs (@fig-betadisper) show similar distances from the centroids for the categories `Northern Italy` and `Southern Italy`. In addition, the ANOVA on the `betadisper()` shows that the separation is not significant (p-value over the significance threshold), meaning that the groups dispersions are homogeneous. We can thus be confident in the PERMANOVA results and accept the difference between the two groups of sites under investigation. In other words, the Southern and Northern Italian group of sites are different during the Early Middle Ages for what concerns cereal farming.
 
@@ -4310,72 +4277,23 @@ Running the same tests on the Roman sites failed to separate the two groups of s
 The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distance) (or earth's mover distance) is a measure of distance between two probability distributions on a metric space.
 :::
 
-In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-boxplot-nMDS-R-EMA.
+In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-nMDS-1D-macroregion.
 
-::: {.content-visible when-format="html"}
-**Source code:**
 
 ```{r}
-#| code-summary: "Show the code: Data preparation"
-#| code-overflow: wrap
+#| code-line-numbers: true
 #| code-fold: true
-
-# DATA PREPARATION #
-
-# Creating a simple dataframe just for the purpose of the NCA
-Df_Cond_Plants_simplified <- data.frame(
-  "Chronology" = Df_Cond_Plants$Chronology, 
-  "Type" = Df_Cond_Plants$Type,
-  "Macroregion" = Df_Cond_Plants$name_macroreg,
-  "Weight" = Df_Cond_Plants$weight,
-  Df_Cond_Plants[11:ncol(Df_Cond_Plants)]
-  )
-
-# Joining site typology categories to simplify the output, using library stringr
-library(vegan)
-library(stringr)
-
-Df_Cond_Plants_simplified$Type <- str_replace_all(
-  Df_Cond_Plants_simplified$Type, c(
-    "Rural site, villa" = "Rural", 
-    "Rural site, mansio" = "Rural",
-    "Religious, monastery" = "Religious",
-    "Castle" = "Fortified",
-    "Castrum" = "Fortified")
-  )
-
-# Convert to Presence (1) / Absence (0) using library vegan
-Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)] <- decostand(Df_Cond_Plants_simplified[5:ncol(Df_Cond_Plants_simplified)], method="pa")
-
-# Creating dataframes for the chronologies R and EMA
-Df_Cereals_R <- subset(Df_Cond_Plants_simplified, Chronology=="R" & Macroregion!="Central Italy")
-Df_Cereals_EMA <- subset(Df_Cond_Plants_simplified, Chronology=="EMA" & Macroregion!="Central Italy")
-
-# Selecting only cereals from both dataframes
-Df_Cereals_R <- Df_Cereals_R[1:14]
-Df_Cereals_R[is.na(Df_Cereals_R)] <- 0
-Df_Cereals_R <- Df_Cereals_R[rowSums(Df_Cereals_R[,5:14] != 0) > 0, ] # Removing empty rows
-
-Df_Cereals_EMA <- Df_Cereals_EMA[1:14]
-Df_Cereals_EMA[is.na(Df_Cereals_EMA)] <- 0
-Df_Cereals_EMA <- Df_Cereals_EMA[rowSums(Df_Cereals_EMA[,5:14] != 0) > 0, ]
-
-```
-
-```{r}
-#| echo: false
+#| code-summary: nMDS and Wasserstein distance
 #| output: false
 
 library(ggpubr)
-set.seed(7)
-
 # Perform the metaMDS to 1D for Df_Cereals_R and Df_Cereals_EMA 
-mds_R <- metaMDS(Df_Cereals_R[, c(5:14)], k=1, distance = "jaccard")
-mds_EMA <- metaMDS(Df_Cereals_EMA[, c(5:14)], k=1, distance = "jaccard")
+mds_R <- metaMDS(Bot_PA_data.R, k=1, distance = "jaccard")
+mds_EMA <- metaMDS(Bot_PA_data.EMA, k=1, distance = "jaccard")
 
 # Add the Macroregion data to the metaMDS results for both dataframes
-mds_df_R <- data.frame(mds_R$points, Macroregion = Df_Cereals_R$Macroregion)
-mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Df_Cereals_EMA$Macroregion)
+mds_df_R <- data.frame(mds_R$points, Macroregion = Bot_PA_categ.R$Macroregion)
+mds_df_EMA <- data.frame(mds_EMA$points, Macroregion = Bot_PA_categ.EMA$Macroregion)
 
 # Create dataframes to calculate wasserstein distance
 library(transport)
@@ -4457,31 +4375,18 @@ mds_EMA.boxplot <- ggplot(mds_df_EMA, aes(x=Macroregion, y=MDS1, fill=Macroregio
 ```
 
 ```{r}
+#| echo: false
+#| layout-ncol: 2
 #| label: fig-nMDS-1D-macroregion
-#| fig-cap: "nMDS reduction to one dimension performed on the Roman and early Medieval cereal datasets. The dashed colored lines indicate the mean of the distribution."
+#| fig-cap: "Results of the nMDS on the Roman and Early Medieval datasets."
 #| fig-subcap: 
-#|  - "Roman age."
-#|  - "Early Medieval Age."
-#| layout-nrow: 1
-#| layout-ncol: 2
-#| echo: false
+#| - "Roman - KDE curves of the nMDS. The group mean is represented by the dashed line."
+#| - "Early Medieval - KDE curves of the nMDS. The group mean is represented by the dashed line."
+#| - "Roman - Boxplots of nMDS scores."
+#| - "Early Medieval - Boxplots of nMDS scores."
 
-
-# Plot the two plots side by side
-mds_R.plot 
+mds_R.plot
 mds_EMA.plot
-```
-
-```{r}
-#| echo: false
-#| label: fig-boxplot-nMDS-R-EMA
-#| fig-cap: "Boxplots showing the nMDS scores for Northern and Southern Roman Italy."
-#| fig-subcap: 
-#|  - "Roman age."
-#|  - "Early Medieval age."
-#| layout-nrow: 1
-#| layout-ncol: 2
-
 mds_R.boxplot
 mds_EMA.boxplot
 
@@ -4489,20 +4394,17 @@ mds_EMA.boxplot
 
 ```{r}
 #| echo: false
-#| label: fig-stressplots-nMDS-R-EMA
-#| fig-cap: "Shepards stressplots showing the goodness of fit between ordination distances and observed dissimilarities for both Chronologies."
-#| fig-subcap: 
-#|  - "Roman age."
-#|  - "Early Medieval age."
-#| layout-nrow: 1
+#| label: fig-stressplots-nmds
 #| layout-ncol: 2
+#| fig-cap: "nMDS stressplots. Stress values slightly change everytime we run the function, as it is an iterative algorithm."
+#| fig-subcap: 
+#|  - "Roman dataset. Stress value = 0.27"
+#|  - "Early Medieval dataset. Stress value = 0.31"
 
 stressplot(mds_R, p.col="khaki4", l.col="#212529")
-
 stressplot(mds_EMA, p.col="khaki4", l.col="#212529")
 
 ```
-:::
 
 ### Legumes
 
