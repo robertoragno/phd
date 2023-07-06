@@ -2,27 +2,482 @@
 
 ## Introduction {style="text-align:justify"}
 
-This chapter provides an overview of the zooarchaeological materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. The storing procedures are described in @sec-database.
+This chapter provides an overview of the zooarchaeological materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. In addition to discussing general aspects of the discipline, this chapter also provides a more detailed examination of the specific data available for this research project, which have been stored in the database. The storing procedures are described in @sec-database.
 
-::: callout-important
-## Section in progress {style="text-align:justify;"}
+The objective of zooarchaeology is to recover, identify, and document animal remains from excavated archaeological sites to reconstruct the relationship between humans and other animals, as well as farming practices and food patterns. The name of the discipline has been debated since its origins, with the first reference to its practitioners being "zoologico-archaeologists". Mirroring the anthropological perspective of studying animal remains to gain insights into human behaviour, the discipline is widely referred as "zooarchaeology" especially in the Americas. The term "archaeozoology" is preferred by practitioners who emphasise the biological nature of faunal remains; especially in Africa and Eurasia. Italian scholars refer to the discipline as *archeozoologia*, reflecting this tradition. More alternatives are also available, including "ethnozoology", "paleoethnozoology" and "osteoarchaeology" [@clutton-brockArchaeozoology2017; @reitzZooarchaeology2008, pp. 4-5]. Because this thesis deals with humans' relationship with animals for economic and historical purposes, the term "zooarchaeology" will be used throughout this volume. The importance of archaeology in making inferences about historical environmental questions has already been emphasized in @sec-materials-bot; as with archaeobotany, although textual sources can be useful in answering historical questions, zooarchaeology is essential for verifying and complicating our understanding of the past. Zooarchaeology studies both vertebrate and invertebrate remains. Depending on the research questions, a zooarchaeologist may focus on domestic/wild animals, on a single species, on a specimen (*i.e.*, a single bone) at different scales ranging from a stratigraphic unit to an entire region [@lymanRelativeAbundancesSkeletal1994]. The recovery methods for animal bones include *in situ* examination, screening with sieves, and flotation techniques. All these techniques have already been outlined in @sec-materials-bot. However, it is important to address again the underlying challenges. Visual collection tends to favour larger bones, potentially leading to the loss of smaller finds if not properly sieved. In contrast, flotation proves particularly useful for the recovery of remains such as fish, birds, and mollusca. For instance, fish otoliths, which are structures found in the inner ears of fish, can be challenging to visually identify and are often successfully recovered through flotation. In @fig-screening-flotation-reitz2008, the impact of screening and flotation techniques on the recovery of fish vertebrae from the Kings Bay site, located on the Atlantic coast of Georgia, United States, is illustrated.
 
-Should the maps be here?
+![Influence of screening and flotation techniques on the recovery of fish vertebrae at the Kings Bay site on the Atlantic coast of Georgia, United States. Image after [@reitzZooarchaeology2008, p. 149]](images/Reitz%202008%20p%20149.png){#fig-screening-flotation-reitz2008 fig-align="center" width="400"}
+
+## Sampling {style="text-align:justify"}
+
+Although faunal remains are generally more abundant and easily identifiable compared to botanical remains, the number of recovered remains at a given archaeological site is inevitably influenced by the chosen sampling strategy. As emphasized by Terry O'Connor [-@oconnor2000, pp.28-30], it is crucial to establish a sampling strategy prior to commencing excavation. The author outlines three potential strategies that can be employed in the field:
+
+1.  All-from-all: This strategy involves collecting all bone fragments encountered in every context or deposit within the excavation area. It aims to capture a comprehensive representation of the faunal assemblage without selective biases.
+2.  Some-from-all: In this strategy, a selective approach is taken, and only a portion of the bone fragments from each context or deposit is collected. The selection may be based on specific criteria, such as bone size, element type, or preservation quality. This strategy allows for a more manageable sample size while still providing valuable faunal data.
+3.  Some-from-some: This strategy combines elements of the previous two approaches. It involves selecting certain contexts or deposits for comprehensive sampling (similar to the all-from-all strategy) while applying a selective approach in other areas (similar to the some-from-all strategy). This strategy allows for a balance between comprehensive coverage and practical constraints.
+
+As highlighted in the previous chapter, various drawbacks of different sampling strategies have been discussed, including the limitations of blanket, judgemental (or feature-based), and random approaches. These strategies are influenced by factors such as research questions, time constraints, and economic considerations. The blanket approach, which involves collecting all the bone fragments from every context without any selective criteria, may lead to an overwhelming amount of material to analyse. This can be time-consuming and resource-intensive, especially when dealing with large or complex archaeological sites. The judgemental or feature-based approach relies on selecting specific contexts or features for sampling based on prior knowledge or assumptions about their potential significance. While this approach may provide focused data collection, there is a risk of bias and overlooking important information from other contexts or areas of the site. The random approach involves selecting samples in a random or systematic manner to ensure unbiased representation. However, this approach may not effectively capture the full range of variability within the site and may result in missing important data. As the sampling effort increases, the probability of encountering rare species also tends to rise. By collecting a larger quantity of bone fragments or applying a more comprehensive sampling approach, researchers increase their chances of capturing a broader range of faunal remains, including those that may be less common or uncommonly preserved [@reitzZooarchaeology2008, p. 110]. Ultimately, the choice of a sampling strategy depends on the specific research questions, available resources, and logistical constraints of the excavation project. By considering these factors, researchers can determine the most appropriate approach to ensure the collection of meaningful and representative faunal data within the given constraints.
+
+## Preservation {style="text-align:justify"}
+
+There are several taphonomic processes that influence the preservation of faunal remains in archaeological contexts. While providing an exhaustive list is beyond the scope of this dissertation, a synthesis presented by @oconnor2000 offers valuable insights into these processes:
+
+1.  **Biotic processes** encompass the pre-death factors that influence the composition of the animal population in a specific time and space. These processes include ecological interactions, competition, predation, and disease dynamics among living organisms.
+2.  **Thanatic processes** refer to the events that lead to the death and subsequent deposition of the animal remains. They can be natural, such as natural mortality or predator-prey interactions, or human-induced, including hunting, butchery, and discard practices. Other animals, such as scavengers, can also contribute to the deposition of faunal remains.
+3.  **Perthotaxic processes** involve the movement and destruction of bones before their incorporation into a deposit. This includes various agents such as fluvial action (river currents), scavenging by animals, and human waste management practices that can alter the distribution and integrity of skeletal elements.
+4.  **Taphic processes** encompass the chemical and physical agents that act upon the bones after burial. These processes can either contribute to the preservation or degradation of bones. Factors such as soil chemistry, burial environment, and exposure to moisture, acidity, or other corrosive agents play a role in bone preservation.
+5.  **Anataxic processes** represent recycling processes in which buried bones are re-exposed to external agents such as fluvial action, sub-aerial weathering, trampling, or other attritional processes. These processes can accelerate, redirect, or even halt the physical and chemical changes initiated by taphic processes.
+
+Understanding these taphonomic processes is essential for interpreting faunal remains in archaeological contexts. They provide insights into the complex journey of animal bones from their formation to their recovery and subsequent analysis, shedding light on the potential biases and alterations that may affect the assemblage.
+
+## Counting bones {style="text-align:justify"}
+
+When examining zooarchaeological remains, various methods can be employed to assess the abundance of a specific species at an archaeological site. Two commonly used measures for quantifying abundance are NISP (Number of Identified Specimens) and MNI (Minimum Number of Individuals). Both of them are not without shortcomings, which will be listed below.
+
+### Number of Identified Specimens (NISP) {style="text-align:justify"}
+
+The *Number of Identified Specimens* (NISP) is the measure provided by most reports and is commonly used to estimate the relative frequency of zooarchaeological assemblages. It provides a count of the number of bone fragments identified to bone type and taxon [@orton2010; @lambacher2016]. Although being so widely used, NISP is not without its limitations. One key challenge is its sensitivity to bone fragmentation, as it counts every encountered bone fragment, assigning equal weight to each fragment. However, animal bones exhibit distinct patterns of fragmentation, resulting in variations in fragment counts across species. Furthermore, different animals possess diverse types of hard tissue, leading to variations in the ease of identification for different bone elements [@klein1984; @reitzZooarchaeology2008]. Moreover, the preservation modes of remains play a significant role in the representation of species within the assemblage. Certain species may be better preserved than others due to factors such as differential decay rates or taphonomic biases. Additionally, consumption patterns and butchery practices can influence the preservation of specific bones. For instance, if an animal was butchered outside the settlement and only selected meat portions were brought in, certain bones may be underrepresented in the assemblage [@kent1993]. Excavation methods, such as sieving and flotation, can introduce biases by selectively recovering smaller and more fragile remains like fish vertebrae, mollusc shells, or small mammal bones. Consequently, the application (or lack thereof) of sieving and flotation can introduce biases in the composition of the assemblage. In addition to these challenges, another issue that can inflate NISP counts is the inclusion of an entire skeleton of an animal. This can skew the relative frequency estimates, as a single individual contributes a disproportionate number of bones to the assemblage. To address this concern, another measure called the *Minimum Number of Individuals* (MNI) is often used [@oconnor2000, p.56]. Considering these factors, the NISP measure should be interpreted with caution, taking into account the complexities associated with bone fragmentation, preservation biases, consumption practices, and excavation methods.
+
+### Minimum Number of Individuals (MNI) {style="text-align:justify"}
+
+Introduced by Theodore @white1953, the *Minimum Number of Individuals* (MNI) is a measure that estimates the minimum number of individuals needed to account for all the skeletal elements of a particular species found at a site. MNI takes into account the duplication of skeletal elements within a species, providing a more refined assessment of the faunal assemblage. Analysts determine MNI by examining the bones recovered and identifying the minimum number of individuals required to account for each bone element, considering factors such as articulation, overlap, and symmetry. Despite its utility, MNI has faced criticism from archaeologists, leading to the development of alternative approaches for its refinement. Sándor Bökönyi [-@bökönyi1971; @bökönyi1970] and Raymond @chaplin1971 proposed incorporating additional factors like age, sex, and size to improve the accuracy of MNI calculations. In contrast, Donald Grayson [-@grayson1981; @grayson2014] highlighted the close relationship between MNI and NISP, emphasizing also how sample size affect the MNI estimation. A recognized limitation of MNI is its potential to overestimate the presence of rare taxa within an assemblage. This occurs because a single specimen of a rare taxon is given the same weight (i.e., a count of one) as multiple bones from a more common taxon [@oconnor2000, p.60]. Furthermore, Cornelis and Ina @plug1990 cautioned against using MNI for further numerical analysis, including its conversion to relative frequencies, due to the mathematical incoherence of proportions derived from minimum values. While MNI has been subject to ongoing debate and critique among zooarchaeologists, with some stating that 'critiquing MNI might be considered a growth industry among zooarchaeologists' [@reitzZooarchaeology2008, p. 206], this research primarily relies on NISP as the primary data measure. NISP is commonly reported in zooarchaeological studies, and its estimation methods tend to be less variable compared to MNI. While acknowledging the ongoing discussions surrounding MNI, this research opts to utilize NISP due to its widespread availability and more consistent application in reporting zooarchaeological data.
+
+## Case studies {style="text-align:justify;"}
+
+```{r}
+#| echo: false
+#| output: false
+
+library(kableExtra)
+library(tidyverse)
+
+Zooarch_materials <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Quarto/Database export/Zooarch_Condensed.csv", header=TRUE, sep=";")
+Zooarch_materials[is.na(Zooarch_materials)] = 0
+
+Zooarch_materials$Tot_NISP = rowSums(Zooarch_materials[15:23])
+Zooarch_materials$Tot_PCC_NISP = rowSums(Zooarch_materials[15:17])
+
+# Get only unique samples, getting rid of the chronology (samples with more than one chronology are repeated)
+zooarch_cond_unique = Zooarch_materials[-5]
+zooarch_cond_unique = zooarch_cond_unique[!duplicated(zooarch_cond_unique),]
+
+# Group sizes
+Sample_Sizes_ZOO = Zooarch_materials %>%
+  dplyr::count(Chronology) %>%
+  arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+Sample_Sizes_ZOO$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+
+# NISP Sizes
+NISP_Tot_Sizes = data.frame(
+  Unique_Samples= colSums(zooarch_cond_unique[,23:24]),
+  Repeated_Samples = colSums(Zooarch_materials[,24:25])
+)
+
+NISP_Tot_Sizes = t(NISP_Tot_Sizes)
+colnames(NISP_Tot_Sizes) = c("Total NISP", "Total NISP of pigs/cattle/caprine")
+
+# Nisp Sizes by Chronology
+NISP_Sizes_ZOO = Zooarch_materials %>%
+  group_by(Chronology) %>%
+  summarise(Tot_NISP = sum(Tot_NISP, na.rm = TRUE),
+            Tot_PCC_NISP = sum(Tot_PCC_NISP, na.rm = TRUE)) %>%
+  arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
+
+NISP_Sizes_ZOO$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
+names(NISP_Sizes_ZOO) = c("Chronology", "Total NISP", "Total NISP of pigs/cattle/caprine")
+
+
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Load libraries
+library(sp)
+library(rgdal)
+library(leaflet)
+library(leaflet.extras)
+library(htmltools)
+library(tidyverse)
+library(fontawesome)
+library(vegan)
+
+# Get an Italy shapefile
+#download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/ITA_adm.zip',
+#  destfile = 'italy.zip')
+#unzip(zipfile = 'italy.zip')
+
+italy <- readOGR('Italy_SHP/ITA_Peninsula.shp')
+
+# Grouping
+zoo_map_R <- filter(Zooarch_materials, Chronology == "R")
+zoo_map_LR <- filter(Zooarch_materials, Chronology == "LR")
+zoo_map_EMA <- filter(Zooarch_materials, Chronology == "EMA")
+zoo_map_Ma <- filter(Zooarch_materials, Chronology == "Ma")
+
+#Icon for the map
+
+Icon_red_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'yellow',
+  library = 'fa',
+  markerColor = "red"
+)
+
+Icon_lightred_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor = "lightred"
+)
+
+Icon_lightgray_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor = "lightgray"
+)
+
+Icon_green_zoo <- awesomeIcons(
+  text = fa("cow"),
+  iconColor = 'darkgreen',
+  library = 'glyphicon',
+  markerColor = "lightgreen"
+)
+
+# Build the map
+italy_zoo_map <- leaflet(data = italy) %>%
+  addProviderTiles(providers$CartoDB.Positron,  group = "Political") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical") %>%  addPolygons(
+    weight = 1,
+    smoothFactor = 0.5,
+    opacity = 0.2,
+    fillOpacity = 0.5,
+    fillColor = "#F9F5EB",
+    color =
+      "#D7A86E"
+  ) %>%
+  addAwesomeMarkers(
+    data = zoo_map_R,
+    lng = zoo_map_R$X,
+    lat = zoo_map_R$Y,
+    group = "R",
+    icon = Icon_red_zoo,
+    popup = paste(
+      "<b>",
+      zoo_map_R$Site,
+      "</b>",
+      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+      "<b>Site ID:</b>",
+      zoo_map_R$ID,
+      "<br>",
+      "<b>Type:</b>",
+      zoo_map_R$Type,
+      "<br>",
+      "<b>Centuries:</b>",
+      zoo_map_R$From.Century,
+      "-",
+      zoo_map_R$To.Century,
+      "<br>",
+      "<b>Chronology:</b>",
+      zoo_map_R$Chronology,
+      "<br>",
+      "<b>Reference:</b><i>",
+      zoo_map_R$Reference,
+      "</i><br>",
+      "<b>NISP</b>:",
+      rowSums(zoo_map_R[, c(15:23)], na.rm = T),
+      "<br>",
+      "<br><b>Domestic %:</b> <br>",
+      "Pigs:",
+      round(decostand(
+        zoo_map_R[, c(15:23)], method = "total", na.rm = T
+      )$Pigs * 100, 2),
+      "<br>",
+      "Cattle:",
+      round(decostand(
+        zoo_map_R[, c(15:23)], method = "total", na.rm = T
+      )$Cattle * 100, 2),
+      "<br>",
+      "Sheep/Goat:",
+      round(decostand(
+        zoo_map_R[, c(15:23)], method = "total", na.rm = T
+      )$Caprine * 100, 2)
+    ),
+    label =  ~ htmlEscape(zoo_map_R$Site)
+  ) %>%
+  addAwesomeMarkers(
+    data = zoo_map_LR,
+    lng = zoo_map_LR$X,
+    lat = zoo_map_LR$Y,
+    group = "LR",
+    icon = Icon_lightred_zoo,
+    popup = paste(
+      "<b>",
+      zoo_map_LR$Site,
+      "</b>",
+      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+      "<b>Site ID:</b>",
+      zoo_map_LR$ID,
+      "<br>",
+      "<b>Type:</b>",
+      zoo_map_LR$Type,
+      "<br>",
+      "<b>Centuries:</b>",
+      zoo_map_LR$From.Century,
+      "-",
+      zoo_map_LR$To.Century,
+      "<br>",
+      "<b>Chronology:</b>",
+      zoo_map_LR$Chronology,
+      "<br>",
+      "<b>Reference:</b><i>",
+      zoo_map_LR$Reference,
+      "</i> <br>",
+      "<b>NISP</b>:",
+      rowSums(zoo_map_LR[, c(15:23)], na.rm = T),
+      "<br>",
+      "<br><b>Domestic %:</b> <br>",
+      "Pigs:",
+      round(decostand(
+        zoo_map_LR[, c(15:23)], method = "total", na.rm = T
+      )$Pigs * 100, 2),
+      "<br>",
+      "Cattle:",
+      round(decostand(
+        zoo_map_LR[, c(15:23)], method = "total", na.rm = T
+      )$Cattle * 100, 2),
+      "<br>",
+      "Sheep/Goat:",
+      round(
+        decostand(zoo_map_LR[, c(15:23)], method = "total", na.rm = T)$Caprine *
+          100,
+        2
+      )
+    ),
+    label =  ~ htmlEscape(zoo_map_LR$Site)
+  ) %>%
+  addAwesomeMarkers(
+    data = zoo_map_EMA,
+    lng = zoo_map_EMA$X,
+    lat = zoo_map_EMA$Y,
+    group = "EMA",
+    icon = Icon_lightgray_zoo,
+    popup = paste(
+      "<b>",
+      zoo_map_EMA$Site,
+      "</b>",
+      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+      "<b>Site ID:</b>",
+      zoo_map_EMA$ID,
+      "<br>",
+      "<b>Type:</b>",
+      zoo_map_EMA$Type,
+      "<br>",
+      "<b>Centuries:</b>",
+      zoo_map_EMA$From.Century,
+      "-",
+      zoo_map_EMA$To.Century,
+      "<br>",
+      "<b>Chronology:</b>",
+      zoo_map_EMA$Chronology,
+      "<br>",
+      "<b>Reference:</b><i>",
+      zoo_map_EMA$Reference,
+      "</i> <br>",
+      "<b>NISP</b>:",
+      rowSums(zoo_map_EMA[, c(15:23)], na.rm = T),
+      "<br>",
+      "<br><b>Domestic %:</b> <br>",
+      "Pigs:",
+      round(decostand(
+        zoo_map_EMA[, c(15:23)], method = "total", na.rm = T
+      )$Pigs * 100, 2),
+      "<br>",
+      "Cattle:",
+      round(
+        decostand(zoo_map_EMA[, c(15:23)], method = "total", na.rm = T)$Cattle *
+          100,
+        2
+      ),
+      "<br>",
+      "Sheep/Goat:",
+      round(
+        decostand(zoo_map_EMA[, c(15:23)], method = "total", na.rm = T)$Caprine *
+          100,
+        2
+      )
+    ),
+    label =  ~ htmlEscape(zoo_map_EMA$Site)
+  ) %>%
+  addAwesomeMarkers(
+    data = zoo_map_Ma,
+    lng = zoo_map_Ma$X,
+    lat = zoo_map_Ma$Y,
+    group = "Ma",
+    icon = Icon_green_zoo,
+    popup = paste(
+      "<b>",
+      zoo_map_Ma$Site,
+      "</b>",
+      "<hr style='border:2px solid green; color: solid green, border-radius:2px; margin-top:1.5px; margin-bottom:5px'>",
+      "<b>Site ID:</b>",
+      zoo_map_Ma$ID,
+      "<br>",
+      "<b>Type:</b>",
+      zoo_map_Ma$Type,
+      "<br>",
+      "<b>Centuries:</b>",
+      zoo_map_Ma$From.Century,
+      "-",
+      zoo_map_Ma$To.Century,
+      "<br>",
+      "<b>Chronology:</b>",
+      zoo_map_Ma$Chronology,
+      "<br>",
+      "<b>Reference:</b><i>",
+      zoo_map_Ma$Reference,
+      "</i> <br>",
+      "<b>NISP</b>:",
+      rowSums(zoo_map_Ma[, c(15:23)], na.rm = T),
+      "<br><br>",
+      "<b>Domestic %:</b> <br>",
+      "Pigs:",
+      round(decostand(
+        zoo_map_Ma[, c(15:23)], method = "total", na.rm = T
+      )$Pigs * 100, 2),
+      "<br>",
+      "Cattle:",
+      round(decostand(
+        zoo_map_Ma[, c(15:23)], method = "total", na.rm = T
+      )$Cattle * 100, 2),
+      "<br>",
+      "Sheep/Goat:",
+      round(
+        decostand(zoo_map_Ma[, c(15:23)], method = "total", na.rm = T)$Caprine *
+          100,
+        2
+      )
+    ),
+    label =  ~ htmlEscape(zoo_map_Ma$Site)
+  ) %>%
+  addLayersControl(
+    overlayGroups = c("R", "LR", "EMA", "Ma"),
+    baseGroups = c("Political", "Physical"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  hideGroup(c("LR", "EMA", "Ma")) %>%
+  addResetMapButton() %>%
+  addFullscreenControl() %>%
+  htmlwidgets::onRender(
+    "
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }"
+  )
+
+```
+
+::: {.content-visible when-format="html"}
+```{r}
+#| echo: false
+#| fig-cap: "The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right. **Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
+
+italy_zoo_map
+
+```
 :::
 
-The objective of zooarchaeology is to recover, identify, and document animal remains from excavated archaeological sites to reconstruct the relationship between humans and other animals, as well as farming practices and food patterns. The name of the discipline has been debated since its origins, with the first reference to its practitioners being "zoologico-archaeologists". Mirroring the anthropological perspective of studying animal remains to gain insights into human behaviour, the discipline is widely referred as "zooarchaeology" especially in the Americas. The term "archaeozoology" is preferred by practitioners who emphasise the biological nature of faunal remains; especially in Africa and Eurasia. Italian scholars refer to the discipline as *archeozoologia*, reflecting this tradition. More alternatives are also available, including "ethnozoology", "paleoethnozoology" and "osteoarchaeology" [@clutton-brockArchaeozoology2017; @reitzZooarchaeology2008, pp. 4-5]. Because this thesis deals with humans' relationship with animals for economic and historical purposes, the term "zooarchaeology" will be used throughout this volume. The importance of archaeology in making inferences about historical environmental questions has already been emphasized in @sec-materials-bot; as with archaeobotany, although textual sources can be useful in answering historical questions, zooarchaeology is essential for verifying and complicating our understanding of the past. Zooarchaeology studies both vertebrate and invertebrate remains. Depending on the research questions, a zooarchaeologist may focus on domestic/wild animals, on a single species, on a specimen (*i.e.*, a single bone) at different scales ranging from a stratigraphic unit to an entire region [@lymanRelativeAbundancesSkeletal1994].
+::: {.content-visible when-format="pdf"}
+Insert a map here
+:::
 
+The zooarchaeological data available for this project consists in 465 samples with faunal remains collected from a total of 228 sites dated between the 1^st^ century BCE to the 11^th^ century CE. The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The number of samples for each phase is detailed in @tbl-Zoo-Sample-Sizes, with samples that span more chronologies repeated. As explained in the methods section, some samples were dated between two chronologies, and the entry had to be repeated twice. @tbl-Zoo-NISP-Sizes reports the total NISP count of the samples in the database, with and without the repetition. @tbl-Zoo-NISP-Sizes-by-Chronology shows instead the NISP count of samples divided by chronology. The group sizes in the dataset do not present significant class imbalance issues, particularly for the Roman, Late Roman, and Early Medieval phases. However, the 11^th^ century phase has the smallest group size. This smaller size can be attributed to the fact that it represents the upper boundary of the research period under investigation. From what concerns spatial dispersion, there is no discernible geographical pattern in the distribution of zooarchaeological samples, although certain regions lack a substantial amount of data. Notably, central Italian regions such as Umbria and Marche are among those with limited representation in the dataset. In contrast, there is a concentration of samples specifically related to the Roman and Late Roman chronologies in the city of Rome and Ostia. The uneven distribution of samples in different regions and the concentrated presence of samples in Rome and Ostia are addressed separately in the results section. This section includes an analysis of the effect of Rome on the urban statistical models, examining how the abundance of samples from these locations may impact the overall findings and interpretations.
 
--   What types of remains can we find? Bones, mollusca, etc.
+```{r}
+#| echo: false
+#| label: tbl-Zoo-Sample-Sizes
+#| tbl-cap: "Number of zooarchaeological samples distributed by phase. Samples that span more than one chronology have been repeated."
 
--   This thesis deals with NISP data because...
+kable(Sample_Sizes_ZOO) %>% kable_minimal()
 
-## Sampling
+```
 
-## Counting bones
+```{r}
+#| echo: false
+#| label: tbl-Zoo-NISP-Sizes
+#| tbl-cap: "Total number of remains with and without sample repetition. Samples that span more than one chronology have been repeated."
 
-### NISP
+kable(NISP_Tot_Sizes) %>% kable_minimal()
 
-### MNI
+```
 
-## Preservation
+```{r}
+#| echo: false
+#| label: tbl-Zoo-NISP-Sizes-by-Chronology
+#| tbl-cap: "Total number of remains analysed, divided by chronology. Samples that span more than one chronology have been repeated."
+
+kable(NISP_Sizes_ZOO) %>% kable_minimal()
+
+```
+
+In contrast, there is noticeable topographical variability in the areas that have been sampled. The distribution of samples demonstrates that plains and coasts exhibit a higher number of samples, with 181 and 119 samples, respectively. On the other hand, hills (n = 125) and mountains (n = 40) are slightly less represented in comparison. However, in addition to topographical models, the analysis also incorporates models that consider the elevations of the sites. This approach allows for a more detailed examination of the relationship between animals occurrence and site elevations. The results section provides a breakdown of the sites categorized by their elevation, providing further insights into the influence of elevation on the distribution of zooarchaeological remains.
+
+```{r}
+#| echo: false
+library(waffle)
+library(tidybayes)
+zooarch_cond_unique$Geo <- ifelse(zooarch_cond_unique$Geo == "Hilltop", "Hill", zooarch_cond_unique$Geo)
+
+Zoo_Topography_Samples = as.data.frame(table(zooarch_cond_unique$Geo))
+colnames(Zoo_Topography_Samples) = c("Topography", "Samples")
+
+```
+
+```{r}
+#| echo: false
+#| fig-height: 4
+#| label: fig-topography-zoo-waffle
+#| fig-cap: "Topographical distribution of the zooarchaeological samples."
+
+# Create plot
+ggplot(Zoo_Topography_Samples, aes(fill = factor(
+  Topography, levels = c("Coast", "Plain", "Hill", "Mountain")
+), values = Samples)) +
+  geom_waffle(
+    n_rows = 10,
+    size = 0.33,
+    colour = "white",
+    flip = TRUE,
+    make_proportional = TRUE,
+    na.rm = T
+  ) +
+  scale_fill_brewer(palette = "Spectral", direction = -1) +
+  theme_tidybayes() +
+  theme(
+    legend.position = "bottom",
+    aspect.ratio = 1,
+    strip.background = element_rect(
+      fill = "grey",
+      linewidth = 0.1,
+      colour = "black"
+    ),
+    panel.background = element_rect(fill = "grey100"),
+    panel.border = element_rect(fill = NA, linewidth = 0.1),
+    panel.grid.major.x = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  labs(fill = "Topography",
+       title = "Topographical distribution")
+
+```
