@@ -8,23 +8,15 @@
 
 This chapter presents the methodology employed to carry out this study. The first section discusses statistical computing programming languages such as R. The second section introduces databases and their employment in archaeology, then outlines the construction of the database used for this research. GitHub as a hosting service for this research is discussed in section three. The fourth section describes the logic behind the choice of the temporal boundaries, the creation of chronologies and presents a possible solution to mitigate the problem of chronological fuzziness of samples.
 
-## Data collection
+## Data collection {#sec-data-collection style="text-align: justify"}
 
--   Sources of data
+This section focuses on the data collection phase, complementing the data entry process discussed in the database chapter (@sec-database). The research uses legacy or published archaeobotanical and zooarchaeological data from a variety of sources such as monographs, book chapters, journal articles, conference papers, excavation reports, websites, and dissertations. The site bibliography provides a comprehensive list of these sources, while @fig-publication-type-counts offers a graphical overview of the distribution of primary data sources. A few existing syntheses of archaeobotanical and zooarchaeological data (*cf.* @sec-lit-rev) significantly contributed to the foundation of the database. The data was then organised and stored in a relational database, as detailed in the previous chapter. The publications selected met a number of criteria. Only trusted academic publications were considered, with a requirement for precise site location information or specific geographical context. Only sources that reported raw counts of plant and animal remains were selected. While data quality varied, efforts were made to include details from older excavation reports, albeit with some limitations. Comprehensive information, including sampling strategies, stratigraphic unit (SU) numbers, preservation methods, and sampled soil volume, were incorporated where available. To ensure robust statistical analysis and meaningful results, certain exclusions were necessary. Sporadic finds and low-quantity samples were omitted from particular analyses (e.g., PERMANOVA and nMDS) but retained in the database for comprehensive documentation. For plant and animal taxa, clear and unambiguous taxonomic indications were required for inclusion in the database. For example, plants belonging to the *Triticum* group that could not be further identified to species level were classified as 'Unsp. Cereals'. Similarly, animal bones that were either unidentified or identified only by size (e.g. large ungulates) were stored as 'unidentified' to avoid potential confusion with other taxa.
 
--   Criteria and process of site selection
+The samples selected for this research come from sites that fall within the spatial and chronological boundaries of the study. Inclusion criteria encompassed sites within mainland Italy, dating from the 1^st^ century BCE to the 11^th^ century CE. In order to assess the geographical differences within the peninsula, and to simplify the statistics, the region under review was ideally divided into three parts: Northern, Central, and Southern Italy. Northern Italy lies between today's northern limit and the latitude of about 43°N, the centre between about 42°N and 41°N, and the south from about 40°N to the southern limit of Calabria. To facilitate this division, the boundary of today's regions was followed (@tbl-macroregions-db-join). Although the region of Abruzzo is currently considered part of southern Italy for cultural reasons, it has been included in central Italy following a geographical logic. Although there are important micro-ecological differences, each of these three regions has coastal, plain, hilly and mountainous areas. The choice of boundaries was based on other geographical studies of ancient Italy [@palmisanoLongTermDemographicTrends2021; @parkinsonRadiocarbonDatedTrends2021].
 
-    -   Put periodization here?
+@sec-database, outlines site details, including location, geographical features, site type, and culture. Whenever it was not possible to assign a site to a specific culture (e.g. Byzantine, Lombard, etc.), this field was filled in generically with the corresponding chronology. For this project, decisions have been made on how to classify archaeological sites for the purposes of collecting statistical data and storing it in the database. While some sites are relatively easy to identify and categorise, there can be uncertainty, for example, in classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. The problem of correctly defining a settlement is not new to archaeological theory, and there have been several attempts to define the concept of 'site' itself [@dunnellNotionSite1992; @parsonsArchaeologicalSettlementPatterns1972; @triggerSettlementArchaeologyIts1967; @davisDefiningWhatWe2020; @bowesRomanPeasantProject2020, p.11]. In order to ensure accurate categorisation, it was essential to consider the specific context and characteristics of each site, as well as the definitions and criteria used to classify them. This meticulous approach allowed for a robust selection of sites falling within the spatial and chronological boundaries of the study, thus ensuring the reliability and relevance of the data collected. For example, isolated and smaller settlements that did not have the typical characteristics of the Roman [@grosStoriaUrbanisticaMondo2014] or medieval [@heersCittaNelMedioevo1995; @piccinatoUrbanisticaMedievale1993] city (public buildings, etc.) were recorded as "rural". In the majority of cases, the site classification adhered to the original categorization provided by the respective authors.
 
-    -   Introduce here the 'site types' problem?
-
-    -   Put chronological fuzziness here?
-
--   General protocols followed
-
-### Periodization {#sec-periodization style="text-align:justify;"}
-
-Some of the statistics performed on the dataset have been based on sample periodization, from the Roman age to the Medieval age. The chronologies have been defined as follows:
+Another criterion for selecting a sample was its chronology. Each sample (or collection of samples) had to be associated with a chronological range in centuries or years. Where reports gave only vague chronologies, such as 'Roman' or 'early Medieval', the report was discarded. This approach minimises the risk of misinterpretation when analysing the data. In many cases, publications report chronologies expressed in phases; if these phases were undated, the sample was not included in the database. The scale of detail for samples from the same site entered in the database is contextual and chronological. If the same context (e.g. 'Room A') provided several samples for the same chronological range, these were merged. This choice, although it may result in a loss of scale of detail, was necessary for reasons of time and resources. Most of the statistics performed on the dataset are based on a sample periodisation, from the Roman Age to the Medieval Age. The chronologies were defined as follows:
 
 -   **\[R\] Roman**: from the 1^st^ century BCE to the 2^nd^ century CE.
 
@@ -36,40 +28,14 @@ Some of the statistics performed on the dataset have been based on sample period
 
 In the database, the tables `faunal_chronologies` and `plants_chronologies` connect each bioarchaeological sample to another table with the identification numbers for the periods (e.g. Sample 1 = ID 1). If a sample has a chronology ranging between two periods, two separate entries will be recorded on the database (e.g. Sample 1 -- 2^nd^ to 3^rd^ c. CE = Periods: Roman, Late Roman) with the result of the sample being repeated in both periods.
 
-![Periodization schema.](images/Periodization.png){style="text-align:center;" fig-align="center"}
+![Periodisation schema.](images/Periodization.png){#fig-periodisation style="text-align:center;" fig-align="center"}
 
-### Chronological fuzziness {#sec-chrono-fuzziness style="text-align:justify;"}
-
-::: callout-important
-## Note {style="text-align:justify;"}
-
-Remove?
-:::
-
-One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Taking this into account, I weighted each sample as follows: $$ W=\frac{1}{(C_{end}-C_{start}+1)} $$ Where:
-
--   $C\_{end}$ is the terminus ante quem.
-
--   $C\_{start}$ is the terminus post quem.
-
--   1 has been summed to the denominator to avoid 0 values.
-
-The imported tables already contain a column of weights, as this operation has been performed on the database prior the export. A diachronic table of means for both datasets has been generated using the functions:
-
--   `zooarch_tables` (custom)
--   `Bot_mean_table` (custom)
--   `Bot_mean_fun` (custom)
--   `weightedMedian` (from the package `matrixStats`)
-
-The weight can be used for weighted means and medians, with samples with larger chronologies (hence less precise/fuzzy) weighting less. This method provides each sample with a weight proportional to the length of its chronology so that lower weight values have a smaller impact on the computations.
-
-### Site types
-
-Write that for this project, decisions were made about how to classify archaeological sites in order to gather statistical data and store them in a database. Some sites, such as castra, are relatively easy to identify and categorize. However, there can be uncertainty when it comes to classifying sites as urban or rural, as these terms can have different meanings in the context of archaeology. In order to make these categorizations, it is important to consider the specific context and characteristics of each site, as well as the definitions and criteria being used to classify them.
-
-https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
+One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Rather than creating arbitrary weights that would affect the models in unexpected ways, all samples were considered to have the same weight and impact on the calculations. For example, if a sample spans three centuries, it is difficult to say whether the layer was formed in three centuries (e.g. a waste pit used over a long period), or whether the dating of that layer is less precise because a particular type of pottery was used over a long period.
 
 ## Statistical analysis {style="text-align:justify;"}
+
+::: {.callout-tip collapse="true"}
+## Section structure
 
 -   Statistical approaches (statistical computing)
 
@@ -92,8 +58,9 @@ https://www.sciencedirect.com/science/article/abs/pii/S2212054820300515
     -   Why they did not work in this thesis to explore the data?
 
     -   Dimensionality reduction: nMDS - it is non parametric. Say why I used it.
+:::
 
-Statistical computing, often referred to as computational statistics, is a branch of statistics that uses computational approaches to solving statistical problems. Traditionally, the term *statistical computing* places more emphasis on numerical methods, while *computational statistics* refer to topics such as resampling methods, exploratory data analysis, neural networks, etc. [@rizzoStatisticalComputing2019]. Specifically, computational statistics deals with methods "unthinkable before the computer age" [@lauroComputationalStatisticsStatistical1996]. In archaeology, one widely used programming language for statistical computing is R, which has the advantage of relying on its strong academic community. The community actively contributes to the development of new packages, expanding the functionality and versatility of R for statistical computing. Researchers often choose R for statistical computing in archaeology due to its comprehensive statistical capabilities, flexibility, and the ability to reproduce and share analyses. The syntax and structure of R are specifically designed to facilitate data analysis and statistical modeling, allowing researchers to perform complex analyses efficiently. Additionally, R provides powerful data visualization tools, enabling researchers to create visually appealing and informative graphics to communicate their findings.
+Statistical computing, often referred to as computational statistics, is a branch of statistics that uses computational approaches to solving statistical problems. Traditionally, the term *statistical computing* places more emphasis on numerical methods, while *computational statistics* refer to topics such as resampling methods, exploratory data analysis, neural networks, etc. [@rizzoStatisticalComputing2019]. Specifically, computational statistics deals with methods "unthinkable before the computer age" [@lauroComputationalStatisticsStatistical1996]. In archaeology, one widely used programming language for statistical computing is R, which has the advantage of relying on its strong academic community. The community actively contributes to the development of new packages, expanding the functionality and versatility of R for statistical computing. Researchers often choose R for statistical computing in archaeology due to its comprehensive statistical capabilities, flexibility, and the ability to reproduce and share analyses. The syntax and structure of R are specifically designed to facilitate data analysis and statistical modelling, allowing researchers to perform complex analyses efficiently. Additionally, R provides powerful data visualisation tools, enabling researchers to create visually appealing and informative graphs to communicate their findings.
 
 ### The *R* programming language {style="text-align:justify;"}
 
@@ -103,9 +70,9 @@ R, as described on the [R-Project FAQs](https://cran.r-project.org/doc/FAQ/R-FAQ
 
 #### R Packages
 
-In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 19,533 packages[^methods-2].
+In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 19,877 packages[^methods-2]. This section details some of the packages that have been most useful for this research.
 
-[^methods-2]: Updated on May 19th, 2023.
+[^methods-2]: Updated on August 8th, 2023.
 
 ##### tidyverse
 
@@ -129,15 +96,17 @@ The **rethinking** package [@rethinking] provides tools and resources for statis
 
 ### Archaeobotanical quantifications {style="text-align:justify;"}
 
-::: callout-important
-## Section in progress {style="text-align:justify;"}
+::: {.callout-important collapse="true"}
+## To be written
 
-**Issues**: problems with the data and general problems in sampling
-
-**BIASES**: Talk about the biases and dataset problems here or do it in the Materials chapter?
-
-Write that Quantifications on the archaeobotanical dataset were affected by several biases.
+Write that certain species have been identified as sp. or that others are merged (triticum a/d) because hard to tell apart
 :::
+
+Quantitative analysis of the archaeobotanical remains collected proved difficult due to several biases in the dataset which, if not controlled, could lead to erroneous results. In fact, the majority of published archaeobotanical material can be attributed to judgemental/feature-based sampling, which introduces biases as outlined in the SIGNPOST chapter. Given the paucity of Italian archaeobotanical samples available for the period compared to other European countries (cite McKerracher?), and given that many samples contained outliers, it was not possible to adopt a purely quantitative strategy using the raw counts, but the data had to be processed in other ways. Before going any further, let us consider three sites to give a practical example of the outliers that were so common in the dataset: Parma (Piazza Garibaldi/via Cavestro), Miranduolo, Brescia (via Alberto Mario). The sample from the Parma excavation, Piazza Garibaldi/via Cavestro, comes from an urban cesspit and the seeds have been preserved by waterlogging [@bosiSeedsFruitsPollen2011; @bosiIndaginiArcheobotanicheSul2012]. In this sample, certain taxa skew the distribution and under-represent other plant remains. In the case of the mid 8^th^ to mid 9^th^ century samples from the rural village of Miranduolo, charred samples were taken from layers of a storehouse and storage pits. The outlier here is represented by Triticum aestivum/durum (4,037 seeds) and cereals in general, which have much higher counts compared to legumes or fruits [@buonincontriFarmingRuralSettlement2014]. In other cases, excavators may have taken samples from layers where a large conglomerate of seeds was visible to the naked eye. For example, in Brescia, via Alberto Mario, a small food store contained a large number of charred seeds of Panicum miliaceum (more than 21,000, after which the researchers stopped counting) and Triticum monococcum (750 seeds). Apart from these taxa, other plant remains were found in much smaller quantities [@castiglioniBrescianArchaeobotanicalStudies2019]. It is clear here how the location of the samples affects the type of taxa we might expect to find: cereals are much more common than other taxa in food storage areas, whereas other seeds ingested by humans (figs, strawberries, grapes, etc.) might be expected to be found in cesspits [@smithDefiningIndicatorPackage2013]. In addition to the biases that may be introduced by the choice of sampling strategies, as discussed in @sec-materials-bot, other problems may arise, for example, from the way in which plant remains are preserved. Once again, @fig-pres-mode-species-livarda and @fig-vanderveen2013-preservation-mode give a breakdown of the way in which seeds are preserved under different conditions.
+
+In order to ignore these sources of bias, we would need a very large dataset so that outliers would have less effect on the calculations. Since this is not the case, we need to take precautions to avoid jumping to false conclusions. The first is to transform the data and the second, discussed later, is to use a statistical modelling approach. When it comes to numerical transformations for statistical analysis, there are several examples and approaches in the scientific literature (CITE). Unfortunately, none of them are helpful for outliers of this nature; each site presents its own unique problems. Although @heinrichModellingCropSelectionRoman2017 argues for the need for quantitative archaeobotanical analyses that go beyond presence/absence categories, with the current state of information available for the 1^st^ millennium CE Italian peninsula, this is simply not yet possible. For this reason, most of the analyses of the palaeobotanical dataset presented in this study are based on the presence of particular species in each context. Numerically, this means that raw counts are converted to 1 to indicate that a taxon is present, and to 0 to indicate that it is absent from a sample. Although much safer than other types of data transformation, this transformation has a strong effect on the data and inevitably changes the range of questions that can be asked of our dataset. Within each sample, the data is flattened and the importance of a taxon relative to other taxa in the same context is lost. Instead of asking questions such as "What was the most abundant plant in Roman rural sites?", we can only ask "Which plant was most frequently found in Roman rural sites?".
+
+In one case, for demonstration purposes, the samples were transformed in a different way in order to preserve the quantitative information. In chapter @sec-archaeobotany it is possible to see how different strategies affect the quantification of cereals at different stages. This short case study was chosen because cereals are present in most samples (unlike legumes, for example) and because the chronological division is the one that creates the least imbalance in the data. Other groupings, for example based on site type, would have distorted the results as smaller group sizes are unreliable, especially when frequentist approaches to statistics are used. The purpose of the transformations was to see how the proportions of cereals changed over time. In the first example (@tbl-Cereals-Ratios-Means), simple means were calculated based on the total number of cereals. Whenever a cereal taxon was not present in a sample, its proportion was considered to be 0. In addition, the means are also affected by any other cereal outliers present in the samples. The second example (@tbl-Cereals-Ratios-Means-Pres-Only) shows instead the means calculated on the basis of true presences, excluding missing values (*NAs*). This type of calculation deals well with zero-inflated columns (*i.e.* cereal taxa that are rarely present in a sample), but runs the risk of over-representing rare species. Moreover, the results are still biased by the outliers present in the sample. The third example (@tbl-Cereals-Ranks-ratios-means) uses a different approach. This method involves converting the data into relative ranks using the `decostand()` function found in the *vegan* package [@vegan]. This transformation replaces the original count data with their corresponding increasing ranks, while leaving zeros unaffected. The result is that the taxon with the highest abundance is ranked as 1. This process has the effect of mitigating the effects of pronounced variations within the data, effectively smoothing out extreme values. Crucially, however, it preserves valuable information about the relative abundance of taxa. The values in these tables will be commented on later, but what is important to note here is how different strategies yield different figures, and how important it is to be careful when working with biased datasets. The optimal choice, although very limiting, is to work on presence/absence.
 
 #### Ubiquity {style="text-align:justify;"}
 
@@ -147,38 +116,23 @@ $$
 U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 $$ where $N_p$ is the number of presences, and $N_{tot}$ is the total number of contexts. The result can be multiplied by 100 to obtain a score in %.
 
-This approach has both advantages and drawbacks. Presence analysis minimizes the impact of outliers (overrepresented plant species) on calculations [@wrightMethodologicalIssuesPaleoethnobotany2010, pp. 51-52], but the relative importance of a plant in a particular context is lost. It is also important to keep in mind that taxa richness is influenced by factors including sample size, deposition and preservation modes, and sampling strategies (e.g. sieving methodologies) [@pearsallPaleoethnobotanyHandbookProcedures2015a, pp. 161-2].
+This approach has both advantages and drawbacks. Presence analysis minimizes the impact of outliers (overrepresented plant species) on calculations [@wrightMethodologicalIssuesPaleoethnobotany2010, pp. 51-52], but the relative importance of a plant in a particular context is lost. It is also important to keep in mind that taxa richness is influenced by factors including sample size, deposition and preservation modes, and sampling strategies (e.g. sieving methodologies) [@pearsallPaleoethnobotanyHandbookProcedures2015a, pp. 161-2; @banningAnalysingPlantRemains2000]. In general, larger sample sizes tend to produce more diverse samples, while smaller samples under-represent rarer species [@plogSampleSizeRichnessRelation1993; @kadanePossibleStatisticalContributions1988]. Despite these limits, ubiquity is the best option for immediate reading of the botanical dataset of the Italian peninsula. The variability of the seed/fruit samples is too high, with different species being outliers in different sites. As mentioned earlier, the probable reason for this is probably the poor quality of sampling, which usually occurs after an agglomerate of seeds is found during excavation. Typically, agglomerates are found in specific storage or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this problem by providing a score based on the percentage presence of a plant species in the samples considered.
 
--   Remind the reader about the sample size problem. Somewhere (maybe Pearsall 2005 chapter ubiquity) there was a graph that showed how ubiquity is influenced by sample size
+In addition to the general calculation of the diachronic ubiquity across the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an `R` function to subset data related to northern, central and southern Italian regions. For a clearer reading of the plot, I divided the plants into--`Cereals`, `Pulses` and `Fruits/Nuts`. The results are presented in @sec-archaeobotany.
 
--   Write about the problems of this dataset that led to the choice of ubiquity as parameter
+#### Richness and diversity {style="text-align:justify;"}
 
-Ubiquity is the best option to immediately read the Italian peninsular botanical dataset. The variability in the seeds/fruits samples is too high, with different species being outliers in different sites. A likely reason for this is probably the poor sampling quality, usually occurring after an agglomerate of seeds is found during excavation. Normally, agglomerates are found in specific storage places or processing areas (e.g. wine/olive processing quarters), skewing the distribution of the curve. Ubiquity overcomes this issue, as it provides a score based on the percentage of presences of a plant species in the samples considered.
+Species richness ($S$) is the number of species found within a community or ecosystem. The boundaries of the region are defined by the researcher. While ecologists use sampling or censuses to obtain the richness value, archaeobotanists can only rely on sampling, counting the presence of species in the area under investigation [@mooreDiversityTaxonomicFunctional2013]. Species diversity is a measurement of species richness combined with species evenness, meaning that it takes into account not only how many species are present, but also how evenly distributed the numbers of each species are. There are several diversity indices used in ecology, all of which include abundance in the calculation. Given the biases in the dataset discussed earlier, it is safer to calculate diversity by grouping the samples only chronologically, so that the imbalance in the groups is not too high. Species diversity can be a useful indicator of the centralisation of agricultural practices towards specialised production or the specialised storage/import of specific products. Two diversity indices are commonly used in archaeobotany: the Shannon Equitability Index ($E_{H}$) and the Simpson Index (D). Both of these measures range from 0 to 1, where a value of 0 indicates an uneven assemblage or low diversity, while a value of 1 indicates maximum diversity. The Shannon Equitability Index ($E_{H}$) assesses evenness by considering both species diversity and their distribution. In simpler terms, a higher $E_{H}$ score indicates a more balanced spread of individuals among species. Also referred to as the Pielou index, this measure is a variant of the Shannon index [@hillDiversityEvennessUnifying1973; @pielouMeasurementDiversityDifferent1966]. Its calculation follows the formula: $$E_{H} = \frac{ - \sum\limits_{i=1}^{S} p_{i} \cdot \ln p_{i}}{\ln S}$$
 
-In addition to the general calculation of the diachronic ubiquity in the entire peninsula, it is also important to look for regional differences in the archaeobotanical dataset. To do so, I created an `R` function to subset data related to Northern, Central and Southern Italian regions. For a clearer reading of the plot, I divided the plants into--`Cereals`, `Pulses` and `Fruits/Nuts`. The results are in @sec-archaeobotany.
+Here, $\sum\limits_{i=1}^{S}$ indicates the sum across all species, with $i$ ranging from 1 to $S$, representing the total number of species. $p_{i}$ stands for the proportion (relative abundance) of the $i$th species, and $ln$ signifies the natural logarithm. The term $S$ denotes the total number of species in the ecological community.
 
-#### Diversity {style="text-align:justify;"}
+The Simpson index, on the other hand, is a different measure of species diversity that emphasises dominance within a community. It quantifies the probability that two randomly selected individuals belong to the same species. Higher values of the Simpson Index indicate lower diversity, with greater dominance of a few species [@simpsonMeasurementDiversity1949]. The calculation of the Simpson Index is given by the formula: $$D = 1 - \sum\limits_{i=1}^{S} p_{i}^2$$ The terms of this formula are equivalent to the previous ones, with $\sum\limits_{i=1}^{S}$ representing the sum across all species, with $i$ ranging from 1 to $S$. Again, $p_{i}$ represents the proportion of the $i$th species. By subtracting the sum to 1, the Simpson Index ($D$) ranges from 0 to 1, where a value of 0 indicates maximum diversity (each species is equally abundant), and a value of 1 indicates minimum diversity (one species dominates the community).
 
-::: {#species-richness-notes .callout-note}
-## Notes:
+Examining both measures together provides a more holistic view of the ecological characteristics of a community. The Shannon Equitability Index emphasises evenness, showing the balance of species distribution, while the Simpson Index highlights dominance and the prevalence of abundant species. The two indices presented above are not the only diversity and equitability indices available in scientific literature. Ecological diversity indices have indeed undergone several stages of critiques, with those advocating for better and more mathematically sound indices and those advocating that ecologists should stop using such indices and move on to other methods, such as multivariate analysis [@barrantesConceptualStatisticalProblems2009; @dalyEcologicalDiversityMeasuring2018; @morrisChoosingUsingDiversity2014; @heipComparingSpeciesDiversity1974]. In summary, although diversity indices can help to read the distribution of species within archaeobotanical samples, caution is required in their interpretation.
 
-Introduce the concept of diversity. Why is it useful?
-:::
-
-**Species richness** ($S$) is the number of species found within a community or ecosystem. The boundaries of the region are defined by the researcher. While ecologists use sampling or census to obtain the richness value, archaeobotanists can only rely on sampling, counting the presence of species in the area under investigation [@mooreDiversityTaxonomicFunctional2013]. **Species diversity** is a measurement of species richness combined with **species** **evenness**, meaning it takes into account not only how many species are present but also how evenly distributed the numbers of each species are.
-
-There are different ways to calculate species diversity...
-
-Shannon-W
+In this study, both diversity indices were applied to each sample in the dataset to produce a score. The diversity scores for each site were later modelled using a Bayesian approach, which is explained in more detail in the following sections of this chapter. The mathematical breakdown of the models specific to plant richness and diversity is presented in @sec-archaeobot-results-richness-diversity.
 
 
-## Multivariate statistics {#sec-met-multivariate-statistics style="text-align:justify;"}
-
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-:::
-
-This research uses multivariate analysis to explore possible relationships within the sets of environmental data under investigation. Univariate analyses can be easily plotted and visualized with bar charts, histograms and density curves. A scatterplot (or scattergram) shows the relationship between two variables by plotting their values on the axes of a diagram using Cartesian coordinates. This relationship can also be mathematically measured by calculating a distance between two points in the graph. However, the relationship between more than two variables is much harder to read on a scatterplot, as it would require as many axes as the number of variables. If our analysis is exploratory, we might not know yet where to look for correlations. A possible solution is analysing each combination of two variables in the dataset and measure their correlation. This would require too much computation time if the dataset had a large number of variables, that is to say if we are dealing with big data. In addition, we would only gather information about the relationship between two variables, when there might be another factor influencing a trend or phenomenon. Multivariate statistics has a wide range of applications, including grouping and multidimensional scaling, as well as in machine learning and predictive analysis [@fletcherDiggingNumbersElementary2005]. In this research, multivariate methods have been applied both to the botanical and faunal datasets, mainly with the objective of *(i)* testing hypotheses between multiple variables and *(ii)* reducing the dimensionality of data to---assess which variables are the main drivers of change in the datasets and examine relationships between these variables.
 
 ### Statistical hypothesis testing {style="text-align:justify;"}
 
@@ -187,106 +141,6 @@ Explain what is hypothesis testing
 #### PERMANOVA
 
 **Permutational multivariate analysis of variance** (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not. [@andersonPermutationalMultivariateAnalysis2017].
-
-### Dimensionality reduction and ordination {style="text-align:justify;"}
-
-Dimensionality reduction techniques transform high-dimension datasets into a low-dimension ordination space, with the intention of maintaining the geometry and data structure as close as possible to the original dataset. The **dimension** of a dataset is given by the number of variables (*i.e.* the columns in the table). As anticipated in @sec-met-multivariate-statistics, as each variable is graphically represented by an axis, it would be virtually impossible to represent more than three axes in a graph. Ordination allows to reduce data dimensionality to usually one to three (at most) dimensions. Moreover, focusing on a reduced number of dimensions reduces the amount of "noise" that can mislead the interpretation [@gauchMultivariateAnalysisCommunity1982]. The points generated through ordination techniques (the objects in our dataset) can eventually be plotted in a scatterplot. In most of the ordination methods, points plotting closer together in graph are more similar, whereas points far apart from each other are more dissimilar [@shennanQuantifyingArchaeology1997, p. 197]. For instance, one could perform an ordination on a group of burials in a cemetery where each point represents a single burial assemblage. After the ordination it is also possible to group the new reduced set of variables, to observe differences between groups and facilitate the interpretation. In the previous example, a group might be represented by burials of the same ethnic group, status, etc.
-
-Many of the ordination techniques described in this chapter developed in fields outside archaeology, and are thus borrowed from disciplines as community ecology. Ecologists regularly apply ordination methods for the study of environmental gradients, so that the term "gradient analysis" is often used interchangeably with "ordination". An environmental gradient refers to variations in site characteristics (*e.g.* time, elevation, temperature, vegetation, etc.), which in turn can affect biotic factors (*e.g.* species abundance, diversity, etc.) [@grebnerForestDynamics2013]. The purpose of ordination is then to identify the cause of ecological processes in the dataset. Generally, it is possible to apply ordination on datasets in which the variables have a cause-and-effect (*e.g.* climate vs. plant species) or mutual influences on each other. There are two main types of ordination, or gradient analysis, techniques (see @tbl-gradient-analysis): **direct** (constrained) or **indirect** (unconstrained). The objective of indirect (unconstrained) gradient analysis is to identify patterns between samples of 'dependent variables' (*e.g.* which sites are more similar according to their species composition). Conversely, direct gradient (or constrained) analysis includes more information (or tables) in a single analysis---the dependent variables are now constrained to be a function of other sets of 'independent variables' (usually environmental proxies). In short, a constrained analysis uses both datasets to find the best possible mathematical relationship between the dependent and independent variables. In this sense, direct gradient analysis can be considered as an extension of unconstrained analysis [@symsOrdination2008]. The choice between using constrained or unconstrained methods for ordination strictly depends on the research questions and on the researcher's dataset.
-
-+-----------------+--------------------------------------------+-----------------------------------------+
-| Response model  | Indirect gradient analysis                 | Direct gradient analysis                |
-+=================+============================================+=========================================+
-| ***Linear***    | Principal component analysis (PCA)         | Redundancy analysis (RDA)               |
-+-----------------+--------------------------------------------+-----------------------------------------+
-| ***Unimodal***  | Correspondence analysis (CA)               | Canonical correspondence analysis (CCA) |
-|                 |                                            |                                         |
-|                 | Detrended CA (DCA)                         | Detrended CCA                           |
-+-----------------+--------------------------------------------+-----------------------------------------+
-| ***Monotonic*** | non-metric multidimensional scaling (nMDS) |                                         |
-+-----------------+--------------------------------------------+-----------------------------------------+
-
-: Ordination methods used in gradient analysis. Table after @cuffneyAquaticEcosystemsIndicators2014 [p. 149] {#tbl-gradient-analysis}
-
-#### PCA {style="text-align:justify;"}
-
-::: callout-note
-## Eigenvalues and eigenvectors {style="text-align:justify;"}
-
-Both PCA and CA are methods based on eigenanalysis. The analysis of eigenvalues and eigenvectors will not be described in detail in this chapter, and the meaning of the terms will be only briefly explained in the text. However, some information must be given for the eigenanalysis-based ordination methods:
-
--   The methods are performed on a square symmetric matrix (for instance a correlation matrix);
-
--   The order of the variables is not important for the result;
-
--   Axes are ranked according to their eigenvalues (*i.e.* the first axis has the largest eigenvalue, the second the second-largest, etc.)
-
--   Eigenvalues have mathematical meaning that is important for the interpretation of our data.
-:::
-
-**Principal component analysis** (PCA) is an useful tool to identify possible patterns or sub-groups in data. The input variables in the dataset must be numerical (or at least dichotomous). If used for machine learning, PCA is in fact an *unsupervised* method, meaning that the data points will be unlabelled after the transformation. As for other dimensionality reduction methods, the algorithm tries to preserve the global structure of data by finding a space in which dimensions can be reduced without losing much information. In other words, PCA optimizes the loss of variance. The first step in PCA is creating a correlation matrix or covariance matrix, to extract the eigenvalues and eigenvectors. The decision between correlation or covariance matrix depends on our data and on our research questions. Correlation matrices are helpful if our variables have different units (*e.g.* lenght, volume, etc.). Covariance matrices can be used if the variables have the same unit and comparable variances. The latter is an important factor to consider before choosing covariance matrices, as the biggest variances will overshadow the others [@carlsonQuantitativeMethodsArchaeology2017, p. 267]. For PCA, the **eigenvalues** are the variances of the principal components (so that the first component has the largest eigenvalue) and the **eigenvectors** are the principal component loadings (the score for each variable in the new dimensional space). After extracting the eigenvalues and eigenvectors, the user must decide how many components he will use. The components (defined as the sum in % of the eigenvalues) are the axes in our new dimensional space. Most of the times, the first two components are enough to explain the variance in our dataset. For instance, if the first two axes explain 80% and 12% of the variance, it is acceptable to use a 2D graph---the graphical representation of the two axes will explain 92% of the variance. It is possible to choose the appropriate number of components by using a scree plot, which shows the amount of variance for each component. Scree plots are an important of PCA, because they allow us to see how many components have a significant variance (eigenvalue). A significant variance must be greater than 1. If more than 2 or 3 components have a variance greater than 1, PCA might not be the best method for reducing our set of data. The example in @fig-screeplot-pca-carlson2017 shows that PCA in this case is an appropriate method, as only the first two components have variances greater than 1. Therefore we can discard the other components as they are of little significance.
-
-![Example of a scree plot showing that only the first two components have a variance greater than 1. Figure after @carlsonQuantitativeMethodsArchaeology2017 [p. 271]](images/Carlson2017p271-Scree%20plot%20PCA.png){#fig-screeplot-pca-carlson2017 fig-alt="Carlson 2017, p.271 - Scree plot" width="400"}
-
-Most of the statistical packages offer an automatic rotation of the axes for an easier interpretation of the results, which is more important if the data has been standardised prior to the calculations.
-
-##### Interpreting a PCA
-
-PCA are often visualised through biplots, which shows at the same time the scores of the observations (rows) and the loadings of the variables (columns). Generally, the x-axis of the plot represents the first component, and the y-axis the second component. Making sense of the plotted **observations** is straightforward---points that are closer together are more similar and they can create clusters. It is important to remember that first component of the PCA lays on the x-axis, so differences in clusters on the first component (*i.e.* the horizontal distance) is actually larger than differences in clusters on the second component (*i.e.* the vertical distance). Interpreting the **variable** loadings can be more difficult. The variables are represented by arrows, implying that the variable increases in the direction of the arrow and decreases in the opposite direction. The direction of the arrow is given by the loadings of the first component---if the loadings are negative the arrows will point to the left. If the signs of the loadings are flipped the result will be the same but the arrows will point towards opposite directions. The arrows show how strongly each variable influences a principal component, with longer arrows being the best described in the dimension. The angle between the arrows also indicate extra information useful for the interpretation:
-
--   If two arrows form a small angle, the two variables are positively correlated.
-
--   If two arrows form a large diverging angle, the two variables are negatively correlated.
-
--   If two arrows form an angle close to 90°, there might be no correlation at all.
-
-@fig-pca-carlson2017 shows an example of a PCA biplot. All the arrows (variables) point to the same direction, but we can interpret their correlations using the angles as described above. For example, B1 and B2 are not correlated, as they form an angle of 90°. On the contrary, the variables B and L are positively correlated, as they form a very small angle.
-
-![PCA Biplot, after @carlsonQuantitativeMethodsArchaeology2017 [p.274]](images/Carlson2017p274-PCA.png){#fig-pca-carlson2017 fig-alt="PCA Biplot, Carlson 2017 p. 274" width="600"}
-
-#### CA
-
-**Correspondence analysis** (CA) is a dimensionality reduction technique that can be applied to contingency tables. Contingency tables (or crosstabs) are two-way tables used to display frequency data formed by two categorical variables. In some ways, correspondence analysis is similar to PCA, being an indirect gradient analysis[^methods-3] used to summarize categorical variables. As opposed to maximising the variance, CA maximises the degree of correspondence between rows and columns (*i.e.* observations and variables). The distance matrix used to perform the analysis is obtained from the chi-square distance between the rows and columns profiles. This is a modification of the chi-square statistic for hypothesis testing [@tallaridaChiSquareTest1987]. An in-depth technical and methodological breakdown of correspondence analysis is beyond the scope of this text, and readers can refer to @greenacreCorrespondenceAnalysisPractice2021. As in PCA, the analysis generates---eigenvalues, row coordinates (scores), and column coordinates (loadings). An important distinction must be made with PCA with regard to eigenvalues. In PCA, eigenvalues refer to the 'variation explained'. Conversely, in CA eigenvalues represent the **inertia**, the correlation coefficient between rows and columns (*i.e.* how well does the row correspond to the column?).
-
-[^methods-3]: It is important not to confuse correspondence analysis (CA) with canonical correspondence analysis (CCA), which is a direct gradient analysis method.
-
-Correspondence analysis is appropriate for exploring non-negative data (*e.g.* relative abundance, counts, presence/absence) in a contingency table, and examining the relationships between cells in a row, in a column, and their interrelationship [@baxterExploratoryMultivariateAnalysis2015, p. 101]. On a practical level, CA can be used to compare assemblages from different sites, to answer questions such as "which sites do certain finds correspond to?" or "which sites are more similar according to their assemblages?". This technique is extremely useful for archaeologists, even though its reception by the archaeological community has been slow. CA has been used by archaeologists since the mid-70s in France, although the technique was only introduced to the English-speaking audience in the 80s with a paper by @bolvikenCorrespondenceAnalysisAlternative1982, and became more popular in the 90s [@baxterCorrespondenceAnalysisArchaeologists2010; @baxterExploratoryMultivariateAnalysis2015]. One of the biggest drawbacks of CA is its sensitivity to outliers (values that are either much bigger or much smaller when compared to the others in the table). Some of the samples used in this project suffer from this problem, and the causes of outliers will be discussed in more detail later in this text[^methods-4]. The algorithm tends to place larger abundances towards the centre of the diagonal, and small or zero values away from the diagonal---it is indeed a bad idea to use CA with tables containing outliers. Outliers represent a major problem in CA, as their presence will determine the scale of the biplot, thus clustering the other points closer together, and perhaps obscuring some of the patterns we are interested in finding. In this eventuality, these points might be poorly ordinated. A possible way to overcome this issue would be to check whether the other dimensions are more appropriate for the representation, even though the sensible thing to do would be to remove these outliers from the original contingency table and to study them separately. Practical examples of outliers are rare species, for instance rows with a few non-zero values. Rare species should not be studied with CA, unless the table only contains rare species, with comparable values. As @baxterCorrespondenceAnalysisArchaeologists2010 [p. 225] note, we should not regard this omission as "subjective and unjustified data manipulation"---there are other ways to visualise outliers along with the rest of our data, for instance boxplots.
-
-[^methods-4]: Insert here link to BOT bias and ZOO bias
-
-In `R`, common implementations of correspondence analysis are included in the packages `MASS`, `FactoMineR` and `vegan`. CA has been used several times in this research using the function `cca()` from the `vegan` package, which was applied to the presence/absence archaeobotanical dataset (\*\*add where else\*\*[^methods-5]). The function `cca()` performs a canonical correspondence analysis (CCA), but it can also be used for correspondence analysis.
-
-[^methods-5]: remember to change this
-
-##### Interpreting a CA
-
-Correspondence analyses are also visualised through biplots. As in PCA, the horizontal axis represents most of the variance, and the vertical axis is the second most representative dimension. A classic example for understanding and interpreting CA comes from a survey on the smoking habits of 193 employees in a fictitious company (@tbl-ca-smoking-example). The staff members are categorised according to their position in the company (rows) and smoking habits (columns).
-
-| Staff                | None | Light | Medium | Heavy |
-|----------------------|------|-------|--------|-------|
-| Senior Manager (SM)  | 4    | 2     | 3      | 2     |
-| Junior Manager (JM)  | 4    | 3     | 7      | 4     |
-| Senior Employee (SE) | 25   | 10    | 12     | 4     |
-| Junior Employee (JE) | 18   | 24    | 33     | 13    |
-| Secretaries (SC)     | 10   | 6     | 7      | 2     |
-
-: Smoking habits of staff groups, example after @greenacreTheoryApplicationsCorrespondence1984. {#tbl-ca-smoking-example}
-
-The technical details of how the algorithm computes scores for this dataset are described in @greenacreCorrespondenceAnalysisPractice2021 [pp. 65-72]. After computing the CA, it is possible to visualise the biplot. In @fig-ca-example-smokers, the x-axis explains 87.8% of the variance, and the y-axis 11.8%. Together, they explain 99.6% of the total variance in the dataset, an optimal representation of the dataset. Much of the variance is explained by the first component (x-axis), and the horizontal distance between points is thus much more important than the vertical distance (on the y-axis).
-
-![Correspondence analysis performed on @tbl-ca-smoking-example, image after @greenacreCorrespondenceAnalysisPractice2021 [p. 67].](images/Greenacre%202007%20figure%20p%2067.png){#fig-ca-example-smokers width="400"}
-
-A scree plot can be helpful to evaluate the number of dimensions to choose, representing eigenvalues (or variances) from the largest to the smallest. The number of dimensions should be chosen by looking at where the scree plot starts to bend and the eigenvalues start to become small. An example of a scree plot has already been provided in @fig-screeplot-pca-carlson2017. The biplot contains points both for rows and columns. As the distances between points are chi-squared distances, for the interpretation of the results row points closer together are more similar, and the same logic applies to column points. However, one should be careful when interpreting distances between row and column points. The way to interpret their correlation is similar to the PCA:
-
--   If angle formed by the lines connecting the row and column labels to the origin is small, the association is strong.
-
--   If the angle is 90°, there is no association.
-
--   If the angle is near 180°, the association is negative.
-
-In addition to what already mentioned, it is important to remember that points away from the origin and the edges are the most informative, as they might represent a better ordination.
-
-Returning to the interpretation of the CA in @fig-ca-example-smokers, from the example concerning the smoking habits of the staff members in a company, it is easy to see how the smoking categories (on the left) are separated from the non-smokers (on the right). The groups that display the biggest separation are Junior Employee-Junior Manager, against Senior Employee. Secretaries are closer to Senior Employees. On the vertical axis, it is possible to see how Junior Employees are relatively more light smokers when compared to Junior Managers.
 
 #### nMDS {#sec-met-nmds}
 
@@ -318,6 +172,8 @@ If the solution has produced a good stress level for the number of dimensions re
 In this project, nMDS has been applied to the Roman and early Medieval cereal datasets, with the scope of dimensionality reduction. The dataset has been reduced to one dimension to show a greater degree of separation between Northern and Southern Italy in the early Middle Ages. The entire process of data preparation and processing is described in WRITE WHERE.
 
 ## Bayesian approach and multilevel modeling
+
+Discuss the rationale for using a multi-source archaeological study, integrating environmental proxies such as animal and plant remains. Explain the significance of using a Bayesian approach to multilevel modeling and the application of beta-binomial models for data analysis. Justify the use of the selected datasets and the importance of a holistic approach.
 
 -   Discuss the use of a Bayesian approach in the analysis.
 
@@ -393,7 +249,6 @@ curve(dbeta2(x,pbar,theta), from=0, to=1,
 -   Discuss the rationale behind integrating archaeological, environmental, and textual records for a comprehensive analysis.
 
 -   Describe any challenges or considerations encountered during the integration process.
-
 
 ## Evaluation of Agricultural Strategies
 

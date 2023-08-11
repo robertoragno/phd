@@ -294,7 +294,7 @@ Page under construction
 <h2 style="text-align:justify" data-number="5.3" class="anchored" data-anchor-id="sec-environm-db"><span class="header-section-number">5.3</span> Creating an Environmental Archaeology database</h2>
 <p>An integrated database with environmental archaeology data is still missing in Italy. A first step towards botanical data digitalisation has been the <a href="https://brainplants.successoterra.net">BRAIN project</a> (Botanical Records of Archaeobotany Italian Network), a census of the Italian excavations that reported archaeobotanical data <span class="citation" data-cites="mercuriPollenMacroremainsHolocene2015">(<a href="references.html#ref-mercuriPollenMacroremainsHolocene2015" role="doc-biblioref">Mercuri et al., 2015</a>)</span>. The website, although not providing raw data, has been useful to the bibliographical research for this project. For what concerns faunal remains, a database is missing, although a pilot project was started at the University of Siena by <span class="citation" data-cites="boscatoPropostaDiDatabase2007">Boscato et al. (<a href="references.html#ref-boscatoPropostaDiDatabase2007" role="doc-biblioref">2007</a>)</span>. The database was created using FileMaker Pro and was likely never published.</p>
 <p>For the scope of this project, it was thus necessary to create a database that contained raw environmental data. The creation of a database for this research responded to the need of a systematic approach in storing environmental data in a common format and in a way that is convenient for querying, rather than merely archiving the information. The goal is to have data readily available for exploratory data analysis, in an automated process that does not require to adapt the query and manually wrangle data each time a new sample is added to the collection. This project uses <a href="https://mariadb.com">MariaDB</a>, a fast and stable fork of MySQL.</p>
-<p>The database was structured with the creation of 21 tables. The table <code>site_list</code> is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the macroperiod<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and by the centuries, with two columns: <code>startcentury</code> and <code>endcentury</code>. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).</p>
+<p>The database was structured with the creation of 21 tables. The table <code>site_list</code> is the core table, from which most of the other tables in the schema depend. The entries in the table are based on the chronology of a single sample. The chronology is defined both by the phase<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and by the centuries, with two columns: <code>startcentury</code> and <code>endcentury</code>. If a context has been sampled more than once, there will be as many entries as many chronologies. If a context has been sampled both for seeds and bones, the sample IDs will be recorded on the same entry (if the chronologies match).</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -316,10 +316,9 @@ Page under construction
 <p>Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. In addition to the reference to the samples table, the table <code>site_list</code> also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The samples are organized in three tables, depending on the type of remain that has to be recorded in the database:</p>
 <ul>
 <li><p><code>plant_remains</code></p></li>
-<li><p><code>pollen_remains</code></p></li>
 <li><p><code>faunal_remains</code></p></li>
 </ul>
-<p>Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The tables <code>faunal_chrono_weights</code> and <code>plants_chrono_weights</code> contain the automated calculation of the samples weights (refer to <a href="methods.html#sec-chrono-fuzziness"><span>Section&nbsp;6.4.1</span></a>). The <a href="#fig-db-schema">Figure&nbsp;<span>5.1</span></a> shows the schema with the complete list of tables in the database.</p>
+<p>Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The tables <code>faunal_chrono_weights</code> and <code>plants_chrono_weights</code> contain the automated calculation of the samples weights (refer to <span class="quarto-unresolved-ref">?sec-chrono-fuzziness</span>). The <a href="#fig-db-schema">Figure&nbsp;<span>5.1</span></a> shows the schema with the complete list of tables in the database.</p>
 <div id="fig-db-schema" class="quarto-figure quarto-figure-center anchored" style="text-align:center;">
 <figure class="figure">
 <p><img src="images/DB_Structure.png" class="img-fluid figure-img"></p>
@@ -363,12 +362,11 @@ Page under construction
 <li><p><code>region_id</code>: foreign key (linked to the table <code>regions</code>), referring to the current Italian region in which the site is located. See <a href="#sec-regions-db"><span>Section&nbsp;5.4.1.1.3</span></a> for details of the input values.</p></li>
 <li><p><code>x</code>: a numeric value of the type <code>double</code> indicating the longitude at which the site is located.</p></li>
 <li><p><code>y</code>: a numeric value of the type <code>double</code> indicating the latitude at which the site is located.</p></li>
-<li><p><code>available_data</code>: text field of the type <code>varchar(255)</code>, describing the type of data available for the site. The values that can be entered are: <code>bot</code> = Archaeobotanical remains, <code>zoo</code> = Zooarchaeological remains, <code>poll</code> = Pollen remains. If the codes are combined, more than one type of data is available for the same context and chronology.</p></li>
+<li><p><code>available_data</code>: text field of the type <code>varchar(255)</code>, describing the type of data available for the site. The values that can be entered are: <code>bot</code> = Archaeobotanical remains and <code>zoo</code> = Zooarchaeological remains. If the codes are combined, more than one type of data is available for the same context and chronology.</p></li>
 <li><p><code>startcentury</code>: an integer indicating the first century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2<sup>nd</sup> c.&nbsp;BCE to the 1<sup>st</sup> c.&nbsp;CE, the field will be filled with the value <code>-2</code>.</p></li>
 <li><p><code>endcentury</code>: an integer indicating the last century covered by the sample. The value can be positive for CE centuries and negative for BCE centuries. For instance, if the author attributes the sample to the 2<sup>nd</sup> c.&nbsp;BCE to the 1<sup>st</sup> c.&nbsp;CE, the field will be filled with the value <code>1</code>.</p></li>
 <li><p><code>bot</code>: foreign key (linked to the table <code>plant_remains</code>). The input value is the <code>uuid</code> (unique id) of the archaeobotanical sample.</p></li>
 <li><p><code>zoo</code>: foreign key (linked to the table <code>faunal_remains</code>). The input value is the <code>uuid</code> (unique id) of the zooarchaeological sample.</p></li>
-<li><p><code>poll</code>: foreign key (linked to the table <code>pollen_remains</code>). The input value is the <code>uuid</code> (unique id) of the palynological sample.</p></li>
 </ul>
 </section>
 <section id="sec-site-type-db" class="level5" data-number="5.4.1.1.2">
@@ -681,8 +679,8 @@ Page under construction
 <table class="table">
 <caption>Table&nbsp;5.6: Macroregions of Italy.</caption>
 <colgroup>
-<col style="width: 22%">
-<col style="width: 77%">
+<col style="width: 9%">
+<col style="width: 90%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -818,7 +816,7 @@ Page under construction
 </tbody>
 </table>
 </div>
-<p>For further information concerning the division of the dataset into larger chronologies, see <a href="methods.html#sec-periodization"><span>Section&nbsp;6.4</span></a>.</p>
+<p>For further information concerning the division of the dataset into larger chronologies, see <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>.</p>
 </section>
 </section>
 <section id="archaeobotany" class="level3" data-number="5.4.2">
@@ -897,7 +895,7 @@ Page under construction
 <li><p><code>sample_id</code>: foreign key (linked to the table <code>plant_remains</code>), where the <code>sample_id</code> is the field <code>uuid</code>.</p></li>
 <li><p><code>sample_period</code>: foreign key (linked to the table <code>Periodization</code>), where the <code>sample_period</code> is the field <code>id</code>.</p></li>
 </ul>
-<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-periodization"><span>Section&nbsp;6.4</span></a>).</p>
+<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>).</p>
 </section>
 <section id="table-plants_chrono_weights" class="level5" data-number="5.4.2.1.4">
 <h5 data-number="5.4.2.1.4" class="anchored" data-anchor-id="table-plants_chrono_weights"><span class="header-section-number">5.4.2.1.4</span> Table: <code>plants_chrono_weights</code></h5>
@@ -970,7 +968,7 @@ Page under construction
 <li><p><code>sample_period</code>: foreign key (linked to the table <code>Periodization</code>), where the <code>sample_period</code> is the field <code>id</code>.</p></li>
 <li><p><code>chrono_unique_id</code>: an incremental unique primary key. It was necessary to have a distinct unique key as samples can range between two chronologies.</p></li>
 </ul>
-<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-periodization"><span>Section&nbsp;6.4</span></a>).</p>
+<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>).</p>
 </section>
 <section id="table-faunal_chrono_weights" class="level4" data-number="5.4.3.4">
 <h4 data-number="5.4.3.4" class="anchored" data-anchor-id="table-faunal_chrono_weights"><span class="header-section-number">5.4.3.4</span> Table: <code>faunal_chrono_weights</code></h4>
@@ -1008,7 +1006,7 @@ Richards, J.D., 2021. Archiving <span>Archaeological Data</span> in the <span>Un
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>See <a href="methods.html#sec-periodization"><span>Section&nbsp;6.4</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>

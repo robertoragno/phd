@@ -423,8 +423,8 @@ for (col_name in plant_tables.col_names) {
 ```
 
 ```{r}
-#| echo: false
 #| eval: false
+#| echo: false
 #| label: fig-ubiquity-triticum-aest-jeffrey-int
 #| fig-cap: "Posterior probability distribution of samples with cereal remains. The observed ubiquity is represented by the horizontal bar, while the highlighted areas represent the 90% Jeffreys interval."
 #| fig-subcap: 
@@ -1141,7 +1141,7 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
-## Site richness and diversity by chronology
+## Site richness and diversity by chronology {#sec-archaeobot-results-richness-diversity}
 
 ::: callout-tip
 Make sure to cite @nagendra2002 to explain why the indices show different results.
@@ -1438,7 +1438,7 @@ Plants_Richness_by_Chronology_fit_b_Means %>%
 
 ```
 
-In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability (H') and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows $$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ $$logit(\mu_{i}) = a_{[ChrID]}$$ $$a_{[ChrID]} \sim Normal(0,1.5)$$ $$\phi_{i} \sim Exp(0.1)+2$$
+In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability ($E_{H}$) and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows $$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ $$logit(\mu_{i}) = a_{[ChrID]}$$ $$a_{[ChrID]} \sim Normal(0,1.5)$$ $$\phi_{i} \sim Exp(0.1)+2$$
 
 ```{r}
 #| echo: false
