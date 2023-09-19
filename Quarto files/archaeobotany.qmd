@@ -1515,7 +1515,7 @@ Plants_Diversity_Indices_by_Chronology_fit_a %>%
 
 
 
-## Context type {style="text-align:justify"}
+## Context type {#sec-archaeobot-results-context-type style="text-align:justify"}
 
 ::: callout-note
 Important: This section has to be rewritten as now the approach is not frequentist anymore.
@@ -1539,7 +1539,8 @@ $$
 
 $$
 \alpha_{[TCid]} \sim Normal(0,1.5)
-$$ The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
+$$ 
+The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
 
 ```{r}
 #| echo: false
@@ -3723,6 +3724,7 @@ m_mg_reg.plot
 
 ::: callout-important
 ## Section in progress {style="text-align:justify;"}
+The pre processing part should go here
 :::
 
 ```{r}
@@ -4048,7 +4050,7 @@ Cereals share similar presence values in Roman Northern and Southern Italian sit
 #| eval: false
 #| layout: "[[100,100], [1]]"
 #| label: fig-cereal-richness-RvsEMA
-#| fig-cap: "Boxplots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
+#| 
 #| fig-subcap: 
 #|   - "Roman age." 
 #|   - "Early Medieval age."
@@ -4056,6 +4058,7 @@ Cereals share similar presence values in Roman Northern and Southern Italian sit
 #| fig-width: 6
 #| fig-dpi: 600
 
+#fig-cap: "Boxplots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
 plot_RichnessMacroReg.R
 plot_RichnessMacroReg.EMA
 
