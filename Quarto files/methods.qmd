@@ -4,9 +4,7 @@
 ## Page under construction {style="text-align:justify;"}
 :::
 
-## Introduction
-
-This chapter presents the methodology used to carry out this study. The first section deals with the process of data collection, including defining the chronological and geographical boundaries of this research. This is followed by a brief introduction to statistical computing programming languages such as R. The third section outlines the approaches and issues of archaeobotanical quantification, describing ubiquity, richness and diversity indices and multivariate analysis used in a case study of the cereal dataset.
+This chapter details the methodology implemented to undertake the present study. The first section concerns the data collection process, encompassing the delimitation of this research's chronological and geographical parameters. This is followed by a concise introduction to statistical computing programming languages like R. The third section outlines the approaches and concerns of archaeobotanical quantification, addressing ubiquity, richness, and diversity indices, as well as multivariate analysis used in the case study of the cereal dataset. The subsequent section provides a brief overview of the issues in the zooarchaeological dataset, including overdispersion. The fifth section provides an overview of statistical modelling, leading into the following section which discusses Bayesian inference and modelling. Models with examples from archaeobotanical and zooarchaeological quantifications are also provided.
 
 ## Data collection {#sec-data-collection style="text-align: justify"}
 
@@ -211,7 +209,7 @@ Multivariate statistics are used in this research to test the hypothesis of a sh
 
 PERMANOVA was used to test the hypothesis of a separation between northern and southern Italy in two chronological phases. However, this test does not indicate the extent of this separation. For this purpose, nMDS, a non-parametric technique for reducing the dimensionality of a dataset, is useful. Although it is commonly applied by reducing a dataset to two dimensions, following a procedure similar to @cardarelliDeepVariationalConvolutional2022, the dataset will be reduced to one dimension so that the distance between two density curves can be calculated. nMDS can be computed using the `metaMDS()` function in `vegan`, which allows for several dissimilarity measures. The most appropriate measure for this dataset is again the Jaccard distance. In addition to reducing the dimensionality of the dataset, the aim was also to measure the degree of separation between regions using the Wasserstein distance, also known as the Earth Mover's distance. This measure quantifies the distance between two probability distributions, taking into account the cost of moving mass from one distribution to the other. In order to avoid potentially biased estimates in the calculations, the macroregion of Central Italy and the phases LR (Late Roman) and Ma (11^th^ century onwards) were excluded from the scaling due to the very uneven sample sizes. These phases are analysed separately using ubiquity only. The nMDS was run with the reduction set to one dimension only, and KDE plots were used to visualise the results. Reducing the dimension to one allows for easier distance calculations using the Wasserstein distance. Finally, the distance was calculated using the `wasserstein1d()` function in the `transport` library [@schuhmacherTransportComputationOptimal2022].
 
-## Issues and approaches in the quantification of zooarchaeological data {style="text-align:justify;"}
+## Issues and approaches in the quantification of zooarchaeological data {#sec-issues-zoo-quant style="text-align:justify;"}
 
 ::: callout-note
 Discuss diversity and richness? https://doi.org/10.1016/0305-4403(88)90006-4
@@ -385,7 +383,7 @@ $$
 
 In its simplest form, a distribution for a single success/failure experiment (N=1) is referred to as a Bernoulli trial [@gelmanBayesianDataAnalysis2013a, p.39]. One of the most common ways to illustrate the binomial distribution is by tossing a coin. Suppose you want to find the probability of getting exactly 3 heads if you flip a fair coin 5 times. In this scenario, $N$ is 5, representing the number of coin flips, and p is 0.5 since each coin flip has an equal likelihood of landing on either heads or tails. Using the binomial distribution formula, you can calculate the probability in the following way:
 
-$$P(X = 3) = C(5, 3) * (0.5)^3 * (1 - 0.5)^(5 - 3) = 0.31$$
+$$P(X = 3) = C(5, 3) \cdot (0.5)^3 \cdot (1 - 0.5)^{(5 - 3)} = 0.31$$
 
 Where:
 
@@ -393,7 +391,7 @@ Where:
 
 -   $(0.5)^3$ is the probability of getting 3 heads.
 
--   The probability of obtaining 2 tails when flipping a coin 5 times is $(1 - 0.5)^(5 - 3)$ since the complementary event to obtaining a head is obtaining a tail.
+-   The probability of obtaining 2 tails when flipping a coin 5 times is $(1 - 0.5)^{(5 - 3)}$ since the complementary event to obtaining a head is obtaining a tail.
 
 -   The probability of getting exactly 3 heads on 5 tosses of a fair coin is 0.31, or 31%.
 
@@ -449,53 +447,130 @@ After building the model, we can sample from the posterior distribution and obta
 
 [^methods-5]: The level of confidence in a frequentist confidence interval instead represents the probability that the interval will contain the true parameter value in repeated sampling. For instance, a 95% confidence interval means that if one were to collect data and construct confidence intervals several times, about 95% of those intervals would contain the true parameter value.
 
-### Betabinomial
+#### Zooarchaeology
 
-::: callout-tip
-Show the beta distribution and explain the precision values.
-:::
+The zooarchaeological dataset permitted a more quantitative approach compared to the archaeobotanical dataset, as previously described in @sec-issues-zoo-quant. Instead of modelling the occurrence of specific species, it was feasible to directly model counts to evaluate quantitative distinctions between species based on selected stratifying factors, such as chronology, type of context, macroregion, and others. Counts are frequently modelled with a Poisson distribution [@hilbeModelingCountData2014, pp.35-73], which has been used, for example, to model species diversity and richness in the archaeobotanical dataset. However, while it is feasible to use Poisson regression to model comparable counts, it is not advisable to do so when comparing NISP data. The amount of NISP data collected in each sample can vary depending on various factors, including excavation size, number of samples, and richness of the stratigraphic layer. When exploring a single excavation, researchers may ask specific questions such as: "Which area or chronology provided the most bone fragments?". However, our focus is on understanding the relative occurrence of specific species, which requires investigating different questions: "What is the probability of finding pig remains in a sample from the Roman period?". This can only be determined through modelling comparable counts. Fortunately, the binomial distribution can be used to simulate relative proportions among species in a different strategy. Assuming that $Y$ represents the NISP count for a specific species such as pigs and $N$ (i.e. the number of trials) represents the total NISP from a sample, we can utilise the $Y \sim Binomial(N, p)$ formula. This approach provides each probability for each sample within the range of 0 and 1 as each sample will be capped at its own total NISP count. We will not elaborate on the construction of a Bayesian binomial regression again, as it has been previously explained, and we can improve on this. In @sec-issues-zoo-quant, we explored overdispersion as a major challenge in quantifying zooarchaeological data. This issue arises because several factors can contribute to a particular species dominating in a sample, and the proportions between species and samples are never precise. One immediate approach to address this issue would be to implement ranking (e.g. Sample 1, Pigs = 1, Sheep/Goats = 2, Cattle = 3), although at the expense of losing some of the finer details. It is worth noting that whether a sample comprises of 300 pig bones, 20 sheep or goats bones, or 10 cattle bones, the rankings would remain the same at 300, 290 and 280 bones respectively.
 
-Material: https://medium.com/ro.mo.flo47/the-beta-binomial-model-an-introduction-to-bayesian-statistics-154395875f93
+There is an alternative method that considers overdispersion while still allowing us to model our counts with a binomial distribution. To introduce this, we need to take a step back and talk about conjugate priors. As defined by @johnsonBayesRulesIntroduction2022 [p.62]:
 
-https://stats.stackexchange.com/questions/297901/choosing-between-uninformative-beta-priors/298176#298176
+> "We say that $f (π)$ is a conjugate prior for $L(π∣y)$ if the posterior, $f (π∣y) ∝ f (π)L(π∣y)$, is from the same model family as the prior".
+
+Conjugate priors for the likelihood are an algebraic convenience, as they facilitate otherwise difficult (or impossible) computations. By creating a closed-form expression for the posterior distribution within the same family as the prior, it becomes more straightforward to observe the impact of the likelihood in revising our prior evidence. One of the most frequently utilised continuous probability distributions that are conjugate to the binomial distribution is the Beta distribution. It is defined on the $[0,1]$ interval and characterised by two positive parameters, $\alpha$ and $\beta$, which can be adjusted to express strong, weak, or neutral prior beliefs. The distribution's shape may vary as we modify its parameters:
+
+-   With $\alpha = \beta = 1$, the Beta pdf is uniform.
+
+-   With $\alpha < \beta$, the Beta pdf is right skewed.
+
+-   With $\alpha > \beta$, the Beta pdf is left skewed.
+
+-   With $\alpha = \beta$, the Beta pdf is symmetric with mean and mode equal to 0.5.
+
+The $\alpha$ and $\beta$ values also provide information on the variability of the probability density function. As these values increase, the pdf becomes narrower, more concentrated around the mean, and less dispersed. It is clear that these qualities are desirable as they provide significant flexibility when selecting a prior belief. How can we benefit from these properties? The solution is to use a beta-binomial model, a mixture model in which each binomial count observation has its unique probability of success, allowing a distribution of probabilities of success to be estimated rather than a singular probability [@mcelreath2016, pp.370-371]. Instead of utilising the conventional formulation of the beta-binomial distribution, the reparameterization provided in McElreath was adopted for this study. In this reparameterization, Beta takes on two parameters: a mean probability of $p$ and a scale or precision parameter of $\phi$[^methods-6]. The value of $\phi$ can be determined based on the relationship between $\alpha$ and $\beta$, which is such that: $$\alpha = p \cdot \phi; \beta = (1-p) \cdot \phi$$ Additionally, the Beta-Binomial model:
+
+[^methods-6]: The precision (or scale/spread) parameter is referred to as $\theta$ by @mcelreath2016, $\phi$ by @burknerOrdinalRegressionModels2019 and $\kappa$ by @kruschkeDoingBayesianData2015. They all mean the same thing. This research will refer to the parameter as $\phi$, following @burknerOrdinalRegressionModels2019.
+
+$$
+Y \sim Binomial(N,p)
+$$
+
+$$
+p \sim Beta(\alpha, \beta)
+$$
+
+Can be reparametrized as:
+
+$$
+Y \sim Betabinomial(N, p, \phi)
+$$
+
+This formulation (which already includes the Beta distribution) is simpler for modelling and interpreting the results since the exploration of a single parameter $\phi$ provides a clearer understanding of the variability in the posterior distribution. Specifically:
+
+-   When $\phi < 2$, the distribution is greatly overdispersed, leading to a possible concentration of probabilities around 0 and 1.
+
+-   When $\phi = 2$, the distribution is uniform (flat).
+
+-   When $\phi > 2$, the distribution becomes increasingly narrow and the probabilities are more concentrated.
+
+With these concepts in mind, we can begin constructing a beta-binomial model to evaluate its practicality. Let us examine a case in this study. Extending the binomial model that was previously presented to estimate the occurrence of pigs, let us move back into multilevel territory. Having constructed a DAG, we are interested in knowing the predicted occurrence of pig remains on different site types, stratified by chronology. Just as in the previous binomial archaeobotanical example, we introduce a trick to map the interaction between each of the site types and each of the chronologies: an interaction index. We define the variable intercept as $\alpha$ and clarify that $[TCid]$ signifies the numerical interaction index. Consistent with our earlier example, we also assign $\alpha$ a weakly informative prior of $Normal(0,1.5)$. To establish a prior for the shape parameter $\phi$ of assuming that any $\phi$ value below 2 would result in excessive dispersion, we aim to establish a flat beta distribution as a baseline [@kermanNeutralNoninformativeInformative2011]. In order to proceed, a prior distribution with a minimum of 2 is required. @mcelreath2016 [p.371] recommends the use of an exponential distribution, which has a minimum of 0. Therefore, two is added to the $Exp(1)$ generative model (compare @fig-beta-zoo-prior-sim-methods and @fig-betabin-zoo-prior-sim-methods). The interaction index $[TCid]\$\$ is also added to the prior $\phi$ in order to get varying estimates for each site type and chronology.
 
 ```{r}
 #| echo: false
-#| warning: false
-#| message: false
-library(rethinking)
-pbar <- 0.5
-theta <- 5
-curve( dbeta2( x, pbar, theta), from=0, to=1, xlab="Probability", ylab="Density")
+#| label: fig-beta-zoo-prior-sim-methods
+#| fig-cap: "Example of a beta distribution using a precision parameter generated randomly from an exponential distribution with a rate of 1 and then adding a constant of 2. This type of prior is considered weakly informative."
+
+
+plot(
+  density(
+  rbeta2(1000, 
+         inv_logit(rnorm(1e4,0,1.5)), 
+         rexp(1000, 1)+2
+         )
+  ), main="",
+col=rangi2, xlim=c(0,1)
+)
 ```
 
-### Precision plots
+```{r}
+#| echo: false
+#| layout-ncol: 2
+#| label: fig-betabin-zoo-prior-sim-methods
+#| fig-cap: "Prior predictive simulation for the betabinomial distribution with and without the addition of the constant 2."
+#| fig-subcap: 
+#|  - "&Phi; + 2; The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution. "
+#|  - "&Phi;; The simulation shows how when no data is available the probabilities pile up on the extremes."
 
-The following plots for the posterior distributions of the beta-binomial models will also come with a precision parameter $\phi$, that shapes the beta curve. What is the correct way to interpret it? A $\phi$ value smaller than 2 indicates that there is extreme overdispersion in the dataset, and that probabilities around 0 and 1 are more likely than the mean. On the contrary, a $\phi$ value greater than 2 indicates more precision in the dataset. Although this is often the case of larger datasets, where most of the values shrink towards the average, it also indicates a coherent dataset (where values are similar). Finally, if $\phi$ equals 2 every probability between 0 and 1 is likely possible.
+set.seed(21)
+
+simplehist(rbetabinom(1e4, 
+                      size=20, 
+                      prob=inv_logit(
+                      rnorm(1e4, 0, 1.5)
+                                ), 
+                      theta = dexp(1e4, 1)+2
+                      ), xlab="Y",
+col=rangi2
+           )
+simplehist(rbetabinom(1e4, 
+                      size=20, 
+                      prob=inv_logit(
+                      rnorm(1e4, 0, 1.5)
+                                ), 
+                      theta = dexp(1e4, 1)
+                      ), xlab="Y",
+col=rangi2
+           )
+```
+
+After constructing the hierarchical model and sampling from the posterior distribution, we obtain valuable information about two key parameters for each group (e.g., Roman: Rural, Roman: Urban, etc.). These parameters are the varying intercept $\alpha$ and the precision parameter $\phi$. Analysing the distribution of $\phi$ within each chronology and site type enables us to assess the model's performance and accuracy. The distribution of $\alpha$ offers insights into the central tendency of probabilities of occurrence, helping us identify where these probabilities are most concentrated. Additionally, it provides us with credible intervals that can vary in width based on the available data and the degree of variability within each group. A wider credible interval for $\alpha$ suggests more uncertainty about where the group's probability is centred. On the other hand, the parameter $\phi$ is complementary as it informs us about the dispersion or variability within each group. A flat and wide distribution of $\phi$ values suggests higher uncertainty or variability in estimating the precision parameter across different groups. This variability can arise due to factors such as limited data, inherent heterogeneity, or weak prior information. Conversely, a narrow distribution of $\phi$ values indicates lower uncertainty or variability in estimating the precision parameter across different groups. This suggests that the groups are more consistent in terms of their data dispersion, and the precision parameter is estimated with greater confidence. As we anticipated, low $\phi$ values suggest that the data within a group are highly dispersed or variable, with observations deviating significantly from each other. High $\phi$ values (far from zero) imply that the data within a group are less dispersed or variable, with observations clustering closely together (@fig-phi-values-example). To clarify, while both credible intervals and $\phi$ values provide insights into dispersion, credible intervals focus on the central tendency of probabilities, while $\phi$ measures the dispersion of the data points themselves within a group. They offer complementary information to understand how groups behave and how variable their probabilities are.
 
 ```{r}
 #| echo: false
+#| label: fig-phi-values-example
+#| fig-cap: "The behaviour of &Phi; with varying values is demonstrated in the plots."
+#| fig-subcap: 
+#|  - "Low precision"
+#|  - "Uniform distribution"
+#|  - "High precision" 
 #| message: false
 #| warning: false
 #| layout-ncol: 3
 
-library(rethinking)
 
 # Create the plots 
 pbar <- 0.5
 theta <- 1
 curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi<2)))
+      xlab="Probability", ylab="Density", main=expression(paste(phi<2)), col=rangi2)
 
 pbar <- 0.5
 theta <- 2
 curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi==2)))
+      xlab="Probability", ylab="Density", main=expression(paste(phi==2)), col=rangi2)
 
 pbar <- 0.5
 theta <- 5
 curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi>2)))
+      xlab="Probability", ylab="Density", main=expression(paste(phi>2)), col=rangi2)
 
 
 ```
