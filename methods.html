@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,14 +17,49 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +73,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,10 +111,12 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -89,11 +125,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./methods.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -101,125 +142,144 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./literature_review.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a>
+  <a href="./literature_review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Materials</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Materials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./database.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a>
+  <a href="./database.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methods.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  <a href="./methods.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Results</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Results</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
+  <a href="./isotopes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">Sites bibliography</a>
+  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sites bibliography</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Custom functions</span></a>
   </div>
 </li>
       </ul>
@@ -227,34 +287,36 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-data-collection" id="toc-sec-data-collection" class="nav-link active" data-scroll-target="#sec-data-collection"><span class="toc-section-number">6.1</span>  Data collection</a></li>
-  <li><a href="#introduction-to-statistical-computing" id="toc-introduction-to-statistical-computing" class="nav-link" data-scroll-target="#introduction-to-statistical-computing"><span class="toc-section-number">6.2</span>  Introduction to statistical computing</a>
+  <li><a href="#sec-data-collection" id="toc-sec-data-collection" class="nav-link active" data-scroll-target="#sec-data-collection"><span class="header-section-number">6.1</span> Data collection</a></li>
+  <li><a href="#introduction-to-statistical-computing" id="toc-introduction-to-statistical-computing" class="nav-link" data-scroll-target="#introduction-to-statistical-computing"><span class="header-section-number">6.2</span> Introduction to statistical computing</a>
   <ul class="collapse">
-  <li><a href="#statistical-programming-r" id="toc-statistical-programming-r" class="nav-link" data-scroll-target="#statistical-programming-r"><span class="toc-section-number">6.2.1</span>  Statistical programming: <em>R</em></a></li>
+  <li><a href="#statistical-programming-r" id="toc-statistical-programming-r" class="nav-link" data-scroll-target="#statistical-programming-r"><span class="header-section-number">6.2.1</span> Statistical programming: <em>R</em></a></li>
   </ul></li>
-  <li><a href="#issues-and-approaches-in-the-quantification-of-archaeobotanical-data" id="toc-issues-and-approaches-in-the-quantification-of-archaeobotanical-data" class="nav-link" data-scroll-target="#issues-and-approaches-in-the-quantification-of-archaeobotanical-data"><span class="toc-section-number">6.3</span>  Issues and approaches in the quantification of archaeobotanical data</a>
+  <li><a href="#issues-and-approaches-in-the-quantification-of-archaeobotanical-data" id="toc-issues-and-approaches-in-the-quantification-of-archaeobotanical-data" class="nav-link" data-scroll-target="#issues-and-approaches-in-the-quantification-of-archaeobotanical-data"><span class="header-section-number">6.3</span> Issues and approaches in the quantification of archaeobotanical data</a>
   <ul class="collapse">
-  <li><a href="#ubiquity" id="toc-ubiquity" class="nav-link" data-scroll-target="#ubiquity"><span class="toc-section-number">6.3.1</span>  Ubiquity</a></li>
-  <li><a href="#richness-and-diversity-indices" id="toc-richness-and-diversity-indices" class="nav-link" data-scroll-target="#richness-and-diversity-indices"><span class="toc-section-number">6.3.2</span>  Richness and diversity indices</a></li>
-  <li><a href="#sec-met-multivariate-statistics" id="toc-sec-met-multivariate-statistics" class="nav-link" data-scroll-target="#sec-met-multivariate-statistics"><span class="toc-section-number">6.3.3</span>  Multivariate analysis</a></li>
-  <li><a href="#case-study-cereal-richness-across-the-italian-subregions" id="toc-case-study-cereal-richness-across-the-italian-subregions" class="nav-link" data-scroll-target="#case-study-cereal-richness-across-the-italian-subregions"><span class="toc-section-number">6.3.4</span>  Case study: Cereal richness across the Italian subregions</a></li>
+  <li><a href="#ubiquity" id="toc-ubiquity" class="nav-link" data-scroll-target="#ubiquity"><span class="header-section-number">6.3.1</span> Ubiquity</a></li>
+  <li><a href="#richness-and-diversity-indices" id="toc-richness-and-diversity-indices" class="nav-link" data-scroll-target="#richness-and-diversity-indices"><span class="header-section-number">6.3.2</span> Richness and diversity indices</a></li>
+  <li><a href="#sec-met-multivariate-statistics" id="toc-sec-met-multivariate-statistics" class="nav-link" data-scroll-target="#sec-met-multivariate-statistics"><span class="header-section-number">6.3.3</span> Multivariate analysis</a></li>
+  <li><a href="#case-study-cereal-richness-across-the-italian-subregions" id="toc-case-study-cereal-richness-across-the-italian-subregions" class="nav-link" data-scroll-target="#case-study-cereal-richness-across-the-italian-subregions"><span class="header-section-number">6.3.4</span> Case study: Cereal richness across the Italian subregions</a></li>
   </ul></li>
-  <li><a href="#sec-issues-zoo-quant" id="toc-sec-issues-zoo-quant" class="nav-link" data-scroll-target="#sec-issues-zoo-quant"><span class="toc-section-number">6.4</span>  Issues and approaches in the quantification of zooarchaeological data</a></li>
-  <li><a href="#building-a-statistical-model" id="toc-building-a-statistical-model" class="nav-link" data-scroll-target="#building-a-statistical-model"><span class="toc-section-number">6.5</span>  Building a statistical model</a></li>
-  <li><a href="#modeling-the-bayesian-way" id="toc-modeling-the-bayesian-way" class="nav-link" data-scroll-target="#modeling-the-bayesian-way"><span class="toc-section-number">6.6</span>  Modeling, the Bayesian way</a>
+  <li><a href="#sec-issues-zoo-quant" id="toc-sec-issues-zoo-quant" class="nav-link" data-scroll-target="#sec-issues-zoo-quant"><span class="header-section-number">6.4</span> Issues and approaches in the quantification of zooarchaeological data</a></li>
+  <li><a href="#building-a-statistical-model" id="toc-building-a-statistical-model" class="nav-link" data-scroll-target="#building-a-statistical-model"><span class="header-section-number">6.5</span> Building a statistical model</a></li>
+  <li><a href="#sec-bayesian-modeling" id="toc-sec-bayesian-modeling" class="nav-link" data-scroll-target="#sec-bayesian-modeling"><span class="header-section-number">6.6</span> Modeling, the Bayesian way</a>
   <ul class="collapse">
-  <li><a href="#building-bayesian-models" id="toc-building-bayesian-models" class="nav-link" data-scroll-target="#building-bayesian-models"><span class="toc-section-number">6.6.1</span>  Building Bayesian models</a></li>
+  <li><a href="#building-bayesian-models" id="toc-building-bayesian-models" class="nav-link" data-scroll-target="#building-bayesian-models"><span class="header-section-number">6.6.1</span> Building Bayesian models</a></li>
+  <li><a href="#sampling-from-the-posterior-and-model-diagnostics" id="toc-sampling-from-the-posterior-and-model-diagnostics" class="nav-link" data-scroll-target="#sampling-from-the-posterior-and-model-diagnostics"><span class="header-section-number">6.6.2</span> Sampling from the posterior and model diagnostics</a></li>
   </ul></li>
-  <li><a href="#integration-of-data-sources" id="toc-integration-of-data-sources" class="nav-link" data-scroll-target="#integration-of-data-sources"><span class="toc-section-number">6.7</span>  Integration of Data Sources</a></li>
-  <li><a href="#evaluation-of-agricultural-strategies" id="toc-evaluation-of-agricultural-strategies" class="nav-link" data-scroll-target="#evaluation-of-agricultural-strategies"><span class="toc-section-number">6.8</span>  Evaluation of Agricultural Strategies</a></li>
-  <li><a href="#limitations-and-assumptions" id="toc-limitations-and-assumptions" class="nav-link" data-scroll-target="#limitations-and-assumptions"><span class="toc-section-number">6.9</span>  Limitations and Assumptions</a></li>
-  <li><a href="#github-hosting-the-project" id="toc-github-hosting-the-project" class="nav-link" data-scroll-target="#github-hosting-the-project"><span class="toc-section-number">6.10</span>  GitHub: hosting the project</a></li>
+  <li><a href="#integration-of-data-sources" id="toc-integration-of-data-sources" class="nav-link" data-scroll-target="#integration-of-data-sources"><span class="header-section-number">6.7</span> Integration of Data Sources</a></li>
+  <li><a href="#evaluation-of-agricultural-strategies" id="toc-evaluation-of-agricultural-strategies" class="nav-link" data-scroll-target="#evaluation-of-agricultural-strategies"><span class="header-section-number">6.8</span> Evaluation of Agricultural Strategies</a></li>
+  <li><a href="#limitations-and-assumptions" id="toc-limitations-and-assumptions" class="nav-link" data-scroll-target="#limitations-and-assumptions"><span class="header-section-number">6.9</span> Limitations and Assumptions</a></li>
+  <li><a href="#github-hosting-the-project" id="toc-github-hosting-the-project" class="nav-link" data-scroll-target="#github-hosting-the-project"><span class="header-section-number">6.10</span> GitHub: hosting the project</a></li>
   </ul>
 </nav>
     </div>
@@ -263,7 +325,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-methods" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></h1>
+<h1 class="title"><span id="sec-methods" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></h1>
 </div>
 
 
@@ -278,12 +340,12 @@ div.csl-indent {
 
 </header>
 
-<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Page under construction
 </div>
 </div>
@@ -308,19 +370,19 @@ Page under construction
 <div id="fig-periodisation" class="quarto-figure quarto-figure-center anchored" style="text-align:center;">
 <figure class="figure">
 <p><img src="images/Periodization.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.1: Periodisation schema.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.1: Periodisation schema.</figcaption>
 </figure>
 </div>
 <p>One of the methodological issues affecting this project is that of chronological fuzziness. Dating plant and animal remains using radiocarbon is very rare, at least in the samples recorded in the database. Most of these samples are dated using ceramics, and chronologies can range between one century or several. Rather than creating arbitrary weights that would affect the models in unexpected ways, all samples were considered to have the same weight and impact on the calculations. For example, if a sample spans three centuries, it is difficult to say whether the layer was formed in three centuries (e.g.&nbsp;a waste pit used over a long period), or whether the dating of that layer is less precise because a particular type of pottery was used over a long period.</p>
 </section>
 <section id="introduction-to-statistical-computing" class="level2" style="text-align:justify;" data-number="6.2">
 <h2 style="text-align:justify;" data-number="6.2" class="anchored" data-anchor-id="introduction-to-statistical-computing"><span class="header-section-number">6.2</span> Introduction to statistical computing</h2>
-<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Section structure
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -353,7 +415,7 @@ Section structure
 <p>R, as described on the <a href="https://cran.r-project.org/doc/FAQ/R-FAQ.html#What-is-R_003f">R-Project FAQs</a> is a “system for statistical computation and graphics. It consists of a language plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files”. Increasingly popular for data scientists, R is based on S and provides its own IDE (the R GUI), although <a href="https://www.rstudio.com">RStudio</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is the most popular IDE for computing the R language. For this project, RStudio was the standard IDE.</p>
 <section id="r-packages" class="level4" data-number="6.2.1.1">
 <h4 data-number="6.2.1.1" class="anchored" data-anchor-id="r-packages"><span class="header-section-number">6.2.1.1</span> R Packages</h4>
-<p>In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official <a href="https://cran.r-project.org/web/packages/">CRAN repository</a>, which counts more than 19,877 packages<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This section details some of the packages that have been most useful for this research.</p>
+<p>In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official <a href="https://cran.r-project.org/web/packages/">CRAN repository</a>, which counts more than 19,909 packages<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This section details some of the packages that have been most useful for this research.</p>
 <section id="tidyverse" class="level5" data-number="6.2.1.1.1">
 <h5 data-number="6.2.1.1.1" class="anchored" data-anchor-id="tidyverse"><span class="header-section-number">6.2.1.1.1</span> tidyverse</h5>
 <p>The <strong>tidyverse</strong> ecosystem <span class="citation" data-cites="tidyverse">(<a href="references.html#ref-tidyverse" role="doc-biblioref">Wickham et al., 2019</a>)</span> is a core set of packages for R, maintained by Hadley Wickham for importing, tidying, transforming and visualising data which includes packages such as—ggplot2, dplyr, tidyr, stringr, tibble, forcats, purr, readr.</p>
@@ -379,12 +441,12 @@ Section structure
 </section>
 <section id="issues-and-approaches-in-the-quantification-of-archaeobotanical-data" class="level2" style="text-align:justify;" data-number="6.3">
 <h2 style="text-align:justify;" data-number="6.3" class="anchored" data-anchor-id="issues-and-approaches-in-the-quantification-of-archaeobotanical-data"><span class="header-section-number">6.3</span> Issues and approaches in the quantification of archaeobotanical data</h2>
-<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 To be written
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -481,7 +543,7 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 <div id="fig-shepard-plot-nmds" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/ShepardPlot.png" class="img-fluid figure-img" width="600"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.2: A Shepard plot, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.2: A Shepard plot, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption>
 </figure>
 </div>
 <p>The Shepard plot displays the ordination distance against the observed distance. Ideally, the higher the points should fall on a monotonic line, where an increased observed distance is related to an increased ordination distance. Moreover, the higher the number of dimensions, the lower the stress value. If interested in choosing the appropriate number of dimensions, it is possible to use a scree plot which shows the number of dimensions against the stress level. Generally, it is possible to interpret stress values following these guidelines <span class="citation" data-cites="dexterTroubleStressFlexible2018">(<a href="references.html#ref-dexterTroubleStressFlexible2018" role="doc-biblioref">Dexter et al., 2018</a>)</span>:</p>
@@ -518,7 +580,7 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 <div id="fig-nmds-rpubs" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/NMDS_RPub.png" class="img-fluid figure-img" width="600"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.3: A nMDS plot with clusters, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.3: A nMDS plot with clusters, from <a href="https://rpubs.com/CPEL/NMDS">R Studio Pubs</a>.</figcaption>
 </figure>
 </div>
 </section>
@@ -539,7 +601,7 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 </section>
 <section id="sec-issues-zoo-quant" class="level2" style="text-align:justify;" data-number="6.4">
 <h2 style="text-align:justify;" data-number="6.4" class="anchored" data-anchor-id="sec-issues-zoo-quant"><span class="header-section-number">6.4</span> Issues and approaches in the quantification of zooarchaeological data</h2>
-<div class="callout-note callout callout-style-simple">
+<div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -560,13 +622,13 @@ U_x = (\frac{N_p}{N_{tot}}) \cdot 100
 <div id="fig-levins-model-classification" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/Guisan et al 2000 p150 - Levins models.png" class="img-fluid figure-img" width="500"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.4: Illustration of Levins’ models classification. Image after Guisan and Zimmerman <span class="citation" data-cites="guisanPredictiveHabitatDistribution2000">(<a href="references.html#ref-guisanPredictiveHabitatDistribution2000" role="doc-biblioref">2000, p. 150</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.4: Illustration of Levins’ models classification. Image after Guisan and Zimmerman <span class="citation" data-cites="guisanPredictiveHabitatDistribution2000">(<a href="references.html#ref-guisanPredictiveHabitatDistribution2000" role="doc-biblioref">2000, p. 150</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>Among the statistical models most frequently used are Generalised Linear Models (GLMs). GLMs should be employed because of their ability to handle a wide range of response variables, including non-normal and categorical variables, and to allow modelling of other distributions. Furthermore, GLMs permit the modelling of non-constant variance functions, particularly valuable in addressing heteroscedasticity, a common issue in many datasets. Once the predictor (<span class="math inline">\(X\)</span>, the factor used to make the prediction) and the response variable (<span class="math inline">\(Y\)</span>, the factor being explained or predicted) and are identified, the subsequent step is to analyse the relationship between the two by correctly formulating the statistical model. The statistical method used for modelling data must be appropriate to the type of data being analysed. When modelling counts of data, a probability density function (PDF) such as Poisson, negative-binomial, and others should be specified. For presence-absence data, various PDFs such as binomial, beta-binomial, and others are necessary <span class="citation" data-cites="guisanPredictiveHabitatDistribution2000 guisanHabitatSuitabilityDistribution2017">(<a href="references.html#ref-guisanHabitatSuitabilityDistribution2017" role="doc-biblioref">Guisan et al., 2017, pp. 55–56</a>; <a href="references.html#ref-guisanPredictiveHabitatDistribution2000" role="doc-biblioref">Guisan and Zimmermann, 2000, pp. 159–160</a>)</span>. Each of these distributions possesses distinctive properties and traits that are suitable for modelling certain kinds of data. For example, the Poisson distribution is commonly employed when operating with count data, such as the amount of events of a particular kind taking place within a fixed interval. It presupposes that events happen at a consistent rate and are mutually independent. On the other hand, the binomial distribution is appropriate for modelling binary data, in which outcomes are either success or failure, such as presence or absence. Along with selecting the appropriate probability distribution, choosing a link function is also crucial in statistical modelling. The link function determines the relationship between the predictors and the expected value of the response variable. Commonly used link functions include the logit link for logistic regression (which constrains the outcome variable between 0 and 1), the log link for several types of regression (Gaussian, Poisson, Gamma, etc.), and the identity link for linear regression. Selecting a suitable link function depends on the data type and the specific research question being addressed.</p>
 </section>
-<section id="modeling-the-bayesian-way" class="level2" style="text-align:justify;" data-number="6.6">
-<h2 style="text-align:justify;" data-number="6.6" class="anchored" data-anchor-id="modeling-the-bayesian-way"><span class="header-section-number">6.6</span> Modeling, the Bayesian way</h2>
+<section id="sec-bayesian-modeling" class="level2" style="text-align:justify;" data-number="6.6">
+<h2 style="text-align:justify;" data-number="6.6" class="anchored" data-anchor-id="sec-bayesian-modeling"><span class="header-section-number">6.6</span> Modeling, the Bayesian way</h2>
 <p>“Bayesian data analysis takes a question in the form of a model and uses logic to produce an answer in the form of probability distributions” <span class="citation" data-cites="mcelreath2016">(<a href="references.html#ref-mcelreath2016" role="doc-biblioref">McElreath, 2016</a>)</span>. In the literature review section we already discussed the rationale behind Bayesian inference, introducing the concept of prior probabilities. The construction of a Bayesian statistical model initially resembles that of its frequentist counterpart, as we begin with a sampling model for observed data (<span class="math inline">\(B\)</span>) given a vector of unknown parameters (<span class="math inline">\(A\)</span>). However, a unique aspect of the Bayesian model is that the unknown parameters are not fixed, but instead are regarded as random. We create a probability distribution for A that summarises any relevant information. This distribution is known as the prior distribution. Prior distributions may have other random parameters which can be assigned other probability distributions, and these parameters are referred to as hyperparameters. Bayes’ Theorem is then used to derive the posterior distribution, which can be viewed as a compromise between our prior knowledge and the data we have gathered (<a href="#fig-bayesian-compromise">Figure&nbsp;<span>6.5</span></a>). In short, if we have <em>prior</em> knowledge or belief about an event, we can use Bayes’ rule to update our belief in light of new data:</p>
 <p><span class="math display">\[
 P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
@@ -577,7 +639,7 @@ P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
 <div id="fig-bayesian-compromise" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-bayesian-compromise-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.5: Bayesian updating: The posterior distribution is a compromise between our prior knowledge and the likelihood (observed data).</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.5: Bayesian updating: The posterior distribution is a compromise between our prior knowledge and the likelihood (observed data).</figcaption>
 </figure>
 </div>
 </div>
@@ -589,7 +651,7 @@ P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
 <div id="fig-uniform-prior-example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-uniform-prior-example-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.6: When a uniform distribution is applied as a prior belief, the resulting posterior distribution is influenced more by the likelihood than the prior. This example is for illustrative purposes only and is not based on actual data.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.6: When a uniform distribution is applied as a prior belief, the resulting posterior distribution is influenced more by the likelihood than the prior. This example is for illustrative purposes only and is not based on actual data.</figcaption>
 </figure>
 </div>
 </div>
@@ -599,7 +661,7 @@ P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
 <div id="fig-bayesian-updating-example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-bayesian-updating-example-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.7: An illustration demonstrating how two distinct prior beliefs (dashed lines) converge towards the same true probability <span class="math inline">\(p\)</span> with an adequate number of samples (<span class="math inline">\(N\)</span> = 100). The initial prior follows a beta distribution with <span class="math inline">\(a\)</span> = 2 and β = 10, whereas the subsequent prior is defined by α = 8 and β = 3. As the sample size increases, the two distributions converge even more closely.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.7: An illustration demonstrating how two distinct prior beliefs (dashed lines) converge towards the same true probability <span class="math inline">\(p\)</span> with an adequate number of samples (<span class="math inline">\(N\)</span> = 100). The initial prior follows a beta distribution with <span class="math inline">\(a\)</span> = 2 and β = 10, whereas the subsequent prior is defined by α = 8 and β = 3. As the sample size increases, the two distributions converge even more closely.</figcaption>
 </figure>
 </div>
 </div>
@@ -657,7 +719,7 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <div id="fig-met-prior-pred-sim-binom" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-met-prior-pred-sim-binom-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.8: In this prior predictive simulation, it is evident that a weakly informative prior does not result in any fabricated trends. The x-axis displays counts ranging from 0 to 7, representing the highest number of ‘minor’ grains specified in the binomial model. It is advisable to simulate the potential impact of a chosen prior on a hypothetical posterior distribution.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.8: In this prior predictive simulation, it is evident that a weakly informative prior does not result in any fabricated trends. The x-axis displays counts ranging from 0 to 7, representing the highest number of ‘minor’ grains specified in the binomial model. It is advisable to simulate the potential impact of a chosen prior on a hypothetical posterior distribution.</figcaption>
 </figure>
 </div>
 </div>
@@ -675,11 +737,11 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <p>Conjugate priors for the likelihood are an algebraic convenience, as they facilitate otherwise difficult (or impossible) computations. By creating a closed-form expression for the posterior distribution within the same family as the prior, it becomes more straightforward to observe the impact of the likelihood in revising our prior evidence. One of the most frequently utilised continuous probability distributions that are conjugate to the binomial distribution is the Beta distribution. It is defined on the <span class="math inline">\([0,1]\)</span> interval and characterised by two positive parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, which can be adjusted to express strong, weak, or neutral prior beliefs. The distribution’s shape may vary as we modify its parameters:</p>
 <ul>
 <li><p>With <span class="math inline">\(\alpha = \beta = 1\)</span>, the Beta pdf is uniform.</p></li>
-<li><p>With <span class="math inline">\(\alpha &lt; \beta\)</span>, the Beta pdf is right skewed.</p></li>
-<li><p>With <span class="math inline">\(\alpha &gt; \beta\)</span>, the Beta pdf is left skewed.</p></li>
+<li><p>With <span class="math inline">\(\alpha &lt; \beta\)</span>, the Beta pdf is right-skewed.</p></li>
+<li><p>With <span class="math inline">\(\alpha &gt; \beta\)</span>, the Beta pdf is left-skewed.</p></li>
 <li><p>With <span class="math inline">\(\alpha = \beta\)</span>, the Beta pdf is symmetric with mean and mode equal to 0.5.</p></li>
 </ul>
-<p>The <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> values also provide information on the variability of the probability density function. As these values increase, the pdf becomes narrower, more concentrated around the mean, and less dispersed. It is clear that these qualities are desirable as they provide significant flexibility when selecting a prior belief. How can we benefit from these properties? The solution is to use a beta-binomial model, a mixture model in which each binomial count observation has its unique probability of success, allowing a distribution of probabilities of success to be estimated rather than a singular probability <span class="citation" data-cites="mcelreath2016">(<a href="references.html#ref-mcelreath2016" role="doc-biblioref">McElreath, 2016, pp. 370–371</a>)</span>. Instead of utilising the conventional formulation of the beta-binomial distribution, the reparameterization provided in McElreath was adopted for this study. In this reparameterization, Beta takes on two parameters: a mean probability of <span class="math inline">\(p\)</span> and a scale or precision parameter of <span class="math inline">\(\phi\)</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. The value of <span class="math inline">\(\phi\)</span> can be determined based on the relationship between <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, which is such that: <span class="math display">\[\alpha = p \cdot \phi; \beta = (1-p) \cdot \phi\]</span> Additionally, the Beta-Binomial model:</p>
+<p>The <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> values also provide information on the variability of the probability density function. As these values increase, the pdf becomes narrower, more concentrated around the mean, and less dispersed. It is clear that these qualities are desirable as they provide significant flexibility when selecting a prior belief. How can we benefit from these properties? The solution is to use a beta-binomial model, a mixture model in which each binomial count observation has its unique probability of success, allowing a distribution of probabilities of success to be estimated rather than a singular probability <span class="citation" data-cites="mcelreath2016 leeBayesianEstimationPrediction1987 leeNoteBayesianEstimation1999 kimValidationBetaBinomialModel2017">(<a href="references.html#ref-kimValidationBetaBinomialModel2017" role="doc-biblioref">Kim and Lee, 2017</a>; <a href="references.html#ref-leeBayesianEstimationPrediction1987" role="doc-biblioref">Lee and Sabavala, 1987</a>; <a href="references.html#ref-leeNoteBayesianEstimation1999" role="doc-biblioref">Lee and Lio, 1999</a>; <a href="references.html#ref-mcelreath2016" role="doc-biblioref">McElreath, 2016, pp. 370–371</a>)</span>. Instead of utilising the conventional formulation of the beta-binomial distribution, the reparameterization provided in McElreath was adopted for this study. In this reparameterization, Beta takes on two parameters: a mean probability of <span class="math inline">\(p\)</span> and a scale or precision parameter of <span class="math inline">\(\phi\)</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. The value of <span class="math inline">\(\phi\)</span> can be determined based on the relationship between <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, which is such that: <span class="math display">\[\alpha = p \cdot \phi; \beta = (1-p) \cdot \phi\]</span> Additionally, the Beta-Binomial model, in which <span class="math inline">\(p\)</span> is assumed to follow a Beta distribution:</p>
 <p><span class="math display">\[
 Y \sim Binomial(N,p)
 \]</span></p>
@@ -696,13 +758,13 @@ Y \sim Betabinomial(N, p, \phi)
 <li><p>When <span class="math inline">\(\phi = 2\)</span>, the distribution is uniform (flat).</p></li>
 <li><p>When <span class="math inline">\(\phi &gt; 2\)</span>, the distribution becomes increasingly narrow and the probabilities are more concentrated.</p></li>
 </ul>
-<p>With these concepts in mind, we can begin constructing a beta-binomial model to evaluate its practicality. Let us examine a case in this study. Extending the binomial model that was previously presented to estimate the occurrence of pigs, let us move back into multilevel territory. Having constructed a DAG, we are interested in knowing the predicted occurrence of pig remains on different site types, stratified by chronology. Just as in the previous binomial archaeobotanical example, we introduce a trick to map the interaction between each of the site types and each of the chronologies: an interaction index. We define the variable intercept as <span class="math inline">\(\alpha\)</span> and clarify that <span class="math inline">\([TCid]\)</span> signifies the numerical interaction index. Consistent with our earlier example, we also assign <span class="math inline">\(\alpha\)</span> a weakly informative prior of <span class="math inline">\(Normal(0,1.5)\)</span>. To establish a prior for the shape parameter <span class="math inline">\(\phi\)</span> of assuming that any <span class="math inline">\(\phi\)</span> value below 2 would result in excessive dispersion, we aim to establish a flat beta distribution as a baseline <span class="citation" data-cites="kermanNeutralNoninformativeInformative2011">(<a href="references.html#ref-kermanNeutralNoninformativeInformative2011" role="doc-biblioref">Kerman, 2011</a>)</span>. In order to proceed, a prior distribution with a minimum of 2 is required. <span class="citation" data-cites="mcelreath2016">McElreath (<a href="references.html#ref-mcelreath2016" role="doc-biblioref">2016, p. 371</a>)</span> recommends the use of an exponential distribution, which has a minimum of 0. Therefore, two is added to the <span class="math inline">\(Exp(1)\)</span> generative model (compare <a href="#fig-beta-zoo-prior-sim-methods">Figure&nbsp;<span>6.9</span></a> and <a href="#fig-betabin-zoo-prior-sim-methods">Figure&nbsp;<span>6.10</span></a>). The interaction index $[TCid]$$ is also added to the prior <span class="math inline">\(\phi\)</span> in order to get varying estimates for each site type and chronology.</p>
+<p>With these concepts in mind, we can begin constructing a beta-binomial model to evaluate its practicality. Let us examine a case in this study. Extending the binomial model previously used to calculate pig occurrence, we shift our focus back to the multilevel realm. As a recap, a multilevel model allows us to model counts while retaining information about variation between and within groups, and about group sizes (through credible intervals). Furthermore, multilevel models improve estimate accuracy for small groups by gathering information from other groups through partial pooling. Having constructed a DAG, we are interested in knowing the predicted occurrence of pig remains on different site types, stratified by chronology. Just as in the previous binomial archaeobotanical example, we introduce a trick to map the interaction between each of the site types and each of the chronologies: an interaction index. We define the variable intercept as <span class="math inline">\(\alpha\)</span> and clarify that <span class="math inline">\([TCid]\)</span> signifies the numerical interaction index. Consistent with our earlier example, we also assign <span class="math inline">\(\alpha\)</span> a weakly informative prior of <span class="math inline">\(Normal(0,1.5)\)</span>. To establish a prior for the shape parameter <span class="math inline">\(\phi\)</span> of assuming that any <span class="math inline">\(\phi\)</span> value below 2 would result in excessive dispersion, we aim to establish a flat beta distribution as a baseline <span class="citation" data-cites="kermanNeutralNoninformativeInformative2011">(<a href="references.html#ref-kermanNeutralNoninformativeInformative2011" role="doc-biblioref">Kerman, 2011</a>)</span>. In order to proceed, a prior distribution with a minimum of 2 is required. <span class="citation" data-cites="mcelreath2016">McElreath (<a href="references.html#ref-mcelreath2016" role="doc-biblioref">2016</a>)</span> [p.371] recommends the use of an exponential distribution, which has a minimum of 0. Therefore, two is added to the <span class="math inline">\(Exp(1)\)</span> generative model (compare <a href="#fig-beta-zoo-prior-sim-methods">Figure&nbsp;<span>6.9</span></a> and <a href="#fig-betabin-zoo-prior-sim-methods">Figure&nbsp;<span>6.10</span></a>). The interaction index $$[TCid]$$ is also added to the prior <span class="math inline">\(\phi\)</span> in order to get varying estimates for each site type and chronology.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-beta-zoo-prior-sim-methods" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-beta-zoo-prior-sim-methods-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.9: Example of a beta distribution using a precision parameter generated randomly from an exponential distribution with a rate of 1 and then adding a constant of 2. This type of prior is considered weakly informative.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;6.9: Example of a beta distribution using a precision parameter generated randomly from an exponential distribution with a rate of 1 and then adding a constant of 2. This type of prior is considered weakly informative.</figcaption>
 </figure>
 </div>
 </div>
@@ -714,7 +776,7 @@ Y \sim Betabinomial(N, p, \phi)
 <div id="fig-betabin-zoo-prior-sim-methods-1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-betabin-zoo-prior-sim-methods-1.png" class="img-fluid figure-img" data-ref-parent="fig-betabin-zoo-prior-sim-methods" width="672"></p>
-<p></p><figcaption class="figure-caption">(a) Φ + 2; The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution.</figcaption><p></p>
+<figcaption class="figure-caption">(a) Φ + 2; The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution.</figcaption>
 </figure>
 </div>
 </div>
@@ -722,7 +784,7 @@ Y \sim Betabinomial(N, p, \phi)
 <div id="fig-betabin-zoo-prior-sim-methods-2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="methods_files/figure-html/fig-betabin-zoo-prior-sim-methods-2.png" class="img-fluid figure-img" data-ref-parent="fig-betabin-zoo-prior-sim-methods" width="672"></p>
-<p></p><figcaption class="figure-caption">(b) Φ; The simulation shows how when no data is available the probabilities pile up on the extremes.</figcaption><p></p>
+<figcaption class="figure-caption">(b) Φ; The simulation shows how when no data is available the probabilities pile up on the extremes.</figcaption>
 </figure>
 </div>
 </div>
@@ -731,38 +793,158 @@ Y \sim Betabinomial(N, p, \phi)
 </figure>
 </div>
 <p>After constructing the hierarchical model and sampling from the posterior distribution, we obtain valuable information about two key parameters for each group (e.g., Roman: Rural, Roman: Urban, etc.). These parameters are the varying intercept <span class="math inline">\(\alpha\)</span> and the precision parameter <span class="math inline">\(\phi\)</span>. Analysing the distribution of <span class="math inline">\(\phi\)</span> within each chronology and site type enables us to assess the model’s performance and accuracy. The distribution of <span class="math inline">\(\alpha\)</span> offers insights into the central tendency of probabilities of occurrence, helping us identify where these probabilities are most concentrated. Additionally, it provides us with credible intervals that can vary in width based on the available data and the degree of variability within each group. A wider credible interval for <span class="math inline">\(\alpha\)</span> suggests more uncertainty about where the group’s probability is centred. On the other hand, the parameter <span class="math inline">\(\phi\)</span> is complementary as it informs us about the dispersion or variability within each group. A flat and wide distribution of <span class="math inline">\(\phi\)</span> values suggests higher uncertainty or variability in estimating the precision parameter across different groups. This variability can arise due to factors such as limited data, inherent heterogeneity, or weak prior information. Conversely, a narrow distribution of <span class="math inline">\(\phi\)</span> values indicates lower uncertainty or variability in estimating the precision parameter across different groups. This suggests that the groups are more consistent in terms of their data dispersion, and the precision parameter is estimated with greater confidence. As we anticipated, low <span class="math inline">\(\phi\)</span> values suggest that the data within a group are highly dispersed or variable, with observations deviating significantly from each other. High <span class="math inline">\(\phi\)</span> values (far from zero) imply that the data within a group are less dispersed or variable, with observations clustering closely together (<a href="#fig-phi-values-example">Figure&nbsp;<span>6.11</span></a>). To clarify, while both credible intervals and <span class="math inline">\(\phi\)</span> values provide insights into dispersion, credible intervals focus on the central tendency of probabilities, while <span class="math inline">\(\phi\)</span> measures the dispersion of the data points themselves within a group. They offer complementary information to understand how groups behave and how variable their probabilities are.</p>
-<div id="fig-phi-values-example" class="cell quarto-layout-panel">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-phi-values-example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
-<div id="fig-phi-values-example-1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="methods_files/figure-html/fig-phi-values-example-1.png" class="img-fluid figure-img" data-ref-parent="fig-phi-values-example" width="672"></p>
-<p></p><figcaption class="figure-caption">(a) Low precision</figcaption><p></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
-<div id="fig-phi-values-example-2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="methods_files/figure-html/fig-phi-values-example-2.png" class="img-fluid figure-img" data-ref-parent="fig-phi-values-example" width="672"></p>
-<p></p><figcaption class="figure-caption">(b) Uniform distribution</figcaption><p></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
-<div id="fig-phi-values-example-3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="methods_files/figure-html/fig-phi-values-example-3.png" class="img-fluid figure-img" data-ref-parent="fig-phi-values-example" width="672"></p>
-<p></p><figcaption class="figure-caption">(c) High precision</figcaption><p></p>
+<p><img src="methods_files/figure-html/fig-phi-values-example-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;6.11: The plots illustrate the behaviour of Φ across various probability levels for different values.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6.11: The behaviour of Φ with varying values is demonstrated in the plots.</figcaption><p></p>
-</figure>
-</div>
+<p>The beta-binomial multilevel model presented in this section has enabled us to offer reliable estimates for the abundance of a selected species in each site type and chronology. This example has laid the foundations for understanding the logic behind Bayesian model building, although the results section will provide estimates using multiple other predictors. These models address over-dispersion through several methods. Firstly, they introduce an observation-level varying effect <span class="citation" data-cites="harrisonComparisonObservationlevelRandom2015">(<a href="references.html#ref-harrisonComparisonObservationlevelRandom2015" role="doc-biblioref">Harrison, 2015</a>)</span> while also permitting each combination of predictors to have an unobserved intercept <span class="citation" data-cites="mcelreath2016">(<a href="references.html#ref-mcelreath2016" role="doc-biblioref">McElreath, 2016, p. 372</a>)</span>. We can then obtain estimates of these intercepts via posterior predictive. Nonetheless, it would be prudent to verify that our model has operated accurately before doing so. The following section will explore the necessary diagnostics that must be conducted to ascertain the model’s ability to generate precise estimates. It will also explain the methodology for interpreting posterior predictive simulations and comparing various models to determine the most fitting one.</p>
 </section>
+</section>
+<section id="sampling-from-the-posterior-and-model-diagnostics" class="level3" data-number="6.6.2">
+<h3 data-number="6.6.2" class="anchored" data-anchor-id="sampling-from-the-posterior-and-model-diagnostics"><span class="header-section-number">6.6.2</span> Sampling from the posterior and model diagnostics</h3>
+<p>In <a href="#sec-bayesian-modeling"><span>Section&nbsp;6.6</span></a>, we looked at a stochastic process based on MCMC. This process can be used to estimate posterior probability distributions. Following a mathematical notation outline of the Bayesian model, the model must be translated into code. Ideally, prior (or priors) simulations of our selection should be conducted at this stage to ensure that the models behave appropriately and that incorrect prior specifications do not bias the results. There are various probabilistic programming languages and R packages that can be used to create Bayesian models. These R packages often act as compilers for the Bayesian engines. The two most prevalent languages are BUGS/JAGS <span class="citation" data-cites="lunnBUGSProjectEvolution2009 plummerJAGSProgramAnalysis2003">(<a href="references.html#ref-lunnBUGSProjectEvolution2009" role="doc-biblioref">Lunn et al., 2009</a>; <a href="references.html#ref-plummerJAGSProgramAnalysis2003" role="doc-biblioref">Plummer, 2003</a>)</span>, which can be incorporated into R with nimble <span class="citation" data-cites="nimble nimbleEcology">(<a href="references.html#ref-nimbleEcology" role="doc-biblioref">Goldstein et al., 2021</a>; <a href="references.html#ref-nimble" role="doc-biblioref">Valpine et al., 2017</a>)</span>, rjags <span class="citation" data-cites="plummerRjagsBayesianGraphical2023">(<a href="references.html#ref-plummerRjagsBayesianGraphical2023" role="doc-biblioref">Plummer et al., 2023</a>)</span>, and bayesmix <span class="citation" data-cites="gruenBayesmixBayesianMixture2023">(<a href="references.html#ref-gruenBayesmixBayesianMixture2023" role="doc-biblioref">Gruen and Plummer, 2023</a>)</span> packages, and Stan <span class="citation" data-cites="gelmanStanProbabilisticProgramming2015">(<a href="references.html#ref-gelmanStanProbabilisticProgramming2015" role="doc-biblioref">Gelman et al., 2015</a>)</span>, which can be utilised through rstan <span class="citation" data-cites="rstan">(<a href="references.html#ref-rstan" role="doc-biblioref">2023</a>)</span>, rstanarm <span class="citation" data-cites="rstanarm">(<a href="references.html#ref-rstanarm" role="doc-biblioref">Goodrich et al., 2023</a>)</span>, and brms <span class="citation" data-cites="brms">(<a href="references.html#ref-brms" role="doc-biblioref">Bürkner, 2017</a>)</span>. This study utilises the STAN-based package, rethinking <span class="citation" data-cites="rethinking">(<a href="references.html#ref-rethinking" role="doc-biblioref">McElreath, 2023</a>)</span>, which is dependent on rstan for fitting basic models. Other more advanced models, such as the multilevel beta-binomial described above, are instead written directly in STAN and fitted using rstan. To demonstrate the difference between writing a model in R and in Stan, two examples are provided. The following example uses the <code>ulam()</code> function in the rethinking package to fit a multilevel poisson model. This package has the benefit of making it relatively easy to translate a mathematical model into code, as the model specification follows the same structure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rethinking)</span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> </span>
+<span id="annotated-cell-1-4"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ulam</span>(</span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">alist</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-6" class="code-annotation-target"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a>        Richness <span class="sc">~</span> <span class="fu">dpois</span>( p ),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">log</span>(p) <span class="ot">&lt;-</span> a[Chronology] <span class="sc">+</span> b[Observations],</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>        a[Chronology] <span class="sc">~</span> <span class="fu">dnorm</span>(<span class="dv">3</span>,<span class="fl">0.5</span>),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-1-9" class="code-annotation-target"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a>        b[Observations] <span class="sc">~</span> <span class="fu">dnorm</span>(<span class="dv">0</span>,<span class="fl">0.2</span>)</span>
+<span id="annotated-cell-1-10"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>    ), </span>
+<span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>dat.Plants_Richness, </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-1-12" class="code-annotation-target"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">chains=</span><span class="dv">4</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-1-13" class="code-annotation-target"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_lik=</span><span class="cn">TRUE</span></span>
+<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>    )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="1" data-code-lines="6">Defining the model formula.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="2" data-code-lines="7">Modelling <code>p</code> (using the log-link function) in terms of chronology and adding an observation-level varying effect.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="3" data-code-lines="8">Setting a prior for the chronology intercept.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="4" data-code-lines="9">Setting a prior for the observation level slope.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="5" data-code-lines="12">Defining the number of Markov chains.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-annotation="6" data-code-lines="13">Setting <code>log_lik = T</code> to enable model comparisons (with WAIC).</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>When compared to other modelling techniques, designing a model in Stan necessitates meticulous outlining of all data variables and parameters. Moreover, the varying effects cannot be implicitly inferred but need to be defined through for loops and suitable indices. The code snippet below provides the code used to build a beta-binomial model in Stan.</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>model.stan</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>data{</span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>    int<span class="sc">&lt;</span>lower<span class="ot">=</span><span class="dv">0</span><span class="sc">&gt;</span> J;</span>
+<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>    array[J] int N;</span>
+<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>    array[J] int A;</span>
+<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>    array[J] int Chronology;</span>
+<span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-2-7" class="code-annotation-target"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>parameters{</span>
+<span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>     vector[<span class="dv">4</span>] a;</span>
+<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>     array[<span class="dv">4</span>] real<span class="sc">&lt;</span>lower<span class="ot">=</span><span class="dv">2</span><span class="sc">&gt;</span> theta;</span>
+<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-2-11" class="code-annotation-target"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>model{</span>
+<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>    vector[J] pbar;</span>
+<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>    a <span class="sc">~</span> <span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">1.5</span>);</span>
+<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>    theta <span class="sc">~</span> <span class="fu">exponential</span>(<span class="dv">1</span>);</span>
+<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>J ) {</span>
+<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a>        pbar[i] <span class="ot">=</span> a[Chronology[i]];</span>
+<span id="annotated-cell-2-17"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a>        pbar[i] <span class="ot">=</span> <span class="fu">inv_logit</span>(pbar[i]);</span>
+<span id="annotated-cell-2-18"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="annotated-cell-2-19"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="annotated-cell-2-20"><a href="#annotated-cell-2-20" aria-hidden="true" tabindex="-1"></a>    vector[J] theta_l;</span>
+<span id="annotated-cell-2-21"><a href="#annotated-cell-2-21" aria-hidden="true" tabindex="-1"></a>    vector[J] pbar_l;</span>
+<span id="annotated-cell-2-22"><a href="#annotated-cell-2-22" aria-hidden="true" tabindex="-1"></a>    vector[J] beta_c;</span>
+<span id="annotated-cell-2-23"><a href="#annotated-cell-2-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ( i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>J ) {</span>
+<span id="annotated-cell-2-24"><a href="#annotated-cell-2-24" aria-hidden="true" tabindex="-1"></a>        theta_l[i] <span class="ot">=</span> theta[Chronology[i]];</span>
+<span id="annotated-cell-2-25"><a href="#annotated-cell-2-25" aria-hidden="true" tabindex="-1"></a>        pbar_l[i] <span class="ot">=</span> pbar[i]<span class="sc">*</span>theta_l[i];</span>
+<span id="annotated-cell-2-26"><a href="#annotated-cell-2-26" aria-hidden="true" tabindex="-1"></a>        beta_c[i] <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> pbar[i]) <span class="sc">*</span> theta_l[i];</span>
+<span id="annotated-cell-2-27"><a href="#annotated-cell-2-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-2-28" class="code-annotation-target"><a href="#annotated-cell-2-28" aria-hidden="true" tabindex="-1"></a>    target <span class="sc">+</span><span class="er">=</span> <span class="fu">beta_binomial_lupmf</span>(A <span class="sc">|</span> N, pbar_l, beta_c);</span>
+<span id="annotated-cell-2-29"><a href="#annotated-cell-2-29" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-annotation="1" data-code-lines="1">Defining input data variables.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-annotation="2" data-code-lines="7">Defining model parameters.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-annotation="3" data-code-lines="11">Defining model formula and priors.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-annotation="4" data-code-lines="28">Defining target function.</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>The Stan code must be implemented and compiled in R using the rstan package, as shown in the code snippet provided.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>Pigs_by_Century_fit <span class="ot">&lt;-</span> <span class="fu">stan</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-3-2" class="code-annotation-target"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">"model.stan"</span>,</span>
+<span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dataset,    </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">warmup =</span> <span class="dv">1000</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-3-6" class="code-annotation-target"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">4000</span>,</span>
+<span id="annotated-cell-3-7"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cores =</span> <span class="dv">4</span>,              </span>
+<span id="annotated-cell-3-8"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-annotation="1" data-code-lines="2">Path of Stan file “model.stan”.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-annotation="2" data-code-lines="4">Number of Markov chains.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-annotation="3" data-code-lines="5">Warmup iterations per chain.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-annotation="4" data-code-lines="6">Total number of iterations per chain.</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>In both cases, the MCMC method is used for posterior sampling, with diagnostic information on the model’s fit available through the rstan and rethinking packages. The convergence tells us if the model has worked and most R packages terminate when convergence cannot be reached or the Markov chains appear poorly mixed. In addition, these packages offer instruments to evaluate the effective sample size, which is an estimate of the number of independent samples obtained from the MCMC run. A low effective sample size may indicate poor mixing or autocorrelation in the Markov chains, suggesting that more samples are needed for reliable inference. Furthermore, both packages provide trace plots and density plots of the posterior samples, enabling users to visually inspect the behaviour of the chain and the posterior distributions. These diagnostic tools are necessary to ensure that the Bayesian models have converged and yielded dependable outcomes. Good convergence is generally reached with an Rhat (<span class="math inline">\(\hat{R}\)</span>) value near to 1. Rhat measures the convergence of multiple chains.</p>
+<p>[PLACE EXAMPLE OF precis() FROM MCELREATH 281; traceplots at p.285]</p>
+<p>Once the model is ready and the traceplots indicate a good mixing of the chains for the posterior sampling, it is possible to visually inspect the estimates produced. For this purpose, we employ two packages, which enable the extraction of posterior draws with ease. The first package, tidybayes <span class="citation" data-cites="tidybayes">(<a href="references.html#ref-tidybayes" role="doc-biblioref">Kay, 2023</a>)</span>, presents a range of graphics options and functions to plot estimates that are categorised by the chosen parameter. The second package is an extension of tidybayes, called tidybayes.rethinking, which is tailored to models that rely on the rethinking package. These packages provide a variety of visualisation options. We have chosen to display interval bars showing four credible interval ranges (.99, .90, .80, .50) and a mean probability represented by a circle specifically in the context of intercept estimation. This is to facilitate understanding for those who are not accustomed to reading density graphs or to considering estimate intervals rather than means. An illustration of the graph is given in <strong>FIGURE X</strong> below as an example. The high density intervals, or credible intervals, indicate the range of values where the probability density is relatively high, focusing on the areas where the data and prior information offer the greatest support. Regarding beta-binomial models that involve estimating the <span class="math inline">\(\phi\)</span> parameter, we selected an alternative visualisation to prevent any confusion for the reader. The precision parameter estimate graphs are presented similarly to the intercept graphs, with density distributions showing the shape of the distribution. Each line is also plotted with two probability intervals - 0.65 (represented by a shorter, thicker line) and 0.99 (represented by a longer, thinner line). Regarding regression models with numerical predictors (such as elevation, temperature, and precipitation), we plotted estimates using credible intervals at .95, .80, and .50, avoiding intervals that were excessively large (i.e.&nbsp;.99) and could have made interpretation of any specific trend difficult. The plots display either a positive or negative correlation as indicated by the slope, and the width of the interval changes according to the sample size and variability. Finally, for some models, an attempt was made to produce community plots, combining the estimates of several models to provide information on particular temporal trends or interactions between species, to answer questions such as “Which species were similarly abundant? What is the degree of separation between two species? Which species has the largest or smallest variability in its estimates?”. As noted in the results section, combining estimates from different models is not a precise procedure and a multivariate modelling approach would be more suitable. However, since the models were generated using the same formula and parameters, it is nonetheless informative to look at these graphs to get a broader view of the general trends.</p>
+<p>In Bayesian modelling, it is essential to make model comparisons. Various methods exist for model comparison, such as AIC, BIC, DIC, and PSIS, each serving a different purpose. We will introduce the Widely Applicable Information Criterion (WAIC) for simplicity. The WAIC is the logarithm of the predictive posterior density (lppd) with a penalty term proportional to the variance in the posterior predictions. We will not elaborate on the mathematical details, but it is important to note that it provides a more robust approach that takes into account model flexibility and predictive accuracy. To additionally handle overfitting due to an increased number of parameters, the results also present pWAIC alongside WAIC <span class="citation" data-cites="mcelreath2016">(<a href="references.html#ref-mcelreath2016" role="doc-biblioref">McElreath, 2016, pp. 220–221</a>)</span>. It is worth considering that WAIC (and other equivalent measures) are exclusively designed to compare models to help determine which model is preferable when we have models that are equally plausible (assuming our causal inference is correct). This is accomplished by assessing the models out-of-sample, meaning how well they perform with data that was not seen during their fitting process (i.e.&nbsp;how well they generalise to new data). To comprehend the results, the specific WAIC value alone is not significant, but rather used to evaluate the model with the lowest value. The model with the lowest value indicates a better model performance. In addition to WAIC, other graphical tools such as posterior predictive checks and visual comparisons of model predictions to observed data, can provide useful feedback on model performance.</p>
 </section>
 </section>
 <section id="integration-of-data-sources" class="level2" data-number="6.7">
@@ -790,12 +972,12 @@ Y \sim Betabinomial(N, p, \phi)
 </section>
 <section id="github-hosting-the-project" class="level2" data-number="6.10">
 <h2 data-number="6.10" class="anchored" data-anchor-id="github-hosting-the-project"><span class="header-section-number">6.10</span> GitHub: hosting the project</h2>
-<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Section under construction
 </div>
 </div>
@@ -806,251 +988,296 @@ Section under construction
 <p>The code and the datasets used to build this research will be hosted publicly on GitHub to allow reproducibility.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-albertBayesianComputation2009" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-albertBayesianComputation2009" class="csl-entry" role="listitem">
 Albert, J., 2009. Bayesian computation with <span>R</span>, 2. Aufl. ed, Use <span>R</span>! <span>Springer</span>, <span>Dordrecht Heidelberg</span>.
 </div>
-<div id="ref-albertProbabilityBayesianModeling2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-albertProbabilityBayesianModeling2020" class="csl-entry" role="listitem">
 Albert, J., Hu, J., 2020. <a href="https://doi.org/10.1201/9781351030144">Probability and <span>Bayesian Modeling</span></a>, 1st ed. <span>Chapman and Hall/CRC</span>.
 </div>
-<div id="ref-andersonNewMethodNonparametric2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-andersonNewMethodNonparametric2001" class="csl-entry" role="listitem">
 Anderson, M.J., 2001. <a href="https://doi.org/10.1111/j.1442-9993.2001.01070.pp.x">A new method for non-parametric multivariate analysis of variance</a>. Austral Ecology 26, 32–46.
 </div>
-<div id="ref-andersonPermutationalMultivariateAnalysis2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-andersonPermutationalMultivariateAnalysis2017" class="csl-entry" role="listitem">
 Anderson, M.J., 2017. <a href="https://doi.org/10.1002/9781118445112.stat07841">Permutational <span>Multivariate Analysis</span> of <span>Variance</span> (<span>PERMANOVA</span>)</a>. In: Wiley <span>StatsRef</span>: <span>Statistics Reference Online</span>. <span>John Wiley &amp; Sons, Ltd</span>, pp. 1–15.
 </div>
-<div id="ref-andersonScalesStatisticsParametric1961" class="csl-entry" role="doc-biblioentry">
+<div id="ref-andersonScalesStatisticsParametric1961" class="csl-entry" role="listitem">
 Anderson, N.H., 1961. <a href="https://doi.org/10.1037/h0042576">Scales and statistics: <span>Parametric</span> and nonparametric.</a> Psychological Bulletin 58, 305–316.
 </div>
-<div id="ref-bakkerPERMANOVA2023" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bakkerPERMANOVA2023" class="csl-entry" role="listitem">
 Bakker, J.D., 2023. <span>PERMANOVA</span>. Applied Multivariate Statistics in R.
 </div>
-<div id="ref-bannerUseBayesianPriors2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bannerUseBayesianPriors2020" class="csl-entry" role="listitem">
 Banner, K.M., Irvine, K.M., Rodhouse, T.J., 2020. <a href="https://doi.org/10.1111/2041-210X.13407">The use of <span>Bayesian</span> priors in <span>Ecology</span>: <span>The</span> good, the bad and the not great</a>. Methods in Ecology and Evolution 11, 882–889.
 </div>
-<div id="ref-banningAnalysingPlantRemains2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-banningAnalysingPlantRemains2000" class="csl-entry" role="listitem">
 Banning, E.B., Jochim, M.A., Dickens, R.S. (Eds.), 2000. <a href="https://doi.org/10.1007/0-306-47654-1_11">Analysing <span>Plant Remains</span></a>. In: The <span>Archaeologist</span>’s <span>Laboratory</span>: <span>The Analysis</span> of <span>Archaeological Data</span>, Interdisciplinary <span>Contributions</span> to <span>Archaeology</span>. <span>Springer US</span>, <span>Boston, MA</span>, pp. 213–233.
 </div>
-<div id="ref-barrantesConceptualStatisticalProblems2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-barrantesConceptualStatisticalProblems2009" class="csl-entry" role="listitem">
 Barrantes, G., Sandoval, L., 2009. <a href="https://doi.org/10.15517/rbt.v57i3.5467"><span>Conceptual and statistical problems associated with the use of diversity indices in ecology</span></a>. Revista de Biología Tropical 57, 451-460-451-460.
 </div>
-<div id="ref-bastowwilsonSpeciesPresenceAbsence2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bastowwilsonSpeciesPresenceAbsence2012" class="csl-entry" role="listitem">
 Bastow Wilson, J., 2012. <a href="https://doi.org/10.1111/j.1654-1103.2012.01430.x">Species presence/absence sometimes represents a plant community as well as species abundances do, or better</a>. Journal of Vegetation Science 23, 1013–1023.
 </div>
-<div id="ref-bishopPatternRecognitionMachine2006a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bishopPatternRecognitionMachine2006a" class="csl-entry" role="listitem">
 Bishop, C.M., 2006. Pattern recognition and machine learning, Information science and statistics. <span>Springer</span>, <span>New York</span>.
 </div>
-<div id="ref-bosiSeedsFruitsPollen2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bosiSeedsFruitsPollen2011" class="csl-entry" role="listitem">
 Bosi, G., Mazzanti, M.B., Florenzano, A., N’siala, I.M., Pederzoli, A., Rinaldi, R., Torri, P., Mercuri, A.M., 2011. <a href="https://doi.org/10.1016/j.jas.2011.02.027">Seeds/fruits, pollen and parasite remains as evidence of site function: Piazza <span>Garibaldi</span> <span>Parma</span> (<span>N Italy</span>) in <span>Roman</span> and <span>Mediaeval</span> times</a>. Journal of Archaeological Science 38, 1621–1633.
 </div>
-<div id="ref-bosiIndaginiArcheobotanicheSul2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bosiIndaginiArcheobotanicheSul2012" class="csl-entry" role="listitem">
 Bosi, G., Mercuri, A.M., Pederzoli, A., Florenzano, A., Rinaldi, R., Bandini Mazzanti, M., 2012. Indagini archeobotaniche sul riempimento delle buche da rifiuti e del pozzo nero di via <span>Cavestro</span> a <span>Parma</span> (<span>X-XI</span> sec d.<span>C</span>.). In: Marini Calvani, M. (Ed.), Ventidue Secoli a <span>Parma</span>: Lo Scavo Sotto La Sede Centrale Della <span>Cassa</span> Di <span>Risparmio</span> in Piazza <span>Garibaldi</span>, <span>BAR</span> International Series. <span>Archaeopress</span>, <span>Oxford, England</span>, pp. 269–283.
 </div>
-<div id="ref-bowesRomanPeasantProject2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bowesRomanPeasantProject2020" class="csl-entry" role="listitem">
 Bowes, K. (Ed.), 2020. <a href="https://www.jstor.org/stable/j.ctv18dvvqq">The <span>Roman Peasant Project</span> 2009-2014: <span>Excavating</span> the <span>Roman Rural Poor</span></a>. <span>University of Pennsylvania Press</span>.
 </div>
-<div id="ref-buonincontriFarmingRuralSettlement2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buonincontriFarmingRuralSettlement2014" class="csl-entry" role="listitem">
 Buonincontri, M., Moser, D., Allevato, E., Basile, B., Di Pasquale, G., 2014. <a href="https://doi.org/10.1007/s00334-013-0429-8">Farming in a rural settlement in central <span>Italy</span>: Cultural and environmental implications of crop production through the transition from <span>Lombard</span> to <span>Frankish</span> influence (8th11th centuries a.d.)</a>. Vegetation History and Archaeobotany 23, 775–788.
 </div>
-<div id="ref-burknerOrdinalRegressionModels2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-brms" class="csl-entry" role="listitem">
+Bürkner, P.-C., 2017. <a href="https://doi.org/10.18637/jss.v080.i01"><span></span>Brms<span></span>: An <span></span>r<span></span> package for <span></span>bayesian<span></span> multilevel models using <span></span>stan<span></span></a> 80.
+</div>
+<div id="ref-burknerOrdinalRegressionModels2019" class="csl-entry" role="listitem">
 Bürkner, P.-C., Vuorre, M., 2019. <a href="https://doi.org/10.1177/2515245918823199">Ordinal <span>Regression Models</span> in <span>Psychology</span>: <span>A Tutorial</span></a>. Advances in Methods and Practices in Psychological Science 2, 77–101.
 </div>
-<div id="ref-cardarelliDeepVariationalConvolutional2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cardarelliDeepVariationalConvolutional2022" class="csl-entry" role="listitem">
 Cardarelli, L., 2022. <a href="https://doi.org/10.1016/j.jas.2022.105640">A deep variational convolutional <span>Autoencoder</span> for unsupervised features extraction of ceramic profiles. <span>A</span> case study from central <span>Italy</span></a>. Journal of Archaeological Science 144, 105640.
 </div>
-<div id="ref-carlinBayesianMethodsData2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carlinBayesianMethodsData2008" class="csl-entry" role="listitem">
 Carlin, B.P., Louis, T.A., 2008. <a href="https://doi.org/10.1201/b14884">Bayesian <span>Methods</span> for <span>Data Analysis</span></a>, 3rd ed. <span>Chapman and Hall/CRC</span>, <span>New York</span>.
 </div>
-<div id="ref-castiglioniBrescianArchaeobotanicalStudies2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castiglioniBrescianArchaeobotanicalStudies2019" class="csl-entry" role="listitem">
 Castiglioni, E., Rottoli, M., 2019. Brescian archaeobotanical studies, <span>Romanization</span> to <span>Early Medieval</span> periods. European Journal of PostClassical Archaeologies 8, 91–116.
 </div>
-<div id="ref-cuffneyAquaticEcosystemsIndicators2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cuffneyAquaticEcosystemsIndicators2014" class="csl-entry" role="listitem">
 Cuffney, T.F., Kennen, J.G., Waite, I.R., 2014. <a href="https://doi.org/10.1016/B978-0-12-382182-9.00008-6">Aquatic <span>Ecosystems</span> as <span>Indicators</span> of <span>Status</span> and <span>Trends</span> in <span>Water Quality</span></a>. In: Comprehensive <span>Water Quality</span> and <span>Purification</span>. <span>Elsevier</span>, pp. 122–156.
 </div>
-<div id="ref-dalyEcologicalDiversityMeasuring2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-dalyEcologicalDiversityMeasuring2018" class="csl-entry" role="listitem">
 Daly, A.J., Baetens, J.M., De Baets, B., 2018. <a href="https://doi.org/10.3390/math6070119">Ecological <span>Diversity</span>: <span>Measuring</span> the <span>Unmeasurable</span></a>. Mathematics 6, 119.
 </div>
-<div id="ref-davisDefiningWhatWe2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-davisDefiningWhatWe2020" class="csl-entry" role="listitem">
 Davis, D.S., 2020. <a href="https://doi.org/10.1016/j.daach.2020.e00152">Defining what we study: <span>The</span> contribution of machine automation in archaeological research</a>. Digital Applications in Archaeology and Cultural Heritage 18, e00152.
 </div>
-<div id="ref-dexterTroubleStressFlexible2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-dexterTroubleStressFlexible2018" class="csl-entry" role="listitem">
 Dexter, E., Rollwagen-Bollens, G., Bollens, S.M., 2018. <a href="https://doi.org/10.1002/lom3.10257">The trouble with stress: <span>A</span> flexible method for the evaluation of nonmetric multidimensional scaling: <span><em>The</em></span><span> <em>Trouble with Stress</em></span></a>. Limnology and Oceanography: Methods 16, 434–443.
 </div>
-<div id="ref-dunnellNotionSite1992" class="csl-entry" role="doc-biblioentry">
+<div id="ref-dunnellNotionSite1992" class="csl-entry" role="listitem">
 Dunnell, R.C., 1992. <a href="https://doi.org/10.1007/978-1-4899-2450-6_2">The <span>Notion Site</span></a>. In: Rossignol, J., Wandsnider, L. (Eds.), Space, <span>Time</span>, and <span>Archaeological Landscapes</span>, Interdisciplinary <span>Contributions</span> to <span>Archaeology</span>. <span>Springer US</span>, <span>Boston, MA</span>, pp. 21–41.
 </div>
-<div id="ref-fletcherDiggingNumbersElementary2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fletcherDiggingNumbersElementary2005" class="csl-entry" role="listitem">
 Fletcher, M., Lock, G.R., 2005. Digging numbers: Elementary statistics for archaeologists, 2nd ed. ed, Monograph (<span>Oxford University School</span> of <span>Archaeology</span>). <span>Oxford University Committee for Archaeology</span>, <span>Oxford : Oakville, CT</span>.
 </div>
-<div id="ref-garcia-garciaBinomialDistributionHistorical2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-garcia-garciaBinomialDistributionHistorical2022" class="csl-entry" role="listitem">
 García-García, J.I., Fernández Coronado, N.A., Arredondo, E.H., Imilpán Rivera, I.A., 2022. <a href="https://doi.org/10.3390/math10152680">The <span>Binomial Distribution</span>: <span>Historical Origin</span> and <span>Evolution</span> of <span>Its Problem Situations</span></a>. Mathematics 10, 2680.
 </div>
-<div id="ref-gauchMultivariateAnalysisCommunity1982" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gauchMultivariateAnalysisCommunity1982" class="csl-entry" role="listitem">
 Gauch, H.G., 1982. <a href="https://doi.org/10.1017/CBO9780511623332">Multivariate <span>Analysis</span> in <span>Community Ecology</span></a>, First. ed. <span>Cambridge University Press</span>.
 </div>
-<div id="ref-gelmanBayesianDataAnalysis2013a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gelmanBayesianDataAnalysis2013a" class="csl-entry" role="listitem">
 Gelman, A., Carlin, J.B., Stern, H.S., Dunson, D.B., Vehtari, A., Rubin, D.B., 2013. <a href="https://doi.org/10.1201/b16018">Bayesian <span>Data Analysis</span></a>, 3rd ed. <span>Chapman and Hall/CRC</span>, <span>New York</span>.
 </div>
-<div id="ref-gollandPermutationTestsClassification2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gelmanStanProbabilisticProgramming2015" class="csl-entry" role="listitem">
+Gelman, A., Lee, D., Guo, J., 2015. <a href="https://doi.org/10.3102/1076998615606113">Stan: <span>A Probabilistic Programming Language</span> for <span>Bayesian Inference</span> and <span>Optimization</span></a>. Journal of Educational and Behavioral Statistics 40, 530–543.
+</div>
+<div id="ref-nimbleEcology" class="csl-entry" role="listitem">
+Goldstein, B.R., Turek, D., Ponisio, L., Valpine, P. de, 2021. <a href="https://cran.r-project.org/package=nimbleEcology"><span></span>nimbleEcology<span></span>: Distributions for ecological models in <span></span>nimble<span></span></a>.
+</div>
+<div id="ref-gollandPermutationTestsClassification2005" class="csl-entry" role="listitem">
 Golland, P., Liang, F., Mukherjee, S., Panchenko, D., 2005. <a href="https://doi.org/10.1007/11503415_34">Permutation <span>Tests</span> for <span>Classification</span></a>. In: Auer, P., Meir, R. (Eds.), Learning <span>Theory</span>, Lecture <span>Notes</span> in <span>Computer Science</span>. <span>Springer</span>, <span>Berlin, Heidelberg</span>, pp. 501–515.
 </div>
-<div id="ref-grebnerForestDynamics2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rstanarm" class="csl-entry" role="listitem">
+Goodrich, B., Gabry, J., Ali, I., Brilleman, S., 2023. <a href="https://mc-stan.org/rstanarm/">Rstanarm: <span></span>Bayesian<span></span> applied regression modeling via <span></span>stan<span></span>.</a>
+</div>
+<div id="ref-grebnerForestDynamics2013" class="csl-entry" role="listitem">
 Grebner, D.L., Bettinger, P., Siry, J.P., 2013. <a href="https://doi.org/10.1016/B978-0-12-386901-2.00010-5">Forest <span>Dynamics</span></a>. In: Introduction to <span>Forestry</span> and <span>Natural Resources</span>. <span>Elsevier</span>, pp. 243–254.
 </div>
-<div id="ref-grosStoriaUrbanisticaMondo2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-grosStoriaUrbanisticaMondo2014" class="csl-entry" role="listitem">
 Gros, P., Torelli, M., 2014. <span>Storia dell’urbanistica: Il mondo romano</span>, Edizione 3. ed, <span>Grandi Opere</span>. <span>Editori Laterza</span>, <span>Roma</span>.
 </div>
-<div id="ref-guisanHabitatSuitabilityDistribution2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gruenBayesmixBayesianMixture2023" class="csl-entry" role="listitem">
+Gruen, B., Plummer, M., 2023. Bayesmix: <span>Bayesian Mixture Models</span> with <span>JAGS</span>.
+</div>
+<div id="ref-guisanHabitatSuitabilityDistribution2017" class="csl-entry" role="listitem">
 Guisan, A., Thuiller, W., Zimmermann, N.E., 2017. <a href="https://doi.org/10.1017/9781139028271">Habitat suitability and distribution models: With applications in <span>R</span></a>, Ecology, biodiversity and conservation. <span>Cambridge University Press</span>, <span>Cambridge New York, NY Port Melbourne Delhi Singapore</span>.
 </div>
-<div id="ref-guisanPredictiveHabitatDistribution2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-guisanPredictiveHabitatDistribution2000" class="csl-entry" role="listitem">
 Guisan, A., Zimmermann, N.E., 2000. <a href="https://doi.org/10.1016/S0304-3800(00)00354-9">Predictive habitat distribution models in ecology</a>. Ecological Modelling 135, 147–186.
 </div>
-<div id="ref-hartigStatisticalInferenceStochastic2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-harrisonComparisonObservationlevelRandom2015" class="csl-entry" role="listitem">
+Harrison, X.A., 2015. <a href="https://doi.org/10.7717/peerj.1114">A comparison of observation-level random effect and <span>Beta-Binomial</span> models for modelling overdispersion in <span>Binomial</span> data in ecology &amp; evolution</a>. PeerJ 3, e1114.
+</div>
+<div id="ref-hartigStatisticalInferenceStochastic2011" class="csl-entry" role="listitem">
 Hartig, F., Calabrese, J.M., Reineking, B., Wiegand, T., Huth, A., 2011. <a href="https://doi.org/10.1111/j.1461-0248.2011.01640.x">Statistical inference for stochastic simulation models - theory and application: <span>Inference</span> for stochastic simulation models</a>. Ecology Letters 14, 816–827.
 </div>
-<div id="ref-heersCittaNelMedioevo1995" class="csl-entry" role="doc-biblioentry">
+<div id="ref-heersCittaNelMedioevo1995" class="csl-entry" role="listitem">
 Heers, J., 1995. <span>La città nel medioevo in occidente: paesaggi, poteri e conflitti</span>. <span>Editoriale Jaca Book</span>.
 </div>
-<div id="ref-heinrichModellingCropSelectionRoman2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-heinrichModellingCropSelectionRoman2017" class="csl-entry" role="listitem">
 Heinrich, F., 2017. <a href="https://doi.org/10.1163/9789004345027_008">Modelling <span>Crop-Selection</span> in <span>Roman Italy</span>. <span>The Economics</span> of <span>Agricultural Decision Making</span> in a <span>Globalizing Economy</span></a>. In: de Haas, T., Tol, G. (Eds.), The <span>Economic Integration</span> of <span>Roman Italy</span>. <span>BRILL</span>, pp. 141–169.
 </div>
-<div id="ref-heipComparingSpeciesDiversity1974" class="csl-entry" role="doc-biblioentry">
+<div id="ref-heipComparingSpeciesDiversity1974" class="csl-entry" role="listitem">
 Heip, C., Engels, P., 1974. <a href="https://doi.org/10.1017/S0025315400022748">Comparing <span>Species Diversity</span> and <span>Evenness Indices</span></a>. Journal of the Marine Biological Association of the United Kingdom 54, 559–563.
 </div>
-<div id="ref-hilbeModelingCountData2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hilbeModelingCountData2014" class="csl-entry" role="listitem">
 Hilbe, J.M., 2014. Modeling <span>Count Data</span>. <span>Cambridge University Press</span>.
 </div>
-<div id="ref-hillDiversityEvennessUnifying1973" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hillDiversityEvennessUnifying1973" class="csl-entry" role="listitem">
 Hill, M.O., 1973. <a href="https://doi.org/10.2307/1934352">Diversity and <span>Evenness</span>: <span>A Unifying Notation</span> and <span>Its Consequences</span></a>. Ecology 54, 427–432.
 </div>
-<div id="ref-hollanderNonparametricStatisticalMethods2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hollanderNonparametricStatisticalMethods2015" class="csl-entry" role="listitem">
 Hollander, M., Wolfe, D.A., Chicken, E., 2015. Nonparametric <span>Statistical Methods</span>, 2nd ed, Wiley <span>Series</span> in <span>Probability</span> and <span>Statistics</span>. <span>John Wiley &amp; Sons</span>, <span>Hoboken, New Jersey</span>.
 </div>
-<div id="ref-jamesIntroductionStatisticalLearning2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jamesIntroductionStatisticalLearning2021" class="csl-entry" role="listitem">
 James, G., Witten, D., Hastie, T., Tibshirani, R., 2021. <a href="https://doi.org/10.1007/978-1-0716-1418-1">An <span>Introduction</span> to <span>Statistical Learning</span>: With <span>Applications</span> in <span>R</span></a>, Springer <span>Texts</span> in <span>Statistics</span>. <span>Springer US</span>, <span>New York, NY</span>.
 </div>
-<div id="ref-johnsonBayesRulesIntroduction2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-johnsonBayesRulesIntroduction2022" class="csl-entry" role="listitem">
 Johnson, A.A., Ott, M.Q., Dogucu, M., 2022. Bayes rules! An introduction to <span>Bayesian</span> modeling with <span>R</span>, Chapman &amp; <span>Hall</span>/<span>CRC</span> texts in statistical science. <span>CRC Press</span>, <span>Boca Raton</span>.
 </div>
-<div id="ref-kadanePossibleStatisticalContributions1988" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kadanePossibleStatisticalContributions1988" class="csl-entry" role="listitem">
 Kadane, J.B., 1988. Possible statistical contributions to paleoethnobotany. In: Hastorf, C.A., Popper, V.S. (Eds.), Current Paleoethnobotany: Analytical Methods and Cultural Interpretations. <span>University of Chicago Press</span>, <span>Chicago</span>, pp. 206–214.
 </div>
-<div id="ref-kermanNeutralNoninformativeInformative2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-tidybayes" class="csl-entry" role="listitem">
+Kay, M., 2023. <a href="https://doi.org/10.5281/zenodo.1308151"><span></span>Tidybayes<span></span>: Tidy data and geoms for <span></span>bayesian<span></span> models</a>.
+</div>
+<div id="ref-kermanNeutralNoninformativeInformative2011" class="csl-entry" role="listitem">
 Kerman, J., 2011. <a href="https://doi.org/10.1214/11-EJS648">Neutral noninformative and informative conjugate beta and gamma prior distributions</a>. Electronic Journal of Statistics 5, 1450–1470.
 </div>
-<div id="ref-kosubNoteTriangleInequality2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kimValidationBetaBinomialModel2017" class="csl-entry" role="listitem">
+Kim, J., Lee, J.-H., 2017. <a href="https://doi.org/10.1080/03610918.2014.960091">The <span>Validation</span> of a <span>Beta-Binomial Model</span> for <span>Overdispersed Binomial Data</span></a>. Communications in statistics: Simulation and computation 46, 807–814.
+</div>
+<div id="ref-kosubNoteTriangleInequality2019" class="csl-entry" role="listitem">
 Kosub, S., 2019. <a href="https://doi.org/10.1016/j.patrec.2018.12.007">A note on the triangle inequality for the <span>Jaccard</span> distance</a>. Pattern Recognition Letters 120, 36–38.
 </div>
-<div id="ref-kraska-millerNonparametricStatisticsSocial2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kraska-millerNonparametricStatisticsSocial2014" class="csl-entry" role="listitem">
 Kraska-Miller, M., 2014. Nonparametric statistics for social and behavioral sciences. <span>CRC Press</span>, <span>Boca Raton London New York</span>.
 </div>
-<div id="ref-kruschkeDoingBayesianData2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kruschkeDoingBayesianData2015" class="csl-entry" role="listitem">
 Kruschke, J.K., 2015. Doing <span>Bayesian</span> data analysis: A tutorial with <span>R</span>, <span>JAGS</span>, and <span>Stan</span>, 2nd edition. ed. <span>Academic Press</span>, <span>Amsterdam</span>.
 </div>
-<div id="ref-lauroComputationalStatisticsStatistical1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lauroComputationalStatisticsStatistical1996" class="csl-entry" role="listitem">
 Lauro, C., 1996. <a href="https://doi.org/10.1016/0167-9473(96)88920-1">Computational statistics or statistical computing, is that the question?</a> Computational Statistics &amp; Data Analysis, Classification 23, 191–193.
 </div>
-<div id="ref-levinsStrategyModelBuilding1966" class="csl-entry" role="doc-biblioentry">
+<div id="ref-leeBayesianEstimationPrediction1987" class="csl-entry" role="listitem">
+Lee, J.C., Sabavala, D.J., 1987. <a href="https://doi.org/10.1080/07350015.1987.10509600">Bayesian <span>Estimation</span> and <span>Prediction</span> for the <span>Beta-Binomial Model</span></a>. Journal of Business &amp; Economic Statistics 5, 357–367.
+</div>
+<div id="ref-leeNoteBayesianEstimation1999" class="csl-entry" role="listitem">
+Lee, J., Lio, Y.L., 1999. <a href="https://doi.org/10.1080/00949659908811950">A note on bayesian estimation and prediction for the beta-binomial model</a>. Journal of Statistical Computation and Simulation 63, 73–91.
+</div>
+<div id="ref-levinsStrategyModelBuilding1966" class="csl-entry" role="listitem">
 Levins, R., 1966. <a href="https://www.jstor.org/stable/27836590">The <span>Strategy</span> of <span>Model Building</span> in <span>Population Biology</span></a>. American Scientist 54, 421–431.
 </div>
-<div id="ref-marinBayesianEssentials2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lunnBUGSProjectEvolution2009" class="csl-entry" role="listitem">
+Lunn, D., Spiegelhalter, D., Thomas, A., Best, N., 2009. <a href="https://doi.org/10.1002/sim.3680">The <span>BUGS</span> project: <span>Evolution</span>, critique and future directions</a>. Statistics in Medicine 28, 3049–3067.
+</div>
+<div id="ref-marinBayesianEssentials2014" class="csl-entry" role="listitem">
 Marin, J.-M., Robert, C.P., 2014. Bayesian essentials with <span>R</span>, Second edition. ed, Springer <span>Texts</span> in <span>Statistics</span>. <span>Springer</span>, <span>New York</span>.
 </div>
-<div id="ref-mcelreath2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mcelreath2016" class="csl-entry" role="listitem">
 McElreath, R., 2016. Statistical rethinking: A bayesian course with examples in r and stan, Chapman &amp; hall/CRC texts in statistical science series. CRC Press/Taylor &amp; Francis Group, Boca Raton.
 </div>
-<div id="ref-rethinking" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rethinking" class="csl-entry" role="listitem">
 McElreath, R., 2023. Rethinking: Statistical rethinking book package.
 </div>
-<div id="ref-mooreDiversityTaxonomicFunctional2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mooreDiversityTaxonomicFunctional2013" class="csl-entry" role="listitem">
 Moore, J.C., 2013. <a href="https://doi.org/10.1016/B978-0-12-384719-5.00036-8">Diversity, taxonomic versus functional</a>. In: Encyclopedia of Biodiversity. Elsevier, pp. 648–656.
 </div>
-<div id="ref-morrisChoosingUsingDiversity2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-morrisChoosingUsingDiversity2014" class="csl-entry" role="listitem">
 Morris, E.K., Caruso, T., Buscot, F., Fischer, M., Hancock, C., Maier, T.S., Meiners, T., Müller, C., Obermaier, E., Prati, D., Socher, S.A., Sonnemann, I., Wäschke, N., Wubet, T., Wurst, S., Rillig, M.C., 2014. <a href="https://doi.org/10.1002/ece3.1155">Choosing and using diversity indices: Insights for ecological applications from the <span>German Biodiversity Exploratories</span></a>. Ecology and Evolution 4, 3514–3524.
 </div>
-<div id="ref-vegan" class="csl-entry" role="doc-biblioentry">
+<div id="ref-vegan" class="csl-entry" role="listitem">
 Oksanen, J., Blanchet, F.G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., Minchin, P.R., O’Hara, R.B., Simpson, G.L., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., 2020. <a href="https://CRAN.R-project.org/package=vegan">Vegan: Community ecology package</a>.
 </div>
-<div id="ref-oksanenVeganCommunityEcology2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-oksanenVeganCommunityEcology2022" class="csl-entry" role="listitem">
 Oksanen, J., Simpson, G.L., Blanchet, F.G., Kindt, R., Legendre, P., Minchin, P.R., O’Hara, R.B., Solymos, P., Stevens, M.H.H., Szoecs, E., Wagner, H., Barbour, M., Bedward, M., Bolker, B., Borcard, D., Carvalho, G., Chirico, M., Caceres, M.D., Durand, S., Evangelista, H.B.A., FitzJohn, R., Friendly, M., Furneaux, B., Hannigan, G., Hill, M.O., Lahti, L., McGlinn, D., Ouellette, M.-H., Cunha, E.R., Smith, T., Stier, A., Braak, C.J.F.T., Weedon, J., 2022. <a href="https://CRAN.R-project.org/package=vegan">Vegan: Community ecology package</a>.
 </div>
-<div id="ref-palmisanoLongTermDemographicTrends2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-palmisanoLongTermDemographicTrends2021" class="csl-entry" role="listitem">
 Palmisano, A., Bevan, A., Kabelindde, A., Roberts, N., Shennan, S., 2021. <a href="https://doi.org/10.1007/s10963-021-09159-3">Long-<span>Term Demographic Trends</span> in <span>Prehistoric Italy</span>: <span>Climate Impacts</span> and <span>Regionalised Socio-Ecological Trajectories</span></a>. Journal of World Prehistory 34, 381–432.
 </div>
-<div id="ref-parkinsonRadiocarbonDatedTrends2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-parkinsonRadiocarbonDatedTrends2021" class="csl-entry" role="listitem">
 Parkinson, E.W., McLaughlin, T.R., Esposito, C., Stoddart, S., Malone, C., 2021. <a href="https://doi.org/10.1007/s10963-021-09158-4">Radiocarbon <span>Dated Trends</span> and <span>Central Mediterranean Prehistory</span></a>. Journal of World Prehistory 34, 317–379.
 </div>
-<div id="ref-parsonsArchaeologicalSettlementPatterns1972" class="csl-entry" role="doc-biblioentry">
+<div id="ref-parsonsArchaeologicalSettlementPatterns1972" class="csl-entry" role="listitem">
 Parsons, J.R., 1972. <a href="https://doi.org/10.1146/annurev.an.01.100172.001015">Archaeological <span>Settlement Patterns</span></a>. Annual Review of Anthropology 1, 127–150.
 </div>
-<div id="ref-pearlBookWhyNew2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pearlBookWhyNew2019" class="csl-entry" role="listitem">
 Pearl, J., Mackenzie, D., 2019. The book of why: The new science of cause and effect, Penguin science. <span>Penguin Books</span>, <span>London</span>.
 </div>
-<div id="ref-pearsallPaleoethnobotanyHandbookProcedures2015a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pearsallPaleoethnobotanyHandbookProcedures2015a" class="csl-entry" role="listitem">
 Pearsall, D.M., 2015. Paleoethnobotany: A handbook of procedures, Third edition. ed. <span>Left Coast Press Inc</span>, <span>Walnut Creek, California</span>.
 </div>
-<div id="ref-piccinatoUrbanisticaMedievale1993" class="csl-entry" role="doc-biblioentry">
+<div id="ref-piccinatoUrbanisticaMedievale1993" class="csl-entry" role="listitem">
 Piccinato, L., 1993. <span>Urbanistica medievale</span>, 1. rist. ed, <span>Universale di architettura</span>. <span>Ed. Dedalo</span>, <span>Bari</span>.
 </div>
-<div id="ref-pielouMeasurementDiversityDifferent1966" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pielouMeasurementDiversityDifferent1966" class="csl-entry" role="listitem">
 Pielou, E.C., 1966. <a href="https://doi.org/10.1016/0022-5193(66)90013-0">The measurement of diversity in different types of biological collections</a>. Journal of Theoretical Biology 13, 131–144.
 </div>
-<div id="ref-plogSampleSizeRichnessRelation1993" class="csl-entry" role="doc-biblioentry">
+<div id="ref-plogSampleSizeRichnessRelation1993" class="csl-entry" role="listitem">
 Plog, S., Hegmon, M., 1993. <a href="https://doi.org/10.2307/282108">The <span>Sample Size-Richness Relation</span>: <span>The Relevance</span> of <span>Research Questions</span>, <span>Sampling Strategies</span>, and <span>Behavioral Variation</span></a>. American Antiquity 58, 489–496.
 </div>
-<div id="ref-rizzoStatisticalComputing2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-plummerJAGSProgramAnalysis2003" class="csl-entry" role="listitem">
+Plummer, M., 2003. <span>JAGS</span>: <span>A</span> program for analysis of <span>Bayesian</span> graphical models using <span>Gibbs</span> sampling. In: Hornik, K., Leisch, F., Achim, Z. (Eds.), Proceedings of the 3rd <span>International Workshop</span> on <span>Distributed Statistical Computing</span> (<span>DSC</span> 2003). <span>Technische Universität Wien</span>, <span>Vienna</span>, pp. 1–10.
+</div>
+<div id="ref-plummerRjagsBayesianGraphical2023" class="csl-entry" role="listitem">
+Plummer, M., Stukalov, A., Denwood, M., 2023. Rjags: <span>Bayesian Graphical Models</span> using <span>MCMC</span>.
+</div>
+<div id="ref-rizzoStatisticalComputing2019" class="csl-entry" role="listitem">
 Rizzo, M.L., 2019. <a href="https://doi.org/10.1201/9780429192760">Statistical <span>Computing</span> with <span>R</span></a>, Second. ed. <span>Chapman and Hall/CRC</span>, <span>New York</span>.
 </div>
-<div id="ref-robertMonteCarloStatistical2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-robertMonteCarloStatistical2004" class="csl-entry" role="listitem">
 Robert, C.P., Casella, G., 2004. Monte <span>Carlo</span> statistical methods, 2. ed. ed, Springer texts in statistics. <span>Springer</span>, <span>New York, NY</span>.
 </div>
-<div id="ref-robertIntroducingMonteCarlo2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-robertIntroducingMonteCarlo2010" class="csl-entry" role="listitem">
 Robert, C.P., Casella, G., 2010. Introducing <span>Monte Carlo</span> methods with <span>R</span>, Use <span>R</span>! <span>Springer</span>, <span>New York, NY Heidelberg</span>.
 </div>
-<div id="ref-schuhmacherTransportComputationOptimal2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-schuhmacherTransportComputationOptimal2022" class="csl-entry" role="listitem">
 Schuhmacher, D., diagrams), B.B.(aha. and power, Bonneel (networkflow), N., shortlist), C.G.(simplex. and, Hartmann (semidiscrete1), V., integration), F.H.(transport_track. and networkflow, Schmitzer (shielding), B., Schrieber (subsampling), J., Wilm (wpp), T., 2022. Transport: <span>Computation</span> of <span>Optimal Transport Plans</span> and <span>Wasserstein Distances</span>.
 </div>
-<div id="ref-shennanQuantifyingArchaeology1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-shennanQuantifyingArchaeology1997" class="csl-entry" role="listitem">
 Shennan, S., 1997. Quantifying archaeology, 2nd ed. ed. <span>Edinburgh University Press</span>, <span>Edinburgh</span>.
 </div>
-<div id="ref-simpsonMeasurementDiversity1949" class="csl-entry" role="doc-biblioentry">
+<div id="ref-simpsonMeasurementDiversity1949" class="csl-entry" role="listitem">
 Simpson, E.H., 1949. <a href="https://doi.org/10.1038/163688a0">Measurement of <span>Diversity</span></a>. Nature 163, 688–688.
 </div>
-<div id="ref-smithDefiningIndicatorPackage2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-smithDefiningIndicatorPackage2013" class="csl-entry" role="listitem">
 Smith, D.N., 2013. <a href="https://doi.org/10.1016/j.jas.2012.06.014">Defining an indicator package to allow identification of <span>“cesspits”</span> in the archaeological record</a>. Journal of Archaeological Science 40, 526–543.
 </div>
-<div id="ref-symsOrdination2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rstan" class="csl-entry" role="listitem">
+Stan Development Team, 2023. <a href="https://mc-stan.org/"><span></span>RStan<span></span>: The <span></span>r<span></span> interface to <span></span>stan<span></span></a>.
+</div>
+<div id="ref-symsOrdination2008" class="csl-entry" role="listitem">
 Syms, C., 2008. <a href="https://doi.org/10.1016/B978-008045405-4.00524-3">Ordination</a>. In: Encyclopedia of <span>Ecology</span>. <span>Elsevier</span>, pp. 2572–2581.
 </div>
-<div id="ref-tierneyMarkovChainsExploring1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-tierneyMarkovChainsExploring1994" class="csl-entry" role="listitem">
 Tierney, L., 1994. <a href="https://doi.org/10.1214/aos/1176325750">Markov <span>Chains</span> for <span>Exploring Posterior Distributions</span></a>. The Annals of Statistics 22, 1701–1728.
 </div>
-<div id="ref-triggerSettlementArchaeologyIts1967" class="csl-entry" role="doc-biblioentry">
+<div id="ref-triggerSettlementArchaeologyIts1967" class="csl-entry" role="listitem">
 Trigger, B.G., 1967. <a href="https://doi.org/10.2307/277900">Settlement <span>Archaeology</span> and <span>Promise</span></a>. American Antiquity 32, 149–160.
 </div>
-<div id="ref-wassermanAllNonparametricStatistics2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-nimble" class="csl-entry" role="listitem">
+Valpine, P. de, Turek, D., Paciorek, C., Anderson-Bergman, C., Temple Lang, D., Bodik, R., 2017. <a href="https://doi.org/10.1080/10618600.2016.1172487">Programming with models: Writing statistical algorithms for general model structures with <span></span>NIMBLE<span></span></a> 26, 403–413.
+</div>
+<div id="ref-wassermanAllNonparametricStatistics2006" class="csl-entry" role="listitem">
 Wasserman, L., 2006. All of <span>Nonparametric Statistics</span>. <span>Springer Science &amp; Business Media</span>, <span>New York</span>.
 </div>
-<div id="ref-wickhamProgrammingGgplot22016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamProgrammingGgplot22016" class="csl-entry" role="listitem">
 Wickham, H., 2016. <a href="https://doi.org/10.1007/978-3-319-24277-4_12">Programming with Ggplot2</a>. In: Wickham, H. (Ed.), Ggplot2: <span>Elegant Graphics</span> for <span>Data Analysis</span>, Use <span>R</span>! <span>Springer International Publishing</span>, <span>Cham</span>, pp. 241–253.
 </div>
-<div id="ref-tidyverse" class="csl-entry" role="doc-biblioentry">
+<div id="ref-tidyverse" class="csl-entry" role="listitem">
 Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L.D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T.L., Miller, E., Bache, S.M., Müller, K., Ooms, J., Robinson, D., Seidel, D.P., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. <a href="https://doi.org/10.21105/joss.01686">Welcome to the <span></span>tidyverse<span></span></a> 4, 1686.
 </div>
-<div id="ref-wilkensRestiFaunisticiDi1990" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wilkensRestiFaunisticiDi1990" class="csl-entry" role="listitem">
 Wilkens, B., 1990. <span>I resti faunistici di Calvatone (CR)</span>. Archeologia Medievale 307–322.
 </div>
-<div id="ref-wrightMethodologicalIssuesPaleoethnobotany2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wrightMethodologicalIssuesPaleoethnobotany2010" class="csl-entry" role="listitem">
 Wright, P.J., 2010. <a href="https://doi.org/10.1007/978-1-4419-0935-0_3">Methodological <span>Issues</span> in <span>Paleoethnobotany</span>: <span>A</span> consideration of <span>Issues</span>, <span>Methods</span>, and <span>Cases</span></a>. In: VanDerwarker, A.M., Peres, T.M. (Eds.), Integrating <span>Zooarchaeology</span> and <span>Paleoethnobotany</span>: <span>A Consideration</span> of <span>Issues</span>, <span>Methods</span>, and <span>Cases</span>. <span>Springer New York</span>, <span>New York, NY</span>, pp. 37–64.
 </div>
-<div id="ref-wuNonparametricStatistics2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wuNonparametricStatistics2017" class="csl-entry" role="listitem">
 Wu, X., Geng, Z., Zhao, Q., 2017. Non-parametric statistics. In: Handbook of <span>Medical Statistics</span>. <span>World Scientific Publishing</span>, <span>Singapore</span>, pp. 145–182.
 </div>
-<div id="ref-wypijBinomialDistribution2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wypijBinomialDistribution2014" class="csl-entry" role="listitem">
 Wypij, D., 2014. <a href="https://doi.org/10.1002/9781118445112.stat04852">Binomial <span>Distribution</span></a>. In: Balakrishnan, N., Colton, T., Everitt, B., Piegorsch, W., Ruggeri, F., Teugels, J.L. (Eds.), Wiley <span>StatsRef</span>: <span>Statistics Reference Online</span>. <span>Wiley</span>.
 </div>
-<div id="ref-knitr" class="csl-entry" role="doc-biblioentry">
+<div id="ref-knitr" class="csl-entry" role="listitem">
 Xie, Y., 2021. <a href="https://yihui.org/knitr/">Knitr: A general-purpose package for dynamic report generation in r</a>.
 </div>
 </div>
@@ -1059,7 +1286,7 @@ Xie, Y., 2021. <a href="https://yihui.org/knitr/">Knitr: A general-purpose packa
 <hr>
 <ol>
 <li id="fn1"><p>RStudio announced on July 2022 that its name will change to Posit, as it is expanding to Python and Visual Studio Code.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Updated on August 8th, 2023.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Updated on September 21st, 2023.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>A thorough exposition of causal inference concerning confounders, mediators, colliders, and similar concepts is available in <span class="citation" data-cites="pearlBookWhyNew2019">Pearl and Mackenzie (<a href="references.html#ref-pearlBookWhyNew2019" role="doc-biblioref">2019</a>)</span>, while instructive illustrations can be found in <span class="citation" data-cites="mcelreath2016">McElreath (<a href="references.html#ref-mcelreath2016" role="doc-biblioref">2016</a>)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The resulting posterior distribution from this example can be found <a href="archaeobotany.html#sec-archaeobot-results-context-type"><span>Section&nbsp;7.3</span></a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>The level of confidence in a frequentist confidence interval instead represents the probability that the interval will contain the true parameter value in repeated sampling. For instance, a 95% confidence interval means that if one were to collect data and construct confidence intervals several times, about 95% of those intervals would contain the true parameter value.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -1095,9 +1322,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1162,6 +1403,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1216,7 +1543,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
   </div>
 </footer>
 

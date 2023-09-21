@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,14 +17,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +39,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,10 +77,12 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -89,11 +91,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./archaeobotany.html">Results</a></li><li class="breadcrumb-item"><a href="./zooarchaeology.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -101,125 +108,144 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./literature_review.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a>
+  <a href="./literature_review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Materials</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Materials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./database.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a>
+  <a href="./database.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  <a href="./methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Results</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Results</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
+  <a href="./isotopes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">Sites bibliography</a>
+  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sites bibliography</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Custom functions</span></a>
   </div>
 </li>
       </ul>
@@ -227,47 +253,48 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link active" data-scroll-target="#data-exploration"><span class="toc-section-number">8.1</span>  Data exploration</a></li>
-  <li><a href="#chronology" id="toc-chronology" class="nav-link" data-scroll-target="#chronology"><span class="toc-section-number">8.2</span>  Chronology</a>
+  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link active" data-scroll-target="#data-exploration"><span class="header-section-number">8.1</span> Data exploration</a></li>
+  <li><a href="#chronology" id="toc-chronology" class="nav-link" data-scroll-target="#chronology"><span class="header-section-number">8.2</span> Chronology</a>
   <ul class="collapse">
-  <li><a href="#trends-by-century" id="toc-trends-by-century" class="nav-link" data-scroll-target="#trends-by-century"><span class="toc-section-number">8.2.1</span>  Trends by century</a></li>
-  <li><a href="#trends-by-phase" id="toc-trends-by-phase" class="nav-link" data-scroll-target="#trends-by-phase"><span class="toc-section-number">8.2.2</span>  Trends by phase</a></li>
+  <li><a href="#trends-by-century" id="toc-trends-by-century" class="nav-link" data-scroll-target="#trends-by-century"><span class="header-section-number">8.2.1</span> Trends by century</a></li>
+  <li><a href="#trends-by-phase" id="toc-trends-by-phase" class="nav-link" data-scroll-target="#trends-by-phase"><span class="header-section-number">8.2.2</span> Trends by phase</a></li>
   </ul></li>
-  <li><a href="#context-type" id="toc-context-type" class="nav-link" data-scroll-target="#context-type"><span class="toc-section-number">8.3</span>  Context type</a>
+  <li><a href="#context-type" id="toc-context-type" class="nav-link" data-scroll-target="#context-type"><span class="header-section-number">8.3</span> Context type</a>
   <ul class="collapse">
-  <li><a href="#pigs" id="toc-pigs" class="nav-link" data-scroll-target="#pigs"><span class="toc-section-number">8.3.1</span>  Pigs</a></li>
-  <li><a href="#cattle" id="toc-cattle" class="nav-link" data-scroll-target="#cattle"><span class="toc-section-number">8.3.2</span>  Cattle</a></li>
-  <li><a href="#caprine" id="toc-caprine" class="nav-link" data-scroll-target="#caprine"><span class="toc-section-number">8.3.3</span>  Caprine</a></li>
-  <li><a href="#edible-w.-animals" id="toc-edible-w.-animals" class="nav-link" data-scroll-target="#edible-w.-animals"><span class="toc-section-number">8.3.4</span>  Edible W. Animals</a></li>
-  <li><a href="#community-plot-1" id="toc-community-plot-1" class="nav-link" data-scroll-target="#community-plot-1"><span class="toc-section-number">8.3.5</span>  Community plot</a></li>
+  <li><a href="#pigs" id="toc-pigs" class="nav-link" data-scroll-target="#pigs"><span class="header-section-number">8.3.1</span> Pigs</a></li>
+  <li><a href="#cattle" id="toc-cattle" class="nav-link" data-scroll-target="#cattle"><span class="header-section-number">8.3.2</span> Cattle</a></li>
+  <li><a href="#caprine" id="toc-caprine" class="nav-link" data-scroll-target="#caprine"><span class="header-section-number">8.3.3</span> Caprine</a></li>
+  <li><a href="#edible-w.-animals" id="toc-edible-w.-animals" class="nav-link" data-scroll-target="#edible-w.-animals"><span class="header-section-number">8.3.4</span> Edible W. Animals</a></li>
+  <li><a href="#community-plot-1" id="toc-community-plot-1" class="nav-link" data-scroll-target="#community-plot-1"><span class="header-section-number">8.3.5</span> Community plot</a></li>
   </ul></li>
-  <li><a href="#macroregion" id="toc-macroregion" class="nav-link" data-scroll-target="#macroregion"><span class="toc-section-number">8.4</span>  Macroregion</a>
+  <li><a href="#macroregion" id="toc-macroregion" class="nav-link" data-scroll-target="#macroregion"><span class="header-section-number">8.4</span> Macroregion</a>
   <ul class="collapse">
-  <li><a href="#pigs-1" id="toc-pigs-1" class="nav-link" data-scroll-target="#pigs-1"><span class="toc-section-number">8.4.1</span>  Pigs</a></li>
-  <li><a href="#cattle-1" id="toc-cattle-1" class="nav-link" data-scroll-target="#cattle-1"><span class="toc-section-number">8.4.2</span>  Cattle</a></li>
-  <li><a href="#caprine-1" id="toc-caprine-1" class="nav-link" data-scroll-target="#caprine-1"><span class="toc-section-number">8.4.3</span>  Caprine</a></li>
-  <li><a href="#edible-w.-animals-1" id="toc-edible-w.-animals-1" class="nav-link" data-scroll-target="#edible-w.-animals-1"><span class="toc-section-number">8.4.4</span>  Edible W. Animals</a></li>
+  <li><a href="#pigs-1" id="toc-pigs-1" class="nav-link" data-scroll-target="#pigs-1"><span class="header-section-number">8.4.1</span> Pigs</a></li>
+  <li><a href="#cattle-1" id="toc-cattle-1" class="nav-link" data-scroll-target="#cattle-1"><span class="header-section-number">8.4.2</span> Cattle</a></li>
+  <li><a href="#caprine-1" id="toc-caprine-1" class="nav-link" data-scroll-target="#caprine-1"><span class="header-section-number">8.4.3</span> Caprine</a></li>
+  <li><a href="#edible-w.-animals-1" id="toc-edible-w.-animals-1" class="nav-link" data-scroll-target="#edible-w.-animals-1"><span class="header-section-number">8.4.4</span> Edible W. Animals</a></li>
   </ul></li>
-  <li><a href="#geography" id="toc-geography" class="nav-link" data-scroll-target="#geography"><span class="toc-section-number">8.5</span>  Geography</a>
+  <li><a href="#geography" id="toc-geography" class="nav-link" data-scroll-target="#geography"><span class="header-section-number">8.5</span> Geography</a>
   <ul class="collapse">
-  <li><a href="#pigs-2" id="toc-pigs-2" class="nav-link" data-scroll-target="#pigs-2"><span class="toc-section-number">8.5.1</span>  Pigs</a></li>
-  <li><a href="#cattle-2" id="toc-cattle-2" class="nav-link" data-scroll-target="#cattle-2"><span class="toc-section-number">8.5.2</span>  Cattle</a></li>
-  <li><a href="#caprine-2" id="toc-caprine-2" class="nav-link" data-scroll-target="#caprine-2"><span class="toc-section-number">8.5.3</span>  Caprine</a></li>
-  <li><a href="#edible-w.-animals-2" id="toc-edible-w.-animals-2" class="nav-link" data-scroll-target="#edible-w.-animals-2"><span class="toc-section-number">8.5.4</span>  Edible W. Animals</a></li>
+  <li><a href="#pigs-2" id="toc-pigs-2" class="nav-link" data-scroll-target="#pigs-2"><span class="header-section-number">8.5.1</span> Pigs</a></li>
+  <li><a href="#cattle-2" id="toc-cattle-2" class="nav-link" data-scroll-target="#cattle-2"><span class="header-section-number">8.5.2</span> Cattle</a></li>
+  <li><a href="#caprine-2" id="toc-caprine-2" class="nav-link" data-scroll-target="#caprine-2"><span class="header-section-number">8.5.3</span> Caprine</a></li>
+  <li><a href="#edible-w.-animals-2" id="toc-edible-w.-animals-2" class="nav-link" data-scroll-target="#edible-w.-animals-2"><span class="header-section-number">8.5.4</span> Edible W. Animals</a></li>
   </ul></li>
-  <li><a href="#altitude" id="toc-altitude" class="nav-link" data-scroll-target="#altitude"><span class="toc-section-number">8.6</span>  Altitude</a>
+  <li><a href="#altitude" id="toc-altitude" class="nav-link" data-scroll-target="#altitude"><span class="header-section-number">8.6</span> Altitude</a>
   <ul class="collapse">
-  <li><a href="#pigs-3" id="toc-pigs-3" class="nav-link" data-scroll-target="#pigs-3"><span class="toc-section-number">8.6.1</span>  Pigs</a></li>
-  <li><a href="#cattle-3" id="toc-cattle-3" class="nav-link" data-scroll-target="#cattle-3"><span class="toc-section-number">8.6.2</span>  Cattle</a></li>
-  <li><a href="#caprine-3" id="toc-caprine-3" class="nav-link" data-scroll-target="#caprine-3"><span class="toc-section-number">8.6.3</span>  Caprine</a></li>
-  <li><a href="#edible-w.-animals-3" id="toc-edible-w.-animals-3" class="nav-link" data-scroll-target="#edible-w.-animals-3"><span class="toc-section-number">8.6.4</span>  Edible W. Animals</a></li>
-  <li><a href="#community-plot-2" id="toc-community-plot-2" class="nav-link" data-scroll-target="#community-plot-2"><span class="toc-section-number">8.6.5</span>  Community plot</a></li>
+  <li><a href="#pigs-3" id="toc-pigs-3" class="nav-link" data-scroll-target="#pigs-3"><span class="header-section-number">8.6.1</span> Pigs</a></li>
+  <li><a href="#cattle-3" id="toc-cattle-3" class="nav-link" data-scroll-target="#cattle-3"><span class="header-section-number">8.6.2</span> Cattle</a></li>
+  <li><a href="#caprine-3" id="toc-caprine-3" class="nav-link" data-scroll-target="#caprine-3"><span class="header-section-number">8.6.3</span> Caprine</a></li>
+  <li><a href="#edible-w.-animals-3" id="toc-edible-w.-animals-3" class="nav-link" data-scroll-target="#edible-w.-animals-3"><span class="header-section-number">8.6.4</span> Edible W. Animals</a></li>
+  <li><a href="#community-plot-2" id="toc-community-plot-2" class="nav-link" data-scroll-target="#community-plot-2"><span class="header-section-number">8.6.5</span> Community plot</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -277,7 +304,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></h1>
 </div>
 
 
@@ -292,24 +319,18 @@ div.csl-indent {
 
 </header>
 
-<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Page under construction
 </div>
 </div>
 <div class="callout-body-container callout-body">
 
 </div>
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
 </div>
 <p>The faunal dataset used in this study is both extensive and diverse, containing over 466 records. While NISP is a useful proxy for historical animal farming, it is not without its limitations, as previously discussed in the methods section. What is crucial to emphasize here, however, is the presence of overdispersion within the data, which necessitates more sophisticated and nuanced approaches than simply calculating overall means for each animal species. Overdispersion is a common occurrence when analyzing datasets of this nature, given the unique factors at play in each context, including historical and depositional influences. Nevertheless, data modeling requires simplification and causal reasoning, and the best approach is to start with straightforward models that can account for overdispersion and generate credible distributions. To this end, Bayesian hierarchical models were developed for each chronology, context type, macroregion, and geography. As a further step, an additional analysis was conducted that solely focused on altitude and chronology as predictors. By examining the specific contributions of altitude and chronology in predicting animal farming/consumption patterns, this analysis provides valuable insights that complement the earlier models. These findings underscore the importance of considering multiple factors when studying the probability of occurrence of farmed and wild animals in historical contexts. They also demonstrate the potential benefits of simplified models to focus on key predictors. Moreover, several attempts were made to create a coherent understanding of the likelihood of economically valuable animals occurring during the first millennium, in order to provide a more comprehensive perspective on the role of animal farming in shaping historical societies.</p>
 <section id="data-exploration" class="level2" data-number="8.1">
@@ -320,20 +341,17 @@ Page under construction
 <div id="fig-curves-dispersion-example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-curves-dispersion-example-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.1: Probability density curves of three simulated normal distributions, representing underdispersed (sd = 0.5), normal (sd = 1), and overdispersed (sd = 2) data.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.1: Probability density curves of three simulated normal distributions, representing underdispersed (sd = 0.5), normal (sd = 1), and overdispersed (sd = 2) data.</figcaption>
 </figure>
 </div>
 </div>
-</div>
-<div class="cell">
-
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-faunal-rem-distributions" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-faunal-rem-distributions-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.2: Distribution of animal remains in the dataset, displayed both by NISP raw value and NISP proportions.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.2: Distribution of animal remains in the dataset, displayed both by NISP raw value and NISP proportions.</figcaption>
 </figure>
 </div>
 </div>
@@ -341,9 +359,6 @@ Page under construction
 </section>
 <section id="chronology" class="level2" style="text-align:justify;" data-number="8.2">
 <h2 style="text-align:justify;" data-number="8.2" class="anchored" data-anchor-id="chronology"><span class="header-section-number">8.2</span> Chronology</h2>
-<div class="cell">
-
-</div>
 <section id="trends-by-century" class="level3" data-number="8.2.1">
 <h3 data-number="8.2.1" class="anchored" data-anchor-id="trends-by-century"><span class="header-section-number">8.2.1</span> Trends by century</h3>
 <p>The proposed model uses a betabinomial distribution to model overdispersion in the data and estimates the precision (or shape) parameter <span class="math inline">\(\phi\)</span> in the Beta distribution. The <span class="math inline">\(A\)</span> on the left side of the formula is the outcome variable, which represents the animal NISP count for each observed sample <span class="math inline">\(i\)</span>. The model is intercept-only, meaning that there are no further predictors included in the model. The average probability of success <span class="math inline">\(\bar{p}_{i}\)</span> is modelled through a logit link function, and is assumed to equal the intercept <span class="math inline">\(\alpha\)</span>. The model is also indexed with <span class="math inline">\({[Century]}\)</span> so that separate estimates can be obtained for each century (1<sup>st</sup> BCE to 11<sup>th</sup> CE).</p>
@@ -368,7 +383,7 @@ logit(\bar{p}_{i}) = \alpha_{[Century]}
 <div id="fig-betabin-zoo-prior-1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-betabin-zoo-prior-1.png" class="img-fluid figure-img" data-ref-parent="fig-betabin-zoo-prior" width="672"></p>
-<p></p><figcaption class="figure-caption">(a) The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution.</figcaption><p></p>
+<figcaption class="figure-caption">(a) The simulation shows how when no data is available values on the limits are likely. New observations however rapidly affect the posterior distribution.</figcaption>
 </figure>
 </div>
 </div>
@@ -376,7 +391,7 @@ logit(\bar{p}_{i}) = \alpha_{[Century]}
 <div id="fig-betabin-zoo-prior-2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-betabin-zoo-prior-2.png" class="img-fluid figure-img" data-ref-parent="fig-betabin-zoo-prior" width="672"></p>
-<p></p><figcaption class="figure-caption">(b) Conjugate beta distribution.</figcaption><p></p>
+<figcaption class="figure-caption">(b) Conjugate beta distribution.</figcaption>
 </figure>
 </div>
 </div>
@@ -388,21 +403,6 @@ logit(\bar{p}_{i}) = \alpha_{[Century]}
 <p>Cattle, on the other hand, exhibit different trends, with a HDI interval in the 1<sup>st</sup> century BCE above the millennium average (0.20), although with a large credible interval, and a negative trend from the 1<sup>st</sup> to the 3<sup>rd</sup> century CE. HDIs are again increasingly positive between the 4<sup>th</sup> and 7<sup>th</sup> centuries, but decrease in the 8<sup>th</sup> century. As for pigs, HDIs means are close to the millennium average in the 10<sup>th</sup> and 11<sup>th</sup> centuries.</p>
 <p>The modelled probability of occurrence of caprine reveals a positive trend in the 1<sup>st</sup> century BCE, followed by a negative trend (below the average of 0.28) from the 1<sup>st</sup> to the 3<sup>rd</sup> century CE. The probability of occurrence then increases around the 4<sup>th</sup>/5<sup>th</sup> centuries up to the 6<sup>th</sup>/7<sup>th</sup> centuries, with HDIs stable around the mean from the 8<sup>th</sup> to the 11<sup>th</sup> century. The edible wild animals that were included in the analysis are Sus scrofa ferus (boar), Cervus elaphus (red deer), Dama dama (fallow deer), Capreolus capreolus (roe deer), Lepus sp. (hare), Glis glis (dormouse), and unspecified birds. The domestic fowl species that were analysed are Gallus g. (chicken) and Anser A. (goose). Edible wild animals and domestic fowl predicted probabilities are relatively stable trends throughout the analysed period, with HDI means consistently below 0.10. Domestic fowl HDIs remain below the millennium mean of 0.06 from the 1<sup>st</sup> century BCE to the 2<sup>nd</sup> century CE, and then increase steadily from the 3<sup>rd</sup> century to remain around the mean until the 7<sup>th</sup> century. From the 7<sup>th</sup> to the 11<sup>th</sup> century, the HDIs remain positive, but with a much larger credible interval. Similarly, wild animals’ HDIs are positive in the 1<sup>st</sup> century BCE and remain stable around the millennium average (0.05) until the 6<sup>th</sup> century CE, after which they also show a slight increase until the 11<sup>th</sup> century.</p>
 <p>In addition to plotting the probabilities of occurrence extracted by the models, the distributions of the precision parameter <span class="math inline">\(\phi\)</span> are plotted for samples in each century. Each line is plotted with two probability intervals 0.65 (shorter thicker line) and 0.99 (longer thinner line). The probability density functions are also added to the top of the bar.</p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
@@ -427,18 +427,6 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]}
 <p><span class="math display">\[
 \phi_{[ChrID]} \sim Exponential(1)+2
 \]</span></p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <p>As anticipated, the phase-level trends exhibit posterior distributions similar to the more detailed century-level results. However, the phase-level model offers an advantage - the credible intervals are considerably narrower than those of the previous model. Since each phase spans several centuries, except for the medieval phase that only includes the 11<sup>th</sup> century, there are more data points available to provide more reliable probabilities. Pigs’ NISP are at their highest point during the Roman phase, whereas they decrease in the Late Roman and Early Medieval phase, only to be slightly below the millennium average (of 0.37) in the 11<sup>th</sup> century. The predicted millennium average is comparable to the previous century-level model (0.36), with a small difference which can be due to the grouping of the observations. The diachronical means for the other animals are also very comparable to the other with a maximum difference of ±1 for each animal. Cattle’s NISP probabilities of occurrence increase throughout the millennium, although in the 11<sup>th</sup> century (marked as Ma on the plot) the 99% credible interval is larger, spanning from 0.15 to 0.26. Conversely, the century-level model for this period indicated a small increase towards the millennium average. As for the century-level model, the caprine are the second most represented animal in the millennium. Their probability of occurrence shows HDIs just below the millennium mean (of 0.27) in the Roman and Late Roman age, and positive HDIs values for the Early Medieval and Medieval phase, a situation not so different than the century-level model. The phase-level trends for domestic fowl and wild animals show perhaps clearer trends than the century-level models. The HDI for domestic fowl, which is below the millennium mean of 0.05 in the Roman age, slightly increases in the later phases, with a peak in the 11<sup>th</sup> century. This peak is however less reliable than other phases, as the credible interval range is much larger. Wild animals posterior probabilities on the other hand are stable around the mean (0.04) with a small increase in probability during the Early Medieval and Medieval phases. In addition to improved credible intervals as opposed to the century-level model, the probability intervals for the <span class="math inline">\(\phi\)</span> shape parameter are also more reliable, as the PDFs are more narrow and most of the values are around the mean. Unfortunately, a smaller amount of samples for the 11<sup>th</sup> century produced more dispersed curves.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -452,9 +440,6 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]}
 <h4 data-number="8.2.2.1" class="anchored" data-anchor-id="community-plot"><span class="header-section-number">8.2.2.1</span> Community plot</h4>
 <p>After estimating the intercepts for each animal separately, they were compiled together to get a cohesive view of the probability of occurrence of the four animals. This approach is not ideal, but it can still be informative with regards to the patterns of animal exploitation in the archaeological record. The joint community plot allows to visually compare the probability of occurrence of each animal species over time and identify trends in their occurrence. For instance, the plot below shows how the predicted probability values for the three main domesticates—pigs, cattle and caprine vary across the four phases. Pigs have higher probabilities during the Roman phase, while already in the Late Roman period they get closer to other domesticates. It is in this period that the inter-sample variability of <span class="math inline">\(\phi\)</span> seem to decrease, although the values are not very high. The precision <span class="math inline">\(\phi\)</span> is instead very variable for edible wild animals and domestic fowl, as it can be expected given that it is much rarer to find these animals in a sample for various reasons already discussed in the methods. The high variability in the precision of the medieval (11<sup>th</sup> century) intercept and <span class="math inline">\(\phi\)</span> estimates can be explained by the lower number of samples. Overall, the most noticeable trends in the plot are the increased number of cattle in the early medieval period and the decreased number of pigs from the Late Roman phase. Modelling each animal species separately does not fully capture the complex interactions that exist among them, and future work should explore more advanced modelling approaches that account for the co-occurrence of multiple animal species in the same samples.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -466,14 +451,11 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]}
 <h2 style="text-align:justify;" data-number="8.3" class="anchored" data-anchor-id="context-type"><span class="header-section-number">8.3</span> Context type</h2>
 <p>Chronological models provide a broad overview of the trends in domestic and wild animal husbandry and consumption. However, it is important to consider the context where the animal remains are found because different site types can influence the NISP of a particular animal. We can stratify the dataset by site type, but there is a challenge: the four chronologies we are studying also affect the availability, frequency, and economic dynamics of the site types. For example, the agricultural strategies employed by rural villas during the Roman and Late Roman periods could differ based on political and economic events, which could affect the relative amount of animal NISP. To better understand how the context where animal remains were found affects our outcome variable, the <code>NISP</code>, we can use a Directed Acyclic Graph (DAG). In this DAG, the <code>Chronology</code> node is a parent of the <code>Site_Type</code> node, and it affects the <code>NISP</code> count directly and indirectly through <code>Site_Type</code>. To account for this backdoor path, we block by <code>Chronology</code> and stratify the dataset by <code>Site_Type</code>. Since we have two categorical predictors of interest, we can use an interaction index variable to generate distinct intercepts for each chronology and context type. For instance, the <code>Roman:Rural</code> context type could be assigned an index of 1, while <code>Roman:Urban</code> could be assigned an index of 2, and so on. This interaction dummy index (<span class="math inline">\({[TCid]}\)</span>) will determine the variation in intercepts (<span class="math inline">\(\alpha\)</span>) across different context types.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <div id="fig-site-type-dag-animals" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-site-type-dag-animals-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.4: This is a Directed Acyclic Graph (DAG) that represents the relationship between Chronology, Site_Type, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Site_Type. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.4: This is a Directed Acyclic Graph (DAG) that represents the relationship between Chronology, Site_Type, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Site_Type. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology.</figcaption>
 </figure>
 </div>
 </div>
@@ -495,30 +477,12 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <h3 data-number="8.3.1" class="anchored" data-anchor-id="pigs"><span class="header-section-number">8.3.1</span> Pigs</h3>
 <p>As previously noted, pig remains are consistently the most frequently found type of faunal remains in first millennium Italian excavations. However, this study reveals divergent patterns in the presence of pigs depending on the site type and function. We will first discuss categories with narrower credible intervals before moving on to those with smaller sample sizes and wider credible intervals. Urban sites are the most common category, where the probability of finding pig remains follows patterns similar to the chronological trends presented earlier. During the Roman phase, the probability of finding pig remains in urban contexts is very high compared to other animals or categories, with a mean probability of almost 0.5. The consumption of pork in cities appears to have decreased during the Late Roman and Early Medieval phase, with similar credible intervals, only to increase again in the 11<sup>th</sup> century. Possible hypotheses will be discussed later on. Although the precision of the pig beta posterior in urban contexts is slightly below the across-contexts mean of 5, the curves are not too dispersed, at least in the Roman and Late Roman periods, and we can be confident in these results. On the other hand, the 95% HDIs for pigs in rural contexts are lower than those in urban contexts during the Roman and Late Roman periods. In the Early Medieval phase, the mean probabilities are comparable to urban contexts, with both categories having a mean of around 0.31, which then increases to 0.37 in the 11<sup>th</sup> century (0.39 in urban contexts). In general, while the decline in pig presence appears to be significant in urban areas, rural contexts exhibit only a slight increase. Rural villas have been analyzed separately from other rural sites due to their potential implications for the production and consumption of meat, given their status as elite sites. Although the sample size is not large enough to provide highly confident posterior predictions, the results suggest that pork was likely an important component of the diet in these sites, with a mean of approximately 0.4 in the Roman period and an increase in the Late Roman phase. However, the Early Medieval phase is characterized by greater uncertainty, as the sample size is reduced and rural estates often changed function or were abandoned. The credible interval for this period ranges from 0.25 to 0.62. The suggested increase in pigs NISP in the Late Roman period will be discussed further later, as the historical debate might provide helpful hypotheses. It is worth noting that there is no sample from the 11<sup>th</sup> century for rural villas, which is why that line is not included in the graph. Fortified sites were also large consumers of pigs, with the probabilities of occurrence sticking around the mean value and a minor increase in the Early Medieval-Medieval periods. However, there are no significant changes in trends to observe. The probabilities of occurrence in the Late Roman phase are not so trustworthy as the credible interval is large. It is worth noting that there is no Roman posterior prediction on the graph because there were not fortified Roman sites in the sample except for one, the <em>castrum</em> of Ostia <span class="citation" data-cites="mackinnon2014">(<a href="references.html#ref-mackinnon2014" role="doc-biblioref">MacKinnon, 2014</a>)</span>, which has not been included in the observed data for this model as it was one single sample. The <em>castrum</em> had a 71.9% NISP proportion of pigs, out of a sample of 121 total NISP. The religious category has fewer observations than the site types presented before, and the credible intervals are wider. The Roman and Late Roman religious sites mostly include temples such as the temples C and D of Grumentum, the Demetra temple in Macchia delle Valli, the Mithraeum of Crypta Balbi, and more. In the Medieval phases, religious sites are mostly monasteries including the well-studied ones of Monte Gelato, Farfa, San Salvo, S. Giulia of Brescia, and San Vincenzo al Volturno. The range of credible intervals can span probabilities of 0.40, so we must be cautious in our considerations. If we look at the mean of the HDIs, a precise pattern does not emerge. However, in every chronology, the probability of occurrence of pig’s NISP is over the across-contexts average of 0.41. The credible intervals for necropolis sites are too large - spanning almost the entire probability range - to trace any clear patterns. With only nine samples from seven sites, including the Roman and Late Roman <em>necropoleis</em> of Cantone, Otranto, San Cassiano (Riva del Garda), Trieste (loc. Crosada), Poggio Gramignano, San Lorenzo di Sebato, and the Early Medieval necropolis of Baggiovara, the sample size is small. As a result, it is best to draw only qualitative conclusions in the later discussion. Finally, the last category includes only one well-known site, the Flavium amphitheater in Rome, which provided 29 zooarchaeological samples. The 95% HDIs for this site show very high probabilities, with mean values of 0.65 for the Roman and Late Roman periods and 0.49 for the Early Medieval period. However, the credible interval is quite wide for the Early Medieval phase, making it less certain. This type of site was not grouped with the other urban observations as it was too unique.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-28-2.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<div class="cell">
-
 </div>
 <p>Pigs are recognized as indicators of urban environments since pig rearing is primarily for meat production. This dataset contains numerous samples from Rome and Ostia, which is its neighboring port city. It is possible to model the “metropolitan” influence that these cities may have on the probability of discovering pig remains in urban areas. By doing so, we can calculate the differences in probabilities between Rome and other urban sites to gain insights into their varying likelihoods. Results show how pigs were more markedly present in Rome than other Italian urban centres, although they follow the same chronological decreasing trend as other cities.</p>
 <div class="cell">
@@ -537,18 +501,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <h3 data-number="8.3.2" class="anchored" data-anchor-id="cattle"><span class="header-section-number">8.3.2</span> Cattle</h3>
 <p>The probabilities of occurrence of cattle remains in different context types have thinner credible intervals compared to pig remains credible intervals. In urban sites, no significant changing pattern can be observed, as the means of the 95% HDIs mostly lay on the mean probability of 0.20 across contexts, with the exception of the Roman period where it was below mean. Medieval urban sites exhibit increased variability, possibly due to higher uncertainty associated with less data. The mean precision (<span class="math inline">\(\bar{\phi}\)</span> = 7 ca.) in medieval urban sites is the highest of any category. Rural contexts show more variability in probability trends and are more in line with the results of the chronological models. The credible intervals are slightly wider than urban contexts, but can still be interpreted and discussed later. In the Roman age, the probability of cattle occurrence is highest in rural sites, increasing after the 2<sup>nd</sup> century and slightly decreasing in the Medieval phases. Rural villas show stronger trends than rural sites, but with even more uncertainty. If in rural sites probabilities of occurrence of cattle NISP remains increases in the Late Roman period, in villas there is an opposite trend with cattle probabilities going below the mean. As previously mentioned, data on Early Medieval rural villas are scarcer due to the changing functions of these sites and their lower continuity. Only six sites provided nine samples in this period: Ficarolo (loc. Gaiba-Chiunsano), Monte Torto di Osimo, Santa Marta, Villa Magna, S. Giovanni di Ruoti, and Faragola. Consequently, the resulting analysis for this category has higher uncertainty and wider credible intervals. However, the probabilities suggest a small increase again in this phase. The posterior precision parameter (<span class="math inline">\(\bar{\phi}\)</span>) in this phase is the lowest, indicating both less data available and contradictory information in the data, contributing to the uncertainty. Fortified sites, while exhibiting more uncertainty during the Late Roman period, do not show significant changes in cattle NISP occurrences. The mean values of the 95% HDIs remain consistently above the overall mean of 0.20 in all chronologies, but only show a slight increase to around 0.25 in the Medieval period, with a higher precision. The trends in religious sites show similarities to those in villas, with mean probabilities dipping below the across-contexts average in the Late Roman period and a steady increase in the Early Medieval and Medieval phases. In <em>necropoleis</em>, the probabilities of cattle NISP are below the mean in the Roman-Late Roman periods. However, in the Early Medieval phase, due to limited data availability (only one sample from the necropolis of Baggiovara, where cattle NISP is 74/316), the uncertainty is high, and the credible interval is too wide to draw any meaningful conclusions. This extended credible interval is due to the flat prior, indicating that the model is too uncertain to provide reliable probabilities. The final category consists of only one site, the Flavium amphitheater. The probability of occurrence of cattle NISP remains in this category is relatively low and does not follow the same patterns as urban sites. There is a small decrease in the Late Roman period and a potentially uncertain increase in the Early Medieval phase. However, the 50% HDI probabilities are consistently below the across-contexts mean.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -557,9 +509,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 </div>
 </div>
 <p>If pigs can act as a marker of urbanization, it is also important to investigate whether the consumption patterns of other animals in Rome differ from those in other urban centers. Additionally, while pigs were primarily raised for meat consumption, cattle had further purposes beyond meat production (<em>e.g.</em> agricultural purposes, leather production, etc.). To overcome this issue, it would be ideal to control for factors such as age and wear, even though this is outside the boundaries of this research and biometric data is not stored in the database. It is essential to keep this context in mind when interpreting the graphs and drawing conclusions. In contrast to pigs, the analysis reveals notable distinctions in cattle consumption trends between Rome and other urban sites across different chronological phases. One notable observation is that cattle appears to be more commonly consumed in other urban cities compared to Rome. Additionally, while cattle consumption decreases in Rome during the Late Roman period, it concurrently increases in other cities. It is worth noting that the credible intervals in Rome are relatively high, limiting further comparisons in other periods. However, there seems to be a positive trend again in the early medieval phase. The graph depicting the differences illustrates a narrower gap between Rome/Ostia and other cities during the Roman period, whereas the disparity becomes more pronounced in the Late Roman phase.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
@@ -573,18 +522,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <h3 data-number="8.3.3" class="anchored" data-anchor-id="caprine"><span class="header-section-number">8.3.3</span> Caprine</h3>
 <p>Among the contexts analyzed, the probability of finding caprine remains is the second highest with a mean of 0.29, following pig remains. In Roman and Late Roman urban sites caprine probabilities are below the mean, although there is a positive trend until the Early Middle Ages. The Medieval phases (6<sup>th</sup> to 11<sup>th</sup> century) show mean probabilities of 0.31. Rural sites exhibit a decreasing trend, with the 50% HDIs always above mean. However, even with this decreasing trend, the probabilities in rural sites are still higher than those in urban sites. In the Roman period, the caprine probability of occurrence is particularly high (0.35) in rural sites and decreases in the following phases, until the 11<sup>th</sup> century, when there is a strong increase in caprine probabilities (associated with more uncertainty and variability). Rural villas show a decreasing trend in the probabilities of caprine remains: the 50% HDI probabilities in rural villas remain lower than the average, with a slight decrease in the Late Roman phase and a strong increase in the Early Medieval period, when uncertainty is also high. Although the number of samples is not as high as other categories, the mean precision (<span class="math inline">\(\bar{\phi}\)</span> = 8.5 ca.) is high in the Late Roman phase, indicating consistency in the samples. In fortified sites, there is a decreasing trend in caprine probability, starting from a high point of 0.37 in the Late Roman phase and reaching below the average of all contexts in the 11<sup>th</sup> century. As for the case of most categories (except urban sites), there is a decreasing trend in caprine probability until the 11<sup>th</sup> century in religious sites. However, for this category the credible intervals are quite wide, and the precision is always below average, making it challenging to draw reliable conclusions. In the case of <em>necropoleis</em>, the credible intervals are too large to provide any meaningful insight. Finally, in the Flavium amphitheater samples the 50% HDIs probabilities are below average, decreasing in the Late Roman period and increasing (with extreme uncertainty) above average in the Early Medieval phase.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -593,9 +530,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 </div>
 </div>
 <p>Regarding sheep and goats, similar differences were calculated between Rome/Ostia and other urban sites. The overall chronological trends in urban sites do not exhibit significant variations, while Rome and Ostia show an increasing trend, although with a larger credible interval after the Roman period. In this case as well, the differences in probabilities of finding sheep/goat remains in Rome/Ostia versus other urban sites are negative, suggesting that these animals were consumed more in other cities than in the capital. However, during the Late Roman phase, the mean probability approaches zero.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
@@ -609,18 +543,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <h3 data-number="8.3.4" class="anchored" data-anchor-id="edible-w.-animals"><span class="header-section-number">8.3.4</span> Edible W. Animals</h3>
 <p>The trends in edible wild animals are similar between urban and rural sites, with mean probabilities below the average of 0.07 during the Roman and Late Roman periods. The means for urban sites are around 0.03, while those for rural sites are approximately 0.05. In the Early Medieval period, both urban and rural sites show a small increase, with probabilities of 0.05 and 0.06, respectively. In the Medieval period, the 50% HDIs are above the mean for both urban and rural sites, reaching a peak of 0.11 in rural areas. However, caution is required for the 11<sup>th</sup> century, as the credible interval is larger and the mean precision (<span class="math inline">\(\bar{\phi}\)</span>) is low, indicating increased variability. While the credible intervals are wider, rural villas consistently have means above the average and higher than other site types. In the Roman period, the mean probability is 0.11, which decreases to 0.09 in the Late Roman phase and 0.05 in the Early Middle Ages. Similarly, fortified sites display 50% HDIs above the across-context mean, with a small decrease in the Early Medieval phase and an increase in the 11<sup>th</sup> century. Both sites show a positive correlation between game consumption and elite lifeways. Religious sites show probabilities above the mean in the Roman and Late Roman periods, when these sites mostly include temples or ritual contexts. However, in the Medieval phases, the probabilities decrease below the mean instead. The credible intervals for the <em>necropoleis</em> are too wide to draw any reliable conclusion, but it is noteworthy that there is evidence of wild game consumption in these contexts. The Flavium amphitheater also exhibits probabilities below the mean, although the full credible interval extends above the mean as well. In the Early Medieval phase, the mean probability rises above 0.10, but the credible interval remains too wide for confident interpretation.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -632,9 +554,6 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <section id="community-plot-1" class="level3" data-number="8.3.5">
 <h3 data-number="8.3.5" class="anchored" data-anchor-id="community-plot-1"><span class="header-section-number">8.3.5</span> Community plot</h3>
 <p>To examine the overall trends across all context types and chronologies, the probabilities of occurrence for the four animals were compiled and plotted against the precision. The resulting plot shows different context types and chronologies for each animal. Since these are separate models, multinomial regressions would be informative in this sense. These models could be explored further in future research. In the Roman period, the probabilities for pigs and wild animals show clear separation among urban, rural, and villa sites. Pigs are mostly predicted in urban sites, followed by villas and rural sites. Conversely, wild animals have higher probabilities in villas, then rural and urban sites. For pigs, most of the <span class="math inline">\(\phi\)</span> values range between 3 and 8 across all contexts, while the wild animals model shows low precision values for villas and greater variability in urban and rural sites. Additionally, wild mammal probabilities in villa sites vary widely, ranging from 0.05 to as high as 0.20. In contrast, the probabilities of wild mammal occurrence in urban and rural sites are more consistent. The probabilities of cattle and caprine in different contexts are less clear. Rural sites have higher probabilities for both animals than urban sites, and the probabilities for villas have wider ranges. However, adding a fourth site type in the Late Roman period complicates the reading. As for the Roman period, pigs and wild animals show a separation, with pigs being more likely in urban sites and wild animals in villas, but there is a shift in probabilities in the Late Roman period. Pigs are now more likely in villas, whereas wild animals remain similarly distributed. Fortified sites have variable probabilities for all animals. Cattle is more present in rural sites, followed by urban and villa sites, while caprine is most likely to occur in fortified sites (with high variability), followed by rural, urban, and villa sites. The latter show a higher degree of precision. In the Early Medieval period, there is less distinction between the different context types for all animals, except for cattle, which is more likely to occur in rural sites, followed by urban and villa sites. There are no clear trends for the other animals. In the 11<sup>th</sup> century, there is a lot of variability for all animals, possibly due to the smaller sample size. Pigs appear to be more common on urban and fortified sites, while cattle and caprine are more likely to occur on rural sites. The patterns of probabilities for wild animals are highly inconsistent.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="1152"></p>
@@ -650,7 +569,7 @@ logit(\bar{p}_{i}) = \alpha_{[TCid]}
 <div id="fig-macroregion-dag-animals" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-macroregion-dag-animals-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.5: The DAG that represents the relationship between Chronology, Macroregion, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Macroregion. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.5: The DAG that represents the relationship between Chronology, Macroregion, and NISP in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Macroregion. To block the backdoor path between Chronology and NISP, the dataset is stratified by Chronology.</figcaption>
 </figure>
 </div>
 </div>
@@ -668,18 +587,9 @@ logit(\bar{p}_{i}) = \alpha_{[REGid]}
 <p><span class="math display">\[
 \phi_{[REGid]} \sim Exponential(1)+2
 \]</span></p>
-<div class="cell">
-
-</div>
 <section id="pigs-1" class="level3" data-number="8.4.1">
 <h3 data-number="8.4.1" class="anchored" data-anchor-id="pigs-1"><span class="header-section-number">8.4.1</span> Pigs</h3>
 <p>The credible intervals of the resulting probabilities of pig occurrence show variability, making it challenging to describe the results. However, some observations can still be made. Firstly, it’s noticeable that Southern and Central Italy share similar trends, albeit with different estimated probabilities. In the Roman period, Central Italy has the highest 95% HDI for pigs, with a mean probability of 0.51, well above the across-regions mean of 0.36. Although 50 out of 99 samples from this period are from urban contexts, the 30 samples from rural contexts are sufficient to avoid suspicions of biases. Similarly, the credible interval is wider in Southern Italy, with a mean probability of around 0.43. For both regions, the trend shows a decreasing probability of pig occurrence in the Late Roman and Early Medieval periods. In Central Italy, the 95% HDI mean values reach the across-regions mean in the Early Middle Ages, while in Southern Italy, most probabilities are already below the mean in the Late Roman period. The analysis reveals a different pattern for Northern Italy compared to Southern and Central Italy. The probability of pigs in Northern Italy shows only a slight decrease in the Late Roman period, from 0.27 to 0.26. However, there is an apparent increase in the probability of pigs during the Medieval phases, although the 11<sup>th</sup> century remains uncertain due to limited observations. Conversely, in Southern and Central Italy, the trend is decreasing in the Late Roman and Early Medieval periods. While the 11<sup>th</sup> century shows a slight increase in both regions, the credible interval for Southern Italy is too wide to draw any meaningful conclusions.</p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="672"></p>
@@ -693,12 +603,6 @@ logit(\bar{p}_{i}) = \alpha_{[REGid]}
 <h3 data-number="8.4.2" class="anchored" data-anchor-id="cattle-1"><span class="header-section-number">8.4.2</span> Cattle</h3>
 <p>Similar patterns are observed for the occurrence probabilities of cattle in Southern and Central Italy. In the Roman and Late Roman periods, the 50% HDIs for Southern and Central Italy are lower than the across-regions mean of 0.23. However, in the Early Middle Ages, the probabilities increase in both regions and go above the mean. In contrast, Northern Italy shows much higher mean probabilities in the Roman (0.27) and Late Roman (0.32) periods compared to the other regions, but the mean decreases to 0.24 in the Early Middle Ages. Due to wide credible intervals, it is difficult to provide accurate estimates for the 11<sup>th</sup> century.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -711,12 +615,6 @@ logit(\bar{p}_{i}) = \alpha_{[REGid]}
 <h3 data-number="8.4.3" class="anchored" data-anchor-id="caprine-1"><span class="header-section-number">8.4.3</span> Caprine</h3>
 <p>There are distinct patterns in caprine occurrence probability across the three regions examined. In Central Italy, the probability of caprines is consistently lower than the across-regions mean of 0.31, ranging from 0.24 to 0.26 in the Roman age to the Early Middle Ages. While the 11<sup>th</sup> century credible interval is wide, most probabilities are above the mean. The model precision is particularly good in Roman and Late Roman Central Italy, with a peak of around 8. Roman Northern Italy has the highest probability of caprine occurrence in the Roman age, with a mean value of 0.36. However, after this period, the mean probabilities decrease below the mean, only to increase again in the 11<sup>th</sup> century. Nevertheless, the probability distribution for this period is not reliable. Southern Italy, on the other hand, shows a steady increase in probability from the Roman age, with the 50% HDI around the mean, to a peak of 0.41 in the Early Middle Ages. However, the wide credible interval and low model precision in the 11<sup>th</sup> century prevent definitive conclusions.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -728,12 +626,6 @@ logit(\bar{p}_{i}) = \alpha_{[REGid]}
 <section id="edible-w.-animals-1" class="level3" data-number="8.4.4">
 <h3 data-number="8.4.4" class="anchored" data-anchor-id="edible-w.-animals-1"><span class="header-section-number">8.4.4</span> Edible W. Animals</h3>
 <p>The distribution of edible wild animals in the Roman and Late Roman periods is below the across-regions mean of 0.05. In Central Italy, there is an increase in the probability of game consumption from the Roman to the Medieval age, with an uncertain trend in the 11<sup>th</sup> century. The precision parameter <span class="math inline">\(\bar{\phi}\)</span> is also high in the Medieval phase. Similarly, Northern Italy shows an increase in the probability of game consumption in the Medieval phases, while the mean probabilities decrease after the Roman age. Southern Italy, on the other hand, has a stable trend from the Roman to the Early Medieval period, with an uncertain increase in the 11<sup>th</sup> century. The credible interval is wide, and the model might have produced estimates in agreement with the other regions. However, there is evidence of an increase in game consumption in the 11<sup>th</sup> century in every macroregion.</p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-66-1.png" class="img-fluid" width="672"></p>
@@ -748,14 +640,11 @@ logit(\bar{p}_{i}) = \alpha_{[REGid]}
 <h2 style="text-align:justify;" data-number="8.5" class="anchored" data-anchor-id="geography"><span class="header-section-number">8.5</span> Geography</h2>
 <p>Animals distributions can vary across different geographical features. This research has considered plains, coasts, hills and mountains as the most common geographical features in the Italian peninsula. The majority of excavations that returned faunal samples are located at low altitudes. Although - as can be expected - Northern Italy provided more samples from mountain sites when compared to the other parts of mainland Italy, the other samples seem to be evenly located on on plains, coastlands and hills.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <div id="fig-waffle-zoo-geo" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-waffle-zoo-geo-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.6: Distribution of sites on different geographical features.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.6: Distribution of sites on different geographical features.</figcaption>
 </figure>
 </div>
 </div>
@@ -774,18 +663,9 @@ logit(\bar{p}_{i}) = \alpha_{[GEOid]}
 <p><span class="math display">\[
 \phi_{[GEOid]} \sim Exponential(1)+2
 \]</span></p>
-<div class="cell">
-
-</div>
 <section id="pigs-2" class="level3" data-number="8.5.1">
 <h3 data-number="8.5.1" class="anchored" data-anchor-id="pigs-2"><span class="header-section-number">8.5.1</span> Pigs</h3>
 <p>The data suggests that the probabilities of finding pig remains are generally higher in lowland areas, including coasts, plains, and hills, with mean probability values above the overall mean of 0.35 during the Roman period. However, there appears to be a general decrease in the 95% HDIs during the Late Roman period, with the decline being more pronounced in plains where the mean probability drops from 0.49 to 0.34. In plains, probabilities increase above the mean only in the 11<sup>th</sup> century, whereas on coastal sites, the credible interval becomes wider in the 11<sup>th</sup> century, and the mean remains below the average. Although the association between hills and pig remains probabilities seems to be always above average, there are no major patterns of chronological change. In mountains, pig remains are always below the mean, but there seems to be an increase (associated with a good amount of uncertainty, as indicated by the low precision parameter and wide credible interval) in the Early Medieval Age. Unfortunately, no clear indication can be given for the Medieval phase on mountains, given the wide credible interval that spans the entire probability range. This is due to the limited availability of samples for this period and geographical feature: the castrum of Rocca di Asolo (pigs NISP: 220/698 and 529/1837), the Toblburg Castle (94/346) and Rocchetta Nuova of Vacchereccia (60/258).</p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-72-1.png" class="img-fluid" width="672"></p>
@@ -799,12 +679,6 @@ logit(\bar{p}_{i}) = \alpha_{[GEOid]}
 <h3 data-number="8.5.2" class="anchored" data-anchor-id="cattle-2"><span class="header-section-number">8.5.2</span> Cattle</h3>
 <p>In this model, the overall predicted probabilities of cattle are consistently lower than those of other animals, with an average of 0.25. However, mountain sites show a higher mean probability for cattle compared to other geographical features. On the coasts, there is a chronological increase in cattle probabilities, with a mean value going above the overall mean in the 11<sup>th</sup> century, albeit with higher uncertainty due to the fewer available sites. Conversely, on hills and plains, the probabilities of cattle increase only slightly. What is particularly noteworthy is the trend observed in mountain sites, despite the higher uncertainty due to the lower number of available sites. Here, there is an increase in probabilities during the Late Roman period, from a mean of 0.25 to 0.35, followed by a decrease in the Early Medieval period, although with a wider credible interval. In the 11<sup>th</sup> century, the credible interval again spans across the entire probability range, with no clear indication of the trend. Four samples from three sites are available for this period: the castrum of Rocca di Asolo (cattle NISP: 265/698 and 395/1837), the Toblburg Castle (204/346) and Rocchetta Nuova of Vacchereccia (120/258).</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-75-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -816,12 +690,6 @@ logit(\bar{p}_{i}) = \alpha_{[GEOid]}
 <section id="caprine-2" class="level3" data-number="8.5.3">
 <h3 data-number="8.5.3" class="anchored" data-anchor-id="caprine-2"><span class="header-section-number">8.5.3</span> Caprine</h3>
 <p>The average probability for the occurrence of caprine remains is 0.34 across all geographical features. On coastal sites, the mean probabilities are below average in the Roman-Late Roman periods, but increase slightly in the Early Medieval phase and go above mean in the 11<sup>th</sup> century, although the credible interval is high and the <span class="math inline">\(\bar\phi\)</span> is below mean. This increase is also seen on hills, where mean probabilities are below mean until the Early Medieval phase and decrease slightly below mean again in the 11<sup>th</sup> century. On plains, the mean probabilities are always below mean - as can be expected - but generally increase. Credible intervals for mountain sites are very wide, and thus require caution in interpretation. The general trend seems to be in decline from the Roman to the Early Medieval phase from a mean of 0.55 to 0.45. Again, it is impossible to draw conclusions for the 11<sup>th</sup> century phase on mountains as only four samples from three sites are available: the castrum of Rocca di Asolo (caprine NISP: 164/698 and 523/1837), the Toblburg Castle (48/346) and Rocchetta Nuova of Vacchereccia (68/258).</p>
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-78-1.png" class="img-fluid" width="672"></p>
@@ -835,12 +703,6 @@ logit(\bar{p}_{i}) = \alpha_{[GEOid]}
 <h3 data-number="8.5.4" class="anchored" data-anchor-id="edible-w.-animals-2"><span class="header-section-number">8.5.4</span> Edible W. Animals</h3>
 <p>NISP from wild animals is always low, and the probabilities of occurrence show little variation, as most mean probability values lay around the mean of 0.09. Overall, there is a positive association between 11<sup>th</sup> century sites and game consumption in all geographical features. On plains, mean probabilities are above mean already in the Early Medieval period. Again, it is hard to draw conclusions for medieval mountain sites as there are only four samples available: the castrum of Rocca di Asolo (NISP: 12/698 and 39/1837), the Toblburg Castle (0/346) and Rocchetta Nuova of Vacchereccia (0/258).</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-81-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -852,9 +714,6 @@ logit(\bar{p}_{i}) = \alpha_{[GEOid]}
 </section>
 <section id="altitude" class="level2" data-number="8.6">
 <h2 data-number="8.6" class="anchored" data-anchor-id="altitude"><span class="header-section-number">8.6</span> Altitude</h2>
-<div class="cell">
-
-</div>
 <p>The probability of occurrence of the most common faunal remains can be modelled against the elevation of sites in the four time periods under consideration. It is worth noting that the sites where the zooarchaeological remains have been found are not evenly distributed. In the Roman age, most sites investigated are located between 0 and 100 MSL, whereas after there is an increasing number of remains from sites between 100 and 400 MSL. Whether this reflects a real shift in settlement patterns is outside the aims of this study, but it might still be informative to visualise the different distribution of sites across elevations.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -882,7 +741,7 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 <div id="fig-prior-pred-animals-altitude" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-prior-pred-animals-altitude-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.7: Prior predictive simulation for the altitude models used in this section.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.7: Prior predictive simulation for the altitude models used in this section.</figcaption>
 </figure>
 </div>
 </div>
@@ -890,9 +749,6 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 <section id="pigs-3" class="level3" data-number="8.6.1">
 <h3 data-number="8.6.1" class="anchored" data-anchor-id="pigs-3"><span class="header-section-number">8.6.1</span> Pigs</h3>
 <p>The model shows a negative correlation between an increase in elevation and the probabilities of finding pig remains. This result was already suggested in the models with the geographical features as a predictor. In fact, although the variability increases at higher altitudes (due to the more restricted number of samples available), pig remains are more likely to be found in lowlands in all chronologies. The mean precision <span class="math inline">\(\bar\phi\)</span> for the four chronologies is 5.41.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-86-1.png" class="img-fluid" width="672"></p>
@@ -903,9 +759,6 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 <h3 data-number="8.6.2" class="anchored" data-anchor-id="cattle-3"><span class="header-section-number">8.6.2</span> Cattle</h3>
 <p>If pigs showed a negative trend with increased elevations, cattle shows an opposite pattern. In every chronology, probabilities of finding cattle are much higher at high elevations. The Early Medieval and Medieval phases show the strongest association between higher elevations and a larger number of cattle NISP remains. However, the Medieval and Roman datasets do not include samples above 1.2km.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-88-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -915,23 +768,14 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 <h3 data-number="8.6.3" class="anchored" data-anchor-id="caprine-3"><span class="header-section-number">8.6.3</span> Caprine</h3>
 <p>The correlation between sheep/goats NISP and elevation is perhaps the most interesting when stratified by chronology. In the Roman and Late Roman phases, there is a positive correlation between altitude and the probability of finding caprine NISP, meaning that caprine are more likely to be found at high altitudes. However, in the Early Middle Ages, this trend diverges. The correlation begins to become negative, although not markedly, suggesting that there are changing trends. This trend becomes increasingly negative in 11<sup>th</sup> century sites. The mean precision <span class="math inline">\(\bar\phi\)</span> for the four chronologies is 7.57.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-90-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<div class="cell">
-
 </div>
 </section>
 <section id="edible-w.-animals-3" class="level3" data-number="8.6.4">
 <h3 data-number="8.6.4" class="anchored" data-anchor-id="edible-w.-animals-3"><span class="header-section-number">8.6.4</span> Edible W. Animals</h3>
 <p>In contrast, modeling the number of wild animal NISP remains against altitude was not very informative. The probability of occurrence of these species is always low, so elevation does not seem to be a major factor in their distribution. The prediction line appears to indicate no correlation, although if we include the 0.99 credible interval, the correlation is potentially positive in all chronologies. The model performed very poorly on 11<sup>th</sup> century sites, because not many sites reported wild animal remains and the credible intervals are quite wide. In other chronologies, the credible intervals are not very large and the overall mean precision parameter <span class="math inline">\(\bar\phi\)</span> is 15.65, indicating that the data was not very dispersed.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="zooarchaeology_files/figure-html/unnamed-chunk-93-1.png" class="img-fluid" width="672"></p>
@@ -942,22 +786,19 @@ logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
 <h3 data-number="8.6.5" class="anchored" data-anchor-id="community-plot-2"><span class="header-section-number">8.6.5</span> Community plot</h3>
 <p>To examine the overall trends across all phases and different elevations, the probabilities of occurrence for the four animals were compiled and plotted against the slope coefficient (which in the models is multiplied by the elevation). The resulting plot shows probabilities of occurrence of each animal at different elevations. The horizontal dashed line represents the probability of finding each animal at sea level. It is worth reminding that these are separate models, and further research should explore other models, for instance multinomial models. In the Roman period, pigs were the most likely remains to be found, with probabilities ranging from 0.40 to 0.45. Most of the probabilities are negative, indicating a negative correlation with altitude. This suggests that pigs were more likely to be raised in lower-lying areas. Wild animals were also negatively correlated with altitude, but the correlation was not as strong as for pigs. Caprine and cattle were the second and third most common animal remains found, respectively. They were both positively correlated with altitude. In the Late Roman period, the probability of finding pig remains decreased to 0.35-0.34, while the probabilities of finding wild animal, caprine, and cattle remains remained more or less the same. This suggests that pigs may have become less common in this period. In the Early Medieval period, the probabilities of finding cattle and caprine remains increased to 0.17-0.26 and 0.26-0.34, respectively, while the probability of finding wild animal remains decreased to 0.05-0.10. Although cattle and caprine may have become more common in this period, pigs probabilities of occurrence did not change being still the most common species found in zooarchaeological samples. It is interesting to notice how in this period caprine probabilities are negatively correlated to the elevation of sites. This correlation becomes more markedly negative in the 11<sup>th</sup> century phase. In this last phase, there was increased variability in the probabilities of finding all four animal remains. This may be the result of a smaller amount of samples.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
 <div class="cell-output-display">
 <div id="fig-domestic-alt" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="zooarchaeology_files/figure-html/fig-domestic-alt-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;8.8: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;8.8: MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the animal remains and increasing altitude. Intercepts were kept as a baseline occurrence probability of the species. Species on the left of the graph are rarer, species on the right are more common. It is important to notice that this represents the species response to elevation.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-mackinnon2014" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-mackinnon2014" class="csl-entry" role="listitem">
 MacKinnon, M., 2014. Animals in the urban fabric of ostia: Initiating a comparative zooarchaeological synthesis. Journal of Roman Archaeology 27, 175201.
 </div>
 </div>
@@ -992,9 +833,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1059,6 +914,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1113,7 +1054,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
   </div>
 </footer>
 

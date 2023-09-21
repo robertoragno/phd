@@ -68,9 +68,9 @@ R, as described on the [R-Project FAQs](https://cran.r-project.org/doc/FAQ/R-FAQ
 
 #### R Packages
 
-In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 19,877 packages[^methods-2]. This section details some of the packages that have been most useful for this research.
+In addition to base R, several packages enhance its performances and offer more tools to users. The packages are distributed by the official [CRAN repository](https://cran.r-project.org/web/packages/), which counts more than 19,909 packages[^methods-2]. This section details some of the packages that have been most useful for this research.
 
-[^methods-2]: Updated on August 8th, 2023.
+[^methods-2]: Updated on September 21st, 2023.
 
 ##### tidyverse
 
@@ -233,7 +233,7 @@ Whenever dealing with non-normal or skewed distributions, it may be wise to move
 
 Among the statistical models most frequently used are Generalised Linear Models (GLMs). GLMs should be employed because of their ability to handle a wide range of response variables, including non-normal and categorical variables, and to allow modelling of other distributions. Furthermore, GLMs permit the modelling of non-constant variance functions, particularly valuable in addressing heteroscedasticity, a common issue in many datasets. Once the predictor ($X$, the factor used to make the prediction) and the response variable ($Y$, the factor being explained or predicted) and are identified, the subsequent step is to analyse the relationship between the two by correctly formulating the statistical model. The statistical method used for modelling data must be appropriate to the type of data being analysed. When modelling counts of data, a probability density function (PDF) such as Poisson, negative-binomial, and others should be specified. For presence-absence data, various PDFs such as binomial, beta-binomial, and others are necessary [@guisanPredictiveHabitatDistribution2000, pp.159-160; @guisanHabitatSuitabilityDistribution2017, pp.55-56]. Each of these distributions possesses distinctive properties and traits that are suitable for modelling certain kinds of data. For example, the Poisson distribution is commonly employed when operating with count data, such as the amount of events of a particular kind taking place within a fixed interval. It presupposes that events happen at a consistent rate and are mutually independent. On the other hand, the binomial distribution is appropriate for modelling binary data, in which outcomes are either success or failure, such as presence or absence. Along with selecting the appropriate probability distribution, choosing a link function is also crucial in statistical modelling. The link function determines the relationship between the predictors and the expected value of the response variable. Commonly used link functions include the logit link for logistic regression (which constrains the outcome variable between 0 and 1), the log link for several types of regression (Gaussian, Poisson, Gamma, etc.), and the identity link for linear regression. Selecting a suitable link function depends on the data type and the specific research question being addressed.
 
-## Modeling, the Bayesian way {style="text-align:justify;"}
+## Modeling, the Bayesian way {#sec-bayesian-modeling style="text-align:justify;"}
 
 "Bayesian data analysis takes a question in the form of a model and uses logic to produce an answer in the form of probability distributions" [@mcelreath2016]. In the literature review section we already discussed the rationale behind Bayesian inference, introducing the concept of prior probabilities. The construction of a Bayesian statistical model initially resembles that of its frequentist counterpart, as we begin with a sampling model for observed data ($B$) given a vector of unknown parameters ($A$). However, a unique aspect of the Bayesian model is that the unknown parameters are not fixed, but instead are regarded as random. We create a probability distribution for A that summarises any relevant information. This distribution is known as the prior distribution. Prior distributions may have other random parameters which can be assigned other probability distributions, and these parameters are referred to as hyperparameters. Bayes' Theorem is then used to derive the posterior distribution, which can be viewed as a compromise between our prior knowledge and the data we have gathered (@fig-bayesian-compromise). In short, if we have *prior* knowledge or belief about an event, we can use Bayes' rule to update our belief in light of new data:
 
@@ -459,13 +459,13 @@ Conjugate priors for the likelihood are an algebraic convenience, as they facili
 
 -   With $\alpha = \beta = 1$, the Beta pdf is uniform.
 
--   With $\alpha < \beta$, the Beta pdf is right skewed.
+-   With $\alpha < \beta$, the Beta pdf is right-skewed.
 
--   With $\alpha > \beta$, the Beta pdf is left skewed.
+-   With $\alpha > \beta$, the Beta pdf is left-skewed.
 
 -   With $\alpha = \beta$, the Beta pdf is symmetric with mean and mode equal to 0.5.
 
-The $\alpha$ and $\beta$ values also provide information on the variability of the probability density function. As these values increase, the pdf becomes narrower, more concentrated around the mean, and less dispersed. It is clear that these qualities are desirable as they provide significant flexibility when selecting a prior belief. How can we benefit from these properties? The solution is to use a beta-binomial model, a mixture model in which each binomial count observation has its unique probability of success, allowing a distribution of probabilities of success to be estimated rather than a singular probability [@mcelreath2016, pp.370-371]. Instead of utilising the conventional formulation of the beta-binomial distribution, the reparameterization provided in McElreath was adopted for this study. In this reparameterization, Beta takes on two parameters: a mean probability of $p$ and a scale or precision parameter of $\phi$[^methods-6]. The value of $\phi$ can be determined based on the relationship between $\alpha$ and $\beta$, which is such that: $$\alpha = p \cdot \phi; \beta = (1-p) \cdot \phi$$ Additionally, the Beta-Binomial model:
+The $\alpha$ and $\beta$ values also provide information on the variability of the probability density function. As these values increase, the pdf becomes narrower, more concentrated around the mean, and less dispersed. It is clear that these qualities are desirable as they provide significant flexibility when selecting a prior belief. How can we benefit from these properties? The solution is to use a beta-binomial model, a mixture model in which each binomial count observation has its unique probability of success, allowing a distribution of probabilities of success to be estimated rather than a singular probability [@mcelreath2016, pp.370-371; @leeBayesianEstimationPrediction1987; @leeNoteBayesianEstimation1999; @kimValidationBetaBinomialModel2017]. Instead of utilising the conventional formulation of the beta-binomial distribution, the reparameterization provided in McElreath was adopted for this study. In this reparameterization, Beta takes on two parameters: a mean probability of $p$ and a scale or precision parameter of $\phi$[^methods-6]. The value of $\phi$ can be determined based on the relationship between $\alpha$ and $\beta$, which is such that: $$\alpha = p \cdot \phi; \beta = (1-p) \cdot \phi$$ Additionally, the Beta-Binomial model, in which $p$ is assumed to follow a Beta distribution:
 
 [^methods-6]: The precision (or scale/spread) parameter is referred to as $\theta$ by @mcelreath2016, $\phi$ by @burknerOrdinalRegressionModels2019 and $\kappa$ by @kruschkeDoingBayesianData2015. They all mean the same thing. This research will refer to the parameter as $\phi$, following @burknerOrdinalRegressionModels2019.
 
@@ -491,7 +491,7 @@ This formulation (which already includes the Beta distribution) is simpler for m
 
 -   When $\phi > 2$, the distribution becomes increasingly narrow and the probabilities are more concentrated.
 
-With these concepts in mind, we can begin constructing a beta-binomial model to evaluate its practicality. Let us examine a case in this study. Extending the binomial model that was previously presented to estimate the occurrence of pigs, let us move back into multilevel territory. Having constructed a DAG, we are interested in knowing the predicted occurrence of pig remains on different site types, stratified by chronology. Just as in the previous binomial archaeobotanical example, we introduce a trick to map the interaction between each of the site types and each of the chronologies: an interaction index. We define the variable intercept as $\alpha$ and clarify that $[TCid]$ signifies the numerical interaction index. Consistent with our earlier example, we also assign $\alpha$ a weakly informative prior of $Normal(0,1.5)$. To establish a prior for the shape parameter $\phi$ of assuming that any $\phi$ value below 2 would result in excessive dispersion, we aim to establish a flat beta distribution as a baseline [@kermanNeutralNoninformativeInformative2011]. In order to proceed, a prior distribution with a minimum of 2 is required. @mcelreath2016 [p.371] recommends the use of an exponential distribution, which has a minimum of 0. Therefore, two is added to the $Exp(1)$ generative model (compare @fig-beta-zoo-prior-sim-methods and @fig-betabin-zoo-prior-sim-methods). The interaction index $[TCid]\$\$ is also added to the prior $\phi$ in order to get varying estimates for each site type and chronology.
+With these concepts in mind, we can begin constructing a beta-binomial model to evaluate its practicality. Let us examine a case in this study. Extending the binomial model previously used to calculate pig occurrence, we shift our focus back to the multilevel realm. As a recap, a multilevel model allows us to model counts while retaining information about variation between and within groups, and about group sizes (through credible intervals). Furthermore, multilevel models improve estimate accuracy for small groups by gathering information from other groups through partial pooling. Having constructed a DAG, we are interested in knowing the predicted occurrence of pig remains on different site types, stratified by chronology. Just as in the previous binomial archaeobotanical example, we introduce a trick to map the interaction between each of the site types and each of the chronologies: an interaction index. We define the variable intercept as $\alpha$ and clarify that $[TCid]$ signifies the numerical interaction index. Consistent with our earlier example, we also assign $\alpha$ a weakly informative prior of $Normal(0,1.5)$. To establish a prior for the shape parameter $\phi$ of assuming that any $\phi$ value below 2 would result in excessive dispersion, we aim to establish a flat beta distribution as a baseline [@kermanNeutralNoninformativeInformative2011]. In order to proceed, a prior distribution with a minimum of 2 is required. @mcelreath2016 \[p.371\] recommends the use of an exponential distribution, which has a minimum of 0. Therefore, two is added to the $Exp(1)$ generative model (compare @fig-beta-zoo-prior-sim-methods and @fig-betabin-zoo-prior-sim-methods). The interaction index \$\$[TCid]\$\$ is also added to the prior $\phi$ in order to get varying estimates for each site type and chronology.
 
 ```{r}
 #| echo: false
@@ -545,35 +545,149 @@ After constructing the hierarchical model and sampling from the posterior distri
 
 ```{r}
 #| echo: false
-#| label: fig-phi-values-example
-#| fig-cap: "The behaviour of &Phi; with varying values is demonstrated in the plots."
-#| fig-subcap: 
-#|  - "Low precision"
-#|  - "Uniform distribution"
-#|  - "High precision" 
 #| message: false
 #| warning: false
-#| layout-ncol: 3
+#| label: fig-phi-values-example
+#| fig-cap: "The plots illustrate the behaviour of &Phi; across various probability levels for different values."
 
+library(tidyverse)
+library(tidybayes)
 
-# Create the plots 
-pbar <- 0.5
-theta <- 1
-curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi<2)), col=rangi2)
+# data
 
-pbar <- 0.5
-theta <- 2
-curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi==2)), col=rangi2)
-
-pbar <- 0.5
-theta <- 5
-curve(dbeta2(x,pbar,theta), from=0, to=1,
-      xlab="Probability", ylab="Density", main=expression(paste(phi>2)), col=rangi2)
-
+tibble(pbar = c(.25, .5, .75)) %>%
+  expand(pbar, theta = c(1, 2, 5, 15, 30)) %>%
+  expand(nesting(pbar, theta), x = seq(
+    from = 0,
+    to = 1,
+    length.out = 100
+  )) %>%
+  mutate(
+    density = rethinking::dbeta2(x, pbar, theta),
+    p      = str_c("p == ", pbar %>% str_remove(., "0")),
+    phi   = str_c("phi == ", theta)
+  ) %>%
+  mutate(phi = factor(
+    phi,
+    levels = c("phi == 30", "phi == 15", "phi == 5", "phi == 2", "phi == 1")
+  )) %>%
+  # plot
+  ggplot() +
+  geom_ribbon(aes(x    = x,
+                  ymin = 0,
+                  ymax = density),
+              color = rangi2,
+              fill = "white") +
+  scale_x_continuous("Probability Space", breaks = c(0, .5, 1)) +
+  scale_y_continuous(NULL, labels = NULL) +
+  theme_tidybayes() +
+  facet_grid(phi ~ p, labeller = label_parsed)
 
 ```
+
+The beta-binomial multilevel model presented in this section has enabled us to offer reliable estimates for the abundance of a selected species in each site type and chronology. This example has laid the foundations for understanding the logic behind Bayesian model building, although the results section will provide estimates using multiple other predictors. These models address over-dispersion through several methods. Firstly, they introduce an observation-level varying effect [@harrisonComparisonObservationlevelRandom2015] while also permitting each combination of predictors to have an unobserved intercept [@mcelreath2016, p.372]. We can then obtain estimates of these intercepts via posterior predictive. Nonetheless, it would be prudent to verify that our model has operated accurately before doing so. The following section will explore the necessary diagnostics that must be conducted to ascertain the model's ability to generate precise estimates. It will also explain the methodology for interpreting posterior predictive simulations and comparing various models to determine the most fitting one.
+
+### Sampling from the posterior and model diagnostics
+
+In @sec-bayesian-modeling, we looked at a stochastic process based on MCMC. This process can be used to estimate posterior probability distributions. Following a mathematical notation outline of the Bayesian model, the model must be translated into code. Ideally, prior (or priors) simulations of our selection should be conducted at this stage to ensure that the models behave appropriately and that incorrect prior specifications do not bias the results. There are various probabilistic programming languages and R packages that can be used to create Bayesian models. These R packages often act as compilers for the Bayesian engines. The two most prevalent languages are BUGS/JAGS [@lunnBUGSProjectEvolution2009; @plummerJAGSProgramAnalysis2003], which can be incorporated into R with nimble [@nimble; @nimbleEcology], rjags [@plummerRjagsBayesianGraphical2023], and bayesmix [@gruenBayesmixBayesianMixture2023] packages, and Stan [@gelmanStanProbabilisticProgramming2015], which can be utilised through rstan [@rstan], rstanarm [@rstanarm], and brms [@brms]. This study utilises the STAN-based package, rethinking [@rethinking], which is dependent on rstan for fitting basic models. Other more advanced models, such as the multilevel beta-binomial described above, are instead written directly in STAN and fitted using rstan. To demonstrate the difference between writing a model in R and in Stan, two examples are provided. The following example uses the `ulam()` function in the rethinking package to fit a multilevel poisson model. This package has the benefit of making it relatively easy to translate a mathematical model into code, as the model specification follows the same structure.
+
+```{r}
+#| eval: false
+
+library(rethinking)
+
+m1 <- 
+  ulam(
+    alist(
+        Richness ~ dpois( p ), # <1>
+        log(p) <- a[Chronology] + b[Observations], # <2>
+        a[Chronology] ~ dnorm(3,0.5), # <3>
+        b[Observations] ~ dnorm(0,0.2) # <4>
+    ), 
+    data=dat.Plants_Richness, 
+    chains=4, # <5>
+    log_lik=TRUE # <6>
+    )
+
+```
+
+1.  Defining the model formula.
+2.  Modelling `p` (using the log-link function) in terms of chronology and adding an observation-level varying effect.
+3.  Setting a prior for the chronology intercept.
+4.  Setting a prior for the observation level slope.
+5.  Defining the number of Markov chains.
+6.  Setting `log_lik = T` to enable model comparisons (with WAIC).
+
+When compared to other modelling techniques, designing a model in Stan necessitates meticulous outlining of all data variables and parameters. Moreover, the varying effects cannot be implicitly inferred but need to be defined through for loops and suitable indices. The code snippet below provides the code used to build a beta-binomial model in Stan.
+
+```{r}
+#| eval: false
+#| filename: "model.stan"
+
+data{ # <1>
+    int<lower=0> J;
+    array[J] int N;
+    array[J] int A;
+    array[J] int Chronology;
+}
+parameters{ # <2>
+     vector[4] a;
+     array[4] real<lower=2> theta;
+}
+model{ # <3>
+    vector[J] pbar;
+    a ~ normal(0, 1.5);
+    theta ~ exponential(1);
+    for ( i in 1:J ) {
+        pbar[i] = a[Chronology[i]];
+        pbar[i] = inv_logit(pbar[i]);
+    }
+    
+    vector[J] theta_l;
+    vector[J] pbar_l;
+    vector[J] beta_c;
+    for ( i in 1:J ) {
+        theta_l[i] = theta[Chronology[i]];
+        pbar_l[i] = pbar[i]*theta_l[i];
+        beta_c[i] = (1 - pbar[i]) * theta_l[i];
+    }
+    target += beta_binomial_lupmf(A | N, pbar_l, beta_c); # <4>
+}
+
+```
+
+1.  Defining input data variables.
+2.  Defining model parameters.
+3.  Defining model formula and priors.
+4.  Defining target function.
+
+The Stan code must be implemented and compiled in R using the rstan package, as shown in the code snippet provided.
+
+```{r}
+#| eval: false
+
+Pigs_by_Century_fit <- stan(
+  file = "model.stan",  # <1>
+  data = dataset,    
+  chains = 4,             # <2>
+  warmup = 1000,          # <3>
+  iter = 4000,            # <4>
+  cores = 4,              
+)
+```
+
+1.  Path of Stan file "model.stan".
+2.  Number of Markov chains.
+3.  Warmup iterations per chain.
+4.  Total number of iterations per chain.
+
+In both cases, the MCMC method is used for posterior sampling, with diagnostic information on the model's fit available through the rstan and rethinking packages. The convergence tells us if the model has worked and most R packages terminate when convergence cannot be reached or the Markov chains appear poorly mixed. In addition, these packages offer instruments to evaluate the effective sample size, which is an estimate of the number of independent samples obtained from the MCMC run. A low effective sample size may indicate poor mixing or autocorrelation in the Markov chains, suggesting that more samples are needed for reliable inference. Furthermore, both packages provide trace plots and density plots of the posterior samples, enabling users to visually inspect the behaviour of the chain and the posterior distributions. These diagnostic tools are necessary to ensure that the Bayesian models have converged and yielded dependable outcomes. Good convergence is generally reached with an Rhat ($\hat{R}$) value near to 1. Rhat measures the convergence of multiple chains.
+
+\[PLACE EXAMPLE OF precis() FROM MCELREATH 281; traceplots at p.285\]
+
+Once the model is ready and the traceplots indicate a good mixing of the chains for the posterior sampling, it is possible to visually inspect the estimates produced. For this purpose, we employ two packages, which enable the extraction of posterior draws with ease. The first package, tidybayes [@tidybayes], presents a range of graphics options and functions to plot estimates that are categorised by the chosen parameter. The second package is an extension of tidybayes, called tidybayes.rethinking, which is tailored to models that rely on the rethinking package. These packages provide a variety of visualisation options. We have chosen to display interval bars showing four credible interval ranges (.99, .90, .80, .50) and a mean probability represented by a circle specifically in the context of intercept estimation. This is to facilitate understanding for those who are not accustomed to reading density graphs or to considering estimate intervals rather than means. An illustration of the graph is given in **FIGURE X** below as an example. The high density intervals, or credible intervals, indicate the range of values where the probability density is relatively high, focusing on the areas where the data and prior information offer the greatest support. Regarding beta-binomial models that involve estimating the $\phi$ parameter, we selected an alternative visualisation to prevent any confusion for the reader. The precision parameter estimate graphs are presented similarly to the intercept graphs, with density distributions showing the shape of the distribution. Each line is also plotted with two probability intervals - 0.65 (represented by a shorter, thicker line) and 0.99 (represented by a longer, thinner line). Regarding regression models with numerical predictors (such as elevation, temperature, and precipitation), we plotted estimates using credible intervals at .95, .80, and .50, avoiding intervals that were excessively large (i.e. .99) and could have made interpretation of any specific trend difficult. The plots display either a positive or negative correlation as indicated by the slope, and the width of the interval changes according to the sample size and variability. Finally, for some models, an attempt was made to produce community plots, combining the estimates of several models to provide information on particular temporal trends or interactions between species, to answer questions such as "Which species were similarly abundant? What is the degree of separation between two species? Which species has the largest or smallest variability in its estimates?". As noted in the results section, combining estimates from different models is not a precise procedure and a multivariate modelling approach would be more suitable. However, since the models were generated using the same formula and parameters, it is nonetheless informative to look at these graphs to get a broader view of the general trends.
+
+In Bayesian modelling, it is essential to make model comparisons. Various methods exist for model comparison, such as AIC, BIC, DIC, and PSIS, each serving a different purpose. We will introduce the Widely Applicable Information Criterion (WAIC) for simplicity. The WAIC is the logarithm of the predictive posterior density (lppd) with a penalty term proportional to the variance in the posterior predictions. We will not elaborate on the mathematical details, but it is important to note that it provides a more robust approach that takes into account model flexibility and predictive accuracy. To additionally handle overfitting due to an increased number of parameters, the results also present pWAIC alongside WAIC [@mcelreath2016, pp.220-221]. It is worth considering that WAIC (and other equivalent measures) are exclusively designed to compare models to help determine which model is preferable when we have models that are equally plausible (assuming our causal inference is correct). This is accomplished by assessing the models out-of-sample, meaning how well they perform with data that was not seen during their fitting process (i.e. how well they generalise to new data). To comprehend the results, the specific WAIC value alone is not significant, but rather used to evaluate the model with the lowest value. The model with the lowest value indicates a better model performance. In addition to WAIC, other graphical tools such as posterior predictive checks and visual comparisons of model predictions to observed data, can provide useful feedback on model performance.
 
 ## Integration of Data Sources
 
