@@ -272,7 +272,7 @@ col=rangi2, xlim=c(0,1)
 
 ```
 
-The model for pigs' NISP counts shows a positive trend above the millennium average (0.36) for predicted high density intervals (HDIs) from the 1^st^ century BCE to the 3^rd^ century CE. The probability intervals exhibit a steady decrease that begins in the 3^rd^ century and continues until the 8^th^ century, when the mean of the probability distribution coincides with the first millennium average. Despite positive trends reported in the 8^th^ and 9^th^ centuries, interpretation of these values requires caution since the credible intervals are wider due to fewer observed samples dated to these centuries. The HDIs mean for the 10^th^ and 11^th^ centuries is again around the millennium average, indicating a decrease in the probability of pig occurrence.
+The model for pigs' NISP counts shows a positive trend above the millennium average (0.36) for predicted highest density intervals (HDIs) from the 1^st^ century BCE to the 3^rd^ century CE. The probability intervals exhibit a steady decrease that begins in the 3^rd^ century and continues until the 8^th^ century, when the mean of the probability distribution coincides with the first millennium average. Despite positive trends reported in the 8^th^ and 9^th^ centuries, interpretation of these values requires caution since the credible intervals are wider due to fewer observed samples dated to these centuries. The HDIs mean for the 10^th^ and 11^th^ centuries is again around the millennium average, indicating a decrease in the probability of pig occurrence.
 
 Cattle, on the other hand, exhibit different trends, with a HDI interval in the 1^st^ century BCE above the millennium average (0.20), although with a large credible interval, and a negative trend from the 1^st^ to the 3^rd^ century CE. HDIs are again increasingly positive between the 4^th^ and 7^th^ centuries, but decrease in the 8^th^ century. As for pigs, HDIs means are close to the millennium average in the 10^th^ and 11^th^ centuries.
 
@@ -1063,6 +1063,7 @@ Animals_by_Chronology_fit_comm <- slice_sample(
 ```{r}
 #| echo: false
 #| fig-height: 10
+#| label: fig-animals-by-chrono-comm-plot
 
 ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = animal)) +
   geom_point(alpha = .4) +
@@ -1104,7 +1105,8 @@ ggplot(Animals_by_Chronology_fit_comm, aes(x = inv_logit(a), y = theta, color = 
 ```
 
 ## Context type {style="text-align:justify;"}
-Chronological models provide a broad overview of the trends in domestic and wild animal husbandry and consumption. However, it is important to consider the context where the animal remains are found because different site types can influence the NISP of a particular animal. We can stratify the dataset by site type, but there is a challenge: the four chronologies we are studying also affect the availability, frequency, and economic dynamics of the site types. For example, the agricultural strategies employed by rural villas during the Roman and Late Roman periods could differ based on political and economic events, which could affect the relative amount of animal NISP. To better understand how the context where animal remains were found affects our outcome variable, the `NISP`, we can use a Directed Acyclic Graph (DAG). In this DAG, the `Chronology` node is a parent of the `Site_Type` node, and it affects the `NISP` count directly and indirectly through `Site_Type`. To account for this backdoor path, we block by `Chronology` and stratify the dataset by `Site_Type`. Since we have two categorical predictors of interest, we can use an interaction index variable to generate distinct intercepts for each chronology and context type. For instance, the `Roman:Rural` context type could be assigned an index of 1, while `Roman:Urban` could be assigned an index of 2, and so on. This interaction dummy index (${[TCid]}$) will determine the variation in intercepts ($\alpha$) across different context types.
+
+Chronological models offer a broad overview of the trends in animal husbandry and consumption, both domestic and wild. It is essential, however, to consider the contextualization of animal remains since different site types can impact the NISP of a specific animal. Therefore, a detailed analysis of the specific site must be undertaken before any conclusions regarding the NISP of an animal can be reached. When applying the same method as in @sec-archaeobotany, we see how direct stratification by site type is not possible because of a backdoor path between `Chronology` and `Site_Type` that cannot be ignored. Ignoring chronological differences would imply expecting a rural villa site to have comparable production and consumption patterns in the Roman and Late Roman (or even later) periods. To gain a more comprehensive understanding of how the environment in which animal remains were discovered influences the result variable, NISP, we present the directed acyclic graph (DAG) created for the botanical models. The DAG indicates that we must block by Chronology and stratify the dataset by Site_Type. To accomplish this, we introduce an interaction index (${[TCid]}$).
 
 ```{r}
 #| echo: false
@@ -1144,7 +1146,7 @@ ggdag_paths(DAG_site_type,
 
 ```
 
-The approach for the proposed model for estimating the posterior likelihood of animal occurrence in various chronological phases and context types is very to the models discussed earlier. The only modification is the interaction index. The model structure and priors remain the same as in the previous models. There are several contexts that have been recorded in the database (see @tbl-site-type-db for a full list), but the model required some simplifications in order to avoid extremely small categories. For instance, religious monasteries have been grouped with other `Religious` sites, or Roman *mansiones* have been classified as `Rural` for these models. Categorical simplifications can obscure the nuances of data, but tiny sample sizes produce very uninformative posterior distributions.
+The approach for the proposed model for estimating the posterior likelihood of animal occurrence in various chronological phases and context types is very similar to the models discussed earlier. The only modification is the interaction index. The model structure and priors remain the same as in the previous models. 
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})
@@ -3637,7 +3639,7 @@ ggplot(Animals_by_SiteType_fit_comm,
 
 ## Macroregion {style="text-align:justify;"}
 
-In addition to considering chronological and context type models, another important variable that has been examined in this study is `Macroregion`. This allows us to divide the Italian peninsula into three regions (Southern, Central, and Northern) and investigate more specific geographic questions. Due to the limited amount of data available, it is not however feasible to build on the previous model and incorporate this variable into the analysis. Additionally, including three categorical predictors would make it difficult to interpret the results. To account for the influence of Macroregion, we can stratify the dataset by Southern, Central, and Northern Italy, similar to how we stratified by `Site_Type`. It is important to also consider chronological stratification as different dynamics were occurring in the areas under observation. Therefore, we can block by `Chronology` and stratify by `Macroregion` to investigate the influence of geographic location on animal husbandry and consumption patterns.
+We aim to investigate whether there are differences in the relative amount of NISP data among Southern, Central, and Northern Italy during various chronological periods. Building upon the methods utilized in @sec-bot-res-macroregion, we construct a DAG that highlights the necessity of blocking by `Chronology` and stratifying by `Macroregion`, in a similar manner to the previous analysis.
 
 ```{r}
 #| echo: false
@@ -5809,7 +5811,7 @@ zoo_altitude %>%
   facet_grid(factor(Chronology, levels=chrono_levels)~.)
 ```
 
-The proposed model to estimate the probability of occurrence as related to the altitude (the slope $\beta$) and chronology (${[ChrID]}$) uses a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is a simple intercept with slope model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model provides estimates for each chronology under examination. A single $\phi$ parameter indicates the precision in the Beta distribution.
+The proposed model to estimate the probability of occurrence as related to the altitude (the slope $\beta$) and chronology (${[ChrID]}$) uses a betabinomial distribution to model overdispersion in the data. The $A$ on the left side of the formula is the outcome variable---the animal NISP counts for each observation $i$. This is a simple intercept with slope model, where the intercept $\alpha$ carries an index ${[ChrID]}$ as the model provides estimates for each chronology under examination. A single $\phi$ parameter indicates the precision in the Beta distribution. The DAG for this model has not been repeated as it is identical to that in @fig-altitude-dag-plants.
 
 $$
 A_{i} \sim BetaBinomial(NISP_{i}, \bar{p}_{i} , \phi_{i})

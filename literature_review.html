@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,14 +17,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +39,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,10 +77,12 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -89,11 +91,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./literature_review.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -101,125 +108,132 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./literature_review.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a>
+  <a href="./literature_review.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Materials</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Materials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./database.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a>
+  <a href="./database.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  <a href="./methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Results</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Results</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Discussion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">Sites bibliography</a>
+  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sites bibliography</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Custom functions</span></a>
   </div>
 </li>
       </ul>
@@ -227,26 +241,27 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">2.1</span>  Introduction</a></li>
-  <li><a href="#sec-agricultural-economy" id="toc-sec-agricultural-economy" class="nav-link" data-scroll-target="#sec-agricultural-economy"><span class="toc-section-number">2.2</span>  The Agricultural Economy</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">2.1</span> Introduction</a></li>
+  <li><a href="#sec-agricultural-economy" id="toc-sec-agricultural-economy" class="nav-link" data-scroll-target="#sec-agricultural-economy"><span class="header-section-number">2.2</span> The Agricultural Economy</a>
   <ul class="collapse">
-  <li><a href="#the-roman-imperial-phase" id="toc-the-roman-imperial-phase" class="nav-link" data-scroll-target="#the-roman-imperial-phase"><span class="toc-section-number">2.2.1</span>  The Roman imperial phase</a></li>
-  <li><a href="#late-roman-phase" id="toc-late-roman-phase" class="nav-link" data-scroll-target="#late-roman-phase"><span class="toc-section-number">2.2.2</span>  Late Roman Phase</a></li>
-  <li><a href="#the-early-medieval-phase-and-the-11th-century" id="toc-the-early-medieval-phase-and-the-11th-century" class="nav-link" data-scroll-target="#the-early-medieval-phase-and-the-11th-century"><span class="toc-section-number">2.2.3</span>  The Early Medieval phase and the 11<sup>th</sup> century</a></li>
+  <li><a href="#the-roman-imperial-phase" id="toc-the-roman-imperial-phase" class="nav-link" data-scroll-target="#the-roman-imperial-phase"><span class="header-section-number">2.2.1</span> The Roman imperial phase</a></li>
+  <li><a href="#late-roman-phase" id="toc-late-roman-phase" class="nav-link" data-scroll-target="#late-roman-phase"><span class="header-section-number">2.2.2</span> Late Roman Phase</a></li>
+  <li><a href="#the-early-medieval-phase-and-the-11th-century" id="toc-the-early-medieval-phase-and-the-11th-century" class="nav-link" data-scroll-target="#the-early-medieval-phase-and-the-11th-century"><span class="header-section-number">2.2.3</span> The Early Medieval phase and the 11<sup>th</sup> century</a></li>
   </ul></li>
-  <li><a href="#environmental-archaeology-approaches-in-italian-archaeology" id="toc-environmental-archaeology-approaches-in-italian-archaeology" class="nav-link" data-scroll-target="#environmental-archaeology-approaches-in-italian-archaeology"><span class="toc-section-number">2.3</span>  Environmental archaeology approaches in Italian archaeology</a>
+  <li><a href="#environmental-archaeology-approaches-in-italian-archaeology" id="toc-environmental-archaeology-approaches-in-italian-archaeology" class="nav-link" data-scroll-target="#environmental-archaeology-approaches-in-italian-archaeology"><span class="header-section-number">2.3</span> Environmental archaeology approaches in Italian archaeology</a>
   <ul class="collapse">
-  <li><a href="#diet" id="toc-diet" class="nav-link" data-scroll-target="#diet"><span class="toc-section-number">2.3.1</span>  Diet</a></li>
-  <li><a href="#climate" id="toc-climate" class="nav-link" data-scroll-target="#climate"><span class="toc-section-number">2.3.2</span>  Climate</a></li>
+  <li><a href="#diet" id="toc-diet" class="nav-link" data-scroll-target="#diet"><span class="header-section-number">2.3.1</span> Diet</a></li>
+  <li><a href="#climate" id="toc-climate" class="nav-link" data-scroll-target="#climate"><span class="header-section-number">2.3.2</span> Climate</a></li>
   </ul></li>
-  <li><a href="#sec-litrev-stats" id="toc-sec-litrev-stats" class="nav-link" data-scroll-target="#sec-litrev-stats"><span class="toc-section-number">2.4</span>  Research framework: Statistics in Archaeology</a></li>
-  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="toc-section-number">2.5</span>  Conclusions</a></li>
+  <li><a href="#sec-litrev-stats" id="toc-sec-litrev-stats" class="nav-link" data-scroll-target="#sec-litrev-stats"><span class="header-section-number">2.4</span> Research framework: Statistics in Archaeology</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">2.5</span> Conclusions</a></li>
   </ul>
 </nav>
     </div>
@@ -255,7 +270,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-lit-rev" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></h1>
+<h1 class="title"><span id="sec-lit-rev" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></h1>
 </div>
 
 
@@ -283,7 +298,7 @@ div.csl-indent {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/Morley 1986  p 84.png" class="img-fluid figure-img" width="501"></p>
-<p></p><figcaption class="figure-caption">Production in the Roman <em>suburbium</em>. Image after <span class="citation" data-cites="morley1996">Morley (<a href="references.html#ref-morley1996" role="doc-biblioref">1996a, p. 84</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">Production in the Roman <em>suburbium</em>. Image after <span class="citation" data-cites="morley1996">Morley (<a href="references.html#ref-morley1996" role="doc-biblioref">1996a, p. 84</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>Several adjustments to both models have been proposed, with some scholars arguing that the primitivist/modernist dichotomy is too extreme <span class="citation" data-cites="schiavoneStrutturaNascostaGrammatica1989">(<a href="references.html#ref-schiavoneStrutturaNascostaGrammatica1989" role="doc-biblioref">Schiavone, 1989, p. 20</a>)</span>. Others argue that more recent economic frameworks need to be considered, in particular New Institutional Economics (NIE) and Complexity Economics (CE) <span class="citation" data-cites="reframin2022a">(<a href="references.html#ref-reframin2022a" role="doc-biblioref">Van Limbergen et al., 2022, p. 2</a>)</span>. The first, NIE, considers the role of institutions and organizations in driving the economic behaviour of societies. In this approach, economic growth is only obtained through a market system <span class="citation" data-cites="thecamb2007">(<a href="references.html#ref-thecamb2007" role="doc-biblioref">Scheidel et al., 2007</a>)</span>. The concepts of the NIE have also been adopted by historians of the ancient economy in Italy, who have recently recognised a greater role for the imperial institution both as an actor and as an economic legislator <span class="citation" data-cites="maiuroRegionalismoPatrimonioFisco2014">(<a href="references.html#ref-maiuroRegionalismoPatrimonioFisco2014" role="doc-biblioref">Maiuro, 2014</a>)</span>. However, the lack of agency in NIE has been criticised by <span class="citation" data-cites="urbancr2016">Wilson and Flohr (<a href="references.html#ref-urbancr2016" role="doc-biblioref">2016, p. 4</a>)</span>, who believe that institutions are just starting points for economic strategies. In turn, CE is more dynamic, allowing agents to create and adapt strategies according to specific situations: economic systems are in fact “complex adaptive systems” <span class="citation" data-cites="complexi2021 reframin2022a">(<a href="references.html#ref-reframin2022a" role="doc-biblioref">Van Limbergen et al., 2022, p. 6</a>; <a href="references.html#ref-complexi2021" role="doc-biblioref">Verboven, 2021</a>)</span>. In this sense, Elio Lo Cascio <span class="citation" data-cites="locascioCrescitaDeclinoStudi2009">(<a href="references.html#ref-locascioCrescitaDeclinoStudi2009" role="doc-biblioref">2009b, pp. 273–276</a>)</span>, while borrowing language from the NIE, acknowledges the special position of the Roman emperor as a market regulator when necessary. According to the historian, state control does not take the form of dirigisme, which limits the free market, but promotes its functioning. As noted by Kim <span class="citation" data-cites="bowes2021">Bowes (<a href="references.html#ref-bowes2021" role="doc-biblioref">2021</a>)</span>, alongside the on-going academic debate on which economic framework is best suited for Roman economy, the study of the ancient economy experienced a significant shift in the 1990s with some historians embracing a cliometric turn <span class="citation" data-cites="maddisonWorldEconomyMillennial2001 maddisonWorldEconomyHistorical2003 pikettyCapitalTwentyfirstCentury2014">(<a href="references.html#ref-maddisonWorldEconomyHistorical2003" role="doc-biblioref">Maddison, 2003</a>, <a href="references.html#ref-maddisonWorldEconomyMillennial2001" role="doc-biblioref">2001</a>; <a href="references.html#ref-pikettyCapitalTwentyfirstCentury2014" role="doc-biblioref">Piketty and Goldhammer, 2014</a>)</span>. Scholars increasingly employed quantitative methods and sought to quantify various aspects of the Roman economy, including the measurement of gross domestic product (GDP), economic performance, inequality, and other key indicators. Some of these methods are collected in the work “Quantifying the Roman Economy: Methods and Problems” <span class="citation" data-cites="quantify2009">(<a href="references.html#ref-quantify2009" role="doc-biblioref">Bowman and Wilson, 2009</a>)</span>. While the integration of quantitative approaches in ancient economics is on the rise, it is important to acknowledge that these methods are not without their limitations. In this respect, <span class="citation" data-cites="bowes2021">Bowes (<a href="references.html#ref-bowes2021" role="doc-biblioref">2021, pp. 8–10</a>)</span> raises critical points regarding certain efforts in the field. Specifically, she directs her criticism towards works that draw comparisons between the ancient economy and other premodern economies, such as 17<sup>th</sup> century England or 10<sup>th</sup> century China, using methods that have received little scrutiny. Bowes argues that instead of relying solely on such comparisons, it is more valuable to focus on obtaining granular data at the household level. While Bowes’ critique highlights the need for caution and a more nuanced approach in employing quantitative methods, it does not diminish the overall trend of increasing integration of these approaches in the study of ancient economies. Recent publications exemplify this integration by showcasing the use of quantitative methods in studying the Roman economy. For instance, the volume “Complexity Economics: Building a New Approach to Ancient Economic History” <span class="citation" data-cites="complexi2021">(<a href="references.html#ref-complexi2021" role="doc-biblioref">Verboven, 2021</a>)</span> features case studies that employ network analysis and computational modelling to understand the complexities of the Roman economy. Similarly, the book “Simulating Roman Economies: Theories, Methods, and Computational Models” <span class="citation" data-cites="simulati2022">(<a href="references.html#ref-simulati2022" role="doc-biblioref">Brughmans and Wilson, 2022</a>)</span> delves into the application of computational models to simulate and analyse Roman economic systems. These examples demonstrate the growing integration of quantitative approaches in the study of ancient economies, allowing researchers to explore the empirical dimensions of the Roman economy while also engaging with theoretical discussions. Despite their increasing integration into the economic debate, it is indeed true, as <span class="citation" data-cites="bowes2021">Bowes (<a href="references.html#ref-bowes2021" role="doc-biblioref">2021, p. 27</a>)</span> pointed out, that these new major textbooks often prioritize large-scale questions and run the risk of creating deterministic narratives that view the past through teleological lenses of “rise” and “fall.” This limitation is perhaps inherent in computational modelling, which tends to focus on hypothesis testing and requires substantial data to construct narratives and contextualize the information historically. The need to make the reasoning behind causal inference more explicit when constructing models will be addressed in the subsequent discussion (§SIGNPOST HERE).</p>
@@ -327,7 +342,7 @@ div.csl-indent {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/Colombe_TresRichesHeures.jpg" class="img-fluid figure-img" width="500"></p>
-<p></p><figcaption class="figure-caption">The depiction of the month of November from <em>Très riches heures du Duc de Berry</em>. Although the manuscript illumination is dated to 1412-1416, it is a good example of how humans were managing the forested landscape for wood pasture. Image after <span class="citation" data-cites="colombeTresRichesHeures2023">Colombe and Ojéda (<a href="references.html#ref-colombeTresRichesHeures2023" role="doc-biblioref">2023</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">The depiction of the month of November from <em>Très riches heures du Duc de Berry</em>. Although the manuscript illumination is dated to 1412-1416, it is a good example of how humans were managing the forested landscape for wood pasture. Image after <span class="citation" data-cites="colombeTresRichesHeures2023">Colombe and Ojéda (<a href="references.html#ref-colombeTresRichesHeures2023" role="doc-biblioref">2023</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>Evidence from archaeobotanical analyses in various regions of Europe supports the presence of mixed farming strategies. For example, in southern France, alongside the cultivation of cereals, pulses such as faba beans, lentils, peas, and chickpeas were also grown <span class="citation" data-cites="ruasAspectsEarlyMedieval2005">(<a href="references.html#ref-ruasAspectsEarlyMedieval2005" role="doc-biblioref">Ruas, 2005</a>)</span>. This indicates a diverse agricultural system that incorporated both grains and legumes. In northern France and southern Netherlands, the transition from the Merovingian to the Carolingian period did not significantly affect crop choices. A free three-course crop rotation system<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> was consistently practised, with oats, rye, barley, and bread wheat being the most commonly cultivated cereals <span class="citation" data-cites="bakelsCropsProducedSouthern2005">(<a href="references.html#ref-bakelsCropsProducedSouthern2005" role="doc-biblioref">Bakels, 2005</a>)</span>. This suggests a stable agricultural tradition focused on these staple crops. Additionally, the cultivation of grapes emerged as a prevalent practice for fruit production in both southern and northern France. In England, the <em>FeedSax</em> project showed how during the 9<sup>th</sup> to 13<sup>th</sup> century, the cultivation of low-input cereals played a significant role in enabling landowners to accumulate wealth and exert greater control over peasant populations <span class="citation" data-cites="hamerowIntegratedBioarchaeologicalApproach2020 hamerowNewPerspectivesMedieval2022">(<a href="references.html#ref-hamerowIntegratedBioarchaeologicalApproach2020" role="doc-biblioref">Hamerow et al., 2020</a>; <a href="references.html#ref-hamerowNewPerspectivesMedieval2022" role="doc-biblioref">Hamerow and McKerracher, 2022</a>)</span>. In the Iberian Peninsula, a recent overview of the published archaeobotanical data <span class="citation" data-cites="pena-chocarroRomanMedievalCrops2019">(<a href="references.html#ref-pena-chocarroRomanMedievalCrops2019" role="doc-biblioref">Peña-Chocarro et al., 2019</a>)</span> has highlighted the increasing significance of fruit tree cultivation, during the early medieval period. This trend aligns with the observations made by <span class="citation" data-cites="andreolliRuoloOrticulturaFrutticultura1990">Andreolli (<a href="references.html#ref-andreolliRuoloOrticulturaFrutticultura1990" role="doc-biblioref">1990</a>)</span> regarding Italy. In the Italian mainland, there is currently a lack of a comprehensive study based on archaeobotanical evidence that covers the entire region. Instead, studies have primarily focused on specific regions or shorter chronologies, providing valuable insights into localized agricultural practices <span class="citation" data-cites="arthurRoadsRecoveryInvestigation2012 rottoliCropDiversityCentral2014 bosiPlantsManUrban2009">(<a href="references.html#ref-arthurRoadsRecoveryInvestigation2012" role="doc-biblioref">Arthur et al., 2012</a>; <a href="references.html#ref-bosiPlantsManUrban2009" role="doc-biblioref">Bosi et al., 2009</a>; <a href="references.html#ref-rottoliCropDiversityCentral2014" role="doc-biblioref">Rottoli, 2014a</a>)</span>.</p>
@@ -340,7 +355,7 @@ div.csl-indent {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/ArchaeobotanicalArticles_LodwickRowan2022_p599.png" class="img-fluid figure-img" width="300"></p>
-<p></p><figcaption class="figure-caption">Archaeobotanical articles with a Greek or Roman focus. Image after <span class="citation" data-cites="lodwickArchaeobotanicalResearchClassical2022">Lodwick and Rowan (<a href="references.html#ref-lodwickArchaeobotanicalResearchClassical2022" role="doc-biblioref">2022, p. 599</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">Archaeobotanical articles with a Greek or Roman focus. Image after <span class="citation" data-cites="lodwickArchaeobotanicalResearchClassical2022">Lodwick and Rowan (<a href="references.html#ref-lodwickArchaeobotanicalResearchClassical2022" role="doc-biblioref">2022, p. 599</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>Archaeobotany and other bioarchaeological disciplines are more common in prehistorical excavations, whereas zooarchaeology has a longer tradition and is also commonly practised in Italy for excavations relating to historical periods such as the Roman era and later, where ancient sources describe farming practises. Among the regions mentioned in the study above, Britain stands out with the oldest tradition and a more rigorous approach to publishing, although much of the chronological effort is dedicated to earlier periods. In addition to universities in the UK, most commercial archaeology firms collect and examine archaeobotanical samples. Similarly, archaeobotany has been extensively practiced in north-western European nations such as France, Belgium, the Netherlands, Germany, and Switzerland since the 1980s, with commercial archaeology adding significantly to sample availability. In Italy, interest in collecting plant remains dates back to the first excavations of Vesuvian sites in the 18<sup>th</sup> century. However, most of the conversation on the Italian farmland landscape and dietary studies has relied on literary sources. This reliance on ancient textual sources, specifically referring to Italy, has led to a “false sense of security regarding ancient food and diet. Moreover, unlike some of the very rich assemblages recovered from the northern provinces, many Italian Republican and Imperial period assemblages are small, with low densities and poor preservation of remains, which often discouraged sampling efforts. As a result, outside of the Vesuvian sites, many excavations did not bother sampling” <span class="citation" data-cites="lodwickArchaeobotanicalResearchClassical2022">(<a href="references.html#ref-lodwickArchaeobotanicalResearchClassical2022" role="doc-biblioref">Lodwick and Rowan, 2022, p. 603</a>)</span>. In the 19<sup>th</sup> century, during large classical excavations like Pompeii, macroremains visible to the eye were collected and sent to natural scientists for interpretation. Wilhelmina F. Jashemski <span class="citation" data-cites="jashemskiGardensPompeiiHerculaneum1979 jashemskiPompeianHerbalAncient1999 jashemskiGardensRomanEmpire2018 jashemskiNaturalHistoryPompeii2002">(<a href="references.html#ref-jashemskiGardensRomanEmpire2018" role="doc-biblioref">Jashemski, 2018</a>; <a href="references.html#ref-jashemskiPompeianHerbalAncient1999" role="doc-biblioref">Jashemski, 1999</a>, <a href="references.html#ref-jashemskiGardensPompeiiHerculaneum1979" role="doc-biblioref">1979</a>; <a href="references.html#ref-jashemskiNaturalHistoryPompeii2002" role="doc-biblioref">Jashemski and Meyer, 2002</a>)</span>, and later Annamaria Ciarallo <span class="citation" data-cites="ciaralloOrtiGiardiniAntica1992 ciaralloVerdePompeiano2001">(<a href="references.html#ref-ciaralloVerdePompeiano2001" role="doc-biblioref">2001</a>, <a href="references.html#ref-ciaralloOrtiGiardiniAntica1992" role="doc-biblioref">1992</a>)</span> made notable contributions to the scientific cataloguing of ancient botanical remains in Italy, focusing on the gardens of Pompeiian sites. Additionally, in the 1970s and 1980s, efforts were made to create reconstructions based on botanical materials <span class="citation" data-cites="castellettiContributoAlleRicerche1972 castellettiRapportoPreliminareSui1976 costantiniPianteSpontaneePiante1983 costantiniAnalisiPaleoetnobotanicheNel1983 costantiniMonteSanMauro1979 costantiniCerealiLegumiMedievali1983 follieriVegetaliPozzoDi1971">(<a href="references.html#ref-castellettiRapportoPreliminareSui1976" role="doc-biblioref">Castelletti, 1976</a>, <a href="references.html#ref-castellettiContributoAlleRicerche1972" role="doc-biblioref">1972</a>; <a href="references.html#ref-costantiniPianteSpontaneePiante1983" role="doc-biblioref">Costantini, 1983a</a>, <a href="references.html#ref-costantiniAnalisiPaleoetnobotanicheNel1983" role="doc-biblioref">1983b</a>, <a href="references.html#ref-costantiniMonteSanMauro1979" role="doc-biblioref">1979</a>; <a href="references.html#ref-costantiniCerealiLegumiMedievali1983" role="doc-biblioref">Costantini et al., 1983</a>; <a href="references.html#ref-follieriVegetaliPozzoDi1971" role="doc-biblioref">Follieri, 1971</a>)</span>. Since then, several archaeobotanical laboratories have been established in Italy, including those in Modena, Lecce, Rome, and Naples, to name a few. The increased specialization in both macro- and micro-remains led to the creation of the <em>BRAIN</em> project, an archaeobotanical database for Italy <span class="citation" data-cites="mercuri2015">(<a href="references.html#ref-mercuri2015" role="doc-biblioref">Mercuri et al., 2015</a>)</span>. Although a massive task, the database provides references to published material without quantitative information. Syntheses are also becoming available, focusing on the introduction of specific species, regions, or chronologies. Some significant recent syntheses and studies include <span class="citation" data-cites="borgonginoArcheobotanicaRepertiVegetali2006">Borgongino (<a href="references.html#ref-borgonginoArcheobotanicaRepertiVegetali2006" role="doc-biblioref">2006</a>)</span> for botanical remains in the Vesuvian area, <span class="citation" data-cites="sadoriIntroductionDiffusionPeach2009">Sadori et al. (<a href="references.html#ref-sadoriIntroductionDiffusionPeach2009" role="doc-biblioref">2009</a>)</span> on the introduction of peach, <span class="citation" data-cites="ucchesuFirstFindsPrunus2017">Ucchesu et al. (<a href="references.html#ref-ucchesuFirstFindsPrunus2017" role="doc-biblioref">2017</a>)</span> on plum, <span class="citation" data-cites="caracutaOliveGrowingPuglia2020">Caracuta (<a href="references.html#ref-caracutaOliveGrowingPuglia2020" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="dauriaEvidenceShortlivedEpisode2017">D’Auria et al. (<a href="references.html#ref-dauriaEvidenceShortlivedEpisode2017" role="doc-biblioref">2017</a>)</span> on olives, <span class="citation" data-cites="pagnouxIntroductionCitrusItaly2013">Pagnoux et al. (<a href="references.html#ref-pagnouxIntroductionCitrusItaly2013" role="doc-biblioref">2013</a>)</span> and <span class="citation" data-cites="celantMacroremainsCitrusFruit2018">Celant and Fiorentino (<a href="references.html#ref-celantMacroremainsCitrusFruit2018" role="doc-biblioref">2018</a>)</span> on citrus. Additionally, <span class="citation" data-cites="castiglioniSorgoSorghumBicolor2010">Castiglioni and Rottoli (<a href="references.html#ref-castiglioniSorgoSorghumBicolor2010" role="doc-biblioref">2010</a>)</span> focused on sorghum in Northern Italy, whereas <span class="citation" data-cites="castiglioniBroomcornMilletFoxtail2013">Castiglioni and Rottoli (<a href="references.html#ref-castiglioniBroomcornMilletFoxtail2013" role="doc-biblioref">2013</a>)</span> studied broomcorn millet, foxtail millet, and sorghum in North Italian Early Medieval sites. <span class="citation" data-cites="grasso2009">Grasso and Fiorentino (<a href="references.html#ref-grasso2009" role="doc-biblioref">2009</a>)</span> provided a bibliographical reference for archaeobotanical samples from medieval Italy, and <span class="citation" data-cites="buonincontriMultiproxyApproachStudy2017">Buonincontri et al. (<a href="references.html#ref-buonincontriMultiproxyApproachStudy2017" role="doc-biblioref">2017</a>)</span> delved into Medieval Tuscany.</p>
@@ -358,7 +373,7 @@ div.csl-indent {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/LALIA_Buntgen2016_TSI_Steinhilber 2009.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption"><strong><em>Left image</em></strong>. Evidence of LALIA across the Northern Hemisphere. Image after <span class="citation" data-cites="buntgenCoolingSocietalChange2016">Büntgen et al. (<a href="references.html#ref-buntgenCoolingSocietalChange2016" role="doc-biblioref">2016</a>)</span>. <strong><em>Right image.</em></strong> Total Solar Irradiance during the last two millennia. Image after <span class="citation" data-cites="steinhilberTotalSolarIrradiance2009">Steinhilber et al. (<a href="references.html#ref-steinhilberTotalSolarIrradiance2009" role="doc-biblioref">2009</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption"><strong><em>Left image</em></strong>. Evidence of LALIA across the Northern Hemisphere. Image after <span class="citation" data-cites="buntgenCoolingSocietalChange2016">Büntgen et al. (<a href="references.html#ref-buntgenCoolingSocietalChange2016" role="doc-biblioref">2016</a>)</span>. <strong><em>Right image.</em></strong> Total Solar Irradiance during the last two millennia. Image after <span class="citation" data-cites="steinhilberTotalSolarIrradiance2009">Steinhilber et al. (<a href="references.html#ref-steinhilberTotalSolarIrradiance2009" role="doc-biblioref">2009</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>In Northern Italy, another important climatic event dated 589 CE has been the focus of many studies: the so-called Paul the Deacon deluge, termed after the author of <em>Historia Langobardorum</em> who describes it as the major rainfall since Noah’s times <span class="citation" data-cites="paulthedeaconPauliHistoriaLangobardorum1878">(<a href="references.html#ref-paulthedeaconPauliHistoriaLangobardorum1878" role="doc-biblioref">Paul the Deacon et al., 1878, p. 127</a>)</span>. For a long time, the precipitations of the 589 CE have been considered to be the main cause of hydrological change in the Italian north-east <span class="citation" data-cites="squatritiFloods589Climate2010">(<a href="references.html#ref-squatritiFloods589Climate2010" role="doc-biblioref">Squatriti, 2010, pp. 799–801</a>)</span>. Other scholars have reduced the importance of the 589 CE flooding, emphasizing how the process of riverbed aggradation had already started before the 4<sup>th</sup> century CE, in Roman times <span class="citation" data-cites="cremoniniLateantiquityEnvironmentalCrisis2013 marchettiEnvironmentalChangesCentral2002">(<a href="references.html#ref-cremoniniLateantiquityEnvironmentalCrisis2013" role="doc-biblioref">Cremonini et al., 2013, pp. 170–1</a>; <a href="references.html#ref-marchettiEnvironmentalChangesCentral2002" role="doc-biblioref">Marchetti, 2002</a>)</span>. The two main Italian rivers, the Adige and the Po, were extremely lively in the first half of the first millennium CE, as some prevention works on the river banks show <span class="citation" data-cites="squatritiFloods589Climate2010">(<a href="references.html#ref-squatritiFloods589Climate2010" role="doc-biblioref">Squatriti, 2010, p. 816</a>)</span>. Evidence of the 589 CE flooding can be found stratigraphically in the alluvial sediments, hard to recognize outside the region of Emilia-Romagna, the alluvial basin of the Po river. However, alluvial layers have been documented in Lombardy, Veneto and Tuscany <span class="citation" data-cites="cremoniniLateantiquityEnvironmentalCrisis2013 zanchettaOnewayDeterminismSan2021">(<a href="references.html#ref-cremoniniLateantiquityEnvironmentalCrisis2013" role="doc-biblioref">Cremonini et al., 2013, p. 175</a>; <a href="references.html#ref-zanchettaOnewayDeterminismSan2021" role="doc-biblioref">Zanchetta et al., 2021</a>)</span>. In low plains, the consequences of flooding are more visible, with the creation of marshlands, the advancement of the coastline and the development of lagoons <span class="citation" data-cites="brogioloFloodingNorthernItaly2015">(<a href="references.html#ref-brogioloFloodingNorthernItaly2015" role="doc-biblioref">Brogiolo, 2015, p. 50</a>)</span>. The study of pollen, NPPs, and seeds showed indeed evidence of devastating floods in Northern Italy during late antiquity <span class="citation" data-cites="bosiSurveyLateRoman2019a squatritiFloods589Climate2010">(<a href="references.html#ref-bosiSurveyLateRoman2019a" role="doc-biblioref">Bosi et al., 2019</a>; <a href="references.html#ref-squatritiFloods589Climate2010" role="doc-biblioref">Squatriti, 2010</a>)</span>. The waterlogging from such climatic circumstances is used as evidence for the observable return to subsistence economy in some (either rural or urban) centres and for the abandonment of others. Some case studies dated between the 5<sup>th</sup> and the mid-8<sup>th</sup> century CE <span class="citation" data-cites="cremoniniLateantiquityEnvironmentalCrisis2013 sadoriClimateEnvironmentSociety2016 benitoHoloceneFloodingClimate2015">(<a href="references.html#ref-benitoHoloceneFloodingClimate2015" role="doc-biblioref">Benito et al., 2015</a>; <a href="references.html#ref-cremoniniLateantiquityEnvironmentalCrisis2013" role="doc-biblioref">Cremonini et al., 2013</a>; <a href="references.html#ref-sadoriClimateEnvironmentSociety2016" role="doc-biblioref">Sadori et al., 2016</a>)</span> provide a picture of a generally cold and wetter/humid climate. The sites show the advancement of the forest <span class="citation" data-cites="cheyetteDisappearanceAncientLandscape2008">(<a href="references.html#ref-cheyetteDisappearanceAncientLandscape2008" role="doc-biblioref">Cheyette, 2008, pp. 163–164</a>)</span>, with broad-leaved trees (in prevalence deciduous, of the <em>Quercus sp</em>.). At S. Michele di Trino <span class="citation" data-cites="caramielloAnalisiPaleobotanicheSedimentologiche1999">(<a href="references.html#ref-caramielloAnalisiPaleobotanicheSedimentologiche1999" role="doc-biblioref">Caramiello et al., 1999</a>)</span>, however, pollens related to forest coverage slightly decrease, although still in elevated proportions (43%). The woodland encroachment is consistent with the farming collapse following the Greek-Goth war (535-554 CE) described by Neil Christie <span class="citation" data-cites="christieConstantineCharlemagneArchaeology2006">(<a href="references.html#ref-christieConstantineCharlemagneArchaeology2006" role="doc-biblioref">Christie, 2006, pp. 487–491</a>)</span>. Despite the continuity of use of wheats of the <em>Triticum/Avena</em> group, the sites show a general spread of grains, as barley (<em>Hordeum vulgare</em>) and rye (<em>Secale cereale</em>), that are more resistant to cold weather and rain. Pollens from Modena, in the Po valley, show a picture of a sparse forest (49,4%), with many wet land plants (28%) and a marked reduction of man’s activity <span class="citation" data-cites="bosiSeedsFruitsPollen2011 bosiSurveyLateRoman2019a">(<a href="references.html#ref-bosiSurveyLateRoman2019a" role="doc-biblioref">Bosi et al., 2019</a>; <a href="references.html#ref-bosiSeedsFruitsPollen2011" role="doc-biblioref">Bosi et al., 2011</a>)</span>. In the mountain site of Sant’Antonino di Perti, pasture grass pollens are prevalent, in relation to pastoralism <span class="citation" data-cites="arobbaAnalisiPalinologichePaleocarpologiche2001">(<a href="references.html#ref-arobbaAnalisiPalinologichePaleocarpologiche2001" role="doc-biblioref">Arobba and Murialdo, 2001</a>)</span>.</p>
@@ -366,7 +381,7 @@ div.csl-indent {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/Figure_Terrestrial_Climate_Proxies_Sadori_et_al2016.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Diachronic comparison of several terrestrial environmental proxies of central-eastern Mediterranean. After <span class="citation" data-cites="sadoriClimateEnvironmentSociety2016">Sadori et al. (<a href="references.html#ref-sadoriClimateEnvironmentSociety2016" role="doc-biblioref">2016, p. 180</a>)</span>.</figcaption><p></p>
+<figcaption class="figure-caption">Diachronic comparison of several terrestrial environmental proxies of central-eastern Mediterranean. After <span class="citation" data-cites="sadoriClimateEnvironmentSociety2016">Sadori et al. (<a href="references.html#ref-sadoriClimateEnvironmentSociety2016" role="doc-biblioref">2016, p. 180</a>)</span>.</figcaption>
 </figure>
 </div>
 <p>Following the increase in temperatures, it was possible to grow common Mediterranean plants at higher temperatures and in northern areas. For instance, grape seeds have been found in England and fig trees were grown in Northern Italy <span class="citation" data-cites="mannMedievalClimaticOptimum2002">(<a href="references.html#ref-mannMedievalClimaticOptimum2002" role="doc-biblioref">Mann, 2002, p. 515</a>)</span>. Pollen analyses confirm a positive trend in agricultural production in the 10<sup>th</sup> and 11<sup>th</sup> century CE, leading to landscape changes. In Nogara <span class="citation" data-cites="marchesiniPaesaggioVegetaleAntropico2011">(<a href="references.html#ref-marchesiniPaesaggioVegetaleAntropico2011" role="doc-biblioref">Marchesini et al., 2011</a>)</span>, the <em>Quercus</em> forest was replaced by fields of cereals (3.2-16.1%), hemp, and grape vine, with high percentages of pasture grass (14-33.9%). In S. Michele di Trino, the woodland coverage reached a minimum of 15%, mostly consisting of <em>Tilia, Ostrya</em>, and <em>Fraxinus</em>, while wetland plants increased, likely in relation to changes in the Po river course. At the site of Sant’Agata Bolognese <span class="citation" data-cites="gelichiVillaggioNellaPianura2014">(<a href="references.html#ref-gelichiVillaggioNellaPianura2014" role="doc-biblioref">Gelichi et al., 2014</a>)</span>, there was a reduced presence of conifers (3%) and an introduction of Mediterranean trees like <em>Quercus ilex</em>. The pollen analysis revealed an increase in anthropic plants up to 27%, and besides cereals (18%), fruits, and nuts were cultivated. In Parma <span class="citation" data-cites="bosiIndaginiArcheobotanicheSul2012">(<a href="references.html#ref-bosiIndaginiArcheobotanicheSul2012" role="doc-biblioref">Bosi et al., 2012</a>)</span>, the pollen sediments from a cesspit showed a rich variety of cereals and legumes, including the <em>Triticum/Avena</em> group, the <em>Hordeum</em> group, rye, broomcorn millet, and broad bean. In each site, humans are the main driving force of landscape change.</p>
@@ -385,920 +400,920 @@ div.csl-indent {
 <p>This review has outlined the positions and proxies of some key researchers in the study of the first millennium CE in the Italian peninsula. This review has considered the role of settlement size and pattern, ceramics, and historical sources in scholarly understandings of rural exploitation and surplus management. However, I argue (and am supported in this position) that the addition of different proxies to the research can shed new light on old debates of continuity vs.&nbsp;rupture. While is true that archaeobotanical and zooarchaeological analyses are being conducted in Italy and syntheses are being produced, this field is still in an early stage and the full potential of integrating these sources remains unexplored. Quantitative archaeology, with a particular focus on Bayesian inference, offers a promising way to address these challenges. In the following chapters, the bioarchaeological data used in this research will be discussed in detail, providing an overview of the sampling methods, preservation and distribution of remains in the region under study.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-andreolliProdottiAlimentariNei1981" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-andreolliProdottiAlimentariNei1981" class="csl-entry" role="listitem">
 Andreolli, B., 1981. I prodotti alimentari nei contratti agrari toscani dell’<span>Alto Medioevo</span>. Archeologia medievale: cultura materiale, insediamenti, territorio 8, 117–126.
 </div>
-<div id="ref-andreolliRuoloOrticulturaFrutticultura1990" class="csl-entry" role="doc-biblioentry">
+<div id="ref-andreolliRuoloOrticulturaFrutticultura1990" class="csl-entry" role="listitem">
 Andreolli, B., 1990. Il ruolo dell’orticultura e della frutticultura nelle campagne dell’alto medioevo. In: L’<span>Ambiente Vegetale Nell</span>’alto <span>Medioevo</span>: 30 <span>Marzo-5 Aprile</span> 1989. <span>Centro italiano di studi sull’alto Medioevo</span>, <span>Spoleto</span>, pp. 175–219.
 </div>
-<div id="ref-andreolliAziendaCurtenseItalia1985" class="csl-entry" role="doc-biblioentry">
+<div id="ref-andreolliAziendaCurtenseItalia1985" class="csl-entry" role="listitem">
 Andreolli, B., Montanari, M., 1985. <span>L’azienda curtense in Italia: proprietà della terra e lavoro contadino nei secoli VIII-XI</span>. <span>CLUEB</span>, <span>Bologna</span>.
 </div>
-<div id="ref-arobbaAnalisiPalinologichePaleocarpologiche2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-arobbaAnalisiPalinologichePaleocarpologiche2001" class="csl-entry" role="listitem">
 Arobba, D., Murialdo, G., 2001. Le analisi palinologiche e paleocarpologiche. In: Mannoni, T., Murialdo, G., Arobba, D. (Eds.), S. <span>Antonino</span>, Un Insediamento Fortificato Nella <span>Liguria</span> Bizantina, Collezione Di Monografie Preistoriche Ed Archeologiche (<span>Istituto</span> Internazionale Di Studi Liguri). <span>Istituto internazionale di studi liguribaker</span>, <span>Bordighera (Imperia)</span>, pp. 627–638.
 </div>
-<div id="ref-arthurRoadsRecoveryInvestigation2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-arthurRoadsRecoveryInvestigation2012" class="csl-entry" role="listitem">
 Arthur, P., Fiorentino, G., Grasso, A.M., 2012. <a href="https://doi.org/10.1017/S0003598X00062864">Roads to recovery: An investigation of early medieval agrarian strategies in <span>Byzantine Italy</span> in and around the eighth century</a>. Antiquity 86, 444–455.
 </div>
-<div id="ref-augentiIncastellamentoStoriaArcheologia2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-augentiIncastellamentoStoriaArcheologia2018" class="csl-entry" role="listitem">
 Augenti, A., Galetti, P. (Eds.), 2018. <span>L’incastellamento: storia e archeologia: a 40 anni da Les structures di Pierre Toubert</span>, Prima edizione. ed, <span>Miscellanea</span>. <span>Fondazione Centro italiano di studi sull’alto Medioevo</span>, <span>Spoleto</span>.
 </div>
-<div id="ref-bakelsCropsProducedSouthern2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bakelsCropsProducedSouthern2005" class="csl-entry" role="listitem">
 Bakels, C.C., 2005. <a href="https://doi.org/10.1007/s00334-005-0067-x">Crops produced in the southern <span>Netherlands</span> and northern <span>France</span> during the early medieval period: A comparison</a>. Vegetation History and Archaeobotany 14, 394–399.
 </div>
-<div id="ref-barceloMakingFeudalAgricultures2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-barceloMakingFeudalAgricultures2004" class="csl-entry" role="listitem">
 Barceló, M., Sigaut, F. (Eds.), 2004. The making of feudal agricultures?, The transformation of the <span>Roman</span> world. <span>Brill</span>, <span>Leiden; Boston</span>.
 </div>
-<div id="ref-battafaranoAnalisiRestiIttici2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-battafaranoAnalisiRestiIttici2006" class="csl-entry" role="listitem">
 Battafarano, M., De Grossi Mazzorin, J., 2006. Analisi dei resti ittici da alcuni contesti archeologici della <span>Puglia</span> di età tardoantica e medievale. In: Tagliacozzo, A., Fiore, I., Marconi, S., Tecchiati, U. (Eds.), Atti Del <span>V</span> Convegno Nazionale Di Archeozoologia: <span>Rovereto</span>, 10-12 Novembre 2006. <span>Museo Civico di Rovereto</span>, <span>Rovereto</span>, pp. 289–292.
 </div>
-<div id="ref-baxterStatisticsArchaeology2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-baxterStatisticsArchaeology2010" class="csl-entry" role="listitem">
 Baxter, M. (Ed.), 2010. Statistics in archaeology. <span>Wiley</span>, <span>Chichester</span>.
 </div>
-<div id="ref-baylissRollingOutRevolution2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-baylissRollingOutRevolution2009" class="csl-entry" role="listitem">
 Bayliss, A., 2009. Rolling out revolution: Using radiocarbon dating in archaeology. Radiocarbon 51, 123–147.
 </div>
-<div id="ref-benitoHoloceneFloodingClimate2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-benitoHoloceneFloodingClimate2015" class="csl-entry" role="listitem">
 Benito, G., Macklin, M.G., Zielhofer, C., Jones, A.F., Machado, M.J., 2015. <a href="https://doi.org/10.1016/j.catena.2014.11.014">Holocene flooding and climate change in the <span>Mediterranean</span></a>. CATENA, Past <span>Hydrological Extreme Events</span> in a <span>Changing Climate</span> 130, 13–33.
 </div>
-<div id="ref-binfordNewPerspectivesArchaeology1968" class="csl-entry" role="doc-biblioentry">
+<div id="ref-binfordNewPerspectivesArchaeology1968" class="csl-entry" role="listitem">
 Binford, S.R., Binford, L., 1968. New <span>Perspectives</span> in <span>Archaeology</span>. <span>Aldline Press</span>, <span>Chicago</span>.
 </div>
-<div id="ref-blochFrenchRuralHistory1966" class="csl-entry" role="doc-biblioentry">
+<div id="ref-blochFrenchRuralHistory1966" class="csl-entry" role="listitem">
 Bloch, M., 1966. French rural history: <span>An</span> essay on its basic characteristics. <span>University of California Press</span>, <span>Berkeley</span>.
 </div>
-<div id="ref-borgonginoArcheobotanicaRepertiVegetali2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-borgonginoArcheobotanicaRepertiVegetali2006" class="csl-entry" role="listitem">
 Borgongino, M., 2006. Archeobotanica: Reperti vegetali da <span>Pompei</span> e dal territorio vesuviano, Studi della <span>Soprintendenza</span> archeologica di <span>Pompei</span>. <span>L’Erma di Bretschneider</span>, <span>Roma</span>.
 </div>
-<div id="ref-boscatoPropostaDiDatabase2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-boscatoPropostaDiDatabase2007" class="csl-entry" role="listitem">
 Boscato, P., Fronza, V., Salvadori, F., 2007. Proposta di un database per i reperti faunistici. In: Fiore, I., Malerba, G., Chilardi, S. (Eds.), Atti Del 3 <span>Convegno Nazionale</span> Di <span>Archeozoologia</span>. <span>Siracusa</span> 3-5 <span>Novembre</span> 2000. <span>Istituto Poligrafico e Zecca dello Stato</span>, <span>Roma</span>, pp. 1–14.
 </div>
-<div id="ref-bosiSurveyLateRoman2019a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bosiSurveyLateRoman2019a" class="csl-entry" role="listitem">
 Bosi, G., Labate, D., Rinaldi, R., Montecchi, M.C., Mazzanti, M., Torri, P., Riso, F.M., Mercuri, A.M., 2019. <a href="https://doi.org/10.1016/j.quaint.2018.02.002">A survey of the <span>Late Roman</span> period (3rd-6th century <span>AD</span>): <span>Pollen</span>, <span>NPPs</span> and seeds/fruits for reconstructing environmental and cultural changes after the floods in <span>Northern Italy</span></a>. Quaternary International 499, 3–23.
 </div>
-<div id="ref-bosiSeedsFruitsPollen2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bosiSeedsFruitsPollen2011" class="csl-entry" role="listitem">
 Bosi, G., Mazzanti, M.B., Florenzano, A., N’siala, I.M., Pederzoli, A., Rinaldi, R., Torri, P., Mercuri, A.M., 2011. <a href="https://doi.org/10.1016/j.jas.2011.02.027">Seeds/fruits, pollen and parasite remains as evidence of site function: Piazza <span>Garibaldi</span> <span>Parma</span> (<span>N Italy</span>) in <span>Roman</span> and <span>Mediaeval</span> times</a>. Journal of Archaeological Science 38, 1621–1633.
 </div>
-<div id="ref-bosiPlantsManUrban2009" class="csl-entry" role="doc-biblioentry">
-Bosi, G., Mercuri, A.M., Mazzanti, M., 2009. Plants and <span>Man</span> in urban environment: The history of the city of <span>Ferrara</span> (10th - 16th cent. <span>A</span>.<span>D</span>.) Through its archaeobotanical records. Bocconea 23, 285–300.
+<div id="ref-bosiPlantsManUrban2009" class="csl-entry" role="listitem">
+Bosi, G., Mercuri, A.M., Mazzanti, M., 2009. Plants and <span>Man</span> in urban environment: The history of the city of <span>Ferrara</span> (10th - 16th cent. <span>A</span>.<span>D</span>.) through its archaeobotanical records. Bocconea 23, 285–300.
 </div>
-<div id="ref-bosiIndaginiArcheobotanicheSul2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bosiIndaginiArcheobotanicheSul2012" class="csl-entry" role="listitem">
 Bosi, G., Mercuri, A.M., Pederzoli, A., Florenzano, A., Rinaldi, R., Bandini Mazzanti, M., 2012. Indagini archeobotaniche sul riempimento delle buche da rifiuti e del pozzo nero di via <span>Cavestro</span> a <span>Parma</span> (<span>X-XI</span> sec d.<span>C</span>.). In: Marini Calvani, M. (Ed.), Ventidue Secoli a <span>Parma</span>: Lo Scavo Sotto La Sede Centrale Della <span>Cassa</span> Di <span>Risparmio</span> in Piazza <span>Garibaldi</span>, <span>BAR</span> International Series. <span>Archaeopress</span>, <span>Oxford, England</span>, pp. 269–283.
 </div>
-<div id="ref-bowesRomanPeasantProject2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bowesRomanPeasantProject2020" class="csl-entry" role="listitem">
 Bowes, K. (Ed.), 2020. <a href="https://www.jstor.org/stable/j.ctv18dvvqq">The <span>Roman Peasant Project</span> 2009-2014: <span>Excavating</span> the <span>Roman Rural Poor</span></a>. <span>University of Pennsylvania Press</span>.
 </div>
-<div id="ref-bowes2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-bowes2021" class="csl-entry" role="listitem">
 Bowes, K., 2021. <a href="https://doi.org/10.1353/cap.2021.0000">When Kuznets Went to Rome: Roman Economic Well-Being and the Reframing of Roman History</a>. Capitalism: A Journal of History and Economics 2, 7–40.
 </div>
-<div id="ref-quantify2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-quantify2009" class="csl-entry" role="listitem">
 Bowman, A., Wilson, A. (Eds.), 2009. <a href="https://doi.org/10.1093/acprof:oso/9780199562596.001.0001">Quantifying the roman economy</a>. Oxford University PressOxford.
 </div>
-<div id="ref-brogioloFineVilleRomane1996a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-brogioloFineVilleRomane1996a" class="csl-entry" role="listitem">
 Brogiolo, G.P. (Ed.), 1996a. La fine delle ville romane: Trasformazioni nelle campagne tra tarda antichità e alto <span>Medioevo</span>: 1o <span>Convegno</span> archeologico del <span>Garda</span>, <span>Gardone Riviera</span> (<span>Brescia</span>), 14 ottobre 1995, Documenti di archeologia. <span>S.A.P</span>, <span>Mantova</span>.
 </div>
-<div id="ref-brogioloFineVilleRomane1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-brogioloFineVilleRomane1996" class="csl-entry" role="listitem">
 Brogiolo, G.P. (Ed.), 1996b. La fine delle ville romane: Esperienze locali e problemi generali. <span>SAP, Società archeologica</span>, <span>Mantova</span>.
 </div>
-<div id="ref-brogioloFloodingNorthernItaly2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-brogioloFloodingNorthernItaly2015" class="csl-entry" role="listitem">
 Brogiolo, G.P., 2015. Flooding in <span>Northern Italy</span> during the <span>Early Middle Ages</span>: Resilience and adaptation. Post-Classical Archaeologies 5, 47–68.
 </div>
-<div id="ref-brogioloDopoFineVille2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-brogioloDopoFineVille2005" class="csl-entry" role="listitem">
 Brogiolo, G.P., Chavarria Arnau, A., Valenti, M. (Eds.), 2005. <span>Dopo la fine delle ville: le campagne dal VI al IX secolo: 11. Seminario sul tardo antico e l’alto Medioevo, Gavi, 8-10 maggio 2004</span>, <span>Documenti di archeologia</span>. <span>SAP</span>, <span>Mantova</span>.
 </div>
-<div id="ref-simulati2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-simulati2022" class="csl-entry" role="listitem">
 Brughmans, T., Wilson, A. (Eds.), 2022. Simulating roman economies theories, methods, and computational models, 1st ed, Oxford studies on the roman economy. Oxford University Press, New York.
 </div>
-<div id="ref-buckCombiningArchaeologicalRadiocarbon1991" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buckCombiningArchaeologicalRadiocarbon1991" class="csl-entry" role="listitem">
 Buck, C.E., Kenworthy, J.B., Litton, C.D., Smith, A.F., 1991. Combining archaeological and radiocarbon information: A <span>Bayesian</span> approach to calibration. Antiquity 65, 808–821.
 </div>
-<div id="ref-buckCalibrationRadiocarbonResults1992" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buckCalibrationRadiocarbonResults1992" class="csl-entry" role="listitem">
 Buck, C.E., Litton, C.D., Smith, A.F., 1992. Calibration of radiocarbon results pertaining to related archaeological events. Journal of archaeological Science 19, 497–512.
 </div>
-<div id="ref-buckExcavationsSanGiovanni1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buckExcavationsSanGiovanni1994" class="csl-entry" role="listitem">
 Buck, R.J., Small, A.M., 1994. <a href="https://doi.org/10.3138/9781442681217">The <span>Excavations</span> of <span>San Giovanni</span> di <span>Ruoti</span>: <span>Volume I</span>: <span>The Villas</span> and their <span>Environment</span></a>. <span>University of Toronto Press</span>.
 </div>
-<div id="ref-buglioneAnimalManagementSupply2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buglioneAnimalManagementSupply2007" class="csl-entry" role="listitem">
 Buglione, A., 2007. Animal management and supply in <span>Apulia</span> from <span>Late Antiquity</span> to <span>Early Middle Age</span>. In: 4th <span>International Congress</span> of <span>Medieval</span> and <span>Modern Archaeology</span> (2007). <span>Paris</span>.
 </div>
-<div id="ref-buglioneDalTavoliereAlle2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buglioneDalTavoliereAlle2015" class="csl-entry" role="listitem">
 Buglione, A., De Venuto, G., Goffredo, R., Volpe, G., 2015. Dal <span>Tavoliere</span> alle <span>Murge</span>. <span>Storie</span> di lane, di grano e di sale in <span>Puglia</span> tra età romana e <span>Medioevo</span>. In: Cambi, F., De Venuto, G., Goffredo, R. (Eds.), Storia e <span>Archeologia Globale</span>. <span>Edipuglia</span>, <span>Santo Spirito (Bari)</span>, pp. 185–243.
 </div>
-<div id="ref-buglioneAgricolturaAllevamentoNella2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buglioneAgricolturaAllevamentoNella2016" class="csl-entry" role="listitem">
 Buglione, A., Venuto, G.D., Volpe, G., 2016. <a href="https://doi.org/10.4000/mefra.3475"><span>Agricoltura e allevamento nella Puglia settentrionale tra età romana e Medioevo : il contributo delle bioarcheologie</span></a>. Mélanges de l’École française de Rome - Antiquité.
 </div>
-<div id="ref-buntgenCoolingSocietalChange2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buntgenCoolingSocietalChange2016" class="csl-entry" role="listitem">
 Büntgen, U., Myglan, V.S., Ljungqvist, F.C., McCormick, M., Di Cosmo, N., Sigl, M., Jungclaus, J., Wagner, S., Krusic, P.J., Esper, J., Kaplan, J.O., de Vaan, M.A.C., Luterbacher, J., Wacker, L., Tegel, W., Kirdyanov, A.V., 2016. <a href="https://doi.org/10.1038/ngeo2652">Cooling and societal change during the <span>Late Antique Little Ice Age</span> from 536 to around 660 <span>AD</span></a>. Nature Geoscience 9, 231–236.
 </div>
-<div id="ref-buntgen2500YearsEuropean2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buntgen2500YearsEuropean2011" class="csl-entry" role="listitem">
 Büntgen, U., Tegel, W., Nicolussi, K., McCormick, M., Frank, D., Trouet, V., Kaplan, J.O., Herzig, F., Heussner, K.-U., Wanner, H., Luterbacher, J., Esper, J., 2011. 2500 <span>Years</span> of <span>European Climate Variability</span> and <span>Human Susceptibility</span>. Science 331, 578–582.
 </div>
-<div id="ref-buonincontriMultiproxyApproachStudy2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-buonincontriMultiproxyApproachStudy2017" class="csl-entry" role="listitem">
 Buonincontri, M.P., Pecci, A., Di Pasquale, G., Ricci, P., Lubritto, C., 2017. Multiproxy approach to the study of <span>Medieval</span> food habits in <span>Tuscany</span> (central <span>Italy</span>). Archaeological and Anthropological Sciences 9, 653–671.
 </div>
-<div id="ref-caracutaOliveGrowingPuglia2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-caracutaOliveGrowingPuglia2020" class="csl-entry" role="listitem">
 Caracuta, V., 2020. <a href="https://doi.org/10.1007/s00334-019-00765-y">Olive growing in <span>Puglia</span> (southeastern <span>Italy</span>): A review of the evidence from the <span>Mesolithic</span> to the <span>Middle Ages</span></a>. Vegetation History and Archaeobotany 29, 595–620.
 </div>
-<div id="ref-caramielloAnalisiPaleobotanicheSedimentologiche1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-caramielloAnalisiPaleobotanicheSedimentologiche1999" class="csl-entry" role="listitem">
 Caramiello, R., Siniscalco, M.C., Forlani, L., Zeme, A., Accorsi, C.A., Arobba, D., Bandini Mazzanti, M., Zanini, E., 1999. Analisi paleobotaniche e sedimentologiche: Storia forestale, clima e agricoltura a <span>Trino</span> dall’età romana al medioevo. In: Negro Ponzi, M. (Ed.), San <span>Michele</span> Di <span>Trino</span> (<span>VC</span>): Dal Villaggio Romano Al Castello Medievale, Ricerche Di Archeologia Altomedievale e Medievale. <span>All’Insegna del Giglio</span>, <span>Firenze</span>, pp. 577–599.
 </div>
-<div id="ref-carandiniSviluppoCrisiManifatture1981" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carandiniSviluppoCrisiManifatture1981" class="csl-entry" role="listitem">
 Carandini, A., 1981. Sviluppo e crisi delle manifatture rurali e urbane. In: Giardina, A., Carandini, A. (Eds.), Società Romana e Produzione Schiavistica. pp. 249–260.
 </div>
-<div id="ref-carandiniSettefinestreVillaSchiavistica1985" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carandiniSettefinestreVillaSchiavistica1985" class="csl-entry" role="listitem">
 Carandini, A. (Ed.), 1985. Settefinestre. <span>Una</span> villa schiavistica nell’<span>Etruria</span> romana., COPTIP. ed. <span>Modena</span>.
 </div>
-<div id="ref-carandiniSchiaviItaliaStrumenti1988" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carandiniSchiaviItaliaStrumenti1988" class="csl-entry" role="listitem">
 Carandini, A., 1988. <span>Schiavi in Italia: gli strumenti pensanti dei Romani fra tarda Repubblica e medio Impero</span>. <span>Nuova Italia scientifica</span>, <span>Roma</span>.
 </div>
-<div id="ref-carandiniVillaRomanaPiantagione1989" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carandiniVillaRomanaPiantagione1989" class="csl-entry" role="listitem">
 Carandini, A., 1989. La villa romana e la piantagione schiavistica. In: Momigliano, A., Schiavone, A. (Eds.), Storia Di <span>Roma</span>. <span>Einaudi</span>, <span>Torino</span>, pp. 101–200.
 </div>
-<div id="ref-carlsonQuantitativeMethodsArchaeology2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carlsonQuantitativeMethodsArchaeology2017" class="csl-entry" role="listitem">
 Carlson, D.L., 2017. Quantitative methods in archaeology using <span>R</span>, Cambridge University Press. ed, Cambridge <span>Manuals</span> in <span>Archaeology</span>. <span>Cambridge</span>.
 </div>
-<div id="ref-carrieEsercitiStrategie1989" class="csl-entry" role="doc-biblioentry">
+<div id="ref-carrieEsercitiStrategie1989" class="csl-entry" role="listitem">
 Carrié, J.M., 1989. Eserciti e strategie. In: Momigliano, A., Schiavone, A. (Eds.), Storia Di <span>Roma</span>. <span>L</span>’età Tardoantica. <span>Crisi</span> e Trasformazioni. <span>Einaudi</span>, <span>Torino</span>, pp. 83–154.
 </div>
-<div id="ref-cassiodorusLettersCassiodorusBeing1886" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cassiodorusLettersCassiodorusBeing1886" class="csl-entry" role="listitem">
 Cassiodorus, S., 1886. The letters of <span>Cassiodorus</span>, being a condensed translation of the <span>Variae</span> epistolae of <span>Magnus Aurelius Cassiodorus Senator</span> with an introduction. <span>London H. Frowde</span>.
 </div>
-<div id="ref-castellettiContributoAlleRicerche1972" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castellettiContributoAlleRicerche1972" class="csl-entry" role="listitem">
 Castelletti, L., 1972. Contributo alle ricerche paletnobotaniche in <span>Italia</span>. Istituto Lombardo Rendiconti 106, 331–374.
 </div>
-<div id="ref-castellettiRapportoPreliminareSui1976" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castellettiRapportoPreliminareSui1976" class="csl-entry" role="listitem">
 Castelletti, L., 1976. Rapporto preliminare sui resti vegetali macroscopici della serie neolitico-bronzo di <span>Pienza</span> (<span>Siena</span>). Rivista archeologica della antica provincia e diocesi di Como 156/157, 243–251.
 </div>
-<div id="ref-castiglioniSorgoSorghumBicolor2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castiglioniSorgoSorghumBicolor2010" class="csl-entry" role="listitem">
 Castiglioni, E., Rottoli, M., 2010. Il sorgo (<span>Sorghum</span> bicolor) nel <span>Medioevo</span> in <span>Italia</span> settentrionale. Archeologia Medievale 37, 485–495.
 </div>
-<div id="ref-castiglioniBroomcornMilletFoxtail2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castiglioniBroomcornMilletFoxtail2013" class="csl-entry" role="listitem">
 Castiglioni, E., Rottoli, M., 2013. Broomcorn millet, foxtail millet and sorghum in <span>North Italian Early Medieval</span> sites. Post-Classical Archaeologies 3, 131–144.
 </div>
-<div id="ref-castiglioniSemiFruttiDispense2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castiglioniSemiFruttiDispense2015" class="csl-entry" role="listitem">
 Castiglioni, E., Rottoli, M., 2015. <span>I semi e i frutti delle dispense</span>. In: Grassi, B., Miedico, C. (Eds.), <span>Il profumo del pane e delle castagne: dai semi di Cislago ai panini di Angera. Parte I: la villa rustica di Cislago, i resti organici e il paesaggio agro-alimentare in età romana.</span> <span>Lavrano</span>, <span>Arona</span>, pp. 41–54.
 </div>
-<div id="ref-castilloAgrarianArchaeologyEarly2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castilloAgrarianArchaeologyEarly2014" class="csl-entry" role="listitem">
 Castillo, J.A., 2014. <a href="https://doi.org/10.1016/j.quaint.2014.08.007">Agrarian archaeology in <span>Early Medieval Europe</span></a>. Quaternary International 346, 1–6.
 </div>
-<div id="ref-castroraobarbaContinuitaTopograficaDiscontinuita2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castroraobarbaContinuitaTopograficaDiscontinuita2014" class="csl-entry" role="listitem">
 Castrorao Barba, A., 2014. Continuità topografica in discontinuità funzionale: Trasformazioni e riusi delle ville romane in <span>Italia</span> tra <span>III</span> e <span>VIII</span> secolo. Post-Classical Archaeologies 4, 259–296.
 </div>
-<div id="ref-castroraobarbaFineVilleRomane2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-castroraobarbaFineVilleRomane2020" class="csl-entry" role="listitem">
 Castrorao Barba, A., 2020. La fine delle ville romane in <span>Italia</span> tra tarda antichità e <span>Alto Medioevo</span>: <span>III-VIII</span> secolo, Munera. <span>Edipuglia</span>, <span>Bari</span>.
 </div>
-<div id="ref-celantMacroremainsCitrusFruit2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-celantMacroremainsCitrusFruit2018" class="csl-entry" role="listitem">
 Celant, A., Fiorentino, G., 2018. <a href="https://doi.org/10.4000/books.pcjb.2194">Macroremains of citrus fruit in <span>Italy</span></a>. In: Zech-Matterne, V. (Ed.), <span>AGRUMED</span>: <span>Archaeology</span> and History of Citrus Fruit in the <span>Mediterranean</span> : <span>Acclimatization</span>, Diversifications, Uses, Collection Du <span>Centre Jean Bérard</span>. <span>Publications du Centre Jean Bérard</span>, <span>Naples</span>, pp. 130–138.
 </div>
-<div id="ref-cheyetteDisappearanceAncientLandscape2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cheyetteDisappearanceAncientLandscape2008" class="csl-entry" role="listitem">
 Cheyette, F.L., 2008. <a href="https://doi.org/10.1111/j.1468-0254.2008.00225.x">The disappearance of the ancient landscape and the climatic anomaly of the early <span>Middle Ages</span>: A question to be pursued: <span>The</span> climatic anomaly of the early <span>Middle Ages</span></a>. Early Medieval Europe 16, 127–165.
 </div>
-<div id="ref-cheyetteMediterraneanClimate2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cheyetteMediterraneanClimate2014" class="csl-entry" role="listitem">
 Cheyette, F.L., 2014. The <span>Mediterranean Climate</span>. In: Horden, P., Kinoshita, S. (Eds.), A Companion to <span>Mediterranean</span> History, Wiley <span>Blackwell</span> Companions to World History. <span>Wiley Blackwell</span>, <span>Chichester, West Sussex</span>, pp. 11–25.
 </div>
-<div id="ref-christensenTestingFisherNeyman2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-christensenTestingFisherNeyman2005" class="csl-entry" role="listitem">
 Christensen, R., 2005. <a href="https://doi.org/10.1198/000313005X20871">Testing <span>Fisher</span>, <span>Neyman</span>, <span>Pearson</span>, and <span>Bayes</span></a>. The American Statistician 59, 121–126.
 </div>
-<div id="ref-christieLandscapesChangeRural2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-christieLandscapesChangeRural2004" class="csl-entry" role="listitem">
 Christie, N. (Ed.), 2004. Landscapes of change: Rural evolutions in late antiquity and the early <span>Middle Ages</span>. <span>Ashgate</span>, <span>Aldershot, Hants, England ; Burlington, VT</span>.
 </div>
-<div id="ref-christieConstantineCharlemagneArchaeology2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-christieConstantineCharlemagneArchaeology2006" class="csl-entry" role="listitem">
 Christie, N. (Ed.), 2006. From <span>Constantine</span> to <span>Charlemagne</span>: An archaeology of <span>Italy</span>, <span>AD</span> 300-800. <span>Ashgate</span>, <span>Aldershot, Hants, England ; Burlington, VT, USA</span>.
 </div>
-<div id="ref-ciaralloOrtiGiardiniAntica1992" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ciaralloOrtiGiardiniAntica1992" class="csl-entry" role="listitem">
 Ciarallo, A., 1992. <span>Orti e giardini della antica Pompei</span>. <span>Fiorentino</span>, <span>Napoli</span>.
 </div>
-<div id="ref-ciaralloVerdePompeiano2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ciaralloVerdePompeiano2001" class="csl-entry" role="listitem">
 Ciarallo, A., 2001. Verde pompeiano. <span>L’Erma di Bretschneider</span>, <span>Roma</span>.
 </div>
-<div id="ref-clarkeArchaeologyLossInnocence1973" class="csl-entry" role="doc-biblioentry">
+<div id="ref-clarkeArchaeologyLossInnocence1973" class="csl-entry" role="listitem">
 Clarke, D., 1973. <a href="https://doi.org/10.1017/S0003598X0003461X">Archaeology: The loss of innocence</a>. Antiquity 47, 6–18.
 </div>
-<div id="ref-clarkeAnalyticalArchaeology1978" class="csl-entry" role="doc-biblioentry">
+<div id="ref-clarkeAnalyticalArchaeology1978" class="csl-entry" role="listitem">
 Clarke, D.L., 1978. Analytical archaeology. <span>Columbia University Press</span>.
 </div>
-<div id="ref-cocozzaPresentingCompendiumIsotoporum2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cocozzaPresentingCompendiumIsotoporum2022" class="csl-entry" role="listitem">
 Cocozza, C., Cirelli, E., Groß, M., Teegen, W.-R., Fernandes, R., 2022. <a href="https://doi.org/10.1038/s41597-022-01462-8">Presenting the <span>Compendium Isotoporum Medii Aevi</span>, a <span>Multi-Isotope Database</span> for <span>Medieval Europe</span></a>. Scientific Data 9, 354.
 </div>
-<div id="ref-cohenEarth051994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cohenEarth051994" class="csl-entry" role="listitem">
 Cohen, J., 1994. <a href="https://doi.org/10.1037/0003-066X.49.12.997">The earth is round (p <span><span class="math inline">\(&lt;\)</span></span> .05).</a> American Psychologist 49, 997–1003.
 </div>
-<div id="ref-colombeTresRichesHeures2023" class="csl-entry" role="doc-biblioentry">
+<div id="ref-colombeTresRichesHeures2023" class="csl-entry" role="listitem">
 Colombe, J., Ojéda, R.-G., 2023. <span>Très riches heures du Duc de Berry</span>. Wikipedia.
 </div>
-<div id="ref-columellaAgricultureThreeVolumes2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-columellaAgricultureThreeVolumes2010" class="csl-entry" role="listitem">
 Columella, L.I.M., 2010. <span>On agriculture: in three volumes. 1: I - IV</span>, Reprinted. ed, <span>The Loeb classical library</span>. <span>Harvard Univ. Press</span>, <span>Cambridge, Mass.</span>
 </div>
-<div id="ref-corbierTranshumanceEntreSamnium1991" class="csl-entry" role="doc-biblioentry">
+<div id="ref-corbierTranshumanceEntreSamnium1991" class="csl-entry" role="listitem">
 Corbier, M., 1991. <a href="https://doi.org/10.4000/books.pcjb.1455"><span>La transhumance entre le Samnium et l’Apulie: continuités entre l’époque républicaine et l’époque impériale</span></a>. In: Bérard, C.J. (Ed.), <span>La romanisation du Samnium aux iie et ier s. av. J.-C. : Actes du Colloque International (Naples 1988)</span>, <span>Collection du Centre Jean Bérard</span>. <span>Publications du Centre Jean Bérard</span>, <span>Naples</span>, pp. 149–176.
 </div>
-<div id="ref-corbinoEarliestEvidenceChicken2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-corbinoEarliestEvidenceChicken2022" class="csl-entry" role="listitem">
 Corbino, C.A., De Grossi Mazzorin, J., Minniti, C., Albarella, U., 2022. <a href="https://doi.org/10.1016/j.quaint.2021.04.006">The earliest evidence of chicken in <span>Italy</span></a>. Quaternary International, The <span>Archaeology</span> of <span>Human-Bird Interactions</span>: <span>Essays</span> in <span>Honour</span> of <span>Dale Serjeantson Part II</span> 626–627, 80–86.
 </div>
-<div id="ref-costantiniMonteSanMauro1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-costantiniMonteSanMauro1979" class="csl-entry" role="listitem">
 Costantini, L., 1979. Monte <span>San Mauro</span> di <span>Caltagirone</span>. <span>Analisi</span> paleoetnobotaniche dei semi contenuti nei pithoi 4 e 6. Bollettino d’Arte 64, 43–4.
 </div>
-<div id="ref-costantiniPianteSpontaneePiante1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-costantiniPianteSpontaneePiante1983" class="csl-entry" role="listitem">
 Costantini, L., 1983a. <span>Piante spontanee e piante coltivate a S. Giovanni di Ruoti, Potenza</span>. In: Gualtieri, M., Salvatore, M., Small, A.M. (Eds.), <span>Lo Scavo di S. Giovanni di Ruoti ed il periodo tradonantico in Basilicata: atti della tavola rotonda, Roma 4 luglio 1981</span>. <span>Adriatica</span>, <span>Bari</span>, pp. 85–90.
 </div>
-<div id="ref-costantiniAnalisiPaleoetnobotanicheNel1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-costantiniAnalisiPaleoetnobotanicheNel1983" class="csl-entry" role="listitem">
 Costantini, L., 1983b. Analisi paleoetnobotaniche nel comprensorio di <span>Camarina</span>. Bollettino d’arte 49–56.
 </div>
-<div id="ref-costantiniCerealiLegumiMedievali1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-costantiniCerealiLegumiMedievali1983" class="csl-entry" role="listitem">
 Costantini, L., Costantini, L., Napolitano, G., Whitehouse, D., 1983. Cereali e legumi medievali provenienti dalle mura di <span>Santo Stefano</span>, <span>Anguillara Sabazia</span> (<span>Roma</span>). Archeologia Medievale 10, 393.
 </div>
-<div id="ref-cowgillThingsHopeYou2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cowgillThingsHopeYou2015" class="csl-entry" role="listitem">
 Cowgill, G.L., 2015. <a href="https://doi.org/10.1146/annurev-anthro-102214-013814">Some <span>Things I Hope You Will Find Useful Even</span> if <span>Statistics Isn</span>’t <span>Your Thing</span></a>. Annual Review of Anthropology 44, 1–14.
 </div>
-<div id="ref-craccorugginiEconomiaSocietaNell1995" class="csl-entry" role="doc-biblioentry">
+<div id="ref-craccorugginiEconomiaSocietaNell1995" class="csl-entry" role="listitem">
 Cracco Ruggini, L., 1995. Economia e società nell’ "<span>Italia</span> annonaria": Rapporti fra agricoltura e commercio dal <span>IV</span> al <span>VI</span> secolo d. <span>C</span>, Studi storici sulla tarda antichità. <span>Edipuglia</span>, <span>Bari</span>.
 </div>
-<div id="ref-craigStableIsotopicEvidence2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-craigStableIsotopicEvidence2009" class="csl-entry" role="listitem">
 Craig, O.E., Biazzo, M., O’Connell, T.C., Garnsey, P., Martinez-Labarga, C., Lelli, R., Salvadei, L., Tartaglia, G., Nava, A., Renò, L., Fiammenghi, A., Rickards, O., Bondioli, L., 2009. <a href="https://doi.org/10.1002/ajpa.21021">Stable isotopic evidence for diet at the <span>Imperial Roman</span> coastal site of <span>Velia</span> (1st and 2nd <span>Centuries AD</span>) in <span>Southern Italy</span></a>. American Journal of Physical Anthropology 139, 572–583.
 </div>
-<div id="ref-cremoniniLateantiquityEnvironmentalCrisis2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-cremoniniLateantiquityEnvironmentalCrisis2013" class="csl-entry" role="listitem">
 Cremonini, S., Labate, D., Curina, R., 2013. <a href="https://doi.org/10.1016/j.quaint.2013.09.014">The late-antiquity environmental crisis in <span>Emilia</span> region (<span>Po</span> river plain, <span>Northern Italy</span>): <span>Geoarchaeological</span> evidence and paleoclimatic considerations</a>. Quaternary International 316, 162–178.
 </div>
-<div id="ref-dauriaEvidenceShortlivedEpisode2017" class="csl-entry" role="doc-biblioentry">
-D’Auria, A., Buonincontri, M.P., Allevato, E., Saracino, A., Jung, R., Pacciarelli, M., Di Pasquale, G., 2017. <a href="https://doi.org/10.1177/0959683616670218">Evidence of a short-lived episode of olive (<span>Olea</span> europaea <span>L</span>.) Cultivation during the <span>Early Bronze Age</span> in western <span>Mediterranean</span> (southern <span>Italy</span>)</a>. The Holocene 27, 605–612.
+<div id="ref-dauriaEvidenceShortlivedEpisode2017" class="csl-entry" role="listitem">
+D’Auria, A., Buonincontri, M.P., Allevato, E., Saracino, A., Jung, R., Pacciarelli, M., Di Pasquale, G., 2017. <a href="https://doi.org/10.1177/0959683616670218">Evidence of a short-lived episode of olive (<span>Olea</span> europaea <span>L</span>.) cultivation during the <span>Early Bronze Age</span> in western <span>Mediterranean</span> (southern <span>Italy</span>)</a>. The Holocene 27, 605–612.
 </div>
-<div id="ref-daviesGardensGardeningEarly2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-daviesGardensGardeningEarly2019" class="csl-entry" role="listitem">
 Davies, W., 2019. <a href="https://doi.org/10.1111/emed.12342">Gardens and gardening in early medieval <span>Spain</span> and <span>Portugal</span></a>. Early Medieval Europe 27, 327–348.
 </div>
-<div id="ref-deangelisFoodHeartEmpire2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-deangelisFoodHeartEmpire2020" class="csl-entry" role="listitem">
 De Angelis, F., Varano, S., Battistini, A., Di Giannantonio, S., Ricci, P., Lubritto, C., Facchin, G., Brancazi, L., Santangeli-Valenzani, R., Catalano, P., Gazzaniga, V., Rickards, O., Martínez-Labarga, C., 2020. <a href="https://doi.org/10.1007/s12520-020-01194-z">Food at the heart of the <span>Empire</span>: Dietary reconstruction for <span>Imperial Rome</span> inhabitants</a>. Archaeological and Anthropological Sciences 12, 244.
 </div>
-<div id="ref-degrossimazzorinIntroduzioneDiffusionePollame2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinIntroduzioneDiffusionePollame2000" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., 2000. Introduzione e diffusione del pollame in <span>Italia</span> ed evoluzione delle sue forme di allevamento fino al <span>Medioevo</span>. Proc. 3rd Nat. Congr. of Archaeozoology, Siracusa, Italy 351–361.
 </div>
-<div id="ref-degrossimazzorinSfruttamentoRisorseIttiche2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinSfruttamentoRisorseIttiche2002" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., 2002. Lo sfruttamento delle risorse ittiche in alcuni insediamenti dell’età del <span>Bronzo</span>. In: Negroni Catacchio, N. (Ed.), Paesaggi d’acque. <span>Ricerche</span> e <span>Scavi</span> - <span>Atti</span> Del <span>V Incontro</span> Di <span>Studi</span>. <span>Milano</span>. <span>IIPP - Istituto Italiano di Preistoria e Protostoria</span>, <span>Firenze</span>, pp. 257–267.
 </div>
-<div id="ref-degrossimazzorinTestimonianzeDiLavorazione2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinTestimonianzeDiLavorazione2006" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., 2006. Testimonianze di lavorazione del tonno a <span>Populonia</span>? In: Aprosio, M., Mascione, C. (Eds.), Materiali Per <span>Populonia</span> 5. <span>ETS edizioni</span>, <span>Pisa</span>, pp. 263–272.
 </div>
-<div id="ref-degrossimazzorinPrimeRicercheSulle2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinPrimeRicercheSulle2014" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., 2014. Le prime ricerche sulle faune nei siti dell’età del <span>Bronzo</span> in <span>Italia</span>. Le prime ricerche sulle faune nei siti dell’età del Bronzo in Italia 73–78.
 </div>
-<div id="ref-degrossimazzorinAnalisiArcheozoologicaDi2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinAnalisiArcheozoologicaDi2009" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., Cucinotta, C., Bartoloni, G., 2009. Analisi archeozoologica di alcuni contesti dalla città antica di <span>Veio</span>. L’abitato etrusco di Veio. Ricerche dell’Università di Roma” La Sapienza”. I-Cisterne, pozzi e fosse. Dipartimento di Scienze Storiche Archeologiche e Antropologiche dell’Antichità 125–154.
 </div>
-<div id="ref-degrossimazzorinAnalisiRestiFaunistici2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinAnalisiRestiFaunistici2009" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., Minniti, C., 2009a. L’analisi dei resti faunistici: Alcune osservazioni sull’alimentazione dei <span>Minimi</span> di <span>San Francesco</span> di <span>Paola</span>. In: Pincio <span>I</span>. <span>La</span> Villa <span>Mèdicis</span> Et Le Couvent de La <span>Trinitè</span>des a <span>Rome</span>. <span>Rèinvestir</span> Un Site Antique. <span>École Française de Rome &amp; Soprintendenza Speciale per i Beni Archeologici di …</span>, pp. 277–291.
 </div>
-<div id="ref-degrossimazzorinUtilizzazioneAnimaliNella2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinUtilizzazioneAnimaliNella2009" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., Minniti, C., 2009b. <span>L’utilizzazione degli animali nella documentazione archeozoologica a Roma e nel Lazio dalla preistoria recente all’età classica</span>. In: Troccoli, L.D. (Ed.), <span>Il Lazio dai Colli Albani ai Monti Lepini tra preistoria ed età moderna</span>. <span>Edizioni Quasar</span>, <span>Roma</span>, pp. 39–68.
 </div>
-<div id="ref-degrossimazzorinAnimaliRomaTre2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-degrossimazzorinAnimaliRomaTre2022" class="csl-entry" role="listitem">
 De Grossi Mazzorin, J., Minniti, C., 2022. <span>Gli animali a Roma. Tre millenni di interazione con l’uomo</span>. <span>All’Insegna del Giglio</span>.
 </div>
-<div id="ref-deneeveRomanLandownerHis1990" class="csl-entry" role="doc-biblioentry">
+<div id="ref-deneeveRomanLandownerHis1990" class="csl-entry" role="listitem">
 de Neeve, P.W., 1990. A <span>Roman</span> landowner and his estates: <span>Pliny</span> the <span>Younger</span>. Athenaeum 78, 363–402.
 </div>
-<div id="ref-derobertisSulleCondizioniEconomiche1951" class="csl-entry" role="doc-biblioentry">
+<div id="ref-derobertisSulleCondizioniEconomiche1951" class="csl-entry" role="listitem">
 De Robertis, F.M., 1951. Sulle condizioni economiche della <span>Puglia</span> dal <span>IV</span> al <span>VII</span> sec. <span class="nocase">dC</span>. Archivio Storico Pugliese 4, 2–57.
 </div>
-<div id="ref-derobertisProsperitaBanditismoNella1972" class="csl-entry" role="doc-biblioentry">
+<div id="ref-derobertisProsperitaBanditismoNella1972" class="csl-entry" role="listitem">
 De Robertis, F.M., 1972. Prosperita e <span>Banditismo</span> nella <span>Puglia</span> e nell’<span>Italia Meridionale</span> durante il <span>Basso Impero</span>. In: Paone, M. (Ed.), Studi Di <span>Storia Pugliese</span> in <span>Onore</span> Di <span>Giuseppe Chiarelli</span>. <span>Congedo Editore</span>, <span>Galatina</span>, pp. 197–231.
 </div>
-<div id="ref-devenutoEatBeMedieval2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-devenutoEatBeMedieval2010" class="csl-entry" role="listitem">
 De Venuto, G., 2010. To eat and to be in medieval <span>Southern Italy</span>: The zooarchaeological contribution from religious, rural and fortified sites. In: Pluskowski, A., Kucera, M. (Eds.), Bestial <span>Mirrors</span>. <span>Using Animals</span> to <span>Construct Human Identities</span> in <span>Medieval Europe</span>. <span>Universität Wien</span>, <span>Wien</span>, pp. 55–61.
 </div>
-<div id="ref-delanosmithLuniAgerLunensis1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-delanosmithLuniAgerLunensis1986" class="csl-entry" role="listitem">
 Delano Smith, C., Gadd, D., Mills, N., Ward-Perkins, B., 1986. <a href="https://doi.org/10.1017/S0068246200008862">Luni and the <span>Ager Lunensis</span>: <span>The Rise</span> and <span>Fall</span> of a <span>Roman Town</span> and its <span>Territory</span></a>. Papers of the British School at Rome 54, 81–146.
 </div>
-<div id="ref-devroeyEconomy2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-devroeyEconomy2001" class="csl-entry" role="listitem">
 Devroey, J.-P., 2001. The economy. In: McKitterick, R. (Ed.), The <span>Early Middle Ages</span>: <span>Europe</span> 400-1000, The <span>Short Oxford</span> History of <span>Europe</span>. <span>Oxford University Press</span>, <span>Oxford</span>, pp. 97–130.
 </div>
-<div id="ref-devroeyNatureRoiEnvironnement2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-devroeyNatureRoiEnvironnement2019" class="csl-entry" role="listitem">
 Devroey, J.-P., 2019. <span>La Nature et le roi: Environnement pouvoir et société à l’âge de Charlemagne (740-820)</span>. <span>Albin Michel</span>.
 </div>
-<div id="ref-dimuroTerraMercanteSovrano2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-dimuroTerraMercanteSovrano2020" class="csl-entry" role="listitem">
 Di Muro, A., 2020. La terra, il mercante e il sovrano: Economia e società nell’<span>VIII</span> secolo longobardo. <span>Basilicata University Press-BUP</span>, <span>Potenza</span>.
 </div>
-<div id="ref-diazSpatialTemporalCharacteristics2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-diazSpatialTemporalCharacteristics2011" class="csl-entry" role="listitem">
 Diaz, H.F., Trigo, R., Hughes, M.K., Mann, M.E., Xoplaki, E., Barriopedro, D., 2011. <a href="https://doi.org/10.1175/BAMS-D-10-05003.1">Spatial and <span>Temporal Characteristics</span> of <span>Climate</span> in <span>Medieval Times Revisited</span></a>. Bulletin of the American Meteorological Society 92, 1487–1500.
 </div>
-<div id="ref-doddArchaeologyWineProduction2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-doddArchaeologyWineProduction2022" class="csl-entry" role="listitem">
 Dodd, E., 2022. <a href="https://doi.org/10.1086/719697">The <span>Archaeology</span> of <span>Wine Production</span> in <span>Roman</span> and <span>Pre-Roman Italy</span></a>. American Journal of Archaeology 126, 443–480.
 </div>
-<div id="ref-doddConceptualFrameworkApproaching2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-doddConceptualFrameworkApproaching2019" class="csl-entry" role="listitem">
 Dodd, J., 2019. <a href="https://doi.org/10.14795/j.v6i1.359">A conceptual framework to approaching <span>Late Antique</span> villa transformation trajectories</a>. Journal of Ancient History and Archaeology 6.
 </div>
-<div id="ref-drennanStatisticsArchaeologistsCommonsense2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-drennanStatisticsArchaeologistsCommonsense2013" class="csl-entry" role="listitem">
 Drennan, R.D., 2013. Statistics for <span>Archaeologists</span>: <span>A Commonsense Approach</span>. <span>Springer Science &amp; Business Media</span>.
 </div>
-<div id="ref-eisenbergEnvironmentalHistoryLate2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-eisenbergEnvironmentalHistoryLate2015" class="csl-entry" role="listitem">
 Eisenberg, M., Patterson, D.J., Kreiner, J., Arnold, E.F., Newfield, T.P., 2015. The <span>Environmental History</span> of the <span>Late Antique West</span>: A <span>Bibliographic Essay</span>. Late Antique Archaeology 11, 31–50.
 </div>
-<div id="ref-erdkamp2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-erdkamp2005" class="csl-entry" role="listitem">
 Erdkamp, P., 2005. The grain market in the Roman Empire: a social, political and economic study. Cambridge University Press, Cambridge, UK.
 </div>
-<div id="ref-fabbriStoriaLavoroItalia2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fabbriStoriaLavoroItalia2015" class="csl-entry" role="listitem">
 Fabbri, F., Musso, S., Marcone, A. (Eds.), 2015. Storia del lavoro in <span>Italia</span>, 1st ed. <span>Castelvecchi</span>, <span>Roma</span>.
 </div>
-<div id="ref-fernandesQuantitativeDietReconstruction2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fernandesQuantitativeDietReconstruction2015" class="csl-entry" role="listitem">
 Fernandes, R., Grootes, P., Nadeau, M.-J., Nehlich, O., 2015. <a href="https://doi.org/10.1002/ajpa.22788">Quantitative diet reconstruction of a <span>Neolithic</span> population using a <span>Bayesian</span> mixing model (<span>FRUITS</span>): <span>The</span> case study of <span>Ostorf</span> (<span>Germany</span>)</a>. American Journal of Physical Anthropology 158, 325–340.
 </div>
-<div id="ref-finley1973" class="csl-entry" role="doc-biblioentry">
+<div id="ref-finley1973" class="csl-entry" role="listitem">
 Finley, M.I., 1973. The ancient economy, Sather classical lectures. University of California Press, Berkeley.
 </div>
-<div id="ref-fisherStatisticalMethodsResearch1925" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fisherStatisticalMethodsResearch1925" class="csl-entry" role="listitem">
 Fisher, S.R.A., 1925. Statistical <span>Methods</span> for <span>Research Workers</span>. <span>Oliver and Boyd</span>, <span>Edinburgh</span>.
 </div>
-<div id="ref-fletcherDiggingNumbersElementary2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fletcherDiggingNumbersElementary2005" class="csl-entry" role="listitem">
 Fletcher, M., Lock, G.R., 2005. Digging numbers: Elementary statistics for archaeologists, 2nd ed. ed, Monograph (<span>Oxford University School</span> of <span>Archaeology</span>). <span>Oxford University Committee for Archaeology</span>, <span>Oxford : Oakville, CT</span>.
 </div>
-<div id="ref-follieriVegetaliPozzoDi1971" class="csl-entry" role="doc-biblioentry">
+<div id="ref-follieriVegetaliPozzoDi1971" class="csl-entry" role="listitem">
 Follieri, M., 1971. I vegetali del pozzo di età repubblicana nell’area sacra di <span>Vesta</span> al <span>Foro Romano</span>. Annali di Botánica 30, 85–99.
 </div>
-<div id="ref-francovichVillaVillageTransformation2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-francovichVillaVillageTransformation2003" class="csl-entry" role="listitem">
 Francovich, R., Hodges, R., 2003. Villa to village: The transformation of the <span>Roman</span> countryside in <span>Italy</span>, ca. 400-1000. <span>Duckworth</span>, <span>London</span>.
 </div>
-<div id="ref-fuRevisedTimescaleHuman2013a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fuRevisedTimescaleHuman2013a" class="csl-entry" role="listitem">
 Fu, Q., Mittnik, A., Johnson, P.L.F., Bos, K., Lari, M., Bollongino, R., Sun, C., Giemsch, L., Schmitz, R., Burger, J., Ronchitelli, A.M., Martini, F., Cremonesi, R.G., Svoboda, J., Bauer, P., Caramelli, D., Castellano, S., Reich, D., Pääbo, S., Krause, J., 2013. <a href="https://doi.org/10.1016/j.cub.2013.02.044">A <span>Revised Timescale</span> for <span>Human Evolution Based</span> on <span>Ancient Mitochondrial Genomes</span></a>. Current Biology 23, 553–559.
 </div>
-<div id="ref-fumagalliIntroduzioneFeudalesimoSviluppo1980" class="csl-entry" role="doc-biblioentry">
+<div id="ref-fumagalliIntroduzioneFeudalesimoSviluppo1980" class="csl-entry" role="listitem">
 Fumagalli, V., 1980. <span>Introduzione del feudalesimo e sviluppo dell’economia curtense nell’Italia settentrionale</span>. Publications de l’École Française de Rome 44, 313–325.
 </div>
-<div id="ref-garnseyCitiesPeasantsFood1998" class="csl-entry" role="doc-biblioentry">
+<div id="ref-garnseyCitiesPeasantsFood1998" class="csl-entry" role="listitem">
 Garnsey, P., 1998. <a href="https://doi.org/10.1017/CBO9780511585395">Cities, <span>Peasants</span> and <span>Food</span> in <span>Classical Antiquity</span>: <span>Essays</span> in <span>Social</span> and <span>Economic History</span></a>, First. ed. <span>Cambridge University Press</span>.
 </div>
-<div id="ref-garnseyRomanEmpireEconomy2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-garnseyRomanEmpireEconomy2014" class="csl-entry" role="listitem">
 Garnsey, P., 2014. The <span>Roman Empire</span>: Economy, society, and culture, 2nd edition. ed. <span>University of California Press</span>, <span>Oakland, CA</span>.
 </div>
-<div id="ref-gasparriCarteDiFamiglia2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gasparriCarteDiFamiglia2005" class="csl-entry" role="listitem">
 Gasparri, S., La Rocca, C. (Eds.), 2005. Carte di famiglia: Strategie, rappresentazione e memoria del gruppo familiare di <span>Totone</span> di <span>Campione</span> (721-877), 1. ed. ed, Altomedioevo. <span>Viella</span>, <span>Roma</span>.
 </div>
-<div id="ref-gelichiVillaggioNellaPianura2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gelichiVillaggioNellaPianura2014" class="csl-entry" role="listitem">
 Gelichi, S., Librenti, M., Marchesini, M., Accorsi, C.A. (Eds.), 2014. Un villaggio nella pianura: Ricerche archeologiche in un insediamento medievale del territorio di <span>Sant</span>’<span>Agata Bolognese</span>, Quaderni di archeologia dell’<span>Emilia Romagna</span>. <span>All’insegna del giglio</span>, <span>Borgo S. Lorenzo (FI) [i.e. Florence, Italy]</span>.
 </div>
-<div id="ref-gelmanFailureNullHypothesis2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gelmanFailureNullHypothesis2018" class="csl-entry" role="listitem">
 Gelman, A., 2018. <a href="https://doi.org/10.1177/0146167217729162">The <span>Failure</span> of <span>Null Hypothesis Significance Testing When Studying Incremental Changes</span>, and <span>What</span> to <span>Do About It</span></a>. Personality and Social Psychology Bulletin 44, 16–23.
 </div>
-<div id="ref-giardinaSocietaRomanaProduzione1981" class="csl-entry" role="doc-biblioentry">
+<div id="ref-giardinaSocietaRomanaProduzione1981" class="csl-entry" role="listitem">
 Giardina, A., Schiavone, A. (Eds.), 1981. Società romana e produzione schiavistica. <span>Vol</span>. 2: <span>Merci</span>, mercati e scambi nel <span>Mediterraneo</span>, Collezione storica. <span>Laterza</span>, <span>Bari</span>.
 </div>
-<div id="ref-gillInsignificanceNullHypothesis1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gillInsignificanceNullHypothesis1999" class="csl-entry" role="listitem">
 Gill, J., 1999. <a href="https://doi.org/10.1177/106591299905200309">The <span>Insignificance</span> of <span>Null Hypothesis Significance Testing</span></a>. Political Research Quarterly 52, 647–674.
 </div>
-<div id="ref-giordaniVasellameFineMensa1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-giordaniVasellameFineMensa1994" class="csl-entry" role="listitem">
 Giordani, N., 1994. Vasellame fine da mensa: Importazioni e produzioni locali. In: Gelichi, S., Giordani, N. (Eds.), Il Tesoro Nel Pozzo. <span>Pozzi</span> Deposito e Tesaurizzazioni Nell’antica <span>Emilia</span>. <span>Panini Franco Cosimo</span>, <span>Modena</span>, pp. 75–88.
 </div>
-<div id="ref-giovanniniTrasformazioniDemograficheItalia2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-giovanniniTrasformazioniDemograficheItalia2010" class="csl-entry" role="listitem">
 Giovannini, F., 2010. <span>Le trasformazioni demografiche in Italia tra IV e V secolo</span>. In: Delogu, P., Gasparri, S. (Eds.), <span>Le trasformazioni del V secolo: atti del seminario di Poggibonsi, 18-20 ottobre 2007</span>, <span>Seminari internazionali del Centro interuniversitario per la storia e l’archeologia dell’alto medioevo</span>. <span>Brepols</span>, <span>Turnhout</span>, pp. 216–238.
 </div>
-<div id="ref-goffredoOmniumVillasVicosque2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-goffredoOmniumVillasVicosque2018" class="csl-entry" role="listitem">
 Goffredo, R., Volpe, G., 2018. Per omnium villas vicosque cunctos: <span>Rural Landscapes</span> in <span>Late Antique Southern Italy</span>. In: Blasco, P.D.-., Christie, N. (Eds.), Interpreting Transformations of People and Landscapes in Late Antiquity and the Early Middle Ages: Archaeological Approaches and Issues. <span>Oxbow</span>, <span>Philadelphia, PA</span>, pp. 27–42.
 </div>
-<div id="ref-goodsonGardenCitiesEarly2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-goodsonGardenCitiesEarly2018" class="csl-entry" role="listitem">
 Goodson, C., 2018. <a href="https://doi.org/10.1093/oso/9780198777601.003.0026">Garden <span>Cities</span> in <span>Early Medieval Italy</span></a>. In: Balzaretti, R., Barrow, J., Skinner, P. (Eds.), Italy and <span>Early Medieval Europe</span>: <span>Papers</span> for <span>Chris Wickham</span>. <span>Oxford University Press</span>, p. 0.
 </div>
-<div id="ref-goodsonCultivatingCityEarly2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-goodsonCultivatingCityEarly2021" class="csl-entry" role="listitem">
 Goodson, C., 2021. <a href="https://doi.org/10.1017/9781108773966">Cultivating the <span>City</span> in <span>Early Medieval Italy</span></a>. <span>Cambridge University Press</span>, <span>Cambridge</span>.
 </div>
-<div id="ref-grahamSupportGlobalClimate2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-grahamSupportGlobalClimate2011" class="csl-entry" role="listitem">
 Graham, N.E., Ammann, C.M., Fleitmann, D., Cobb, K.M., Luterbacher, J., 2011. <a href="https://doi.org/10.1007/s00382-010-0914-z">Support for global climate reorganization during the <span>“<span>Medieval Climate Anomaly</span>”</span></a>. Climate Dynamics 37, 1217–1245.
 </div>
-<div id="ref-grasso2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-grasso2009" class="csl-entry" role="listitem">
 Grasso, A.M., Fiorentino, G., 2009. Studi archeobotanici per l<span>’</span>italia medievale: Una sintesi. In: Volpe, G., Favia, P. (Eds.),. All’Insegna del Giglio, Firenze, p. 120126.
 </div>
-<div id="ref-greyConstructingCommunitiesLate2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-greyConstructingCommunitiesLate2011" class="csl-entry" role="listitem">
 Grey, C., 2011. <a href="https://doi.org/10.1017/CBO9780511994739">Constructing <span>Communities</span> in the <span>Late Roman Countryside</span></a>. <span>Cambridge University Press</span>, <span>Cambridge</span>.
 </div>
-<div id="ref-groveGlacialGeologicalEvidence1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-groveGlacialGeologicalEvidence1994" class="csl-entry" role="listitem">
 Grove, J.M., Switsur, R., 1994. <a href="https://doi.org/10.1007/BF01092411">Glacial geological evidence for the medieval warm period</a>. Climatic Change 26, 143–169.
 </div>
-<div id="ref-guidiClarkeMediterraneanArchaeology1998" class="csl-entry" role="doc-biblioentry">
+<div id="ref-guidiClarkeMediterraneanArchaeology1998" class="csl-entry" role="listitem">
 Guidi, A., 1998. <a href="https://doi.org/10.1017/S0003598X00087093">Clarke in <span>Mediterranean</span> archaeology</a>. Antiquity 72, 678–680.
 </div>
-<div id="ref-theecon2017a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-theecon2017a" class="csl-entry" role="listitem">
 Haas, T. de, Tol, G. (Eds.), 2017. <a href="https://doi.org/10.1163/9789004345027">The economic integration of roman italy: Rural communities in a globalising world</a>. Brill.
 </div>
-<div id="ref-haldonPlaguesClimateChange2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-haldonPlaguesClimateChange2018" class="csl-entry" role="listitem">
 Haldon, J., Elton, H., Huebner, S.R., Izdebski, A., Mordechai, L., Newfield, T.P., 2018. <a href="https://doi.org/10.1111/hic3.12508">Plagues, climate change, and the end of an empire: <span>A</span> response to <span>Kyle Harper</span>’s <span>The Fate</span> of <span>Rome</span> (1): <span>Climate</span></a>. History Compass 16, e12508.
 </div>
-<div id="ref-hamerowIntegratedBioarchaeologicalApproach2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hamerowIntegratedBioarchaeologicalApproach2020" class="csl-entry" role="listitem">
 Hamerow, H., Bogaard, A., Charles, M., Forster, E., Holmes, M., McKerracher, M., Neil, S., Ramsey, C.B., Stroud, E., Thomas, R., 2020. <a href="https://doi.org/10.1017/eaa.2020.6">An <span>Integrated Bioarchaeological Approach</span> to the <span>Medieval</span> <span>“<span>Agricultural Revolution</span>”</span>: <span>A Case Study</span> from <span>Stafford</span>, <span>England</span>, c.ad 800</a>. European Journal of Archaeology 23, 585–609.
 </div>
-<div id="ref-hamerowNewPerspectivesMedieval2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hamerowNewPerspectivesMedieval2022" class="csl-entry" role="listitem">
 Hamerow, H., McKerracher, M., 2022. New perspectives on the medieval "agricultural revolution": Crop, stock and furrow. <span>Liverpool University Press</span>, <span>Liverpool</span>.
 </div>
-<div id="ref-harperSlaveryLateRoman2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-harperSlaveryLateRoman2011" class="csl-entry" role="listitem">
 Harper, K., 2011. Slavery in the late <span>Roman</span> world, <span>AD</span> 275-425. <span>Cambridge University Press</span>, <span>Cambridge, UK ; New York</span>.
 </div>
-<div id="ref-harperTransformationRomanSlavery2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-harperTransformationRomanSlavery2013" class="csl-entry" role="listitem">
 Harper, K., 2013. <a href="https://doi.org/10.1484/J.AT.1.103102">The transformation of <span>Roman</span> slavery: An economic myth?</a> Antiquité Tardive 20, 165–172.
 </div>
-<div id="ref-harperFateRomeClimate2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-harperFateRomeClimate2017" class="csl-entry" role="listitem">
 Harper, K., 2017. The fate of <span>Rome</span>: Climate, disease, and the end of an empire, The <span>Princeton</span> history of the ancient world. <span>Princeton University Press</span>, <span>Princeton</span>.
 </div>
-<div id="ref-heinrichModellingCropSelectionRoman2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-heinrichModellingCropSelectionRoman2017" class="csl-entry" role="listitem">
 Heinrich, F., 2017. <a href="https://doi.org/10.1163/9789004345027_008">Modelling <span>Crop-Selection</span> in <span>Roman Italy</span>. <span>The Economics</span> of <span>Agricultural Decision Making</span> in a <span>Globalizing Economy</span></a>. In: de Haas, T., Tol, G. (Eds.), The <span>Economic Integration</span> of <span>Roman Italy</span>. <span>BRILL</span>, pp. 141–169.
 </div>
-<div id="ref-heinrichRomanIsotopesEconomic2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-heinrichRomanIsotopesEconomic2021" class="csl-entry" role="listitem">
 Heinrich, F., Hansen, A.M., Erdkamp, P., 2021. <a href="https://doi.org/10.1007/s12520-021-01276-6">Roman isotopes and economic meaning: Millets, manure, mobility, marine signals, and <span>Malthus</span></a>. Archaeological and Anthropological Sciences 13, 44.
 </div>
-<div id="ref-hobsbawmHistory1998" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hobsbawmHistory1998" class="csl-entry" role="listitem">
 Hobsbawm, E.J., 1998. On <span>History</span>. <span>Abacus</span>.
 </div>
-<div id="ref-hodgesMohammedCharlemagneOrigins1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hodgesMohammedCharlemagneOrigins1983" class="csl-entry" role="listitem">
 Hodges, R., Whitehouse, D., 1983. Mohammed, <span>Charlemagne</span>, &amp; the origins of <span>Europe</span>: Archaeology and the <span>Pirenne</span> thesis. <span>Duckworth</span>, <span>London</span>.
 </div>
-<div id="ref-hollanderFarmersAgricultureRoman2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hollanderFarmersAgricultureRoman2019" class="csl-entry" role="listitem">
 Hollander, D.B., 2019. Farmers and agriculture in the <span>Roman</span> economy. <span>Routledge</span>, <span>Abingdon, Oxon ; New York, NY</span>.
 </div>
-<div id="ref-holsingerThorkelFarserkGoes2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-holsingerThorkelFarserkGoes2017" class="csl-entry" role="listitem">
 Holsinger, B., 2017. <a href="https://doi.org/10.5871/bacad/9780197266144.003.0002">Thorkel <span>Farserk Goes</span> for a <span>Swim</span>: <span>Climate Change</span>, the <span>Medieval Optimum</span>, and the <span>Perils</span> of <span>Amateurism</span></a>. In: Bildhauer, B., Jones, C. (Eds.), The <span>Middle Ages</span> in the <span>Modern World</span>: <span class="nocase">Twenty-first</span> Century Perspectives. <span>British Academy</span>, p. 0.
 </div>
-<div id="ref-hoppaRostockManifestoPaleodemography2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hoppaRostockManifestoPaleodemography2002" class="csl-entry" role="listitem">
 Hoppa, R.D., Vaupel, J.W., 2002. <a href="https://doi.org/10.1017/CBO9780511542428.001">The <span>Rostock Manifesto</span> for paleodemography: The way from stage to age</a>. In: Hoppa, R.D., Vaupel, J.W. (Eds.), Paleodemography. <span>Cambridge University Press</span>, pp. 1–8.
 </div>
-<div id="ref-hordenCorruptingSeaStudy2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-hordenCorruptingSeaStudy2000" class="csl-entry" role="listitem">
 Horden, P., Purcell, N., 2000. The corrupting sea: A study of <span>Mediterranean</span> history. <span>Blackwell</span>, <span>Oxford</span>.
 </div>
-<div id="ref-huStalagmiteInferredClimateWestern2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-huStalagmiteInferredClimateWestern2022" class="csl-entry" role="listitem">
 Hu, H.-M., Michel, V., Valensi, P., Mii, H.-S., Starnini, E., Zunino, M., Shen, C.-C., 2022. <a href="https://doi.org/10.3390/cli10070093">Stalagmite-<span>Inferred Climate</span> in the <span>Western Mediterranean</span> during the <span>Roman Warm Period</span></a>. Climate 10, 93.
 </div>
-<div id="ref-humeEssaysMoralPolitical1987" class="csl-entry" role="doc-biblioentry">
+<div id="ref-humeEssaysMoralPolitical1987" class="csl-entry" role="listitem">
 Hume, D., 1987. Essays, moral, political, and literary, Rev. ed. ed. <span>LibertyClassics</span>, <span>Indianapolis</span>.
 </div>
-<div id="ref-iacuminC4consumersSouthernEurope2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-iacuminC4consumersSouthernEurope2014" class="csl-entry" role="listitem">
 Iacumin, P., Galli, E., Cavalli, F., Cecere, L., 2014. <a href="https://doi.org/10.1002/ajpa.22553">C4-consumers in southern europe: <span>The</span> case of friuli <span>V</span>.<span>G</span>. (<span>NE-Italy</span>) during early and central middle ages</a>. American Journal of Physical Anthropology 154, 561–574.
 </div>
-<div id="ref-insegnamentodiarcheologiamedievaleedellaltomedioevoScaviFortunatiInvisibilita2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-insegnamentodiarcheologiamedievaleedellaltomedioevoScaviFortunatiInvisibilita2004" class="csl-entry" role="listitem">
 Insegnamento di Archeologia Medievale e dell’Alto Medioevo, 2004. "<span>Scavi</span> fortunati" e invisibilità archeologica. <span>La</span> formazione del villaggio altomedievale (<span>VI-X</span> sec.) | <span>Insegnamento</span> di <span>Archeologia Medievale</span> e dell’<span>Alto Medioevo</span>.
 </div>
-<div id="ref-jashemskiGardensPompeiiHerculaneum1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jashemskiGardensPompeiiHerculaneum1979" class="csl-entry" role="listitem">
 Jashemski, W.F., 1979. The gardens of <span>Pompeii</span>: <span>Herculaneum</span> and the villas destroyed by <span>Vesuvius</span>. <span>Caratzas Bros</span>, <span>New Rochelle, N.Y</span>.
 </div>
-<div id="ref-jashemskiPompeianHerbalAncient1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jashemskiPompeianHerbalAncient1999" class="csl-entry" role="listitem">
 Jashemski, W.F., 1999. A <span>Pompeian</span> herbal: Ancient and modern medicinal plants, 1st ed. ed. <span>University of Texas Press</span>, <span>Austin</span>.
 </div>
-<div id="ref-jashemskiGardensRomanEmpire2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jashemskiGardensRomanEmpire2018" class="csl-entry" role="listitem">
 Jashemski, W.F. (Ed.), 2018. Gardens of the <span>Roman Empire</span>. <span>Cambridge University Press</span>, <span>Cambridge, United Kingdom</span>.
 </div>
-<div id="ref-jashemskiNaturalHistoryPompeii2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jashemskiNaturalHistoryPompeii2002" class="csl-entry" role="listitem">
 Jashemski, W.F., Meyer, F.G. (Eds.), 2002. The natural history of <span>Pompeii</span>. <span>Cambridge University Press</span>, <span>Cambridge ; New York</span>.
 </div>
-<div id="ref-jasnyCompetitionGrainsClassical1942" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jasnyCompetitionGrainsClassical1942" class="csl-entry" role="listitem">
 Jasny, N., 1942. <a href="https://doi.org/10.2307/1841501">Competition <span>Among Grains</span> in <span>Classical Antiquity</span></a>. The American Historical Review 47, 747–764.
 </div>
-<div id="ref-jasnyWheatsClassicalAntiquity1944a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jasnyWheatsClassicalAntiquity1944a" class="csl-entry" role="listitem">
 Jasny, N., 1944. The <span>Wheats</span> of <span>Classical Antiquity</span>. <span>Johns Hopkins Press</span>, <span>Baltimore</span>.
 </div>
-<div id="ref-jonesLaterRomanEmpire1964" class="csl-entry" role="doc-biblioentry">
+<div id="ref-jonesLaterRomanEmpire1964" class="csl-entry" role="listitem">
 Jones, A.H.M., 1964. The later <span>Roman Empire</span>, 284-602: A social economic and administrative survey. <span>Johns Hopkins University Press</span>, <span>Baltimore</span>.
 </div>
-<div id="ref-killgroveFoodRomeStable2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-killgroveFoodRomeStable2013" class="csl-entry" role="listitem">
 Killgrove, K., Tykot, R.H., 2013. <a href="https://doi.org/10.1016/j.jaa.2012.08.002">Food for <span>Rome</span>: <span>A</span> stable isotope investigation of diet in the <span>Imperial</span> period (1st3rd centuries <span>AD</span>)</a>. Journal of Anthropological Archaeology 32, 28–38.
 </div>
-<div id="ref-killgroveDietCollapseStable2018a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-killgroveDietCollapseStable2018a" class="csl-entry" role="listitem">
 Killgrove, K., Tykot, R.H., 2018. <a href="https://doi.org/10.1016/j.jasrep.2017.05.054">Diet and collapse: <span>A</span> stable isotope study of <span class="nocase">Imperial-era Gabii</span> (1st3rd centuries <span>AD</span>)</a>. Journal of Archaeological Science: Reports 19, 1041–1049.
 </div>
-<div id="ref-kreinerLegionsPigsEarly2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kreinerLegionsPigsEarly2020" class="csl-entry" role="listitem">
 Kreiner, J., 2020. Legions of pigs in the early medieval <span>West</span>, Yale agrarian studies series. <span>Yale University Press</span>, <span>New Haven</span>.
 </div>
-<div id="ref-kronRomanLivestockFarming2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-kronRomanLivestockFarming2004" class="csl-entry" role="listitem">
 Kron, G., 2004. Roman <span>Livestock Farming</span> in <span>Southern Italy</span>: The <span>Case</span> against <span>Environmental Determinism</span>. Collection de l’Institut des Sciences et Techniques de l’Antiquité 939, 119–134.
 </div>
-<div id="ref-lafonVillasItalieImperiale1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lafonVillasItalieImperiale1994" class="csl-entry" role="listitem">
 Lafon, X., 1994. <span>Les villas de l’Italie impériale</span>. Publications de l’École Française de Rome 198, 219–226.
 </div>
-<div id="ref-larsonAncientDNAPig2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-larsonAncientDNAPig2007" class="csl-entry" role="listitem">
 Larson, G., Albarella, U., Dobney, K., Rowley-Conwy, P., Schibler, J., Tresset, A., Vigne, J.-D., Edwards, C.J., Schlumbaum, A., Dinu, A., Bălăçsescu, A., Dolman, G., Tagliacozzo, A., Manaseryan, N., Miracle, P., Van Wijngaarden-Bakker, L., Masseti, M., Bradley, D.G., Cooper, A., 2007. <a href="https://doi.org/10.1073/pnas.0703411104">Ancient <span>DNA</span>, pig domestication, and the spread of the <span>Neolithic</span> into <span>Europe</span></a>. Proceedings of the National Academy of Sciences 104, 15276–15281.
 </div>
-<div id="ref-leggioRicognizioneNeiDintorni1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-leggioRicognizioneNeiDintorni1986" class="csl-entry" role="listitem">
 Leggio, T., Moreland, J., 1986. Ricognizione nei dintorni di <span>Farfa</span>, 1985: Resoconto preliminare. Archeologia medievale 13, 333.
 </div>
-<div id="ref-lentjesSubsistenceMarketExchange2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lentjesSubsistenceMarketExchange2013" class="csl-entry" role="listitem">
 Lentjes, D., 2013. From subsistence to market exchange: The development of an agricultural economy in 1st-millennium-<span>BC Southeast Italy</span>. In: Groot, M., Lentjes, D., Zeiler, J. (Eds.), Barely Surviving or More Than Enough? <span>The</span> Environmental Archaeology of Subsistence, Specialisation and Surplus Food Production. <span>Sidestone Press</span>, <span>Leiden</span>, pp. 101–130.
 </div>
-<div id="ref-lewitVanishingVillasWhat2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lewitVanishingVillasWhat2003" class="csl-entry" role="listitem">
 Lewit, T., 2003. <a href="https://doi.org/10.1017/S104775940001309X"><span>“<span>Vanishing</span> villas”</span>: What happened to élite rural habitation in the <span>West</span> in the 5th-6th c?</a> Journal of Roman Archaeology 16, 260–274.
 </div>
-<div id="ref-lewitVillasFarmsLate2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lewitVillasFarmsLate2004" class="csl-entry" role="listitem">
 Lewit, T., 2004. Villas, farms and the late <span>Roman</span> rural economy (third to fifth centuries <span>AD</span>), <span>BAR International</span> series. <span>Hadrian Books</span>, <span>Oxford</span>.
 </div>
-<div id="ref-lewitBonesBathhouseReevaluating2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lewitBonesBathhouseReevaluating2005" class="csl-entry" role="listitem">
 Lewit, T., 2005. Bones in the bathhouse: Re-evaluating the notion of ‘squatter occupation’in 5th7th century villas. In: Brogiolo, G.P., Chavarria Arnau, A., Valenti, M. (Eds.), Dopo La Fine Delle Ville: <span>Le</span> Campagne Dal <span>VI</span> Al <span>IX</span> Secolo., Documenti Di <span>Archeologia</span>. <span>SAP, Società archeologica</span>, <span>Mantova</span>, pp. 251–262.
 </div>
-<div id="ref-liuModelsBiologicalNitrogen2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-liuModelsBiologicalNitrogen2011" class="csl-entry" role="listitem">
 Liu, Y., Wu, L., Baddeley, J.A., Watson, C.A., 2011. <a href="https://doi.org/10.1007/978-94-007-0394-0_39">Models of <span>Biological Nitrogen Fixation</span> of <span>Legumes</span></a>. In: Lichtfouse, E., Hamelin, M., Navarrete, M., Debaeke, P. (Eds.), Sustainable <span>Agriculture Volume</span> 2. <span>Springer Netherlands</span>, <span>Dordrecht</span>, pp. 883–905.
 </div>
-<div id="ref-ljungqvistNewReconstructionTemperature2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ljungqvistNewReconstructionTemperature2010" class="csl-entry" role="listitem">
 Ljungqvist, F.C., 2010. <a href="https://doi.org/10.1111/j.1468-0459.2010.00399.x">A new reconstruction of temperature variability in the extra-tropical northern hemisphere during the last two millennia</a>. Geografiska Annaler: Series A, Physical Geography 92, 339–351.
 </div>
-<div id="ref-locascioCrescitaDeclinoStudi2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-locascioCrescitaDeclinoStudi2009" class="csl-entry" role="listitem">
 Lo Cascio, E., 2009b. <span>Crescita e declino: studi di storia dell’economia romana</span>, <span>Monografie</span>. <span>L’Erma di Bretschneider</span>, <span>Roma</span>.
 </div>
-<div id="ref-locascioWeberCapitalismoAntico2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-locascioWeberCapitalismoAntico2009" class="csl-entry" role="listitem">
 Lo Cascio, E., 2009a. <span>Weber e il "capitalismo antico"</span>. In: <span>Crescita e declino: studi di storia dell’economia romana</span>, <span>Monografie</span>. <span>L’Erma di Bretschneider</span>, <span>Roma</span>, pp. 299–315.
 </div>
-<div id="ref-lodwickArchaeobotanicalResearchClassical2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lodwickArchaeobotanicalResearchClassical2022" class="csl-entry" role="listitem">
 Lodwick, L., Rowan, E., 2022. <a href="https://doi.org/10.1086/720897">Archaeobotanical <span>Research</span> in <span>Classical Archaeology</span></a>. American Journal of Archaeology 126, 593–623.
 </div>
-<div id="ref-love1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-love1986" class="csl-entry" role="listitem">
 Love, J., 1986. <a href="https://doi.org/10.2307/2505303">Max weber and the theory of ancient capitalism</a>. History and Theory 25, 152.
 </div>
-<div id="ref-lubrittoNewDietaryEvidence2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-lubrittoNewDietaryEvidence2017" class="csl-entry" role="listitem">
 Lubritto, C., García-Collado, M.I., Ricci, P., Altieri, S., Sirignano, C., Quirós Castillo, J.A., 2017. <a href="https://doi.org/10.1002/oa.2610">New <span>Dietary Evidence</span> on <span>Medieval Rural Communities</span> of the <span>Basque Country</span> (<span>Spain</span>) and <span>Its Surroundings</span> from <span>Carbon</span> and <span>Nitrogen Stable Isotope Analyses</span>: <span>Social Insights</span>, <span>Diachronic Changes</span> and <span>Geographic Comparison</span></a>. International Journal of Osteoarchaeology 27, 984–1002.
 </div>
-<div id="ref-mackinnon2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mackinnon2014" class="csl-entry" role="listitem">
 MacKinnon, M., 2014. Animals in the urban fabric of ostia: Initiating a comparative zooarchaeological synthesis. Journal of Roman Archaeology 27, 175201.
 </div>
-<div id="ref-mackinnonProductionConsumptionAnimals2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mackinnonProductionConsumptionAnimals2004" class="csl-entry" role="listitem">
 MacKinnon, M.R., 2004. Production and consumption of animals in <span>Roman Italy</span>: Integrating the zooarchaeological and textual evidence, Journal of <span>Roman</span> archaeology. <span>Journal of Roman Archaeology</span>, <span>Portsmouth, R.I</span>.
 </div>
-<div id="ref-maddisonWorldEconomyMillennial2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-maddisonWorldEconomyMillennial2001" class="csl-entry" role="listitem">
 Maddison, A., 2001. The <span>World Economy</span>: A <span>Millennial Perspective</span>, Development <span>Centre</span> studies. <span>OECD</span>, <span>Paris</span>.
 </div>
-<div id="ref-maddisonWorldEconomyHistorical2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-maddisonWorldEconomyHistorical2003" class="csl-entry" role="listitem">
 Maddison, A., 2003. <a href="https://doi.org/10.1787/9789264104143-en">The <span>World Economy</span>: <span>Historical Statistics</span></a>, Development <span>Centre Studies</span>. <span>OECD</span>, <span>Paris</span>.
 </div>
-<div id="ref-maiuroRegionalismoPatrimonioFisco2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-maiuroRegionalismoPatrimonioFisco2014" class="csl-entry" role="listitem">
 Maiuro, M., 2014. <a href="https://www.jstor.org/stable/24332616">Regionalismo <span>Del Patrimonio Del Fisco E Sue Implicazioni Teoriche E Pratiche</span></a>. Studi Classici e Orientali 60, 279–293.
 </div>
-<div id="ref-maloneSpecialSectionDavid1998" class="csl-entry" role="doc-biblioentry">
+<div id="ref-maloneSpecialSectionDavid1998" class="csl-entry" role="listitem">
 Malone, C., Stoddart, S., 1998. <a href="https://doi.org/10.1017/S0003598X00087081">Special section <span>David Clarke</span>’s <span>“<span>Archaeology</span>: The loss of innocence”</span> (1973) 25 years after</a>. Antiquity 72, 676–677.
 </div>
-<div id="ref-mannMedievalClimaticOptimum2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mannMedievalClimaticOptimum2002" class="csl-entry" role="listitem">
 Mann, M.E., 2002. Medieval <span>Climatic Optimum</span>. In: MacCracken, M.C., Perry, J.S., Munn, T. (Eds.), Earth System: Physical and Chemical Dimensions of Global Environmental Change. <span>John Wiley</span>, <span>New York</span>, pp. 514–6.
 </div>
-<div id="ref-marchesiniPaesaggioVegetaleAntropico2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marchesiniPaesaggioVegetaleAntropico2011" class="csl-entry" role="listitem">
 Marchesini, M., Marvelli, S., Gobbo, I., Biagioni, S., 2011. <span>Paesaggio vegetale e antropico circostante l’abitato altomedievale di Nogara (Verona): risultati delle indagini archeopalinologiche</span>. In: Saggioro, F. (Ed.), <span>Nogara: archeologia e storia di un villaggio medievale (scavi 2003-2008)</span>, <span>Dipartimento tempo, spazio, immagine e società / Università degli studi di Verona</span>. <span>G. Bretschneider</span>, <span>Roma</span>, pp. 159–183.
 </div>
-<div id="ref-marchettiEnvironmentalChangesCentral2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marchettiEnvironmentalChangesCentral2002" class="csl-entry" role="listitem">
 Marchetti, M., 2002. <a href="https://doi.org/10.1016/S0169-555X(01)00183-0">Environmental changes in the central <span>Po Plain</span> (<span>Northern Italy</span>) due to fluvial modifications and anthropogenic activities</a>. Geomorphology 44, 361–373.
 </div>
-<div id="ref-marconeStoriaAgricolturaRomana2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marconeStoriaAgricolturaRomana2004" class="csl-entry" role="listitem">
 Marcone, A., 2004. <span>Storia dell’agricoltura romana</span>, 2. ed. ed, <span>Quality paperbacks</span>. <span>Carocci</span>, <span>Roma</span>.
 </div>
-<div id="ref-marconeAgronomiaModelliDi2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marconeAgronomiaModelliDi2019" class="csl-entry" role="listitem">
 Marcone, A., 2019. Agronomia e modelli di sviluppo a <span>Roma</span> tra la fine della <span>Repubblica</span> e l’<span>Alto Impero</span>. In: Segenni, S. (Ed.), L’agricoltura in Età Romana, Consonanze. <span>Ledizioni</span>, <span>Milano</span>, pp. 147–156.
 </div>
-<div id="ref-marconeLavoroLavoratoriDinamiche2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marconeLavoroLavoratoriDinamiche2018" class="csl-entry" role="listitem">
 Marcone, A., Lo Cascio, E. (Eds.), 2018. <span>Lavoro, lavoratori e dinamiche sociali a Roma antica: persistenze e trasformazioni: atti delle giornate di studio (Roma Tre, 25-26 maggio 2017): per Elio Lo Cascio</span>, 1st ed, <span>Master</span>. <span>Castelvecchi</span>, <span>Roma</span>.
 </div>
-<div id="ref-margaritelliPersistentWarmMediterranean2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-margaritelliPersistentWarmMediterranean2020" class="csl-entry" role="listitem">
 Margaritelli, G., Cacho, I., Català, A., Barra, M., Bellucci, L.G., Lubritto, C., Rettori, R., Lirer, F., 2020. <a href="https://doi.org/10.1038/s41598-020-67281-2">Persistent warm <span>Mediterranean</span> surface waters during the <span>Roman</span> period</a>. Scientific Reports 10, 10431.
 </div>
-<div id="ref-marstonCropIntroductionsAgricultural2023" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marstonCropIntroductionsAgricultural2023" class="csl-entry" role="listitem">
 Marston, J.M., Castellano, L., 2023. <a href="https://doi.org/10.1007/s00334-023-00919-z">Crop introductions and agricultural change in <span>Anatolia</span> during the long first millennium ce</a>. Vegetation History and Archaeobotany.
 </div>
-<div id="ref-martinChroniconSanctaeSophiae2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-martinChroniconSanctaeSophiae2000" class="csl-entry" role="listitem">
 Martin, J.-M., 2000. <span>Chronicon Sanctae Sophiae: cod. Vat. Lat. 4939</span>, <span>Rerum Italicarum Scriptores</span>. <span>Istituto storico italiano per il Medio Evo</span>, <span>Roma</span>.
 </div>
-<div id="ref-marzanoRomanVillasCentral2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marzanoRomanVillasCentral2007" class="csl-entry" role="listitem">
 Marzano, A., 2007. Roman villas in central <span>Italy</span>: A social and economic history. <span>Brill</span>, <span>Leiden</span>.
 </div>
-<div id="ref-marzanoNonSoloVino2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marzanoNonSoloVino2008" class="csl-entry" role="listitem">
 Marzano, A., 2008. Non solo vino campano. <span>La</span> pastio villatica e una rivalutazione della navigazione nell’antichità. Oebalus. Studi sulla Campania nell’Antichità. 3, 251–266.
 </div>
-<div id="ref-marzanoPlantsPoliticsEmpire2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-marzanoPlantsPoliticsEmpire2022" class="csl-entry" role="listitem">
 Marzano, A., 2022. Plants, politics and empire in ancient <span>Rome</span>. <span>Cambridge University Press</span>, <span>Cambridge ; New York, NY</span>.
 </div>
-<div id="ref-mattinglyProductiveEconomiesAgriculture2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mattinglyProductiveEconomiesAgriculture2001" class="csl-entry" role="listitem">
 Mattingly, D.J., Salmon, J. (Eds.), 2001. The productive past. <span>Economies</span> beyond agriculture. In: Economies Beyond Agriculture in the Classical World, Leicester-<span>Nottingham</span> Studies in Ancient Society. <span>Routledge</span>, <span>London ; New York</span>, pp. 3–14.
 </div>
-<div id="ref-mccormickClimateChangeRoman2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mccormickClimateChangeRoman2012" class="csl-entry" role="listitem">
 McCormick, M., Büntgen, U., Cane, M.A., Cook, E.R., Harper, K., Huybers, P., Litt, T., Manning, S.W., Mayewski, P.A., More, A.F.M., Nicolussi, K., Tegel, W., 2012. <a href="https://doi.org/10.1162/JINH_a_00379">Climate <span>Change</span> during and after the <span>Roman Empire</span>: <span>Reconstructing</span> the <span>Past</span> from <span>Scientific</span> and <span>Historical Evidence</span></a>. The Journal of Interdisciplinary History 43, 169–220.
 </div>
-<div id="ref-mercuri2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mercuri2015" class="csl-entry" role="listitem">
 Mercuri, A.M., Allevato, E., Arobba, D., Bandini Mazzanti, M., Bosi, G., Caramiello, R., Castiglioni, E., Carra, M.L., Celant, A., Costantini, L., Di Pasquale, G., Fiorentino, G., Florenzano, A., Guido, M., Marchesini, M., Mariotti Lippi, M., Marvelli, S., Miola, A., Montanari, C., Nisbet, R., Peña-Chocarro, L., Perego, R., Ravazzi, C., Rottoli, M., Sadori, L., Ucchesu, M., Rinaldi, R., 2015. Pollen and macroremains from Holocene archaeological sites: A dataset for the understanding of the bio-cultural diversity of the Italian landscape. Review of Palaeobotany and Palynology 218, 250–266.
 </div>
-<div id="ref-montanariAlimentazioneContadinaNell1979" class="csl-entry" role="doc-biblioentry">
+<div id="ref-montanariAlimentazioneContadinaNell1979" class="csl-entry" role="listitem">
 Montanari, M., 1979. L’alimentazione contadina nell’alto <span>Medioevo</span>, 1a ed. italiana. ed, Nuovo <span>Medioevo</span>. <span>Liguori</span>, <span>Napoli</span>.
 </div>
-<div id="ref-montanariStoriaMedievale2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-montanariStoriaMedievale2014" class="csl-entry" role="listitem">
 Montanari, M., 2014. Storia medievale, 25th ed, Manuali di base. <span>Laterza</span>, <span>Roma</span>.
 </div>
-<div id="ref-montanari2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-montanari2015" class="csl-entry" role="listitem">
 Montanari, M., 2015. Medieval tastes: food, cooking, and the table. Columbia University Press, New York.
 </div>
-<div id="ref-morley1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-morley1996" class="csl-entry" role="listitem">
 Morley, N., 1996a. Metropolis and Hinterland: the city of Rome and the Italian economy, 200 BC-AD 200. Cambridge University Press, Cambridge.
 </div>
-<div id="ref-morleyMetropolisHinterlandCity1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-morleyMetropolisHinterlandCity1996" class="csl-entry" role="listitem">
 Morley, N., 1996b. Metropolis and <span>Hinterland</span>: The city of <span>Rome</span> and the <span>Italian</span> economy, 200 <span>BC-AD</span> 200. <span>Cambridge University Press</span>, <span>Cambridge</span>.
 </div>
-<div id="ref-munroRecyclingDemandMaterials2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-munroRecyclingDemandMaterials2012" class="csl-entry" role="listitem">
 Munro, B., 2012. <a href="https://doi.org/10.1017/S1047759400001240">Recycling, demand for materials, and landownership at villas in <span>Italy</span> and the western provinces in late antiquity</a>. Journal of Roman Archaeology 25, 351–370.
 </div>
-<div id="ref-munroOrganizedRecyclingRoman2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-munroOrganizedRecyclingRoman2020" class="csl-entry" role="listitem">
 Munro, B., 2020. <a href="https://doi.org/10.1093/oso/9780198860846.003.0012">The <span>Organized Recycling</span> of <span>Roman Villa Sites</span></a>. In: Recycling and <span>Reuse</span> in the <span>Roman Economy</span>. <span>Oxford University Press</span>, pp. 383–402.
 </div>
-<div id="ref-nanniQuadroAmbientaleBiologico2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-nanniQuadroAmbientaleBiologico2017" class="csl-entry" role="listitem">
 Nanni, P., 2017. <span>Per un quadro ambientale e biologico: il Periodo Caldo Medievale e la variabilità climatica</span>. In: <span>La crescita economica dell’Occidente medievale: un tema storico non ancora esaurito.</span> <span>Centro italiano di studi di storia e d’arte ; Viella</span>, <span>Pistoia; Roma</span>, pp. 69–91.
 </div>
-<div id="ref-neymanUseInterpretationCertain1928" class="csl-entry" role="doc-biblioentry">
+<div id="ref-neymanUseInterpretationCertain1928" class="csl-entry" role="listitem">
 Neyman, J., Pearson, E.S., 1928. <a href="https://doi.org/10.2307/2331945">On the <span>Use</span> and <span>Interpretation</span> of <span>Certain Test Criteria</span> for <span>Purposes</span> of <span>Statistical Inference</span>: <span>Part I</span></a>. Biometrika 20A, 175–240.
 </div>
-<div id="ref-ortalliFineVilleRomane1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ortalliFineVilleRomane1996" class="csl-entry" role="listitem">
 Ortalli, J., 1996. La fine delle ville romane: Esperienze locali e problemi generali. In: Brogiolo, G.P. (Ed.), La Fine Delle Ville Romane: Trasformazioni Nelle Campagne Tra Tarda Antichità e Alto Medioevo. <span>SAP, Società archeologica</span>, <span>Mantova</span>, pp. 9–21.
 </div>
-<div id="ref-otarola-castilloBayesianInferentialParadigm2023" class="csl-entry" role="doc-biblioentry">
+<div id="ref-otarola-castilloBayesianInferentialParadigm2023" class="csl-entry" role="listitem">
 Otárola-Castillo, E., Torquato, M.G., Buck, C.E., 2023. <a href="https://doi.org/10.1002/9781119592112.ch59">The <span>Bayesian Inferential Paradigm</span> in <span>Archaeology</span></a>. In: Pollard, A.M., Armitage, R.A., Makarewicz, C.A. (Eds.), Handbook of <span>Archaeological Sciences</span>. <span>Wiley</span>, pp. 1193–1209.
 </div>
-<div id="ref-otarola-castilloDifferentiatingCuttingActions2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-otarola-castilloDifferentiatingCuttingActions2018" class="csl-entry" role="listitem">
 Otárola-Castillo, E., Torquato, M.G., Hawkins, H.C., James, E., Harris, J.A., Marean, C.W., McPherron, S.P., Thompson, J.C., 2018. <a href="https://doi.org/10.1016/j.jas.2017.10.004">Differentiating between cutting actions on bone using <span>3D</span> geometric morphometrics and <span>Bayesian</span> analyses with implications to human evolution</a>. Journal of Archaeological Science 89, 56–67.
 </div>
-<div id="ref-pagnouxIntroductionCitrusItaly2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pagnouxIntroductionCitrusItaly2013" class="csl-entry" role="listitem">
 Pagnoux, C., Celant, A., Coubray, S., Fiorentino, G., Zech-Matterne, V., 2013. <a href="https://doi.org/10.1007/s00334-012-0389-4">The introduction of <span>Citrus</span> to <span>Italy</span>, with reference to the identification problems of seed remains</a>. Vegetation History and Archaeobotany 22, 421–438.
 </div>
-<div id="ref-panellaAnforeItalicheII1989" class="csl-entry" role="doc-biblioentry">
+<div id="ref-panellaAnforeItalicheII1989" class="csl-entry" role="listitem">
 Panella, C., 1989. <span>Le anfore italiche del II secolo D.C.</span> Publications de l’École Française de Rome 114, 139–178.
 </div>
-<div id="ref-panellaMerciScambiNel1993" class="csl-entry" role="doc-biblioentry">
+<div id="ref-panellaMerciScambiNel1993" class="csl-entry" role="listitem">
 Panella, C., 1993. Merci e scambi nel <span>Mediterraneo</span> tardoantico. In: Carandini, A., Ruggini, L.C., Giardina, A. (Eds.), Storia Di <span>Roma III</span>: <span>L</span>’età Tardoantica. 2. <span>I</span> Luoghi e Le Culture. <span>Einaudi</span>, <span>Torino</span>, pp. 613–702.
 </div>
-<div id="ref-paulthedeaconPauliHistoriaLangobardorum1878" class="csl-entry" role="doc-biblioentry">
+<div id="ref-paulthedeaconPauliHistoriaLangobardorum1878" class="csl-entry" role="listitem">
 Paul the Deacon, Bethmann, L.K., Waitz, G., 1878. <span>Pauli Historia Langobardorum</span>. <span>Hannoverae Impensis Bibliopolii Hahniani</span>.
 </div>
-<div id="ref-pena-chocarroRomanMedievalCrops2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pena-chocarroRomanMedievalCrops2019" class="csl-entry" role="listitem">
 Peña-Chocarro, L., Pérez- Jordà, G., Alonso, N., Antolín, F., Teira-Brión, A., Tereso, J.P., Montes Moya, E.M., López Reyes, D., 2019. <a href="https://doi.org/10.1016/j.quaint.2017.09.037">Roman and medieval crops in the <span>Iberian Peninsula</span>: <span>A</span> first overview of seeds and fruits from archaeological sites</a>. Quaternary International, Food <span>Production</span> and <span>Land Use</span> 499, 49–66.
 </div>
-<div id="ref-pensabeneVillaCasaleTerritorio2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pensabeneVillaCasaleTerritorio2010" class="csl-entry" role="listitem">
 Pensabene, P., 2010. <span>Villa del Casale e il territorio di Piazza Armerina tra Tardoantico e Medioevo: le nuove ricerche del 2004-2009</span>. In: <span>Piazza Armerina: Villa del Casale e la Sicilia tra Tardoantico e Medioevo. - ( Studia archaeologica ; 175)</span>. <span>L’Erma di Bretschneider</span>, <span>Roma</span>, pp. 1–32.
 </div>
-<div id="ref-pernetNullHypothesisSignificance2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pernetNullHypothesisSignificance2016" class="csl-entry" role="listitem">
 Pernet, C., 2016. <a href="https://doi.org/10.12688/f1000research.6963.3">Null hypothesis significance testing: A short tutorial</a>. F1000Research 4, 621.
 </div>
-<div id="ref-petrucciArcheozoologiaFriuliVenezia2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-petrucciArcheozoologiaFriuliVenezia2008" class="csl-entry" role="listitem">
 Petrucci, G., 2008. Archeozoologia in <span>Friuli Venezia Giulia</span>: Dati, considerazioni ed ipotesi sullo sfruttamento delle risorse di origine animale da recenti scavi condotti in <span>Regione</span>. Archeozoologia in Friuli Venezia Giulia: dati, considerazioni ed ipotesi sullo sfruttamento delle risorse di origine animale da recenti scavi condotti in Regione 262–269.
 </div>
-<div id="ref-peytremannStructuresEspacesStockage2013" class="csl-entry" role="doc-biblioentry">
-Peytremann, E., 2013. Structures et espaces de stockage dans les villages alto-médiévaux (6e-12e s.) De la moitié septentrionale de la <span>Gaule</span>: Un apport à l’étude socio-économique du monde rural. In: Vigil-Escalera, A., Bianchi, G., Quirós Castillo, J.A. (Eds.), Horrea, Barns and Silos: Storage and Incomes in <span>Early Medieval Europe</span>, Documentos de Arqueología Medieval. <span>Universidad del País Vasco</span>, <span>Bilbao</span>, pp. 39–56.
+<div id="ref-peytremannStructuresEspacesStockage2013" class="csl-entry" role="listitem">
+Peytremann, E., 2013. Structures et espaces de stockage dans les villages alto-médiévaux (6e-12e s.) de la moitié septentrionale de la <span>Gaule</span>: Un apport à l’étude socio-économique du monde rural. In: Vigil-Escalera, A., Bianchi, G., Quirós Castillo, J.A. (Eds.), Horrea, Barns and Silos: Storage and Incomes in <span>Early Medieval Europe</span>, Documentos de Arqueología Medieval. <span>Universidad del País Vasco</span>, <span>Bilbao</span>, pp. 39–56.
 </div>
-<div id="ref-pikettyCapitalTwentyfirstCentury2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pikettyCapitalTwentyfirstCentury2014" class="csl-entry" role="listitem">
 Piketty, T., Goldhammer, A., 2014. Capital in the twenty-first century. <span>The Belknap Press of Harvard University Press</span>, <span>Cambridge Massachusetts</span>.
 </div>
-<div id="ref-pinchetti2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pinchetti2021" class="csl-entry" role="listitem">
 Pinchetti, L., 2021. Between town and monastery: Peasant economy in the first millennium AD, Contributi di archeologia medievale. All’insegna del giglio, Sesto Fiorentino (FI).
 </div>
-<div id="ref-pirenneMohammedCharlemagne2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-pirenneMohammedCharlemagne2008" class="csl-entry" role="listitem">
 Pirenne, H., [1939] 2008. Mohammed and <span>Charlemagne</span>. <span>ACLS Humanities</span>, <span>New York</span>.
 </div>
-<div id="ref-plinyEpistulaeCriticalEdition1962" class="csl-entry" role="doc-biblioentry">
+<div id="ref-plinyEpistulaeCriticalEdition1962" class="csl-entry" role="listitem">
 Pliny, the Y., Stout, S.E., 1962. Epistulae: A critical edition. <span>Bloomington, Indiana University Press</span>.
 </div>
-<div id="ref-ramseyRadiocarbonCalibrationAnalysis1995" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ramseyRadiocarbonCalibrationAnalysis1995" class="csl-entry" role="listitem">
 Ramsey, C.B., 1995. Radiocarbon calibration and analysis of stratigraphy: The <span>OxCal</span> program. Radiocarbon 37, 425–430.
 </div>
-<div id="ref-ramseyRecentPlannedDevelopments2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ramseyRecentPlannedDevelopments2013" class="csl-entry" role="listitem">
 Ramsey, C.B., Lee, S., 2013. Recent and planned developments of the program <span>OxCal</span>. Radiocarbon 55, 720–730.
 </div>
-<div id="ref-rathboneDevelopmentAgricultureAger1981" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rathboneDevelopmentAgricultureAger1981" class="csl-entry" role="listitem">
 Rathbone, D.W., 1981. <a href="https://doi.org/10.2307/299493">The <span>Development</span> of <span>Agriculture</span> in the ’<span>Ager Cosanus</span>’ during the <span>Roman Republic</span>: <span>Problems</span> of <span>Evidence</span> and <span>Interpretation</span></a>. The Journal of Roman Studies 71, 10–23.
 </div>
-<div id="ref-ricciPaestumDietaryHabits2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ricciPaestumDietaryHabits2016" class="csl-entry" role="listitem">
 Ricci, P., Sirignano, C., Altieri, S., Pistillo, M., Santoriello, A., Lubritto, C., 2016. <a href="https://doi.org/10.21014/acta_imeko.v5i2.334">Paestum dietary habits during the <span>Imperial</span> period: Archaeological records and stable isotope measurement</a>. Acta IMEKO 5, 26–32.
 </div>
-<div id="ref-riedelArchaeozoologicalInvestigactionsNortheastern1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-riedelArchaeozoologicalInvestigactionsNortheastern1994" class="csl-entry" role="listitem">
 Riedel, A., 1994. Archaeozoological investigactions in <span class="nocase">North-eastern Italy</span>: The exploitation of animals since the <span>Neolithic</span>. Preistoria Alpina 43–94.
 </div>
-<div id="ref-ripollTransformationEndRoman2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ripollTransformationEndRoman2000" class="csl-entry" role="listitem">
 Ripoll, G., Arce, J., 2000. <a href="https://doi.org/10.1163/9789004474796_008">The <span>Transformation</span> and <span>End</span> of <span>Roman Villae</span> in the <span>West</span> (<span>Fourth-Seventh Centuries</span>): <span>Problems</span> and <span>Perspectives</span></a>. In: Towns and Their <span>Territories Between Late Antiquity</span> and the <span>Early Middle Ages</span>. <span>Brill</span>, pp. 63–114.
 </div>
-<div id="ref-rottoliCropDiversityCentral2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rottoliCropDiversityCentral2014" class="csl-entry" role="listitem">
 Rottoli, M., 2014a. Crop diversity between <span>Central Europe</span> and the <span>Mediterranean</span>: Aspects of northern <span>Italian</span> agriculture. In: Chevalier, A., Marinova, E., Peña-Chocarro, L. (Eds.), Plants and People: Choices and Diversity Through Time, Early Agricultural Remnants and Technical Heritage (<span>EARTH</span>) : 8,000 Years of Resilience and Innovation. <span>Oxbow Books</span>, <span>Oxford ; Philadelphia</span>, pp. 75–81.
 </div>
-<div id="ref-rottoliReflectionsEarlyMedieval2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rottoliReflectionsEarlyMedieval2014" class="csl-entry" role="listitem">
 Rottoli, M., 2014b. Reflections on <span>Early Medieval</span> resources in northern <span>Italy</span>: <span>The</span> archaeobotanical and archaeozoological data. Quaternary International, Agrarian <span>Archaeology</span> in <span>Early Medieval Europe</span> 346, 20–27.
 </div>
-<div id="ref-rowanRichHungryPoor2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-rowanRichHungryPoor2022" class="csl-entry" role="listitem">
 Rowan, E., 2022. Rich and <span>Hungry</span>, <span>Poor</span> and <span>Full</span>: <span>Social</span> and <span>Cultural Food Poverty</span> in the <span>Roman World</span>. In: Carlà-Uhink, F., Cecchet, L., Machado, C. (Eds.), Poverty in <span>Ancient Greece</span> and <span>Rome</span>. <span>Routledge</span>, <span>London ; New York</span>, pp. 184–208.
 </div>
-<div id="ref-ruasAspectsEarlyMedieval2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ruasAspectsEarlyMedieval2005" class="csl-entry" role="listitem">
 Ruas, M.-P., 2005. <a href="https://doi.org/10.1007/s00334-005-0069-8">Aspects of early medieval farming from sites in <span>Mediterranean France</span></a>. Vegetation History and Archaeobotany 14, 400–415.
 </div>
-<div id="ref-sadoriIntroductionDiffusionPeach2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sadoriIntroductionDiffusionPeach2009" class="csl-entry" role="listitem">
 Sadori, L., Allevato, E., Bosi, G., Caneva, G., Castiglioni, E., Celant, A., Di Pasquale, G., Giardini, M., Mazzanti, M., Rinaldi, R., 2009. The introduction and diffusion of peach in ancient <span>Italy</span>. Plants and culture: seeds of the cultural heritage of Europe 45–61.
 </div>
-<div id="ref-sadoriClimateEnvironmentSociety2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sadoriClimateEnvironmentSociety2016" class="csl-entry" role="listitem">
 Sadori, L., Giraudi, C., Masi, A., Magny, M., Ortu, E., Zanchetta, G., Izdebski, A., 2016. <a href="https://doi.org/10.1016/j.quascirev.2015.09.020">Climate, environment and society in southern <span>Italy</span> during the last 2000 years. <span>A</span> review of the environmental, historical and archaeological evidence</a>. Quaternary Science Reviews, Special <span>Issue</span>: <span>Mediterranean Holocene Climate</span>, <span>Environment</span> and <span>Human Societies</span> 136, 173–188.
 </div>
-<div id="ref-salesseIsoArcHEuOpenaccess2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-salesseIsoArcHEuOpenaccess2018" class="csl-entry" role="listitem">
 Salesse, K., Fernandes, R., de Rochefort, X., Brůžek, J., Castex, D., Dufour, É., 2018. <a href="https://doi.org/10.1016/j.jasrep.2017.07.030"><span>IsoArcH</span>.eu: <span>An</span> open-access and collaborative isotope database for bioarchaeological samples from the <span>Graeco-Roman</span> world and its margins</a>. Journal of Archaeological Science: Reports 19, 1050–1055.
 </div>
-<div id="ref-sallaresEcologyAncientGreek1991" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sallaresEcologyAncientGreek1991" class="csl-entry" role="listitem">
 Sallares, R., 1991. The <span>Ecology</span> of the <span>Ancient Greek World</span>. <span>Cornell University Press</span>.
 </div>
-<div id="ref-salvadoriUominiAnimaliNel2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-salvadoriUominiAnimaliNel2015" class="csl-entry" role="listitem">
 Salvadori, 2015. <span>Uomini e animali nel Medioevo: ricerche archeozoologiche in Italia, tra analisi di laboratorio e censimento dell’edito</span>. <span>Edizioni accademiche italiane</span>, <span>Saarbrucken</span>.
 </div>
-<div id="ref-thecamb2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-thecamb2007" class="csl-entry" role="listitem">
 Scheidel, W., Morris, I., Saller, R.P. (Eds.), 2007. <a href="https://doi.org/10.1017/CHOL9780521780537">The cambridge economic history of the greco-roman world</a>, 1st ed. Cambridge University Press.
 </div>
-<div id="ref-schiavoneStrutturaNascostaGrammatica1989" class="csl-entry" role="doc-biblioentry">
+<div id="ref-schiavoneStrutturaNascostaGrammatica1989" class="csl-entry" role="listitem">
 Schiavone, A., 1989. <span>La struttura nascosta. Una grammatica nell’economia romana</span>. In: Gabba, E., Schiavone, A. (Eds.), <span>Storia di Roma. Caratteri e morfologie</span>. <span>Einaudi</span>, <span>Torino</span>, pp. 7–70.
 </div>
-<div id="ref-schmidtovaPresentingRomAniDatData2023" class="csl-entry" role="doc-biblioentry">
+<div id="ref-schmidtovaPresentingRomAniDatData2023" class="csl-entry" role="listitem">
 Schmidtova, D., King, A., Klontza Jaklova, V., Reese, D.S., Rizzetto, M., Fernandes, R., 2023. <a href="https://doi.org/10.1016/j.jasrep.2022.103764">Presenting the <span>RomAniDat</span> data community and an archaeofaunal dataset for <span>Roman Italy</span></a>. Journal of Archaeological Science: Reports 47, 103764.
 </div>
-<div id="ref-scottGrainDeepHistory2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-scottGrainDeepHistory2017" class="csl-entry" role="listitem">
 Scott, J.C., 2017. Against the grain: A deep history of the earliest states, Yale agrarian studies. <span>Yale University Press</span>, <span>New Haven</span>.
 </div>
-<div id="ref-seppaQuaternaryPollenAnalysis2003" class="csl-entry" role="doc-biblioentry">
+<div id="ref-seppaQuaternaryPollenAnalysis2003" class="csl-entry" role="listitem">
 Seppä, H., Bennett, K.D., 2003. <a href="https://doi.org/10.1191/0309133303pp394oa">Quaternary pollen analysis: Recent progress in palaeoecology and palaeoclimatology</a>. Progress in Physical Geography: Earth and Environment 27, 548–579.
 </div>
-<div id="ref-sereniStoriaPaesaggioAgrario1961" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sereniStoriaPaesaggioAgrario1961" class="csl-entry" role="listitem">
 Sereni, E., 1961. Storia del paesaggio agrario italiano, Two thousand, twenty-first. ed, Biblioteca <span>Storica Laterza</span>. <span>Editori Laterza</span>, <span>Bari</span>.
 </div>
-<div id="ref-serre-bachetMiddleAgesTemperature1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-serre-bachetMiddleAgesTemperature1994" class="csl-entry" role="listitem">
 Serre-Bachet, F., 1994. <a href="https://doi.org/10.1007/BF01092415">Middle ages temperature reconstructions in europe, a focus on northeastern <span>Italy</span></a>. Climatic Change 26, 213–224.
 </div>
-<div id="ref-sfameniVilleResidenzialiNell2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sfameniVilleResidenzialiNell2006" class="csl-entry" role="listitem">
 Sfameni, C., 2006. Ville residenziali nell’<span>Italia</span> tardoantica, Munera. <span>Edipuglia</span>, <span>Bari</span>.
 </div>
-<div id="ref-sfameniVilleResidenzialiItalia2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-sfameniVilleResidenzialiItalia2012" class="csl-entry" role="listitem">
 Sfameni, C., 2012. Ville <span>“residenziali”</span> in <span>Italia</span> nel <span>V</span> secolo: Considerazioni su dati recenti. In: D’Andria, R., Mannino, K. (Eds.), Gli Allievi Raccontano, <span>Atti</span> Dell’incontro Di Studio Per i Trent’anni Della <span>Scuola</span> Di <span>Specializzazione</span> in <span>Beni Archeologici Università</span> Del <span>Salento</span>, <span>Cavallino</span> (<span>LE</span>)- <span>Convento</span> Dei <span>Domenicani</span> 29-30 Gennaio 2010, Archeologia e Storia. <span>Congedo Editore</span>, <span>Galatina</span>, pp. 53–64.
 </div>
-<div id="ref-shennanQuantifyingArchaeology1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-shennanQuantifyingArchaeology1997" class="csl-entry" role="listitem">
 Shennan, S., 1997. Quantifying archaeology, 2nd ed. ed. <span>Edinburgh University Press</span>, <span>Edinburgh</span>.
 </div>
-<div id="ref-shiRomanWarmPeriod2022" class="csl-entry" role="doc-biblioentry">
+<div id="ref-shiRomanWarmPeriod2022" class="csl-entry" role="listitem">
 Shi, F., Sun, C., Guion, A., Yin, Q., Zhao, S., Liu, T., Guo, Z., 2022. <a href="https://doi.org/10.1029/2021JD035832">Roman <span>Warm Period</span> and <span>Late Antique Little Ice Age</span> in an <span>Earth System Model Large Ensemble</span></a>. Journal of Geophysical Research: Atmospheres 127, e2021JD035832.
 </div>
-<div id="ref-siglNewBipolarIce2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-siglNewBipolarIce2013" class="csl-entry" role="listitem">
 Sigl, M., McConnell, J.R., Layman, L., Maselli, O., McGwire, K., Pasteris, D., Dahl-Jensen, D., Steffensen, J.P., Vinther, B., Edwards, R., Mulvaney, R., Kipfstuhl, S., 2013. <a href="https://doi.org/10.1029/2012JD018603">A new bipolar ice core record of volcanism from <span>WAIS Divide</span> and <span>NEEM</span> and implications for climate forcing of the last 2000 years</a>. Journal of Geophysical Research: Atmospheres 118, 1151–1169.
 </div>
-<div id="ref-soncinHighresolutionDietaryReconstruction2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-soncinHighresolutionDietaryReconstruction2021" class="csl-entry" role="listitem">
 Soncin, S., Talbot, H.M., Fernandes, R., Harris, A., von Tersch, M., Robson, H.K., Bakker, J.K., Richter, K.K., Alexander, M., Ellis, S., Thompson, G., Amoretti, V., Osanna, M., Caso, M., Sirano, F., Fattore, L., Colonese, A.C., Garnsey, P., Bondioli, L., Craig, O.E., 2021. <a href="https://doi.org/10.1126/sciadv.abg5791">High-resolution dietary reconstruction of victims of the 79 <span>CE Vesuvius</span> eruption at <span>Herculaneum</span> by compound-specific isotope analysis</a>. Science Advances 7, eabg5791.
 </div>
-<div id="ref-spurrCultivationMilletRoman1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-spurrCultivationMilletRoman1983" class="csl-entry" role="listitem">
 Spurr, M.S., 1983. <a href="https://www.jstor.org/stable/40310790">The <span>Cultivation</span> of <span>Millet</span> in <span>Roman Italy</span></a>. Papers of the British School at Rome 51, 1–15.
 </div>
-<div id="ref-spurrArableCultivationRoman1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-spurrArableCultivationRoman1986" class="csl-entry" role="listitem">
 Spurr, M.S., 1986. Arable <span>Cultivation</span> in <span>Roman Italy</span>, <span>C</span>. 200 <span>B</span>.<span>C</span>.-c.<span>A</span>.<span>D</span>. 100. <span>Society for the Promotion of Roman Studies</span>.
 </div>
-<div id="ref-squatritiFloods589Climate2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-squatritiFloods589Climate2010" class="csl-entry" role="listitem">
 Squatriti, P., 2010. <a href="https://www.jstor.org/stable/41105414">The <span>Floods</span> of 589 and <span>Climate Change</span> at the <span>Beginning</span> of the <span>Middle Ages</span>: <span>An Italian Microhistory</span></a>. Speculum 85, 799–826.
 </div>
-<div id="ref-squatritiLandscapeChangeEarly2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-squatritiLandscapeChangeEarly2013" class="csl-entry" role="listitem">
 Squatriti, P., 2013. Landscape and change in early medieval <span>Italy</span>: Chestnuts, economy, and culture. <span>Cambridge University Press</span>, <span>Cambridge</span>.
 </div>
-<div id="ref-squatritiRyeRiseRome2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-squatritiRyeRiseRome2019" class="csl-entry" role="listitem">
 Squatriti, P., 2019. Rye’s <span>Rise</span> and <span>Rome</span>’s <span>Fall</span>: <span>Agriculture</span> and <span>Climate</span> in <span>Europe</span> during <span>Late Antiquity</span>. In: Izdebski, A., Mulryan, M. (Eds.), Environment and <span>Society</span> in the <span>Long Late Antiquity</span>. <span>Brill</span>, <span>Leiden</span>, pp. 342–351.
 </div>
-<div id="ref-steinhilberTotalSolarIrradiance2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-steinhilberTotalSolarIrradiance2009" class="csl-entry" role="listitem">
 Steinhilber, F., Beer, J., Fröhlich, C., 2009. <a href="https://doi.org/10.1029/2009GL040142">Total solar irradiance during the <span>Holocene</span></a>. Geophysical Research Letters 36.
 </div>
-<div id="ref-strobelAvanziPreromaniRaccolti1863" class="csl-entry" role="doc-biblioentry">
+<div id="ref-strobelAvanziPreromaniRaccolti1863" class="csl-entry" role="listitem">
 Strobel, P., 1863. Avanzi preromani raccolti nelle terremare e palafitte dell’<span>Emilia</span>: Fasc. 1. <span>tip. Ferrari</span>, <span>Parma</span>.
 </div>
-<div id="ref-strobelAvanziDiCastoro1875" class="csl-entry" role="doc-biblioentry">
+<div id="ref-strobelAvanziDiCastoro1875" class="csl-entry" role="listitem">
 Strobel, P., 1875. Gli avanzi di <span>Castoro</span> scoperti in un fondo di capanna dell’età litica a <span>Calerno</span> presso l’<span>Enza</span>. Bullettino di paletnologia italiana 1, 110–115.
 </div>
-<div id="ref-strobelAvanziAnimaliFondi1877" class="csl-entry" role="doc-biblioentry">
+<div id="ref-strobelAvanziAnimaliFondi1877" class="csl-entry" role="listitem">
 Strobel, P., 1877. Avanzi animali dei fondi di capanne nel <span>Reggiano</span>. Bullettino di paletnologia italiana 3, 45–79.
 </div>
-<div id="ref-strobelAvanziAsinoNelle1882" class="csl-entry" role="doc-biblioentry">
+<div id="ref-strobelAvanziAsinoNelle1882" class="csl-entry" role="listitem">
 Strobel, P., 1882. Gli avanzi dell’asino nelle <span>Terramare</span>. Bullettino di paletnologia italiana 8, 89–92.
 </div>
-<div id="ref-strobelSaggioFaunaMammologica1890" class="csl-entry" role="doc-biblioentry">
+<div id="ref-strobelSaggioFaunaMammologica1890" class="csl-entry" role="listitem">
 Strobel, P., 1890. Saggio della fauna mammologica delle <span>Stazioni</span> preistoriche dei <span>Monti Lessini Veronesi</span>. Bullettino di paletnologia italiana 16, 167–175.
 </div>
-<div id="ref-tcherniaVinItalieRomaine1986" class="csl-entry" role="doc-biblioentry">
+<div id="ref-tcherniaVinItalieRomaine1986" class="csl-entry" role="listitem">
 Tchernia, A., 1986. <a href="https://doi.org/10.3406/befar.1986.1221"><span>Le vin de l’Italie romaine. Essai d’histoire économique d’après les amphores</span></a>. Bibliothèque des Écoles françaises d’Athènes et de Rome 261, 0–0.
 </div>
-<div id="ref-temin2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-temin2013" class="csl-entry" role="listitem">
 Temin, P., 2013. The roman market economy, The princeton economic history of the western world. Princeton University Press, Princeton.
 </div>
-<div id="ref-theophrastusEnquiryPlantsMinor1980" class="csl-entry" role="doc-biblioentry">
+<div id="ref-theophrastusEnquiryPlantsMinor1980" class="csl-entry" role="listitem">
 Theophrastus, 1980. Enquiry <span>Into Plants</span> and <span>Minor Works</span> on <span>Odours</span> and <span>Weather Signs</span>, The <span>Loeb</span> classical library. <span>Harvard Univ. Press</span>, <span>Cambridge, Mass</span>.
 </div>
-<div id="ref-toubertStructuresLatiumMedieval1973" class="csl-entry" role="doc-biblioentry">
+<div id="ref-toubertStructuresLatiumMedieval1973" class="csl-entry" role="listitem">
 Toubert, P., 1973. <span>Les structures du Latium médiéval: le Latium méridional et la Sabine du IXe à la fin du XIIe siècle</span>. <span>École française de Rome</span>, <span>Roma</span>.
 </div>
-<div id="ref-toynbeeHannibalLegacyHannibalic1965" class="csl-entry" role="doc-biblioentry">
+<div id="ref-toynbeeHannibalLegacyHannibalic1965" class="csl-entry" role="listitem">
 Toynbee, A.J., 1965. Hannibal’s <span>Legacy</span>: <span>The Hannibalic War</span>’s <span>Effects</span> on <span>Roman Life</span>. <span>Rome</span> and her neighbours after <span>Hannibal</span>’s exit. <span>Oxford University Press</span>.
 </div>
-<div id="ref-trentacosteNewTrajectoriesAccelerating2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-trentacosteNewTrajectoriesAccelerating2021" class="csl-entry" role="listitem">
 Trentacoste, A., Nieto-Espinet, A., Guimarães, S., Wilkens, B., Petrucci, G., Valenzuela-Lamas, S., 2021. <a href="https://doi.org/10.1007/s12520-020-01251-7">New trajectories or accelerating change? <span>Zooarchaeological</span> evidence for <span>Roman</span> transformation of animal husbandry in <span>Northern Italy</span></a>. Archaeological and Anthropological Sciences 13, 25.
 </div>
-<div id="ref-trouetPersistentPositiveNorth2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-trouetPersistentPositiveNorth2009" class="csl-entry" role="listitem">
 Trouet, V., Esper, J., Graham, N.E., Baker, A., Scourse, J.D., Frank, D.C., 2009. <a href="https://doi.org/10.1126/science.1166349">Persistent <span>Positive North Atlantic Oscillation Mode Dominated</span> the <span>Medieval Climate Anomaly</span></a>. Science 324, 78–80.
 </div>
-<div id="ref-turchianoFaragolaEreditaVille2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-turchianoFaragolaEreditaVille2016" class="csl-entry" role="listitem">
 Turchiano, M., Volpe, G., 2016. Faragola e l’eredità delle ville in <span>Italia</span> meridionale tra <span>Tardoantico</span> e <span>Altomedioevo</span>. Anales de Arquelogía Cordobesa 97–124.
 </div>
-<div id="ref-twissHowArchaeologistsStudy2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-twissHowArchaeologistsStudy2019" class="csl-entry" role="listitem">
 Twiss, K.C. (Ed.), 2019. <a href="https://doi.org/10.1017/9781108670159.002">How <span>Do Archaeologists Study Food</span>?: <span>Data Sets</span> and <span>Methods</span></a>. In: The <span>Archaeology</span> of <span>Food</span>: <span>Identity</span>, <span>Politics</span>, and <span>Ideology</span> in the <span>Prehistoric</span> and <span>Historic Past</span>. <span>Cambridge University Press</span>, <span>Cambridge</span>, pp. 18–48.
 </div>
-<div id="ref-ucchesuFirstFindsPrunus2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ucchesuFirstFindsPrunus2017" class="csl-entry" role="listitem">
 Ucchesu, M., Sarigu, M., Vais, C.D., Sanna, I., d’Hallewin, G., Grillo, O., Bacchetta, G., 2017. <a href="https://doi.org/10.1007/s00334-017-0622-2">First finds of <span>Prunus</span> domestica <span>L</span>. In <span>Italy</span> from the <span>Phoenician</span> and <span>Punic</span> periods (6th2nd centuries bc)</a>. Vegetation History and Archaeobotany 26, 539–549.
 </div>
-<div id="ref-valentiMargineAlleCampagne2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-valentiMargineAlleCampagne2009" class="csl-entry" role="listitem">
 Valenti, M., 2009. <span>In margine alle campagne</span>. In: Gelichi, S. (Ed.), <span>Una sola moltitudine. Scritti e ricordi per Riccardo Francovich</span>. <span>All’Insegna del Giglio</span>, <span>Firenze</span>, pp. 39–48.
 </div>
-<div id="ref-valentiArcheologiaCampagneAltomedievali2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-valentiArcheologiaCampagneAltomedievali2014" class="csl-entry" role="listitem">
 Valenti, M., 2014. Archeologia delle campagne altomedievali: Diacronia e forme dell’insediamento. Archeologia Medievale Quarant’anni di Archeologia Medievale in Italia. La rivista, i temi, la teoria e i metodi., 123–142.
 </div>
-<div id="ref-vandermerwe13CContentHuman1978" class="csl-entry" role="doc-biblioentry">
+<div id="ref-vandermerwe13CContentHuman1978" class="csl-entry" role="listitem">
 Van Der Merwe, N.J., Vogel, J.C., 1978. <a href="https://doi.org/10.1038/276815a0"><span>13C Content</span> of human collagen as a measure of prehistoric diet in woodland <span>North America</span></a>. Nature 276, 815–816.
 </div>
-<div id="ref-vanlimbergenViticultureClimateProxy2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-vanlimbergenViticultureClimateProxy2021" class="csl-entry" role="listitem">
 Van Limbergen, D., De Clercq, W., 2021. <a href="https://doi.org/10.1007/978-3-030-81103-7_17">Viticulture as a <span>Climate Proxy</span> for the <span>Roman World</span>? <span>Global Warming</span> as a <span>Comparative Framework</span> for <span>Interpreting</span> the <span>Ancient Source Material</span> in <span>Italy</span> and the <span>West</span> (ca. 200 <span>BC</span> <span>AD</span>)</a>. In: Erdkamp, P., Manning, J.G., Verboven, K. (Eds.), Climate <span>Change</span> and <span>Ancient Societies</span> in <span>Europe</span> and the <span>Near East</span>: <span>Diversity</span> in <span>Collapse</span> and <span>Resilience</span>, Palgrave <span>Studies</span> in <span>Ancient Economies</span>. <span>Springer International Publishing</span>, <span>Cham</span>, pp. 443–484.
 </div>
-<div id="ref-reframin2022a" class="csl-entry" role="doc-biblioentry">
+<div id="ref-reframin2022a" class="csl-entry" role="listitem">
 Van Limbergen, D., Hoffelinck, A., Taelman, D. (Eds.), 2022. <a href="https://doi.org/10.1007/978-3-031-06281-0">Reframing the Roman Economy: New Perspectives on Habitual Economic Practices</a>, Palgrave Studies in Ancient Economies. Springer International Publishing, Cham.
 </div>
-<div id="ref-varroAgriculture1934" class="csl-entry" role="doc-biblioentry">
+<div id="ref-varroAgriculture1934" class="csl-entry" role="listitem">
 Varro, M.T., 1934. On <span>Agriculture</span>, Loeb <span>Classical Library</span>. <span>Harvard Univ. Press</span>, <span>Cambridge, Mass.</span>
 </div>
-<div id="ref-veraDallaVillaPerfecta1995" class="csl-entry" role="doc-biblioentry">
+<div id="ref-veraDallaVillaPerfecta1995" class="csl-entry" role="listitem">
 Vera, D., 1995. <span>Dalla ’villa perfecta’ alla villa di Palladio: sulle trasformazioni del sistema agrario in Italia fra Principato e Dominato</span>. Athenaeum 83.
 </div>
-<div id="ref-veraStruttureAgrarieStrutture1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-veraStruttureAgrarieStrutture1996" class="csl-entry" role="listitem">
 Vera, D., 1996. Strutture agrarie e strutture patrimoniali nella tarda antichità: L’aristocrazia romana fra agricoltura e commercio.
 </div>
-<div id="ref-veraMassaFundorumForme1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-veraMassaFundorumForme1999" class="csl-entry" role="listitem">
 Vera, D., 1999. <a href="https://doi.org/10.3406/mefr.1999.2104"><span>Massa fundorum. Forme della grande proprietà e poteri della città in Italia fra Costantino e Gregorio Magno</span></a>. Mélanges de l’école française de Rome 111, 991–1025.
 </div>
-<div id="ref-veraQuestioniDiStoria2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-veraQuestioniDiStoria2012" class="csl-entry" role="listitem">
 Vera, D., 2012. <a href="https://doi.org/10.1484/J.AT.1.103097">Questioni di storia agraria tardoromana: Schiavi, coloni, villae</a>. Antiquité Tardive 20, 115–122.
 </div>
-<div id="ref-veraDoniDiCerere2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-veraDoniDiCerere2020" class="csl-entry" role="listitem">
 Vera, D., 2020. <span>I doni di Cerere: storie della terra nella tarda Antichità strutture, società, economia</span>, <span>Bibliothèque de l’Antiquité tardive</span>. <span>Brepols</span>, <span>Turnhout</span>.
 </div>
-<div id="ref-complexi2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-complexi2021" class="csl-entry" role="listitem">
 Verboven, K. (Ed.), 2021. <a href="https://doi.org/10.1007/978-3-030-47898-8">Complexity economics: building a new approach to ancient economic history</a>, Palgrave studies in ancient economies. Palgrave Macmillan, Cham, Switzerland.
 </div>
-<div id="ref-verhulstCarolingianEconomy2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-verhulstCarolingianEconomy2002" class="csl-entry" role="listitem">
 Verhulst, A., 2002. The <span>Carolingian Economy</span>. <span>Cambridge University Press</span>.
 </div>
-<div id="ref-verhulstGeneseRegimeDomanial1966" class="csl-entry" role="doc-biblioentry">
+<div id="ref-verhulstGeneseRegimeDomanial1966" class="csl-entry" role="listitem">
 Verhulst, A.E., 1966. <span>La genèse du régime domanial classique an France au haut moyen âge</span>, <span>Studia historica Gandensia</span>. <span>Université de Gand</span>.
 </div>
-<div id="ref-verhulstEconomieRuraleEconomie1994" class="csl-entry" role="doc-biblioentry">
+<div id="ref-verhulstEconomieRuraleEconomie1994" class="csl-entry" role="listitem">
 Verhulst, A.E., Morimoto, Y., 1994. <span>Economie rurale et économie urbaine au Moyen Age</span>. <span>Belgisch Centrum voor Landelijke Geschiedenis</span>.
 </div>
-<div id="ref-vogelIsotopicEvidenceEarly1977" class="csl-entry" role="doc-biblioentry">
+<div id="ref-vogelIsotopicEvidenceEarly1977" class="csl-entry" role="listitem">
 Vogel, J.C., Merwe, N.J.V.D., 1977. <a href="https://doi.org/10.2307/278984">Isotopic <span>Evidence</span> for <span>Early Maize Cultivation</span> in <span>New York State</span></a>. American Antiquity 42, 238–242.
 </div>
-<div id="ref-volpeContadiniPastoriMercanti1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeContadiniPastoriMercanti1996" class="csl-entry" role="listitem">
 Volpe, G., 1996. Contadini, pastori e mercanti nell’<span>Apulia</span> tardoantica, Munera. <span>Edipuglia</span>, <span>Bari</span>.
 </div>
-<div id="ref-volpeCittaCampagnaStrutture2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeCittaCampagnaStrutture2014" class="csl-entry" role="listitem">
 Volpe, G., 2014. <span>Città e campagna, strutture insediative e strutture ecclesiastiche dell’Italia meridionale: Il caso dell’Apulia</span>. In: Fondazione Centro italiano di studi sull’alto Medioevo (Ed.), <span>Chiese locali e chiese regionali nell’alto Medioevo: Spoleto, 4-9 aprile 2013</span>, <span>Settimane di studio della Fondazione Centro italiano di studi sull’Alto Medioevo</span>. <span>Fondazione Centro italiano di studi sull’alto Medioevo</span>, <span>Spoleto</span>, pp. 1041–1072.
 </div>
-<div id="ref-volpeApportoArcheologiaAlla2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeApportoArcheologiaAlla2017" class="csl-entry" role="listitem">
 Volpe, G., 2017. <span>L’apporto dell’archeologia alla conoscenza dei paesaggi altomedievali dell’Apulia</span>. In: Rivera Magos, V., Violante, F., Licinio, R. (Eds.), <span>Apprendere ciò che vive: studi offerti a Raffaele Licinio</span>, <span>Mediterranea</span>. <span>Edipuglia</span>, <span>Bari</span>, pp. 579–590.
 </div>
-<div id="ref-volpeLanePecorePastori2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeLanePecorePastori2012" class="csl-entry" role="listitem">
 Volpe, G., Buglione, A., De Venuto, G., 2012. <span>Lane, Pecore e Pastori in Puglia tra Tardoantico e Medioevo: novità dai dati archeozoologici</span>. In: Busana, M.S., Basso, P., Tricomi, A.R., Pesavento Mattioli, S. (Eds.), <span>La lana nella Cisalpina romana: economia e società: studi in onore di Stefania Pesavento Mattioli: atti del Convegno, Padova-Verona, 18-20 maggio 2011</span>, <span>Antenor quaderni</span>. <span>Padova University Press</span>, <span>Padova</span>, pp. 243–268.
 </div>
-<div id="ref-volpeAbitatoAltomedievaleDi2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeAbitatoAltomedievaleDi2009" class="csl-entry" role="listitem">
 Volpe, G., De Venuto, G., Goffredo, R., Turchiano, M., 2009. L’abitato altomedievale di <span>Faragola</span> (<span>Ascoli Satriano</span>). In: Atti Del <span>V Congresso Nazionale</span> Di <span>Archeologia Medievale</span> (<span>Foggia-Manfredonia</span>, 30 Settembre Ottobre 2009). <span>All’Insegna del Giglio</span>, <span>Firenze</span>, pp. 284–90.
 </div>
-<div id="ref-volpeLastEnclaveRural2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeLastEnclaveRural2010" class="csl-entry" role="listitem">
 Volpe, G., Turchiano, M., 2010. <span>The last enclave. Rural settlement in the 5th Century in Southern Italy: the case of Apulia</span>. In: Delogu, P., Gasparri, S. (Eds.), <span>Le trasformazioni del V secolo: atti del seminario di Poggibonsi, 18-20 ottobre 2007</span>, <span>Seminari internazionali del Centro interuniversitario per la storia e l’archeologia dell’alto medioevo</span>. <span>Brepols</span>, <span>Turnhout</span>, pp. 531–577.
 </div>
-<div id="ref-volpeVillaTardoanticaAbitato2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-volpeVillaTardoanticaAbitato2012" class="csl-entry" role="listitem">
 Volpe, G., Turchiano, M., 2012. La villa tardoantica e l’abitato altomedievale di <span>Faragola</span> (<span>Ascoli Satriano</span>). Mitteilungen des Deutschen Archäologischen Instituts. Römische Abteilung 112, 455–491.
 </div>
-<div id="ref-wagenmakersPracticalSolutionPervasive2007" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wagenmakersPracticalSolutionPervasive2007" class="csl-entry" role="listitem">
 Wagenmakers, E.-J., 2007. <a href="https://doi.org/10.3758/BF03194105">A practical solution to the pervasive problems of p values</a>. Psychonomic Bulletin &amp; Review 14, 779–804.
 </div>
-<div id="ref-ward-perkinsFallRomeEnd2006" class="csl-entry" role="doc-biblioentry">
+<div id="ref-ward-perkinsFallRomeEnd2006" class="csl-entry" role="listitem">
 Ward-Perkins, B., 2006. The fall of <span>Rome</span> and the end of civilization. <span>Oxford Univ. Press</span>, <span>Oxford</span>.
 </div>
-<div id="ref-weber2008" class="csl-entry" role="doc-biblioentry">
+<div id="ref-weber2008" class="csl-entry" role="listitem">
 Weber, M., 2008. Roman agrarian history. Regina Books, Claremont.
 </div>
-<div id="ref-whiteRomanFarming1970" class="csl-entry" role="doc-biblioentry">
+<div id="ref-whiteRomanFarming1970" class="csl-entry" role="listitem">
 White, K.D., 1970. Roman <span>Farming</span>. <span>Cornell University Press</span>.
 </div>
-<div id="ref-whittakerRuralLifeLater1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-whittakerRuralLifeLater1997" class="csl-entry" role="listitem">
 Whittaker, C.R., Garnsey, P., 1997. <a href="https://doi.org/10.1017/CHOL9780521302005.010">Rural life in the later <span>Roman</span> empire</a>. In: Cameron, A., Garnsey, P. (Eds.), The <span>Cambridge Ancient History</span>: <span>Volume</span> 13: <span>The Late Empire</span>, <span>AD</span> 337, The <span>Cambridge Ancient History</span>. <span>Cambridge University Press</span>, <span>Cambridge</span>, pp. 277–311.
 </div>
-<div id="ref-wickhamOtherTransitionAncient1984" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamOtherTransitionAncient1984" class="csl-entry" role="listitem">
 Wickham, C., 1984. <a href="https://doi.org/10.1093/past/103.1.3">The other transition: From the ancient world to feudalism</a>. Past and Present 103, 3–36.
 </div>
-<div id="ref-wickhamStudiSullaSocieta1985" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamStudiSullaSocieta1985" class="csl-entry" role="listitem">
 Wickham, C., 1985. <span>Studi sulla società degli Appennini nell’Alto Medioevo. 2, Il problema dell’incastellamento nell’Italia centrale: l’esempio di San Vincenzo al Volturno</span>. <span>Facolta die Lettere e Filosofia dell’Universita di Siena</span>, <span>Siena</span>.
 </div>
-<div id="ref-wickhamCheServeIncastellamento1998" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamCheServeIncastellamento1998" class="csl-entry" role="listitem">
 Wickham, C., 1998. <span>A che serve l’incastellamento ?</span> Publications de l’École Française de Rome 241, 31–41.
 </div>
-<div id="ref-wickhamRuralEconomySociety2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamRuralEconomySociety2002" class="csl-entry" role="listitem">
 Wickham, C., 2002. Rural economy and society. In: La Rocca, C. (Ed.), Italy in the Early <span>Middle Ages</span>: 476-1000, The Short <span>Oxford</span> History of <span>Italy</span>. <span>Oxford University Press</span>, <span>Oxford</span>, pp. 118–143.
 </div>
-<div id="ref-wickham2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickham2005" class="csl-entry" role="listitem">
 Wickham, C., 2005. Framing the early Middle Ages: Europe and the Mediterranean 400 - 800. Oxford Univ. Press, Oxford.
 </div>
-<div id="ref-wickhamSocietaAltoMedioevo2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-wickhamSocietaAltoMedioevo2009" class="csl-entry" role="listitem">
 Wickham, C., 2009. <span>Le società dell’alto medioevo: Europa e Mediterraneo secoli V-VIII</span>. <span>Viella</span>, <span>Roma</span>.
 </div>
-<div id="ref-urbancr2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-urbancr2016" class="csl-entry" role="listitem">
 Wilson, A., Flohr, M. (Eds.), 2016. Urban craftsmen and traders in the roman world, First edition. ed, Oxford studies on the roman economy. Oxford University Press, New York, NY.
 </div>
-<div id="ref-xoplakiMedievalClimateAnomaly2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-xoplakiMedievalClimateAnomaly2016" class="csl-entry" role="listitem">
 Xoplaki, E., Fleitmann, D., Luterbacher, J., Wagner, S., Haldon, J.F., Zorita, E., Telelis, I., Toreti, A., Izdebski, A., 2016. <a href="https://doi.org/10.1016/j.quascirev.2015.10.004">The <span>Medieval Climate Anomaly</span> and <span>Byzantium</span>: <span>A</span> review of the evidence on climatic fluctuations, economic performance and societal change</a>. Quaternary Science Reviews, Special <span>Issue</span>: <span>Mediterranean Holocene Climate</span>, <span>Environment</span> and <span>Human Societies</span> 136, 229–252.
 </div>
-<div id="ref-zanchettaOnewayDeterminismSan2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-zanchettaOnewayDeterminismSan2021" class="csl-entry" role="listitem">
 Zanchetta, G., Bini, M., Bloomfield, K., Izdebski, A., Vivoli, N., Regattieri, E., Isola, I., Drysdale, R.N., Bajo, P., Hellstrom, J.C., Wiśniewski, R., Fallick, A.E., Natali, S., Luppichini, M., 2021. <a href="https://doi.org/10.1007/s10584-021-03043-x">Beyond one-way determinism: <span>San Frediano</span>’s miracle and climate change in <span>Central</span> and <span>Northern Italy</span> in late antiquity</a>. Climatic Change 165, 25.
 </div>
 </div>
@@ -1344,9 +1359,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1411,6 +1440,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1465,7 +1580,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
   </div>
 </footer>
 

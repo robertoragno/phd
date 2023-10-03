@@ -18,27 +18,20 @@ library(tidybayes.rethinking)
 library(tidybayes)
 ```
 
-::: callout-important
-## Page under construction {style="text-align:justify;"}
-
-The results presented here are preliminary and the chapter has yet to be written.
-:::
-
-In this chapter, I will present the macrobotanical data from 190 case studies used to carry on this research (@sec-materials-bot), along with the statistics performed on the data. The results will be first presented temporally, and a discussion of the diachronic trends will follow at the end of the chapter.
-
+This chapter presents the quantitative findings based on macrobotanical data from 190 case studies used in this research. The limitations inherent in the dataset have been presented in both the materials (@sec-materials-bot) and methods (@sec-methods) sections. In particular, the considerable presence of outliers in numerous database samples would result in unreliable results if analysed as counts, necessitating a presence/absence analysis. Plant remains serve as a valuable indicator of ancient farming practices, and a general approach to supplying relative chronological trends is provided towards the conclusion of this chapter. The results will initially be presented in temporal order, offering ubiquity scores for each century under review. For explorative purposes, ubiquity has also been computed for Southern, Central and Northern Italy. The initial qualitative interpretations of the findings and the Bayesian modelling of site richness and diversity scores prompted a thorough study, including the development of hierarchical models for each macroregion. A case study examining the prevalence of free-threshing wheats and other more rustic cereal crops in Italy in the three macroregions was also carried out, both using a frequentist approach and in the form of Bayesian hierarchical models. Additional models have been developed for all classifications of plant macroremains utilizing more predictors, such as context type, site altitude, average yearly temperature and precipitation. This chapter also presents an assessment of these models.
 
 ## Ubiquity {style="text-align:justify;"}
 
-::: callout-note
-I need to justify in this section why I have used a frequentist approach. Using Jeffreys interval would be ideal, but the amount of plots needed to graphically show the results would simply be ridiculous. This decision will probably be justified by saying that these are simply exploratory introductory figures, and maybe I can plot some important taxa using Jeffreys interval.
-:::
+In @sec-methods, we concluded that due to the numerous biases present in the sample, dealing with the archaeobotanical dataset warrants the use of a presence/absence analysis. One of the most prevalent types of presence/absence analyses for archaeobotanical remains is ubiquity. Technically speaking, ubiquity is a frequentist approach that only describes the presence of a particular species in a certain number of contexts. While there exist uncomplicated Bayesian substitutes, they still demand a certain degree of modelling or individual handling of each taxon purposes[^archaeobotany-1]. This level of detail is prohibitive for exploratory purposes. With this aim, ubiquity has been calculated (a) for each century, (b) for each Italian macroregion, stratified by chronological phase.
+
+[^archaeobotany-1]: The Jeffreys interval is a suitable option for the Bayesian credible interval, which is obtained by using the non-informative Jeffreys prior for the binomial proportion $p$. The Jeffreys prior follows a $Beta(1/2, 1/2)$ distribution, which is a conjugate prior. The calculation of the posterior distribution for $p$ can be easily done by using $Beta(x+ \frac{1}{2}, n-x+\frac{1}{2})$.
 
 ::: {.content-visible when-format="html"}
-In @sec-methods, ubiquity has been described as the best solution to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (@fig-heatmap-ubiquity) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.
+The heatmap in @fig-heatmap-ubiquity provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination. Despite some trends are visible, it is important to remember that these results are just exploratory and they need to be compared with other predictors (i.e. context type, macroregion, etc.). The chart additionally presents the scientific names of all plants being researched, thereby allowing the usage of common English names later in this chapter.
 :::
 
 ::: {.content-visible when-format="pdf"}
-In @sec-methods, ubiquity has been described as the best solution to present the archaeobotanical remains from the Italian peninsula, given the numerous biases in the samples. The heatmap below (@fig-heatmap-ubiquity-for-PDF) provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination.
+The heatmap in @fig-heatmap-ubiquity-for-PDF provides a good overview of the temporal trends of presence of cereals, legumes, fruits and nuts in the entire area under examination. Despite some trends are visible, it is important to remember that these results are just exploratory and they need to be compared with other predictors (i.e. context type, macroregion, etc.). The chart additionally presents the scientific names of all plants being researched, thereby allowing the usage of common English names later in this chapter.
 :::
 
 ```{r}
@@ -61,10 +54,8 @@ Df_Cond_Plants <- read.csv("/Users/robertoragno/Desktop/University/Bari/PhD - Qu
 
 ::: {.content-visible when-format="html"}
 ```{r}
-#| code-fold: true
 #| output: false
-#| code-summary: "Show the code"
-#| code-overflow: wrap
+#| echo: false
 
 # Load the libraries
 # Note: these libraries are used for the data visualizations in this page.
@@ -156,613 +147,15 @@ Ubiquity_HM
 ```
 :::
 
-```{r}
-#| echo: false
-#| eval: false
-#| message: false
+### Macroregional trends {#sec-macroregional-differences-ubiquity}
 
-# JEFFREY S INTERVAL 
-
-#Make a copy of the dataframe
-plants_pa <- plants_export
-# Presence/Absence
-library(vegan)
-plants_pa[,c(14:52)] <- decostand(plants_export[,c(14:52)], method="pa")
-plants_pa <- replace(plants_pa, is.na(plants_pa), 0)
-
-# Periods
-dataset.centuries = c(-1:11)
-dataset.centuries = subset(dataset.centuries, dataset.centuries!=0)
-
-# Create a list to store the tables
-plant_tables <- list()
-
-# Loop through each plant column in the original dataframe
-for (plant_col in colnames(plants_pa)[14:52]) {
-
-  # Create a new tibble for the current plant
-  plant_table <- tibble(
-    Century = dataset.centuries,
-    Beta1 = NA_real_,
-    Beta2 = NA_real_,
-    Tot_Pres = NA_real_,
-    Tot_Sites = NA_real_
-  )
-
-  # Loop through each century
-  for (i in seq_along(dataset.centuries)) {
-    century = dataset.centuries[i]
-    tmp = filter(plants_pa, 
-               data_valid_start <= century & data_valid_end >= century & 
-               !is.na(data_valid_start) & !is.na(data_valid_end))
-    
-    
-    # Count the number of presences for the current plant and century
-    presences <- sum(tmp[[plant_col]])
-    
-    # Count the total number of rows for the current century
-    total_rows <- nrow(tmp)
-    
-    # Calculate the beta1 and beta2 values for the current plant and century
-    beta1 <- 0.5 + presences
-    beta2 <- 0.5 + total_rows - presences
-    Tot_Sites <- total_rows
-    Tot_Pres <- presences
-    
-    # Add the beta1 and beta2 values to the plant table
-    plant_table$Beta1[i] <- beta1
-    plant_table$Beta2[i] <- beta2
-    plant_table$Tot_Sites[i] <- Tot_Sites
-    plant_table$Tot_Pres[i] <- Tot_Pres
-  }
-  
-  # Add the plant table to the list
-  plant_tables[[plant_col]] <- plant_table
-  plant_tables[[plant_col]]$Century <- as.factor(plant_tables[[plant_col]]$Century)
-
-}
-
-
-# Adds Violin-plot for Posterior estimates of Binomial using conjugate Beta prior
-# x ... x coordinate  of the violin plot
-# w ... width of the violin
-# beta1,beta2 ... parameters of the beta distribution
-# col ... fill color
-# hpd ... quantile percentage range for region to be color filled
-
-
-addBetaDens  <- function(x,beta1,beta2,w,col,hpd=0.9,betaprior=0.5)
-{
-	xx  <- round(seq(0,1,length.out=1000),3)
-	dens  <- dbeta(xx,beta1,beta2)
-	dens999lo  <- round(qbeta(0.001,beta1,beta2),3)
-	dens999hi  <- round(qbeta(0.999,beta1,beta2),3)
-	denshpdlo  <- round(qbeta(1-hpd,beta1,beta2),3)
-	denshpdhi  <- round(qbeta(hpd,beta1,beta2),3)
-
-	d999i  <- which(xx>=dens999lo&xx<=dens999hi)
-	dhpdi  <- which(xx>=denshpdlo&xx<=denshpdhi) 
-	
-	maxLeft = x-w
-	maxRight= x+w
-	leftVals.999 = (dens[d999i]/(max(dens[d999i]))) * (maxLeft - x) + x
-	rightVals.999 = (dens[d999i]/(max(dens[d999i]))) * (maxRight - x) + x 
-	leftVals.hpd = (dens[dhpdi]/(max(dens[dhpdi]))) * (maxLeft - x) + x
-	rightVals.hpd = (dens[dhpdi]/(max(dens[dhpdi]))) * (maxRight - x) + x 
-	polygon(c(leftVals.999,rev(rightVals.999)),c(xx[d999i],rev(xx[d999i])),col=NULL,border = 'lightgrey')
-	polygon(c(leftVals.hpd,rev(rightVals.hpd)),c(xx[dhpdi],rev(xx[dhpdi])),col=col,border=col)
-	lines(c(maxLeft,maxRight),rep((beta1-betaprior)/(beta1+beta2-betaprior*2),2),lwd=2,col=1)
-}
-
-colors = gray(seq(0.7, 0.15, length.out = 20))
-
-```
-
-```{r}
-#| echo: false
-#| eval: false
-
-
-# Get lower and upper confidence interval
-library("ratesci")
-
-test <- jeffreysci(
-  x=plant_tables[["Vitis.vinifera"]]$Tot_Pres,
-  n=plant_tables[["Vitis.vinifera"]]$Tot_Sites,
-  level=0.90
-  )
-
-test_dist <- data.frame(
-  Distribution = rbeta(1000, 
-                   shape1=plant_tables[["Vitis.vinifera"]]$Beta1[1],
-                   shape2=plant_tables[["Vitis.vinifera"]]$Beta2[1]
-                     ),
-  Century=plant_tables[["Vitis.vinifera"]]$Century[1]
-  )
-
-# Create an empty data frame to store the results
-all_dists <- data.frame()
-
-# Loop through all centuries (from 1 to 12)
-for (i in 1:12) {
-  # Generate the data for the current century using rbeta
-  dist <- data.frame(
-    Distribution = rbeta(1000,
-shape1=plant_tables[["Vitis.vinifera"]]$Beta1[i],
-shape2=plant_tables[["Vitis.vinifera"]]$Beta2[i]),
-Century=plant_tables[["Vitis.vinifera"]]$Century[i]
-  )
-  
-  # Add the data to the all_dists data frame
-  all_dists <- rbind(all_dists, dist)
-}
-
-ggplot(all_dists, aes(x=Century, y=Distribution))+
-  geom_boxplot(
-    lower=test[,1], 
-    upper=test[,2],
-    middle=test[,3],
-    alpha=.8,
-    width=.5,
-    outlier.colour = "red4",
-    outlier.size=0.9,
-    outlier.alpha=0.4
-    )+ 
-    geom_hline(
-    yintercept = mean(all_dists$Distribution),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4")+
-    labs(
-    x = "Century",
-    y = "Ubiquity",
-    title = "Vitis Vinifera",
-    caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
-  ) +
-  theme_tidybayes() +
-  theme(
-    legend.position = "bottom",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.25,
-      linetype = 2
-    ),
-    axis.title.x.top = element_blank()
-  )
-
-  
-
-```
-
-```{r}
-#| eval: false
-#| echo: false
-# TEST AUTOMATION
-
-# Define the column names
-plant_tables.col_names <- names(plant_tables)
-
-# Create an empty data frame to store the results
-all_dists <- data.frame()
-
-# Loop through all columns
-for (col_name in plant_tables.col_names) {
-  # Calculate the 90% Jeffreys interval for the column
-  test <- jeffreysci(
-    x = plant_tables[[col_name]]$Tot_Pres,
-    n = plant_tables[[col_name]]$Tot_Sites,
-    level = 0.90
-  )
-  
-  # Loop through all centuries (from 1 to 12)
-  for (i in 1:12) {
-    # Generate the data for the current century using rbeta
-    dist <- data.frame(
-      Distribution = rbeta(1000,
-        shape1 = plant_tables[[col_name]]$Beta1[i],
-        shape2 = plant_tables[[col_name]]$Beta2[i]),
-      Century = plant_tables[[col_name]]$Century[i]
-    )
-  
-    # Add the data to the all_dists data frame
-    all_dists <- rbind(all_dists, dist)
-  }
-  
-  # Create a boxplot with the calculated Jeffreys interval
-  ggplot(all_dists, aes(x = Century, y = Distribution)) +
-    geom_boxplot(
-      lower = test[, 1], 
-      upper = test[, 2],
-      middle = test[, 3],
-      alpha = 0.8,
-      width = 0.5,
-      outlier.colour = "red4",
-      outlier.size = 0.9
-    ) + 
-    geom_hline(
-      yintercept = mean(all_dists$Distribution),
-      linetype = "twodash",
-      linewidth = 0.45,
-      color = "red4"
-    ) +
-    labs(
-      x = "Century",
-      y = "Ubiquity",
-      title = col_name,
-      caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
-    ) +
-    theme_tidybayes() +
-    theme(
-      legend.position = "bottom",
-      strip.background = element_rect(
-        fill = "grey",
-        linewidth = 0.1,
-        colour = "black"
-      ),
-      panel.background = element_rect(fill = "grey90"),
-      panel.border = element_rect(fill = NA, linewidth = 0.1),
-      panel.grid.major.x = element_line(
-        color = "grey50",
-        linewidth = 0.25,
-        linetype = 2
-      ),
-      axis.title.x.top = element_blank()
-    )
-  
-  # Clear the all_dists data frame for the next column
-  all_dists <- data.frame()
-}
-
-```
-
-```{r}
-#| eval: false
-#| echo: false
-#| label: fig-ubiquity-triticum-aest-jeffrey-int
-#| fig-cap: "Posterior probability distribution of samples with cereal remains. The observed ubiquity is represented by the horizontal bar, while the highlighted areas represent the 90% Jeffreys interval."
-#| fig-subcap: 
-#|  - "Triticum aestivum/durum"
-#|  - "Hordeum vulgare"
-#|  - "Triticum monococcum"
-#|  - "Triticum dicoccum"
-#|  - "Panicum milliaceum"
-#|  - "Setaria italica"
-#|  - "Secale cereale"
-#|  - "Sorghum bicolor"
-#| layout-ncol: 2
-#| layout-nrow: 4
-#| fig-height: 4
-
-# 1. T. aest. durum.
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum aestivum / durum')
-
-for (i in seq_along(dataset.centuries)) {
-	addBetaDens(x=i,
-	            beta1=plant_tables[["Triticum.aestivum.durum"]]$Beta1[i],
-	            beta2=plant_tables[["Triticum.aestivum.durum"]]$Beta2[i],
-	            w=0.3, 
-	            col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-
-# 2. Hordeum
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Hordeum v.')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Hordeum.vulgare"]]$Beta1[i],
-              beta2=plant_tables[["Hordeum.vulgare"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-
-# 3. Monococcum
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum monococcum')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Triticum.monococcum"]]$Beta1[i],
-              beta2=plant_tables[["Triticum.monococcum"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-# 4. dicoccum
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Triticum dicoccum')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Triticum.dicoccum"]]$Beta1[i],
-              beta2=plant_tables[["Triticum.dicoccum"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-# 5. Panicum m.
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, main='Panicum milliaceum')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Panicum.milliaceum"]]$Beta1[i],
-              beta2=plant_tables[["Panicum.milliaceum"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-# 6. Setaria italica
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
-     main='Setaria italica')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Setaria.italica"]]$Beta1[i],
-              beta2=plant_tables[["Setaria.italica"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-# 7. Rye
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
-     main='Secale cereale')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Secale.cereale"]]$Beta1[i],
-              beta2=plant_tables[["Secale.cereale"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-# 8. Sorghum
-par(mar=c(3,4,5,1))
-plot(NULL,xlim=c(0,12), ylim=c(0,1),xlab='',ylab='Proportion Sites',axes=FALSE, 
-     main='Sorghum bicolor')
-
-for (i in seq_along(dataset.centuries)) {
-  addBetaDens(x=i,
-              beta1=plant_tables[["Sorghum.bicolor"]]$Beta1[i],
-              beta2=plant_tables[["Sorghum.bicolor"]]$Beta2[i],
-              w=0.3, 
-              col=colors[i])
-}
-
-axis(side=1,at=c(1:12),
-     labels=dataset.centuries,
-     tick=FALSE,
-     cex=1.2)
-abline(v = c(1:12 +0.5),lty=2)
-axis(side=2,at=seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-axis(side=2,at=1.1+seq(0,1,length.out=5),labels=seq(0,1,length.out = 5),las=2)
-
-```
-
-```{r}
-#| echo: false
-#| eval: false
-
-# MACROREGION
-#Make a copy of the dataframe
-plants_pa_mr <- Df_Cond_Plants
-
-# Presence/Absence
-plants_pa_mr[,c(11:50)] <- decostand(plants_pa_mr[,c(11:50)], method="pa")
-plants_pa_mr <- replace(plants_pa_mr, is.na(plants_pa_mr), 0)
-
-# Macroregions
-dataset.macroregions = c("Southern Italy", "Central Italy", "Northern Italy")
-
-# Chronologies
-plants_pa_mr.R = subset(plants_pa_mr, Chronology=="R")
-plants_pa_mr.LR = subset(plants_pa_mr, Chronology=="LR")
-plants_pa_mr.EMA = subset(plants_pa_mr, Chronology=="EMA")
-plants_pa_mr.Ma = subset(plants_pa_mr, Chronology=="Ma")
-
-# Create a list to store the tables
-plant_tables_mr.R <- list()
-
-# Loop through each plant column in the original dataframe
-for (plant_col in colnames(plants_pa_mr.R)[11:50]) {
-
-  # Create a new tibble for the current plant
-  plant_table_mr.R <- tibble(
-    Macroregion = dataset.macroregions,
-    Beta1 = NA_real_,
-    Beta2 = NA_real_,
-    Tot_Pres = NA_real_,
-    Tot_Sites = NA_real_
-  )
-
-  # Loop through each century
-  for (i in seq_along(dataset.macroregions)) {
-    macroregion = dataset.macroregions[i]
-    tmp = filter(plants_pa_mr.R, name_macroreg==macroregion)
-    
-    # Count the number of presences for the current plant and century
-    presences <- sum(tmp[[plant_col]])
-    
-    # Count the total number of rows for the current century
-    total_rows <- nrow(tmp)
-    
-    # Calculate the beta1 and beta2 values for the current plant and macroregion
-    beta1 <- 0.5 + presences
-    beta2 <- 0.5 + total_rows - presences
-    Tot_Sites <- total_rows
-    Tot_Pres <- presences
-    
-    # Add the beta1 and beta2 values to the plant table
-    plant_table_mr.R$Beta1[i] <- beta1
-    plant_table_mr.R$Beta2[i] <- beta2
-    plant_table_mr.R$Tot_Sites[i] <- Tot_Sites
-    plant_table_mr.R$Tot_Pres[i] <- Tot_Pres
-  }
-  
-  # Add the plant table to the list
-  plant_tables_mr.R[[plant_col]] <- plant_table_mr.R
-  plant_tables_mr.R[[plant_col]]$Macroregion <- as.factor(plant_tables_mr.R[[plant_col]]$Macroregion)
-
-}
-
-# Get lower and upper confidence interval
-
-test <- jeffreysci(
-  x=plant_tables_mr.R[["Grape"]]$Tot_Pres,
-  n=plant_tables_mr.R[["Grape"]]$Tot_Sites,
-  level=0.90
-  )
-
-# Create an empty data frame to store the results
-all_dists <- data.frame()
-
-# Loop through all centuries (from 1 to 12)
-for (i in 1:3) {
-  # Generate the data for the current century using rbeta
-  dist <- data.frame(
-    Distribution = rbeta(1000,
-shape1=plant_tables_mr.R[["Grape"]]$Beta1[i],
-shape2=plant_tables_mr.R[["Grape"]]$Beta2[i]),
-Macroregion=plant_tables_mr.R[["Grape"]]$Macroregion[i]
-  )
-  
-  # Add the data to the all_dists data frame
-  all_dists <- rbind(all_dists, dist)
-}
-
-ggplot(all_dists, aes(x=Macroregion, y=Distribution))+
-  geom_boxplot(
-    lower=test[,1], 
-    upper=test[,2],
-    middle=test[,3],
-    alpha=.8,
-    width=.5,
-    outlier.colour = "red4",
-    outlier.size=0.9,
-    outlier.alpha=0.4
-    )+ 
-    geom_hline(
-    yintercept = mean(all_dists$Distribution),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4")+
-    labs(
-    x = "Macroregion",
-    y = "Ubiquity",
-    title = "Vitis Vinifera",
-    caption = "90% Jeffreys interval boxplots where the middle line is the true estimate."
-  ) +
-  theme_tidybayes() +
-  theme(
-    legend.position = "bottom",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.25,
-      linetype = 2
-    ),
-    axis.title.x.top = element_blank()
-  )
-
-  
-
-
-```
-
-### Ubiquity by macroregion {#sec-macroregional-differences-ubiquity}
-
-::: callout-alert
-Probably delete, in favor of the bayesian predictions. If this section is kept, make sure to explain that ubiquity was calculated by macroregion only because it was more reliable etc etc
-:::
-
-::: {.content-visible when-format="html"}
-The heatmap (@fig-heatmap-ubiquity) shows the diachronical ubiquity values of the Italian mainland. It is possible however to compare plants' ubiquity values in different areas of the peninsula. The R function `Ubiquity_macroreg_chrono()` (@sec-Ubiquity-macroreg-chrono) was created to subset data from Northern, Central and Southern Italian regions, using modern boundaries. Archaeobotanical data from Italy is scarce, and subsetting the dataset required a larger chronological division to have enough sites for a valid statistical interpretation of the results. For this reason, the ubiquity values are presented using the variable `Chronology` rather than subsetting the individual centuries. For a clearer reading of the plot, the taxa have been divided into--Cereals, Pulses and Fruits/Nuts. Some taxa have been omitted from the plot.
-:::
-
-::: {.content-visible when-format="pdf"}
-The heatmap (@fig-heatmap-ubiquity-for-PDF) shows the diachronical ubiquity values of the Italian mainland. It is possible however to compare plants' ubiquity values in different areas of the peninsula. The R function `Ubiquity_macroreg_chrono()` (@sec-custom-functions) was created to subset data from Northern, Central and Southern Italian regions, using modern boundaries. Archaeobotanical data from Italy is scarce, and subsetting the dataset required a larger chronological division to have enough sites for a valid statistical interpretation of the results. For this reason, the ubiquity values are presented using the variable `Chronology` rather than subsetting the individual centuries. For a clearer reading of the plot, the taxa have been divided into--Cereals, Pulses and Fruits/Nuts. Some taxa have been omitted from the plot.
-:::
+In addition to investigating the ubiquity of each plant in every century, diachronic trends can also be derived by utilising the chronology and Italian sub-regions as predictive factors. This approach is only used as an initial form of data exploration, although this type of data stratification is risky with a data set that is not large enough. Sub-groups, such as Roman: Central Italy, may not be informative due to their size. It is not feasible, for example, to carry out this research at the level of centuries. To subset the data from the northern, central and southern Italian regions, the R function `Ubiquity_macroreg_chrono()` (Custom functions, @sec-Ubiquity-macroreg-chrono) was created. In order to enhance readability of the plots, we categorized taxa into cereals, pulses, and fruits/nuts. We did not include some dataset columns, such as fruits that were only present in a few sites, in the plot.
 
 ::: {.content-visible when-format="html"}
 ```{r}
 #| echo: false
 #| output: false
-#| code-summary: "Show the code: data preparation"
-#| code-overflow: wrap
+
 
 # Ubiquity by Italian Macro regions: Northern, Central and Southern Italy
 
@@ -832,8 +225,7 @@ fnuts_ubiquity_macroreg.Ma <- filter(fnuts_ubiquity_macroreg.Ma, Macroregion!="S
 ```{r}
 #| echo: false
 #| output: false
-#| code-summary: "Show the code: plots"
-#| code-overflow: wrap
+
 
 # Cereals plots ubiquity
 cer_ubiquity_macroreg_R.HM <- ggplot(cer_ubiquity_macroreg.R, aes(
@@ -1101,7 +493,7 @@ FrNuts_Ubiquity_MacroReg_Patchwork + plot_annotation(
 
 #### Cereals
 
-It is interesting to notice how in the **Roman age**, cereals are similarly ubiquitous in Southern and Northern Italy, although there are some exceptions (*i.e.* einkorn, rye, oats, and proso millet) that can derive from the randomness of sampling. Unfortunately, only three sites provided botanical samples for Roman Central Italy and their values have then been omitted from the plot. These sites (all from Tuscany) were studied by the Roman Peasant Project [@bowesRomanPeasantProject2020a] and only reported three kinds of cereal: common wheat, emmer, and barley. Similar ubiquity values from Northern and Southern Italy in the Roman age may suggest similar production patterns in the whole Italian mainland, even though more data is required. In the **Late Roman age**, ubiquity data has been calculated for the three macroregions, with Southern Italy being the least trustworthy (five sites in total). Three crops are found on 62.5-75% of the Central Italian sites: common wheat, barley and emmer. Other cereals are present, but less ubiquitously. The cereal triad aforementioned seems to be diffused in the south as well. Conversely, in Northern Italy common wheat and barley were indeed important cultivations but had to compete with other cereals including millet, sorghum, and rye. The latter had a significant increase, being present on almost 30% of the Northern sites (as opposed to the Roman 15%). The **Early Medieval age** seems to mark a shift in Italian agricultural practices, as cereal ubiquities are much more variable regionally. In Southern Italy, the triad of common wheat, barley and emmer were still the predominant cereals. These cereals are ubiquitous in Central and Northern Italy as well, although these regions adopt polyculture with a diversified number of cereals. The samples from the **Medieval age** are fewer in number since the upper boundary of this project's chronology is the 11^th^ c. Despite the short chronology, it is possible to make some considerations. Medieval Centraly Italy relied heavily on common wheat, barley and emmer, with other cereals increasingly important. Barley is the most ubiquitous cereal in Northern Italy in this period, followed by common wheat, millets and sorghum.
+It is noteworthy that during the Roman age, cereals were widely found both in Southern and Northern Italy, with some exceptions (namely einkorn, rye, oats, and proso millet) possibly due to the randomness of the sampling. It is unfortunate that only three sites in Roman Central Italy provided botanical samples, and their values have subsequently been omitted from the graph. The Roman Peasant Project [@bowesRomanPeasantProject2020] has investigated these sites in Tuscany and has found three types of cereal: free-threshing wheats, emmer wheat and barley. Comparable ubiquity figures in both northern and Southern Italy during the Roman age may imply similar production patterns throughout the Italian mainland, but more data is necessary. In the late Roman period, data on crop prevalence has been analysed for three macroregions, with southern Italy displaying the lowest reliability due to data being available for only five sites. The central Italian sites show that three crops - free-threshing wheats, barley, and emmer - are found on 62.5% of those areas. While other cereals are present, they are not as ubiquitous. The aforementioned cereal triad also shows diffusion in Southern Italy. Conversely, in the north of Italy, although free-threshing wheats and barley were important crops, they had to compete with other cereals such as millet, sorghum and rye. The latter crop witnessed a significant increase and was present in nearly 30% of the Northern sites (as opposed to the Roman 16%). The Early Medieval period appears to have marked a shift in Italian agricultural practices, leading to greater regional variability in cereal production. In Southern Italy, free-threshing wheats, barley, and emmer formed the main cereals during Medieval times. These cereals are also prevalent in Central and Northern Italy, although these regions practise polyculture with a diverse range of cereals. The small number of samples from this age is due to the project's chronological limit, which ends at the 11^th^ century. Despite the brevity of the chronology, we can still make certain observations. Central Italy during the Medieval period heavily relied on free-threshing wheats, barley, and emmer, whereas other cereals played a more minor role. Barley is the most prevalent cereal in Northern Italy during this period, succeeded by free-threshing wheats, millets, and sorghum.
 
 ```{r}
 #| echo: false
@@ -1115,7 +507,7 @@ Cereals_Ubiquity_MacroReg_Patchwork
 
 #### Legumes
 
-In the **Roman Age**, pulses are an important part of the diet and are cultivated both in Northern and Southern Italy. In the latter, vetch/broad beans are present in 22-32% of the samples, and lentils are present in 38% of the sites. In the **Late Roman Age**, broad beans are equally important in Central and Northern Italy, and peas are present in 50% of the Central Italian sites. In the **Early Medieval Age**, pulses are present in many Central Italian sites, especially blue/red peas, broad beans and other Fabaceae. Lentils and broad beans are also cultivated in almost half of the Northern Italian sites. The importance of pulses in Central Italy is confirmed by the **11^th^ c.** samples, where every specie is present in over 66% of the sites and Fabaceae and blue/red peas are found in every sample. Conversely, in Northern Italy broad bean is found in 66% of the sites.
+Pulses played an important role in the diet and were grown in both northern and southern Italy during the Roman Empire. In the latter, vetch and broad beans are present in 31% and 22% of the samples, respectively, while lentils are present in 40% of the sites. During the Late Roman Age, broad beans were equally significant in Central and Northern Italy, with peas present in 50% of the Central Italian sites. In the Early Medieval Age, pulses were present in many Central Italian sites, notably blue and red peas, broad beans, and other Fabaceae. Lentils and broad beans are also cultivated in nearly half of the Northern Italian sites. The significance of pulses in Central Italy is corroborated by the 11^th^ century samples, as each species is prevalent in over 50% of the sites and Fabaceae can be detected in every sample. Broad beans were also found in 66% of the Northern Italian sites.
 
 ```{r}
 #| echo: false
@@ -1128,9 +520,9 @@ Pulses_Ubiquity_MacroReg_Patchwork
 
 #### Fruits and nuts
 
-Olive and grape are two essential cultivations in the Italian peninsula. Olive pits, as can be expected, are more ubiquitous in Southern Italy, where in Roman times are present in \>87% of the sites and in over 58% of the sites in the following chronologies[^archaeobotany-1]. Conversely, grape is important in Central and Northern Italy in the Late Roman, Early Medieval and Medieval ages.
+Olive and grape are two major crops grown on the Italian peninsula. It is expected that olive pits are more prevalent in Southern Italy, where they existed in over 88% of sites during the Roman era and more than 58% of sites in later chronologies[^archaeobotany-2]. Grape plays a significant role in the Italian peninsula, exhibiting notably high ubiquity values in Roman Southern Italy and in Late Roman Central Italy. The results for other cultivated fruits are varied, possibly because these species are present in smaller quantities in the excavations, especially when these are aimed at specific storage structures. It may therefore be more advantageous to investigate trends in fruits and nuts as a combined column, as we will do in the Bayesian models.
 
-[^archaeobotany-1]: The Late Roman values for Southern Italy are only based on 5 samples (3 of which are from the same site, Salapia) so the values are not very trustworthy.
+[^archaeobotany-2]: The Late Roman values for Southern Italy rely solely on 5 samples, of which 3 are from the same site, Salapia [@fiorentinoDallaLagunaAll2022]. Thus, the values are not very reliable.
 
 ```{r}
 #| echo: false
@@ -1141,24 +533,22 @@ FrNuts_Ubiquity_MacroReg_Patchwork
 
 ```
 
-## Site richness and diversity by chronology {#sec-archaeobot-results-richness-diversity}
+## Site richness and diversity by chronology {#sec-archaeobot-results-richness-diversity style="text-align:justify;"}
 
-::: callout-tip
-Make sure to cite @nagendra2002 to explain why the indices show different results.
-:::
+Species richness is a measure used in ecology consisting simply in the counts of species found at a certain location. In archaeology, it can be informative for assessing how many different plants were found at a site. For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce more credible and comparable results. The graphs below show extended credible intervals for groups with fewer observations.
 
-Species richness is a measure used in ecology consisting simply in the counts of species found at a certain location. In archaeology, it can be informative for assessing how many different plants were found at a site. For the calculation, only sites that provided cereals, legumes, fruits and nuts have been used. Although this choice entails the loss of many observations, it was necessary in order to produce more credible and comparable results. The graph shows extended credible intervals for groups with fewer observations.
+The objective of the model was to determine the average plant diversity in each chronological sequence. A Poisson distribution was selected for the model as it is utilized when counts do not have a set upper limit (in contrast to a binomial distribution). The outcome variable is the richness ($R_{i}$) for each site ${i}$, calculated as follows
 
-The aim of the following model was to calculate the mean plant richness in each chronology. The distribution chosen for the model is a Poisson distribution, used when counts do not have a fixed upper boundary (as it is the case of a binomial distribution, for instance). The outcome variable is the richness ($R_{i}$) for each site ${i}$, calculated as follows
-
-$$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$ where $k$ is the total number of species in a site. The goal is then to model the mean richness $\lambda_{i}$. In addition to calculating four intercepts, one for each chronology $ChrID$, the regression also includes a varying slope for each observation ($\beta_{[Observations]}$). This will later be informative in quantifying on average how much the observations in each chronology deviate from the mean ($\alpha_{[ChrID]}$). The formula for the Poisson regression is as follows, where priors for the intercept and slope have been chosen to be weakly informative, so that the range of the possible $\lambda_{i}$ will remain in the outcome space.
+$$ R_{i} = \sum_{n=1}^{k} Species_{ni}$$ where $k$ represents the total number of species in a given site. The aim is to model the average richness $\lambda_{i}$. The regression involves computing four intercepts, one for each chronology $ChrID$, in addition to a varying slope for each observation ($\beta_{[Observations]}$). This will later help in quantifying the average deviation of the observations from the mean in each chronology ($\alpha_{[ChrID]}$). The Poisson regression formula is as follows, with weakly informative priors selected for the intercept and slope to ensure that the range of possible $\lambda_{i}$ values stays within the outcome space:
 
 $$R_{i} \sim Poisson({\lambda}_{i})$$
 
-$$log {\lambda}_{i} = \alpha_{[ChrID]} + \beta_{[Observations]}$$ $$\alpha_{[ChrID]} \sim Normal(3,0.5)$$ $$\beta_{[Observations]} \sim Normal(0,0.2)$$
+$$log {\lambda}_{i} = \alpha_{[ChrID]} + \beta_{[Observations]}$$ $$\alpha_{[ChrID]} \sim Normal(3,0.5)$$ $$\beta_{[Observations]} \sim Normal(0,0.2)$$ The results illustrate that, within the 0.50 credible interval, the predicted species richness during the Roman and Late Roman period is approximately 9-10 species, which increase up to 12 species during the early medieval period, and between 14.5-16.5 post the 11^th^ century; however, the credible interval is wider because of the scarce sample size. Despite their larger credible interval, even the most extreme values within the 0.99 credible interval have a minimum of 12 species, suggesting greater species richness during this period. When considering the varying effect, which illustrates the predicted deviations of each site from the mean (stratified by chronology), the samples from the 11^th^ century onwards exhibit greater variability. Conversely, the samples from the Roman and Late Roman periods appear to form a more cohesive set of sites in relation to the number of species present. The median deviation of each site from the mean is consistently below one species in all chronologies.
 
 ```{r}
 #| echo: false
+#| label: fig-prior-pred-sim-plant-richness
+#| fig-cap: "Prior predictive simulation for the Poisson model demonstrates the unlikelihood of obtaining more extreme values after crossing a certain threshold."
 
 plot(
   density(
@@ -1354,6 +744,8 @@ Plants_Diversity_Indices_by_Chronology_fit_a <- bind_rows(Plants_Diversity_Shann
 
 ```{r}
 #| echo: false
+#| label: fig-plant-richness-bayesian
+#| fig-cap: "The graph shows the predicted richness of plants in the four examined chronologies."
 
 Plants_Richness_by_Chronology_fit_a %>%
   ggplot(aes(
@@ -1401,6 +793,13 @@ Plants_Richness_by_Chronology_fit_a %>%
     ),
     axis.title.x.top = element_blank()
   )
+```
+
+```{r}
+#| echo: false
+#| label: fig-plant-richness-varying-effect
+#| fig-cap: "The graph illustrates the predicted deviations from the mean, stratified by chronology, and reveals that Roman and Late Roman samples exhibit a reduced variability regarding plant richness."
+
 
 Plants_Richness_by_Chronology_fit_b_Means %>%
   ggplot(aes(
@@ -1413,10 +812,9 @@ Plants_Richness_by_Chronology_fit_b_Means %>%
   scale_y_discrete(limits = rev) +
   scale_color_brewer(palette = "Greys", name = "Credible interval") +
   labs(
-    x = "B (Slope)",
+    x = "B (Varying effect)",
     y = "Chronology",
-    title = "Plant Richness - Varying effect",
-    caption = "Predicted deviations from the mean, plotted by chronology."
+    title = "Plant Richness - Varying effect"
   ) +
   theme_tidybayes() +
   theme(
@@ -1438,10 +836,13 @@ Plants_Richness_by_Chronology_fit_b_Means %>%
 
 ```
 
-In contrast to richness, diversity takes into account also each taxon's abundance. It is important to notice that in this dataset this figure can be particularly biased by samples that are extremely dominated by one taxon. For instance, if a sample was collected in a processing area or in a storage it is likely to see one taxon dominating the others. Although this was the reason for choosing to work with presence or absence data in this project, diversity indices are still provided for thoroughness' sake. In particular, two indices have been calculated---the Shannon equitability ($E_{H}$) and Simpson indices, both ranging from 0 (for complete unevenness) to 1 (maximum diversity). The ecology R package `vegan` contains functions to perform these calculations. As for the case of richness, only complete observations (containing cereals, pulses, and fruits/nuts) have been taken into account. After calculating both indices for each sample, these values have been modelled both using a beta distribution as follows $$ D_{i} \sim Beta(\mu_{i}, \phi_{i}) $$ $$logit(\mu_{i}) = a_{[ChrID]}$$ $$a_{[ChrID]} \sim Normal(0,1.5)$$ $$\phi_{i} \sim Exp(0.1)+2$$
+In contrast to taxon richness, taxon diversity considers the abundance of each taxon. It should be noted that in this dataset, this measurement can be skewed by samples where one taxon dominates to an extreme degree. For example, a sample collected from a processing or storage area is likely to exhibit one taxon that dominates the others. Although this was the reason for choosing to work with presence or absence data in this research, diversity indices are nonetheless provided for the sake of completeness. Specifically, we have computed two indices - Shannon equitability ($E_{H}$) and Simpson ($D$) - that range from 0 (complete inequality) to 1 (maximum diversity). These calculations can be performed using the `vegan` ecology R package functions. Only complete observations, consisting of cereals, pulses, and fruits/nuts, were considered for the calculation of richness indices. After computing both indices for each sample, these values were modelled using a beta distribution because it is bounded between 0 and 1. The resulting equation is as follows: $$ D_{i} \sim Beta(\mu_{i}, \phi_{i})$$ $$logit(\mu_{i}) = a_{[ChrID]}$$ $$a_{[ChrID]} \sim Normal(0,1.5)$$ $$\phi_{i} \sim Exp(0.1)+2$$
 
 ```{r}
 #| echo: false
+#| label: fig-prior-pred-sim-plant-diversity
+#| fig-cap: "Prior predictive simulation for the Beta model demonstrates that, without any data, any value between 0 and 1 is possible."
+
 plot(
   density(
   rbeta2(1000, 
@@ -1455,11 +856,12 @@ col=rangi2, xlim=c(0,1)
 
 ```
 
-The graph shows extended credible intervals for groups (chronologies) with fewer observations. In particular, the Shannon equitability index showed higher variability in the 11^th^ century. Consequently, its credible range is very wide.
+Both indices have a range of values from 0 to 1, but they differ in their calculation methods [@nagendra2002]. Therefore, direct comparisons between the values of $E_{H}$ and $D$ should not be made, even when displayed in the same figure. Rather, the relative trends within each index should be considered. Although the credible intervals differ (larger for the Simpson index due to increased variability between samples), the trends in diversity across chronological groups remain similar. During the Roman period, there was a lower diversity phase, followed by a slight increase in diversity in the Late Roman period and a subsequent decrease in the early medieval period. However, diversity then increased once more in the post-11^th^ century samples. Nonetheless, the credible interval for this group is considerable and thus the results must be interpreted with caution.
 
 ```{r}
 #| echo: false
-
+#| label: fig-plant-diversity-bayesian
+#| fig-cap: "The graph shows the predicted diversity of plants in the four examined chronologies."
 
 Plants_Diversity_Indices_by_Chronology_fit_a %>%
   ggplot(aes(
@@ -1513,21 +915,48 @@ Plants_Diversity_Indices_by_Chronology_fit_a %>%
 
 ```
 
-
-
 ## Context type {#sec-archaeobot-results-context-type style="text-align:justify"}
 
-::: callout-note
-Important: This section has to be rewritten as now the approach is not frequentist anymore.
-:::
+After examining the principal chronological trends for plants' distribution during the first millennium, we may add another factor to our inquiry, namely site type. We can expect dissimilar plants in a funerary context than in an urban site. Stratification of the dataset by site type is possible, but there is a challenge: the four chronologies we are studying also affect the availability, frequency and economic dynamics of site types. For example, the agricultural strategies employed by rural villas during the Roman and Late Roman periods could differ based on political and economic events, which could affect the presence of certain taxa. We begin by drawing a directed acyclic graph (DAG), which illustrates how the `Chronology` node functions as the parent node of `Site_Type`, and it affects the `Plant_Present` value directly and indirectly through `Site_Type`. To account for this backdoor path, we block by `Chronology` and stratify the dataset by `Site_Type`. Since we have two categorical predictors of interest, an interaction index variable can be utilised to create separate intercepts for each chronology and context type. For instance, the `Roman:Rural` context type could be assigned an index of 1, while `Roman:Urban` could be assigned an index of 2, and so on. This interaction dummy index (${[TCid]}$) will determine the variation in intercepts ($\alpha$) across different context types. This is described in @sec-building-bayesian-models.
 
-It is possible to examine the distribution of plants across different site types during the four phases under examination. During the Roman period, wheat and barley were most prevalent on rural and religious sites, in the latter being used as part of ritual offerings. Minor grains were widely distributed on religious and urban sites, with rural sites and villas also showing high percentages. Legumes were also used in religious offerings but were found on both urban and rural sites. Grapes were ubiquitous across all Roman sites, with particularly high percentages in urban contexts and being extensively cultivated in large Roman estates. Olives had lower percentages, as they cannot be grown in Northern Italy, where most of the samples were collected. However, they were still widely distributed across all contexts, with peak percentages in urban and religious sites. In the Late Roman period, olive presence significantly decreased in urban sites and villas, but remained relatively unchanged in rural contexts. Similarly to olives, grape decrease in the same contexts, but slightly increase in rural sites. In addition to rural sites, grapes are also diffused in over 66% of the fortified sites (*castra*) that start to appear in this period. It is noteworthy that fortified sites from the Late Roman period exhibit high percentages of both minor and noble grains, possibly being stocked with the addition of pulses such as faba beans and vetch. In the EMA phase, noble/minor grains and pulses are still present in almost any fortified sites, a situation that is similar to the one in rural sites. In rural sites however minor grains (40%) and pulses (32%) are less ubiquitous in this period, although this figure might suffer from sites that only published cereal remains. Grapes are present in every religious/funerary context, followed by fortified (71%) and rural sites (66%). If olive cultivation seem to decrease in this phase, it might be because most of the sites with archaeobotanical remains are located in Northern Italy. Olives are present in 50% of the religious sites and on 36% of villa sites. Olives are absent from fortified sites in all phases, probably as a reflection of the northern location of these sites. Both rural and urban sites increase the consumption of berries in this period (13-14% ca.), which are also used for funerary offerings (14%).
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(dagitty)
+library(ggdag)
+```
 
-::: callout-note
-Important: The new section will start from here.
-:::
+```{r}
+#| echo: false
+#| label: fig-site-type-dag-plants
+#| fig-cap: "This is a Directed Acyclic Graph (DAG) that represents the relationship between Chronology, Site_Type, and plant presence in the study. Chronology is shown as a collider variable, and its influence on plant presence is mediated through Site_Type. To block the backdoor path between Chronology and plant presence, the dataset is stratified by Chronology."
 
-To estimate the probability of occurrence of one (or more) taxa in each chronology and context, I used a Binomial distribution. The $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. For instance, in the case of 'Noble Grains', the model is trying to assess the probability that common wheat and barley will be on a site type in a certain chronology. The $T$ value for noble grains will then be 2. The outcome variable $F$ indicates the number of types of noble grains found on a particular site $i$, and it can have values ranging from 0 (no noble grains found) to 2 (the site has both barley and common wheat). Although this is not the common way to use a binomial distribution, it was a necessary adjustment as I am working with presence/absence data. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[TCid]}$ as the model will provide estimates for each context type and chronology under examination.
+DAG_site_type <- dagitty('dag {
+Plant_Present [outcome]
+Chronology [collider,dagitty.stratum="1"]
+Site_Type [exposure,dagitty.stratum="2"]
+Chronology -> Plant_Present
+Chronology -> Site_Type
+Site_Type -> Plant_Present
+}')
+
+DAG_site_type <- tidy_dagitty(DAG_site_type)
+
+ggdag_paths(DAG_site_type, 
+      text = FALSE, 
+      use_labels = "name", 
+      shadow = TRUE) +
+  theme_dag(base_size = 14)+
+  theme(legend.position = "none", strip.text = element_blank())+
+  scale_color_manual(values = "#0072B2", na.value = "grey80") + 
+  scale_fill_manual(values = "#0072B2", na.value = "grey80")+
+   ggraph::scale_edge_color_manual(values = "#0072B2", na.value = "grey80")
+
+
+```
+
+To assess the probability of the presence of a single or multiple taxa in each chronology and context, we opted to utilise a Binomial distribution. The $F$ (an abbreviation for the term 'found') outlined on the left-hand side of the formula denotes the outcome variable - an indicator of presence/absence for the observation $i$. If there is only one taxon, this value can either be 0 (absent) or 1 (present), with $T$ equalling 1. This effectively makes the Binomial distribution equivalent to a Bernoulli distribution. If the model includes more than one taxon, $T$ represents the total number of taxa being modelled. For example, in the case of free-threshing wheats and barley, the model aims to evaluate the likelihood of these grains being present at a specific site type within a certain chronology. In this instance, the value of $T$ for 'noble' grains is 2. The outcome variable $F$ denotes the quantity of different 'noble' grains discovered on a specific site $i$, with values ranging from 0 (no grains located) to 2 (the site contains both barley and free-threshing wheats). While it deviates from typical binomial distribution usage, this modification was essential because this study is handling presence/absence statistics. The presented model is an intercept-only one, where the intercept $\alpha$ holds an interaction index ${[TCid]}$. The model produces estimates for each context type and chronology under investigation.
 
 $$
 F_{i} \sim Binomial(T, \bar{p}_{i} )
@@ -1539,8 +968,7 @@ $$
 
 $$
 \alpha_{[TCid]} \sim Normal(0,1.5)
-$$ 
-The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
+$$ The rationale behind choosing a normally distributed prior for the intercept $a$ is that it is weakly informative. Below, a simulation of the intercept prior.
 
 ```{r}
 #| echo: false
@@ -1686,7 +1114,7 @@ noblegrains_by_type <- ggplot(data=Ubiquity_All_Chrono_Type,
         theme(legend.position="top") +
         scale_fill_grey() +
         labs(
-          title = "Noble Grains",
+          title = "Free-threshing wheats and barley",
           x= "",
           y = "%",
         fill="Chronology"
@@ -1884,8 +1312,7 @@ Noble_Grains_Reg[,c(1,4,5,6)] <- lapply(Noble_Grains_Reg[,c(1,4,5,6)], factor)
 ```
 
 ```{r}
-#| echo: true
-#| code-fold: true
+#| echo: false
 #| eval: true
 #| message: false
 #| output: false
@@ -1951,7 +1378,7 @@ Legumes <- with(
   Macroregion = name_macroreg,
   Site_Type = as.factor(Type),
   Geo = Geo,
-  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(21,27)]) # Excludes Unsp. Pulses
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(21:27)]) # Excludes Unsp. Pulses
   )
 )
 
@@ -2042,7 +1469,7 @@ Nuts <- with(
   Macroregion = name_macroreg,
   Site_Type = as.factor(Type),
   Geo = Geo,
-  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(29,31)])
+  Seed_Count = rowSums(Df_Cond_Plants.pa[,c(29:31)])
   )
 )
 
@@ -2066,7 +1493,7 @@ Nuts.list$TC_ID <- droplevels(Nuts.list$TC_ID)
 ```
 
 ```{r}
-#| echo: true
+#| echo: false
 #| code-fold: true
 #| eval: false
 # Eval is set to false because the models have been saved
@@ -2232,7 +1659,7 @@ m_ng_type.plot <- ggplot(
   ) +
   facet_grid(Type ~ ., scales = "free") +
   labs(
-    title = "Noble Grains",
+    title = "Free-Threshing Wheats and Barley",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2317,7 +1744,8 @@ m_mg_type.plot <- ggplot(
   ) +
   facet_grid(Type ~ ., scales = "free") +
   labs(
-    title = "Minor Grains",
+    title = "'Minor' Grains",
+    subtitle = "Einkorn, Oats, Rye, Proso Millet, Foxtail Millet, Sorghum, and Emmer",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2401,6 +1829,7 @@ m_leg_type.plot <- ggplot(
   facet_grid(Type ~ ., scales = "free") +
   labs(
     title = "Legumes",
+    subtitle = "Lentil, Pea, Blue/Red Pea, Chickpea, and Vetches",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2652,6 +2081,7 @@ m_nuts_type.plot <- ggplot(
   facet_grid(Type ~ ., scales = "free") +
   labs(
     title = "Nuts",
+    subtitle = "Hazelnut, Walnut, and Chestnut",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2828,6 +2258,7 @@ m_dfruit_type.plot <- ggplot(
   facet_grid(Type ~ ., scales = "free") +
   labs(
     title = "Domestic Fruits",
+    subtitle = "Apple, Fig, Melon, Peach, Pear, Plum, and Date",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2905,6 +2336,7 @@ m_berries_type.plot <- ggplot(
   facet_grid(Type ~ ., scales = "free") +
   labs(
     title = "Berries",
+    subtitle="Sour Cherry, Cornelian Cherry, Rowan, Wild Cherries, Elderberry, Blackthorn, Blackberry,\n and Strawberry",
     x = "Probability",
     y = "Chronology",
     color = "Credible interval",
@@ -2912,6 +2344,8 @@ m_berries_type.plot <- ggplot(
   )
 
 ```
+
+During the Roman period, free-threshing wheats and barley were primarily found on rural sites, where the predicted probability of occurrence (with a credible interval of 0.50) ranged between 0.68-0.78. The trend is positive, with an increase in predicted occurrence in later chronological phases. There is also an increasing tendency, although to a lesser extent, for urban sites and villas (at least until this type of settlement was abandoned). One site type consistently shows a strong presence of these grains from the Late Roman to the Medieval period: fortified sites (castra). Indeed, fortified settlements also exhibit a substantial presence of other types of cereal grains, including emmer, einkorn, and millets. If the average expected occurrence of more rustic grains throughout each chronology and type of site is approximately 0.31, in fortified sites, the average is about 0.65 during the Late Roman and Medieval eras and 0.59 during the Early Medieval period. In rural sites, too, minor grains increase from the Roman to the Early Medieval period, reaching a peak of 0.43 in the Medieval period and falling to 0.30 (but with a considerable credible interval) in the latest period after the 11^th^ century. This pattern is also evident in urban and villa sites, which exhibit acceptably narrow credible intervals. However, credible intervals for religious sites, despite showing promising results, are too wide due to their small group sizes. Regarding legumes, reliable conclusions can be drawn for most site types up until the 11th century. However, the length of credible intervals for religious sites makes any major informative conclusion uncertain for this site type. Legumes appear to always be a part of the rural landscape, found in both rural sites where pulses were particularly present during the early medieval (HDI = 0.30-0.34) and medieval (HDI = 0.25-0.34) periods, as well as in rural villas. In fact, during the Early Medieval Period, probabilities increased in villas as well, with an HDI of 0.16-0.22. This trend is mirrored in urban sites as well. While probabilities during the Roman age hover below the mean of 0.25, the early Middle Ages witness a rise with an HDI of 0.25-0.30, reaching a peak in the later phase with an HDI of 0.28-0.37. This signals a notable uptick in the significance of pulses in the diet and farming. If the mean estimate of legume occurrence is consistently around 0.15 within necropoleis from the Roman to the early medieval period, then it is notable that legumes were important offerings at religious sites. During the Roman period, their significance ranged between 0.30-0.40, whereas in the early medieval period it was between 0.30-0.45. Regrettably, this group is relatively limited, and further observations are required from religious sites, as there were no late Roman samples, and the medieval samples show excessively wide credible intervals. While fortified sites display a wide credible interval in each phase, which may suggest considerable variability within the data, their 0.50 credible interval greatly surpasses the overall mean. During the Late Roman period, the HDI fluctuates between 0.59-0.73. In the Early Medieval period, the HDI is marginally lower, ranging between 0.55-0.64, before increasing again in the 11th century samples, where it ranges between 0.64-0.76. For what concerns the two primary cash crops, grapes and olives, it is challenging to draw conclusions with regards to site type and chronology as predictors. This is due to the small group sizes and variability between sites, which result in particularly broad credible intervals. In general, there are indications of a decrease in grape cultivation in both urban and rural areas. In the rural setting, however, the trend is fluctuating, with a positive turn in the late Roman era and a new decline in the early Middle Ages. With such wide credible intervals covering a significant portion of the probability space, it is probable that the data was unable to overcome the prior, leading to high uncertainty. Further data or a more informative prior (although this may introduce subjectivity) may be necessary. The olive plots have narrowed the credible intervals range slightly. During the Roman period, olives were frequently present in urban sites with a range of 0.63-0.72 (credible interval = 0.50) and religious sites with a highest density interval (HDI) ranging between 0.61 and 0.81. In rural sites, olives were also prevalent, with an estimated mean of around 0.50 in the Roman period and 0.52 in the Late Roman period. However, in later periods, there was a sharp decline in olive production. This decline commences in the Late Roman period for both urban and rural villa sites, though the latter does experience a renewed positive HDI in the early medieval period. Generally, the average occurrence of grapes (although with all the limitations imposed by such large credible intervals) is higher than that of olives. This may be attributed to numerous samples in the database coming from Northern Italy, which is less suitable for olive cultivation. The credible interval ranges for the models of nuts, i.e. hazelnuts, walnuts and chestnuts, are narrower and more informative compared to those of the grape/olives models. This implies that there is less variability in the dataset available for this category. During the Roman period, the highest HDIs for nuts are found in religious sites, necropoleis, and rural villas. However, the credible intervals for these categories are large. The estimated mean HDI for urban sites during this period is approximately 0.35, while for rural sites, it is around 0.22. During all the subsequent periods, the mean predicted occurrence remains below the overall mean of 0.31 for both types of locations, with a potential downward trend for urban sites. The group that exhibits the most significant decline is rural villas, which decreased from an average Roman estimate of 0.45 to an average of 0.09 in the early medieval era. Villas show a similar decrease in the frequency of domestic fruits (apple, fig, melon, peach, pear, plum, date), but with credible intervals of considerable size. During the Roman era, fruits were abundant in urban locations, becoming less prevalent in subsequent periods, only to rise again in samples after the 11^th^ century. Funerary sites also exhibit high HDI averages for domestic fruits (0.23 in the Roman period and 0.28 in the late Roman period). In contrast, there is a gradual rise in the occurrence of cultivated fruits in rural areas between the Roman and Medieval eras. In addition to larger fruits, our model encompasses the consumption of different types of berries such as sour cherry, cornelian cherry, rowan, wild cherries, elderberry, blackthorn, blackberry, and strawberry. It appears that the presence of berries was ubiquitous, albeit in minor quantities. Upon closer inspection of contexts with more reliable credible intervals, a positive trend is observable in rural sites from the Roman to the Medieval era. While urban sites exhibit fluctuations, they appear to have a higher consumption of berries, with HDI values exceeding the overall mean. The trend in rural villas is less pronounced: during the Roman period there is a substantial variability that resulted in a larger credible interval, whereas the late Roman period's average is around the overall mean of 0.10. Afterwards, the average drops to 0.04. For the Roman and Late Roman period, estimated averages of 0.04 and 0.07 are identified in necropoleis, respectively.
 
 ```{r}
 #| echo: false
@@ -2942,7 +2376,7 @@ m_berries_type.plot
 
 ```
 
-### Richness and diversity
+### Species richness in urban contexts
 
 ```{r}
 #| echo: false
@@ -3029,407 +2463,9 @@ IncompleteSamplesIndexes.Ma <- which(rowSums(CompleteSamples.Ma) < 3)
 ## END OF CORRECTION FOR INCOMPLETE SAMPLES #
 #############################################
 
-plot_RichnessType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, 
-                              aes(x = Type, y = Specnumber, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.R$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha = 0.3) +
-  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n = 12)", "Villa \n (n = 4)", "Urban \n (n = 44)")) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Number of species per site",
-       title = "R - Plant Richness")
-
-plot_DiversityType.R <- ggplot(Df_Cond_Plants_RichnDiv.R, aes(x = Type, y = Shannon.Div, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.R$Shannon.Div),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Necropolis \n (n = 13)", "Religious \n (n = 3)", "Rural \n (n=12)", "Villa \n (n=4)", "Urban \n (n=44)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Site diversity",
-       title = "R - Shannon diversity")
-
-plot_RichnessType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Specnumber, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.LR$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Number of species per site",
-       title = "LR - Plant richness")
-
-plot_DiversityType.LR <- ggplot(Df_Cond_Plants_RichnDiv.LR, aes(x = Type, y = Shannon.Div, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.LR$Shannon.Div),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n=3)", "Necropolis \n (n = 10)", "Rural \n (n=14)", "Villa \n (n=11)", "Urban \n (n=24)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Site diversity",
-       title = "LR - Shannon diversity")
-
-plot_RichnessType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Specnumber, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.EMA$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Number of species per site",
-       title = "EMA - Plant richness")
-
-plot_DiversityType.EMA <- ggplot(Df_Cond_Plants_RichnDiv.EMA, aes(x = Type, y = Shannon.Div, fill = Type)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.EMA$Shannon.Div),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n = 7)", "Necropolis \n (n = 1)", "Religious \n (n=2)", "Rural \n (n=18)", "Villa \n (n=11)", "Urban \n (n=25)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Site diversity",
-       title = "EMA - Shannon Diversity")
-
-plot_RichnessType.Ma <- ggplot(Df_Cond_Plants_RichnDiv.Ma, aes(x = Type, y = Specnumber, fill = Type)) +
-  geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.Ma$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n = 3)", "Religious \n (n=1)", "Rural \n (n=6)", "Urban \n (n=8)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Number of species per site",
-       title = "Ma - Plant richness")
-
-plot_DiversityType.Ma <- ggplot(Df_Cond_Plants_RichnDiv.Ma, aes(x = Type, y = Shannon.Div, fill = Type)) +
-  geom_hline(
-    yintercept = mean(Df_Cond_Plants_RichnDiv.Ma$Shannon.Div),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Fortified \n (n = 3)", "Religious \n (n=1)", "Rural \n (n=6)", "Urban \n (n=8)" )) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Site type",
-       y = "Site diversity",
-       title = "Ma - Shannon Diversity")
-
 ```
 
-```{r}
-#| echo: false
-#| eval: false
-
-# Check mean of plant richness
-# [RICHNESS] Urban Roman: 6.5 | Urban LR: 5.9 | Urban EMA: 7.2 | Urban Ma: 9
-# [CORRECTED RICHNESS]: UrbR: 8.45 | UrbLR: 7.2 | UrbEMA: 9.625 | UrbMa: 17.5
-# [DIVERSITY] Urban Roman: 1.02 | Urban LR: 1.20 | Urban EMA: 1.45 |Urban Ma: 1.39
-
-mean((filter(Df_Cond_Plants_RichnDiv.R, Type=="Urban"))$Specnumber)
-mean((filter(Df_Cond_Plants_RichnDiv.R[-IncompleteSamplesIndexes.R,], Type=="Urban"))$Specnumber)
-mean((filter(Df_Cond_Plants_RichnDiv.LR, Type=="Urban"))$Specnumber)
-mean((filter(Df_Cond_Plants_RichnDiv.LR[-IncompleteSamplesIndexes.LR,], Type=="Urban"))$Specnumber)
-mean((filter(Df_Cond_Plants_RichnDiv.EMA, Type=="Urban"))$Shannon.Div)
-mean((filter(Df_Cond_Plants_RichnDiv.EMA[-IncompleteSamplesIndexes.EMA,], Type=="Urban"))$Shannon.Div)
-mean((filter(Df_Cond_Plants_RichnDiv.Ma, Type=="Urban"))$Specnumb)
-mean((filter(Df_Cond_Plants_RichnDiv.Ma[-IncompleteSamplesIndexes.Ma,], Type=="Urban"))$Specnumber)
-
-
-```
-
-```{r}
-#| echo: false
-#| warning: false
-#| layout: "[[100,100], [100,100]], [100,100]"
-#| label: fig-type-richness-div
-#| fig-cap: "Boxplots of plant richness and diversity in different site types. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
-#| fig-subcap: 
-#|   - "Roman plant richness" 
-#|   - "Roman plant diversity."
-#|   - "Late Roman plant richness" 
-#|   - "Late Roman plant diversity."
-#|   - "Early medieval plant richness" 
-#|   - "Early medieval plant diversity."
-#|   - "Medieval (11th c.) plant richness" 
-#|   - "Medieval (11th c.) plant diversity."
-#| fig-height: 4
-#| fig-width: 6
-#| fig-dpi: 600
-
-plot_RichnessType.R
-plot_DiversityType.R
-plot_RichnessType.LR
-plot_DiversityType.LR
-plot_RichnessType.EMA
-plot_DiversityType.EMA
-plot_RichnessType.Ma
-plot_DiversityType.Ma
-
-```
-
-#### Richness in urban contexts
-
-The richness of plants in urban contexts has been calculated for every phase. As not every sample reported cereals, fruits/nuts and legumes, a correction has also been applied to exclude contexts that did not report the three types of plant taxa under examination. This correction has however strong disadvantages as it removes sites where the absence of certain plant categories may have been deliberate (*e.g.*, storages). However, if the figures vary considerably (especially in the case of the 11^th^ century CE which only consists of 2 samples after the correction), the general trend is similar after the correction. Plant richness in urban contexts slightly decreases after the Roman age, but early medieval cities are richer in plants when compared to the Roman and Late Roman phases. In the 11th century, plant richness increases further. These values will be discussed in the results chapter.
+In addition to examining the predicted occurrence of particular plant species within the selected contextual classifications, we found it instructive to examine plant richness. Yet, as previously stated in this chapter, subsetting data based on site type results in very narrow groups that provide unreliable information. Of all the context categories, urban sites displayed the greatest frequency of sites for every chronology analysed. For this reason, and because of our specific interest in the urban garden phenomenon, we calculated the richness of plants in urban settings for each stage. To ensure accuracy, we excluded contexts that did not report all three types of plant taxa under examination - namely cereals, fruits/nuts, and legumes. This correction carries significant drawbacks because it eliminates sites where the exclusion of certain plant categories may have been intentional (such as storages). However, despite considerable fluctuations in the numbers (particularly for the 11^th^ century CE, which comprises only two samples after the correction), the overall trend remains similar to the previous one. Plant richness slightly decreases in urban contexts after the Roman period; however, early medieval cities exhibit a higher plant richness than the Roman and Late Roman phases. In the 11^th^ century, plant richness increases even further.
 
 | Chronology | Richness | Samples | Richness\* | Samples\* |
 |------------|----------|---------|------------|-----------|
@@ -3440,13 +2476,46 @@ The richness of plants in urban contexts has been calculated for every phase. As
 
 : Plant richness in urban contexts before and after (**\***) removing incomplete samples. {#tbl-richness-urban}
 
-## Macroregion {style="text-align: justify;"}
+## Macroregion {#sec-bot-res-macroregion style="text-align: justify;"}
 
 ### Cereals
 
-#### Noble grains
+The central focus of this chapter revolves around cereals, given their pivotal economic importance during the first millennium CE. The exploration begins with two Bayesian models that vividly depict the estimated occurrence of free-threshing wheats, barley, and other more rustic grains across each chronological phase under consideration. Moving forward, our attention shifts to the richness of cereals within each sub-region. We delve into an examination of the distances between the northern and southern Italian cereal datasets during the Early Middle Ages, presented as a compelling case study. Unlike the Bayesian models, this case study employs a frequentist approach, allowing for a comparative analysis of results obtained through distinct methodologies and perspectives. As we unravel the findings, it becomes evident that both the Bayesian models and the frequentist approach converge on the same conclusions. Despite their differing methodologies and analytical angles, the unified outcomes contribute to a comprehensive understanding of the dynamics surrounding cereal cultivation in Northern and Southern Italy during the Early Middle Ages.
 
-The model for the diachronic probability of occurrence of plant taxa in the Italian macroregions follows the same strategy employed for the context type models. The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+#### Free-threshing wheats and barley
+
+In addition to considering chronological and context type models, another important variable that has been examined in this study is `Macroregion`. This allows us to divide the Italian peninsula into three regions (Southern, Central, and Northern) and investigate more specific geographic questions. Due to the limited amount of data available, it is not however feasible to build on the previous model and incorporate this variable into the analysis. Additionally, including three categorical predictors would make it difficult to interpret the results. To account for the influence of `Macroregion`, we can stratify the dataset by Southern, Central, and Northern Italy, similar to how we stratified by `Site_Type`. It is important to also consider chronological stratification as different dynamics were occurring in the areas under observation. Therefore, we can block by `Chronology` and stratify by `Macroregion` to investigate the influence of geographic location on animal husbandry and consumption patterns.
+
+```{r}
+#| echo: false
+#| label: fig-macroregion-dag-plants
+#| fig-cap: "The DAG that represents the relationship between Chronology, Macroregion, and the presence of plants in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Macroregion. To block the backdoor path between Chronology and Plant_Present, the dataset is stratified by Chronology."
+
+DAG_macroregion <- dagitty('dag {
+Plant_Present [outcome]
+Chronology [collider,dagitty.stratum="1"]
+Macroregion [exposure,dagitty.stratum="2"]
+Chronology -> Plant_Present
+Chronology -> Macroregion
+Macroregion -> Plant_Present
+}')
+
+DAG_macroregion <- tidy_dagitty(DAG_macroregion)
+
+ggdag_paths(DAG_macroregion, 
+      text = FALSE, 
+      use_labels = "name", 
+      shadow = TRUE) +
+  theme_dag(base_size = 14)+
+  theme(legend.position = "none", strip.text = element_blank())+
+  scale_color_manual(values = "#0072B2", na.value = "grey80") + 
+  scale_fill_manual(values = "#0072B2", na.value = "grey80")+
+   ggraph::scale_edge_color_manual(values = "#0072B2", na.value = "grey80")
+
+
+```
+
+The chosen distribution is a Binomial where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. In the case of a single taxon, the value can either be 0 (for absence) or 1 (for presence) and the $T$ is 1, making the Binomial distribution effectively a Bernoulli distribution. If the model is for more than a single taxon, the $T$ is the total number of taxa that are being modelled. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each macroregion and chronology under examination. For instance, Roman: Southern Italy is labelled as 1, Roman: Central Italy as 2, and so forth.
 
 $$
 F_{i} \sim Binomial(T, \bar{p}_{i} )
@@ -3458,7 +2527,7 @@ $$
 
 $$
 \alpha_{[REGid]} \sim Normal(0,1.5)
-$$
+$$ While this category is of particular importance, the interpretation of the results of this model is problematic and immediately reveals the group imbalances. The credible intervals for Northern Italy are narrow and informative, considering the usage of a weakly informative prior. On the other hand, the range of estimates for Southern and Central Italy requires careful consideration. Nonetheless, it is still possible to draw conclusions by analysing the regions of the graphs where the majority of the probability estimates are located. During the Roman period, the mean estimated probabilities of discovering free-threshing wheats and barley was similar in all three sub-regions (SI = 0.48, CI = 0.50, NI = 0.46), although the credible interval for Central Italy is quite large requiring additional archaeobotanical data to increase specificity. In the Late Roman period, the credible intervals are quite large both for Southern Italy (where the 0.50 probability region ranges between 0.38 and 0.52) and Central Italy (where the 0.50 probability region ranges between 0.53 and 0.69). Conversely, the 0.50 credible interval for Northern Italy is between 0.55 and 0.62. During the early medieval period, there was a marked increase in estimates across all three regions. Central Italy had the highest peak, ranging from 0.91 to 0.97, while Northern Italy reached 0.78 to 0.84, and Southern Italy attained 0.67 to 0.77. The smaller post-11^th^ century dataset yields broad credible intervals, suggesting a possible positive growth in Southern Italy, while mean estimates for Central and Northern Italy reflect a minor decrease.
 
 ```{r}
 #| echo: false
@@ -3564,7 +2633,7 @@ m_ng_reg.plot <- ggplot(
   ) +
   facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
   labs(
-    title = "Noble Grains",
+    title = "Free-Threshing Wheats and Barley",
     subtitle = "Macroregional distribution",
     x = "Probability",
     y = "Chronology",
@@ -3577,14 +2646,14 @@ m_ng_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-ng-macroregion
-#| fig-cap: "Bayesian probability estimates for noble grains (common wheat and barley), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for free-threshing wheats and barley, divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_ng_reg.plot
 ```
 
-#### Minor grains
+#### 'Minor' grains
 
-The model for minor grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on minor grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only minor grain found among other cereals in a context. Modelling the presence of more minor grains in a site can give insights on the rural economy. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each context type and chronology under examination.
+The model for 'minor' grains in the Italian macroregion uses a Binomial distribution where $F$ (short for 'found') on the left side of the formula is the outcome variable---a presence/absence indicator for the observation $i$. As there are seven types of minor grains under investigation, the binomial will take 7 as maximum ($T$). This model effectively shows the probability of a single site to be reliant on more rustic grains. Emmer for instance, is ubiquitous in Italy, but in many cases it is the only hulled grain found among other cereals in a context. Modelling the presence of more grains in a site can give insights on the rural economy. The model presented below is an intercept-only model, where the intercept $\alpha$ carries an interaction index ${[REGid]}$ as the model will provide estimates for each macroregion and chronology under examination.
 
 $$
 F_{i} \sim Binomial(7, \bar{p}_{i} )
@@ -3596,7 +2665,7 @@ $$
 
 $$
 \alpha_{[REGid]} \sim Normal(0,1.5)
-$$
+$$ After examining the posterior distribution, the credible intervals reveal a striking coherence in the dataset, marked by a lack of excessive dispersion. However, Central Italy deviates as the group sizes are small, which leads to larger credible intervals. Divergent patterns among Italian sub-regions can already be observed in the Roman age. In Southern Italy, the 0.50 HDI is confined within the tight range of 0.18 to 0.21. Contrastingly, Central Italy showcases a broader span from 0.07 to 0.13, while the North falls within the range of 0.22 to 0.24. Notably, the North boasts a notably short credible interval, hinting at consistency and a substantial volume of observations. As we transition into the Late Roman period, divergent trends emerge. Southern Italy maintains a modest range of 0.08-0.12, whereas Central Italy experiences a higher amplitude from 0.17 to 0.23. The North exhibits a shift towards 'minor' grains, reflected in an expanded interval of 0.31-0.35. Come the Early Middle Ages, both Central and Northern Italy surpass the overall mean of 0.23, with HDIs ranging impressively between 0.46-0.54 and 0.44-0.48, respectively. A growing disparity between these regions and Southern Italy becomes evident, where the HDI hovers between 0.13-0.17. Despite the broad credible intervals for post-11^th^-century samples, the estimated means consistently uphold the preceding trends, albeit with a subtle downward tendency.
 
 ```{r}
 #| echo: false
@@ -3702,7 +2771,7 @@ m_mg_reg.plot <- ggplot(
   ) +
   facet_grid(factor(Region, levels=c("SI", "CI", "NI")) ~ ., scales = "free") +
   labs(
-    title = "Minor Grains",
+    title = "'Minor' Grains",
     subtitle = "Macroregional distribution",
     x = "Probability",
     y = "Chronology",
@@ -3715,17 +2784,14 @@ m_mg_reg.plot <- ggplot(
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-mg-macroregion
-#| fig-cap: "Bayesian probability estimates for minor grains (Emmer, Einkorn, Foxtail and Broomcorn millets, Sorghum), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
+#| fig-cap: "Bayesian probability estimates for 'minor' grains (emmer, einkorn, foxtail and broomcorn millets, Sorghum), divided by macroregion and chronology.\nThe prediction estimates are produced with a GLM and weakly informative priors. Credible intervals are provided."
 
 m_mg_reg.plot
 ```
 
-#### Richness and diversity {#sec-richness-diversity-macroregions style="text-align:justify;"}
+#### Cereal richness in the Italian macroregions {#sec-richness-macroregions style="text-align:justify;"}
 
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-The pre processing part should go here
-:::
+In @sec-case-study-richness-cereals-macroreg, detailed insights into the pre-processing of archaeobotanical data were provided, aiming to enhance the accuracy of cereal richness estimates across the three distinct Italian sub-regions. The original group sizes before this pre-processing are illustrated in @tbl-Sample-Sizes-original, while @tbl-Sample-Sizes displays the reduced number of samples following the data processing steps. For a more granular view of the impact of data processing, @tbl-Sample-Sizes-Seeds presents the effective count of caryopses per group, with the mean richness conveniently summarised in @tbl-Sample-Richness. Examining cereal presence values reveals similarities between Roman Northern and Southern Italian sites. Notably, Central Italy reports higher values, albeit caution is warranted as this observation relies on data from only three sites, rendering it less reliable. Transitioning to the Early Middle Ages, Central Italy emerges once again as the region richest in cereals, closely trailed by Northern Italy. A fascinating observation is the enduring similarity in cereal values in Southern Italy, which remain remarkably close to those recorded in the Roman age. For a comprehensive listing of Southern Italian Early Middle Ages sites, refer to @tbl-southern-ema-sites.
 
 ```{r}
 #| echo: false
@@ -3839,7 +2905,6 @@ Sample_Sizes_Seeds_Effective$Chronology = c("Roman", "Late Roman", "Early Mediev
 
 ```
 
-
 ```{r}
 #| echo: false
 #| label: tbl-Sample-Sizes-original
@@ -3861,11 +2926,12 @@ kable(Sample_Sizes) %>% kable_minimal()
 ```{r}
 #| echo: false
 #| label: tbl-Sample-Sizes-Seeds
-#| tbl-cap: "Effective seed count for each chronology and macroregion. Some samples with very large outliers (e.g. Sirmione, via Antiche Mura) skew the distribution."
+#| tbl-cap: "Effective cereal caryopses count for each chronology and macroregion. Some samples with very large outliers (e.g. Sirmione, via Antiche Mura) skew the distribution."
 
 kable(Sample_Sizes_Seeds_Effective, digits = 0) %>% kable_minimal()
 
 ```
+
 ```{r}
 #| echo: false
 #| output: false
@@ -3885,187 +2951,15 @@ Sample_Richness$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.
 ```{r}
 #| echo: false
 #| label: tbl-Sample-Richness
-#| tbl-cap: "Mean sample richness after pre-processing data."
+#| tbl-cap: "Mean sample cereal richness after pre-processing data."
 
 
 kable(Sample_Richness, digits = 2) %>% kable_minimal()
 
 ```
 
-::: {.content-visible when-format="html"}
-```{r}
-#| echo: false
-#| eval: false
-#| output: false
-#| code-summary: "Show the code: data preparation"
-#| code-overflow: wrap
-
-# Species richness based on geographical features
-# RELATIVE PROPORTIONS OF ARCHAEOBOT_VIZ QUERY EXPORT FROM THE DB
-# (Condensed, without totals)
-
-
-# Add more info to the dataframe
-Df_Cond_Plants_Rel_Richness_Diversity <- data.frame(
-                                 "Geo" = Df_Cond_Plants$Geo,
-                                 "Chronology" = Df_Cond_Plants$Chronology, 
-                                 "Type"= Df_Cond_Plants$Type, 
-                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel),
-                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel),
-                                 Df_Cond_Plants_Rel
-)
-
-Df_Cond_Plants_Rel_withMacroregion <- data.frame("Geo" = Df_Cond_Plants$Geo,
-                                                 "Chronology" = Df_Cond_Plants$Chronology,
-                                                 "Type"= Df_Cond_Plants$Type, 
-                                                 "Macroregion" = Df_Cond_Plants$name_macroreg,
-                                                 "Specnumber" = specnumber(Df_Cond_Plants_Rel[1:10]), #Only cereals
-                                                 "Shannon Div" = diversity(Df_Cond_Plants_Rel[1:10]),
-                                                 Df_Cond_Plants_Rel[1:10]
-)
-
-# Let's plot the diversity by macroregion
-
-# Creating the dataframes for R and EMA age 
-# I know it's called "Plants" but it's actually just cereals
-Df_Cond_Plants_Rel_withMacroregion.R <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "R")
-Df_Cond_Plants_Rel_withMacroregion.LR <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "LR")
-Df_Cond_Plants_Rel_withMacroregion.EMA <- filter(Df_Cond_Plants_Rel_withMacroregion, Chronology == "EMA")
-
-```
-
-```{r}
-#| echo: false
-#| eval: false
-#| output: false
-#| code-summary: "Show the code: plots"
-#| code-overflow: wrap
-
-pal_RichnessvsGeo <- c("cadetblue3", "gold1",  "bisque4", "palegreen4")
-
-plot_RichnessMacroReg.R <- ggplot(Df_Cond_Plants_Rel_withMacroregion.R, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_Rel_withMacroregion.R$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Central Italy \n (n = 5)", "Northern Italy \n (n = 41)", "Southern Italy \n (n=34)")) +
-  scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Macroregion",
-       y = "Number of species per site",
-       title = "R - Cereal richness")
-
-plot_RichnessMacroReg.EMA <- ggplot(Df_Cond_Plants_Rel_withMacroregion.EMA, aes(x = Macroregion, y = Specnumber, fill = Macroregion)) +
-    geom_hline(
-    yintercept = mean(Df_Cond_Plants_Rel_withMacroregion.EMA$Specnumber),
-    linetype = "twodash",
-    linewidth = 0.45,
-    color = "red4"
-  ) +
-  geom_boxplot(width = 0.2, alpha = 0.6) +
-  scale_fill_brewer(palette = "Greys") +
-  geom_jitter(alpha=0.3)+
-  scale_x_discrete(labels = c("Central Italy \n (n = 11)", "Northern Italy \n (n = 36)", "Southern Italy \n (n=17)")) +
-    scale_y_continuous(
-    breaks = scales::pretty_breaks(n = 10)
-  ) +
-  theme(
-    legend.position = "none",
-    strip.background = element_rect(
-      fill = "grey",
-      linewidth = 0.1,
-      colour = "black"
-    ),
-    panel.background = element_rect(fill = "grey90"),
-    panel.border = element_rect(fill = NA, linewidth = 0.1),
-    panel.grid.major.x = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.major.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    ),
-    panel.grid.minor.y = element_line(
-      color = "grey50",
-      linewidth = 0.05,
-      linetype = 2
-    )
-  ) +
-  labs(x = "Macroregion",
-       y = "Number of species per site",
-       title = "EMA - Cereal richness")
-
-# Check median of cereal richness per macroregion
-
-# ROMAN NORTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Northern Italy"))$Specnumber)
-#ROMAN SOUTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.R, Macroregion=="Southern Italy"))$Specnumber)
-# EMA NORTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Northern Italy"))$Specnumber)
-#EMA SOUTH
-mean((filter(Df_Cond_Plants_Rel_withMacroregion.EMA, Macroregion=="Southern Italy"))$Specnumber)
-
-```
-:::
-
-Cereals share similar presence values in Roman Northern and Southern Italian sites (@fig-cereal-richness-RvsEMA). Central Italy reports higher values, although this is based only on three sites and hence it is not reliable. During the Early Middle Ages, Central Italy again is the richest in cereals, closely followed by Northern Italy. Interestingly, Southern Italy still reports values very close to the Roman age. A full list of the Southern Italian EMA sites is reported in @tbl-southern-ema-sites.
-
-```{r}
-#| echo: false
-#| eval: false
-#| layout: "[[100,100], [1]]"
-#| label: fig-cereal-richness-RvsEMA
-#| 
-#| fig-subcap: 
-#|   - "Roman age." 
-#|   - "Early Medieval age."
-#| fig-height: 4
-#| fig-width: 6
-#| fig-dpi: 600
-
-#fig-cap: "Boxplots of cereal richness in the Italian macroregions. The grey dots (jitters) indicate the value for the single site, while the white boxplot shows the median and the quartile values." 
-plot_RichnessMacroReg.R
-plot_RichnessMacroReg.EMA
-
-```
-
 | ID  | Site                                   | Region     | Geography    | Type         | Culture/Influence |
-|-----|----------------------------------------|------------|--------------|--------------|-------------------|
+|------------|------------|------------|------------|------------|------------|
 | 98  | S. Maria in Cività, D85                | Molise     | Hilltop      | Urban        | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3A         | Basilicata | Mountain     | Monastery    | Lombard           |
 | 107 | S. Giovanni di Ruoti, Phase 3B         | Basilicata | Mountain     | Monastery    | Lombard           |
@@ -4088,42 +2982,32 @@ plot_RichnessMacroReg.EMA
 
 #### Assessing the difference {#sec-permanova-cereals}
 
-::: callout-note
-## Notes on terminology: PERMANOVA {style="text-align:justify;"}
+In order to substantiate the proposed shift in cereal farming during the Early Medieval period, as discussed in both @sec-macroregional-differences-ubiquity and @sec-richness-macroregions, statistical validation is needed. Given the non-unimodal nature of the data and the use of presence/absence analysis, a robust choice is the application of a non-parametric test, such as PERMANOVA, on the Early Medieval botanical dataset. Before subjecting the data to the PERMANOVA analysis, it underwent the pre-processing steps outlined in @sec-case-study-richness-cereals-macroreg. To establish a baseline for comparison, the same PERMANOVA procedure was applied to the Roman dataset.
 
-Permutational multivariate analysis of variance (PERMANOVA) is a non-parametric multivariate statistical test used to compare group of objects. By using measure space, the null hypothesis that the centroids and dispersion of groups are identical is tested. The null hypothesis is rejected if either the centroid or the spread of the objects differs between the groups. A prior calculation of the distance between any two objects included in the experiment is used to determine whether the test is valid or not[^archaeobotany-2] [@andersonPermutationalMultivariateAnalysis2017]. In this context, the *null hypothesis* is that there is no regional difference in the cereals dataset, with cereals being evenly distributed across macroregions and chronologies.
-:::
+The code snippet provided below demonstrates the utilisation of the `adonis2()` function to perform the PERMANOVA calculation:
 
-[^archaeobotany-2]: Source: Wikipedia. Change the source later
-
-The suggestion of an Early Medieval shift in cereal farming stated in @sec-macroregional-differences-ubiquity and @sec-richness-diversity-macroregions needs statistical support. Considering that data is not unimodal and that we are dealing with presence/absence analysis, the best choice is to use a non-parametric test as PERMANOVA on the early medieval botanical dataset. Prior to performing the test, it was necessary to pre-process data by:
-
--   Selecting all the cereals columns of the plant remains table, keeping the categorical variables: `Macroregion`.
-
--   Removing empty rows (samples that only reported seeds/fruits, but not cereals).
-
--   Selecting only samples that had at least 10 seeds.
-
--   Transforming the raw counts into presence/absence, using the function `decostand()` (`method=pa`) in the `R` package `vegan` [@vegan].
-
-After the pre-processing, it was possible to run the PERMANOVA using the function `adonis2()` in the package `vegan`. The function creates a distance matrix and computes an analysis of variance on the matrix. The method chosen to calculate the distance matrix is the `jaccard` distance. The Jaccard distance, based on the Jaccard similarity index, is a value of dissimilarity between sample sets [@kosubNoteTriangleInequality2019]. When compared to other dissimilarity indices, it is more appropriate for presence/absence analyses as it is not based on Euclidean distance.
-
-::: {.content-visible when-format="html"}
 ```{r}
-#| code-fold: true
-#| code-summary: Permanova
 #| code-line-numbers: true
 #| message: false
 
-## PERMANOVA WITH adonis()
-set.seed(29)
-Permanova.Cereals.R = adonis2(
-  Bot_PA_data.R ~ Macroregion, 
-  data = Bot_PA_categ.R,
-  permutations = 10000, 
-  method="jaccard"
-)
+# Example of how to use the function adonis()
+set.seed(29) # <1>
 
+Permanova.Cereals.R = adonis2(
+  Bot_PA_data.R ~ Macroregion, # <2>
+  data = Bot_PA_categ.R,
+  permutations = 10000, # <3>
+  method="jaccard" # <4>
+)
+```
+
+1.  In order to get the same results, we set a seed.
+2.  Formula specification.
+3.  Number of random permutations.
+4.  Distance metric.
+
+```{r}
+#| echo: false
 Permanova.Cereals.EMA = adonis2(
   Bot_PA_data.EMA ~ Macroregion, 
   data = Bot_PA_categ.EMA,
@@ -4154,13 +3038,11 @@ kable(Permanova_Results, col.names = c("Phase",
       ) %>% kable_minimal()
 
 ```
-:::
 
-The calculation of PERMANOVA on the Roman dataset using the variable `Macroregion` reported a not statistically significant p-value, suggesting a degree of homogeneity. On the other hand, when applied to the early Medieval dataset, the results were highly significant (0\<p\<0.001) with a 99.99% confidence. PERMANOVA has not been calculated on the Late Roman dataset as samples from Southern Italy were too scarce. To confirm the significance of the results of PERMANOVA applied to the EMA dataset, it is necessary to check that its assumptions are met (especially since we are dealing with small groups of data). Firstly, we check the homogeneity of variances. The function `betadisper()` from the package `vegan` provides the distances of group samples from centroids. If the variation is even, the null hypothesis of no difference in dispersion between groups is accepted. To test the variation, it is possible to use the analysis of variance (ANOVA).
+PERMANOVA analysis was performed on the Roman dataset using the variable 'Macroregion', indicating a lack of statistical significance in the calculated p-value, implying homogeneity in the dataset. However, the early Medieval dataset showed highly significant results (0\<p\<0.001) with 99.99% confidence. Due to insufficient samples from Southern Italy, PERMANOVA was not conducted on the Late Roman dataset. To verify the statistical significance of the PERMANOVA outcomes obtained using the EMA dataset, it is critical to ensure that the underlying assumptions are fulfilled, especially given our small sample sizes. We first examine the homogeneity of variances, determining the distances between group samples and centroids using the `betadisper()` function in the `vegan` package. If the variance is consistent, we accept the null hypothesis of no variation in dispersion between groups. To verify the statistical significance of the PERMANOVA outcomes obtained using the EMA dataset, it is critical to ensure that the underlying assumptions are fulfilled, especially given our small sample sizes. To assess variance, we can employ analysis of variance (ANOVA).
 
 ```{r}
-#| code-fold: true
-#| code-summary: Betadisper
+#| echo: false
 #| code-line-numbers: true
 #| message: false
 
@@ -4201,9 +3083,7 @@ kable(Betadisper.GroupDistances,
 ```
 
 ```{r}
-#| code-fold: true
-#| code-summary: Betadisper
-#| code-line-numbers: true
+#| echo: false
 #| message: false
 # Checking that the distance from the centroids is not significant:
 Anova.R = anova(Betadisper.R)
@@ -4267,26 +3147,34 @@ boxplot(Betadisper.EMA,
 
 ```
 
+The graphical representation through `betadisper()` plots (@fig-betadisper) illustrates a comparable distance from centroids for both `Northern Italy` and `Southern Italy` categories. Complementing this visual analysis, the ANOVA on `betadisper()` affirms the lack of significance (p-value exceeding the threshold), indicating homogeneity in group dispersions (@tbl-Anova-Betadisper-Results). This robust statistical foundation leads us to confidently affirm the results obtained from the PERMANOVA analysis, supporting the conclusion that there is a significant difference between the two groups of sites---Southern and Northern Italy---specifically in the realm of cereal farming during the Early Middle Ages.
 
-The `betadisper()` graphs (@fig-betadisper) show similar distances from the centroids for the categories `Northern Italy` and `Southern Italy`. In addition, the ANOVA on the `betadisper()` shows that the separation is not significant (p-value over the significance threshold), meaning that the groups dispersions are homogeneous. We can thus be confident in the PERMANOVA results and accept the difference between the two groups of sites under investigation. In other words, the Southern and Northern Italian group of sites are different during the Early Middle Ages for what concerns cereal farming.
-
-Running the same tests on the Roman sites failed to separate the two groups of sites, confirming that there was not a significant difference in the types of cereals cultivated during the Roman age between Northern and Southern Italy.
+Conversely, when the same tests were applied to Roman sites, the outcomes failed to delineate a significant separation between the two groups. This corroborates the notion that, during the Roman age, there was not a noteworthy difference in the types of cereals cultivated between Northern and Southern Italy.
 
 #### Quantifying the separation: nMDS {#sec-nMDS-Cereals style="text-align:justify"}
 
-::: callout-note
-## Notes on terminology: Wasserstein metric {style="text-align:justify;"}
+In the investigation of the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), an additional approach involves quantifying the distance between groups of sites for both the Roman and Early Middle Ages. For this purpose, the chosen dimensionality reduction algorithm is the *non-metric multidimensional scaling* (nMDS) available in the `vegan` library for R. A detailed explanation of this algorithm is provided in @sec-met-nmds. The code snippet provided below exemplifies the utilisation of the `metaMDS()` function to perform the nMDS.
 
-The [Wasserstein distance](https://en.wikipedia.org/wiki/Earth_mover%27s_distance) (or earth's mover distance) is a measure of distance between two probability distributions on a metric space.
-:::
+```{r}
+#| eval: false
 
-In addition to statistically testing the separation between the Northern and Southern Italian early medieval cereals dataset (@sec-permanova-cereals), it is possible to measure the distance between groups of sites both in the Roman and early Middle ages. For this task, a dimensionality reduction algorithm has been chosen: the *non-metric multidimensional scaling*, from the `R` library `vegan`. A more in-depth explanation of the algorithm can be read in @sec-met-nmds. To avoid fallacy in computations, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ c. onwards) have been excluded from this test---the uneven distribution of the group of samples required a cautious approach. The nMDS has been run with a reduction to only one dimension, using KDE plots to visualize the results. Setting the dimension to one allows easier calculations of distance. In @fig-nMDS-1D-macroregion (a), it is possible to see the nMDS performed on the Roman cereals presence/absence dataset. As already pointed out, the PERMANOVA did not produce significant results for this dataset and the Wasserstein distance (calculated with the `wasserstein1d()` function in the `transport` library) is indeed shorter for the Roman dataset. For both chronologies there is an overlap in the curves, which is more considerable in the Roman age (indicating that the group of samples are more similar). The overlap for the EMA groups (@fig-nMDS-1D-macroregion, b) is probably due to the fact that the presence of the noble grains is not by itself a 'marker' of Southern Italian sites---these grains are also very common in the North. The difference is that in the South noble grains are not cultivated in conjunction with other grains. The graph for the EMA chronology shows a clearer separation of the macroregional groups, with some minor overlaps. Moreover, the graph also displays variability in the Northern Italian dataset. The variability can also be assessed from the outliers in the boxplots in @fig-nMDS-1D-macroregion.
+set.seed(29) # <1> 
 
+nMDS <- metaMDS(Dataset, # <2> 
+                   k=1, # <3>
+                   distance = "jaccard") # <4>
+```
+
+1.  Again, we set a seed because these computations are random.
+2.  We choose the dataframe on which to perform the nMDS.
+3.  The number of dimensions chosen, in this case 1.
+4.  Distance metric.
+
+To ensure the integrity of computations and avoid potential fallacies, the macroregion `Central Italy` and the chronologies `LR` (Late Roman) and `Ma` (11^th^ century onwards) have been excluded from this analysis. This cautious approach is taken due to the uneven distribution of the group of samples. The nMDS has been executed with a reduction to a single dimension, leveraging KDE plots for effective visualization of results. Reducing the dimension to one facilitates distance calculations. In @fig-nMDS-1D-macroregion (a), the nMDS results for the Roman cereals presence/absence dataset are presented. As previously highlighted, the non-significant outcome of the PERMANOVA aligns with the shorter Wasserstein distance, as calculated using the `wasserstein1d()` function from the `transport` library. Both chronologies exhibit an overlap in the curves, with the Roman age displaying a more substantial overlap, indicative of higher similarity within the group of samples. The EMA groups' overlap (@fig-nMDS-1D-macroregion, b) can be attributed to the fact that the presence of free-threshing wheats and barley is not exclusive to Southern Italian sites; these grains are prevalent in the North as well. The key distinction lies in the South, where 'noble' grains are not cultivated in tandem with other grains. The graph for the EMA chronology reveals a clearer separation of macroregional groups, with minor overlaps. Additionally, the graph highlights variability in the Northern Italian dataset, a characteristic further underscored by outliers in the boxplots in @fig-nMDS-1D-macroregion.
 
 ```{r}
 #| code-line-numbers: true
-#| code-fold: true
-#| code-summary: nMDS and Wasserstein distance
+#| echo: false
 #| output: false
 
 library(ggpubr)
@@ -4530,6 +3418,8 @@ m_leg_reg.plot <- ggplot(
 
 ```
 
+After comprehensively examining the presence and richness of cereals, our focus now turns towards the scrutiny of legume distribution across the three Italian sub-regions, stratified by chronology. While we will not go into the technical details of constructing this hierarchical model, the methodology is the same as that described above for cereals, using identical predictors and priors. A clear trend is illustrated in the accompanying figure (@fig-bayes-glm-legumes-macroregion). As per the chronologies, Northern Italy persistently exhibits the most reliable credible intervals, with Southern Italy (except the 11^th^ century samples) closely following suit. Conversely, Central Italy displays wider ranges, indicating greater uncertainty in the estimates. From the Roman period (mean = 0.15) to the early medieval and medieval period (means = 0.30/0.29), the estimated means rise in the north. There is a marked decrease from the Roman (mean = 0.24) to the late Roman (mean = 0.09) era in southern Italy, followed by an increase during the early medieval (mean = 0.23) and medieval (mean = 0.37, though with an HDI varying between 0.29-0.46). Similarly, the central Italian area demonstrates a steady increase in legumes farming, with a mean of 0.19 in the Roman epoch and reaching its peak at 0.60 in the 11^th^ century samples (though with a 0.50 credible interval spanning from 0.55-0.66). The importance of legumes in this sub-region aligns with expectations, considering the hilly landscape and the historical agricultural focus of this area.
+
 ```{r}
 #| echo: false
 #| label: fig-bayes-glm-legumes-macroregion
@@ -4541,15 +3431,19 @@ m_leg_reg.plot
 
 ### Fruits
 
+Binomial models have been systematically developed for a range of fruit categories, following the same logical approach used in other macro-regional models and utilizing the same priors. The models' specific formulas are not repeated here, but they are in line with the established methodology. The results for the two most important cash crops, grapes and olives, are of particular interest. The analysis reveals considerable variability in the findings for these crops, denoting a degree of uncertainty in the estimates. The scope of our investigation is not limited to marketable crops, as we have also assessed the diversity of wild and domestic fruits and nuts, providing an in-depth exploration of heterogeneous fruit categories across Italian sub-regions and over different time periods.
+
 #### Grape
+
+The models assessing the occurrence of grapes exhibit notable dispersion, leading to large credible intervals. Basing our interpretation on the 0.50 HDIs, in the Roman period, grapes were markedly more prevalent in the southern regions (0.76-0.85), aligning with expectations given their warmer climates and longstanding tradition of grape cultivation. Central Italy also displayed widespread cultivation, albeit with a larger interval (0.61-0.82). The North showed a notable presence as well, with an HDI ranging between 0.62-0.72. However, in the Late Roman period, credible intervals expanded significantly, especially in Southern and Central Italy. In the South, there was a substantial decrease in the HDI, ranging between 0.32 and 0.50. Contrastingly, Central Italy displayed an HDI in a higher probability range, spanning between 0.72-0.86. In the North, the range remained similar to the previous phase, with an estimated mean around the overall mean of 0.65. Transitioning to the Early Medieval phase, the occurrence of grapes experienced a renewed increase in the South (range: 0.50-0.65). However, Central Italy and the North witnessed a decline in their HDIs. Particularly in Northern Italian samples, the estimated mean (0.60) dropped below the Roman maximum of 0.66. Notably, the North demonstrated minimal variation in means across the four phases, with the 11^th^-century samples returning a mean of 0.65. In Southern and Central Italy, broad credible intervals limit the provision of valuable information.
 
 ```{r}
 #| echo: false
 
 Grape_reg.list <- list(
     Grape_Found = Grape$Present,
-    RC_ID = as.factor((interaction(Legumes$Chronology, 
-                                   Legumes$Macroregion)))
+    RC_ID = as.factor((interaction(Grape$Chronology, 
+                                   Grape$Macroregion)))
    )
 
 Grape_reg.list$RC_ID <- droplevels(Grape_reg.list$RC_ID)
@@ -4663,6 +3557,8 @@ m_grape_reg.plot
 ```
 
 #### Olives
+
+Similar to grapes, the models for olive occurrence present credible intervals of notable magnitude, posing challenges to reliable interpretations. Relying on the 0.50 HDIs for insights, discernible trends emerge. Notably, a pronounced distinction between the South and North of Italy is evident, primarily attributed to climatic factors, as will be further elucidated in subsequent models within this chapter. In the Roman period, the HDI for the South ranges between 0.83 and 0.90, underscoring a robust presence of olives. In contrast, the North displays a considerably lower HDI of 0.30-0.40, reflecting a lesser prevalence. The scarcity of sites in Roman Central Italy results in a broad 0.50 HDI (0.46-0.70), and the 0.99 credible interval for this region is exceptionally dispersed (0.12-0.91), rendering it unreliable. Moving to the Late Roman period, the HDIs remain expansive, especially for the Southern (0.59-0.77) and Central (0.50-0.71) regions. In the North, however, the range narrows to 0.19-0.25, suggesting a more consistent pattern. As we transition to the Early Medieval period, the presence of olives diminishes across all regions, with the HDI ranging between 0.50-0.65 in the South, 0.17-0.31 in the Center, and 0.05-0.1 in the North, where the dataset is more coherent and substantial. The declining trend persists in the post-11^th^-century samples, although this period exhibits increased variability across sites.
 
 ```{r}
 #| echo: false
@@ -4786,6 +3682,8 @@ m_olive_reg.plot
 ```
 
 #### Nuts
+
+The model examining archaeobotanical remains of nuts does not show very large variations across various regions and chronological phases. In the Roman period, the estimated occurrence of nuts in the Southern regions spans from 0.14 to 0.19. Central Italy presents a challenge for interpretation due to an extremely large credible interval, which in the highest density region ranges from 0.11 to 0.26, indicating substantial uncertainty in the estimates. Moving to the Northern regions, a relatively narrower range is observed, with an estimated occurrence between 0.24 and 0.30. Transitioning to the Late Roman period, the Southern regions witness a decline in the presence of nuts, with an estimated range dwindling to 0.03 to 0.06. In Central Italy, a broad credible interval persists, spanning from 0.17 to 0.28. Meanwhile, the Northern regions maintain a similar estimated range as observed in the Roman phase, hovering between 0.25 and 0.30. As we move into the Early Medieval period, the South sees a continuity in the occurrence of nuts, remaining relatively consistent with the Late Roman phase. In Central Italy, the estimated range shifts to 0.11 to 0.19. Northern Italy reports an estimated range of 0.19 to 0.24, suggesting a slight fluctuation. In the 11^th^ century, the Southern and Central regions exhibit very large credible intervals, rendering the estimates less reliable. However, the estimated mean aligns closely with the overall mean of 0.15 in both regions. The North, on the other hand, reports an estimated range of 0.14 to 0.23, suggesting a persistence of nut presence in this phase.
 
 ```{r}
 #| echo: false
@@ -4914,6 +3812,10 @@ m_nuts_reg.plot
 ```
 
 #### Domestic and wild fruits
+
+The model for the occurrence of domestic fruits performed better than the previous fruits models. In Southern Italy during the Roman period, the probability of domestic fruits being present ranges from an estimated 0.19 to 0.24 with a 0.50 credible interval. In the Roman Centre, it is estimated that the presence of domestic fruits was more modest, with estimates ranging from 0.03 to 0.07. During the Late Roman era, there was a decline in the occurrence of domestic fruit in the Southern regions, which was approximately estimated between 0.04 to 0.07. In contrast, there was a mild improvement in domestic fruit presence in the Late Roman Centre which estimated to range from 0.05 to 0.09. Meanwhile, the North sustained a similar range as the previous phase, which was between 0.14-0.16. Moving into the Early Medieval period, the Southern region continues to exhibit domestic fruit occurrences, ranging from 0.06 to 0.09. In the Early Medieval Centre, a similar presence is noted, with estimates ranging from 0.04 to 0.07. The Northern region reports domestic fruit occurrences, with estimates between 0.12 and 0.14. By the 11^th^ century, the Southern region sustains its presence of domestic fruit, estimated to be between 0.07 to 0.17. Central Italy also sees continued occurrences, with estimates ranging between 0.09 and 0.17. In the North, there is a significant presence of domestic fruits observed, with estimates ranging from 0.20 to 0.26. It is noteworthy that the larger HDIs during this phase are due to a smaller number of observations, thereby introducing increased uncertainty.
+
+The berries model demonstrates a minor dietary impact from these predominantly wild fruits during the 1^st^ millennium CE. One notable trend is discernible, whereby Southern and Central Italy exhibit lower HDIs falling below the mean of 0.07 from the Roman phase through the Early Medieval period. Reliable results, attributed to smaller HDIs, indicate a consistent range between 0.09 and 0.16. The small presence observed in this area is in contrast to the consumption pattern observed in Northern Italy. Upon further investigation into the 11^th^ century, a clear increase in the presence of berries can be seen across all sub-regions. In the Southern territories, HDIs increase from 0.03 to 0.09, reflecting a higher density of berry findings. Central Italy shows an increase in the prevalence of berries, reaching HDI values between 0.07 and 0.14. In contrast, Northern Italy experiences the largest growth, with HDI values peaking between 0.27 and 0.34, indicative of a significant surge in the utilization of berries during this period. In contrast, Northern Italy experiences the largest growth, with HDI values peaking between 0.27 and 0.34, indicative of a substantial rise in the utilisation of berries during this period.
 
 ```{r}
 #| echo: false
@@ -5133,11 +4035,9 @@ m_berries_reg.plot
 
 ```
 
-## Altitude
+## Altitude {style="text-align: justify;"}
 
-The creation of altitude models was not possible for every plant investigated in this study. As the process is very time consuming, it was necessary to select only plants that are most likely to be either positively or negatively impacted by altitude, or taxa that are cultivated for economic reasons. Primary importance was thus given to cereals. Since not every cereal can be cultivated at high altitudes, it was more appropriate to model them individually instead of grouping them into noble and minor grains. For reference, below is a breakdown of the elevation of sites during the four chronologies under investigation.
-
-The probability of occurrence of the most common cereal remains can be modelled against the elevation of sites in the four time periods under consideration. It is worth noting that the sites where the archaeobotanical remains have been found are not evenly distributed. In the Roman age, most sites investigated are located between 0 and 100 MSL, whereas after there is an increasing number of remains from sites between at higher elevations. Whether this reflects a real shift in settlement patterns is outside the aims of this study, but it might still be informative to visualise the different distribution of sites across elevations.
+The probability of the occurrence of the most prevalent cereal remains can be modelled against site elevation in the four time periods examined. The distribution of archaeobotanical remains across sites is uneven. During the Roman age, the majority of investigated sites are situated between 0 and 100 MSL. However, there is a rise in the number of sites at higher elevations in the subsequent phases. Though this may indicate a change in settlement patterns, it is not the focus of this study. Nonetheless, mapping the distribution of sites according to elevation could yield valuable information. Due to the time consuming nature of the process, it was not possible to produce elevation models for all the plants surveyed. Therefore, we selected only those plants that showed susceptibility to altitude-based positive or negative effects or were economically significant. Cereal crops were given priority. As not all cereals are suitable for cultivation at high altitudes, it was considered more appropriate to model them independently instead of categorising them into 'noble' and 'minor' grains. For reference, the breakdown of site elevations studied during the four chronologies can be found in @fig-bot-sites-elevation.
 
 ```{r}
 #| echo: false
@@ -5158,6 +4058,8 @@ bot_altitude.chronotable <- table(factor(bot_altitude$Chronology, levels = chron
 ```{r}
 #| echo: false
 #| fig-height: 8
+#| label: fig-bot-sites-elevation
+#| fig-cap: "Distribution of sites at different elevations. The site density has been scaled to facilitate comparison between phases."
 
 bot_altitude %>% 
   ggplot(aes(x=site_altitude/1000)) +
@@ -5194,6 +4096,38 @@ bot_altitude %>%
 
 ### Model specification and priors
 
+The previous models used an interaction index since we were dealing with categorical variables. However, in this scenario, we have a categorical and numerical variable as we focus on the impact of altitude on plant presence. The DAG for this case still displays Chronology as a collider, similar to the prior situation. Certainly, time period affects both the likelihood of a plant's existence and the elevation of sites. As demonstrated in @fig-bot-sites-elevation, the spread of sites varies among different chronological phases. It is unclear if this is an actual pattern or just one present in our data, but we must make chronology adjustments.
+
+```{r}
+#| echo: false
+#| label: fig-altitude-dag-plants
+#| fig-cap: "The DAG that represents the relationship between Chronology, Altitude, and the presence of plants in the study. Chronology is shown as a collider variable, and its influence on NISP is mediated through Altitude. To block the backdoor path between Chronology and Plant_Present, the dataset is stratified by Chronology."
+
+DAG_altitude <- dagitty('dag {
+Plant_Present [outcome]
+Chronology [collider,dagitty.stratum="1"]
+Altitude [exposure,dagitty.stratum="2"]
+Chronology -> Plant_Present
+Chronology -> Altitude
+Altitude -> Plant_Present
+}')
+
+DAG_altitude <- tidy_dagitty(DAG_altitude)
+
+ggdag_paths(DAG_altitude, 
+      text = FALSE, 
+      use_labels = "name", 
+      shadow = TRUE) +
+  theme_dag(base_size = 14)+
+  theme(legend.position = "none", strip.text = element_blank())+
+  scale_color_manual(values = "#0072B2", na.value = "grey80") + 
+  scale_fill_manual(values = "#0072B2", na.value = "grey80")+
+   ggraph::scale_edge_color_manual(values = "#0072B2", na.value = "grey80")
+
+```
+
+Creating a Bayesian hierarchical model to predict the presence of a particular cereal taxon at different elevations is comparable to the binomial models discussed earlier. Since we are only modelling individual taxa, we are dealing with a Bernoulli distribution (in which the number of trials is fixed at 1). Furthermore, we intend to stratify the models by chronology, just as we did previously. For this purpose, we introduce two parameters: a varying intercept $\alpha$ that carries the chronology index ${[ChrID]}$ (i.e. Roman = 1, Late Roman = 2, etc.), and a slope $\beta$ that is multiplied by the elevation of the $i$-th site $Alt_{i}$. The slope parameter is included to ensure that a change in elevation is reflected in the predicted probability. Both parameters have a weakly informative prior (with a mean of 0 and a standard deviation of 1.5) introduced to make the possible outcomes (present/absent) equally likely in the absence of data. The prior predictive simulation in @fig-prior-pred-cereals-altitude visually demonstrates the effect of these priors, with probabilities piling up on both 0 and 1. The figures can be interpreted in a comparable manner to the previous ones, which did not incorporate numerical predictors. The x-axis displays elevation expressed in kilometers, while the y-axis presents the probability of discovering a distinct cereal. Similar to previous plots, estimates can be identified across various credible intervals, where wider intervals convey greater uncertainty in the estimation (owing to limited sample sizes or prominent variability in the data observed). For example, it is evident from each plot that the credible interval widens with increasing elevation. In fact, most of the sites examined in @fig-bot-sites-elevation are situated at lower elevations. The 0.50 HDI, which provides the most reliable probability range, is represented by the darkest shade in the middle of the curves. The following formula shows the components of this model, where the mean probability $p_{i}$ is modelled by a logit link:
+
 $$
 P_{i} \sim Bernoulli(\bar{p}_{i})
 $$
@@ -5210,10 +4144,6 @@ $$
 \beta_{ChrID} \sim Normal(0,1.5)
 $$
 
-$$
-\phi \sim Exponential(1)
-$$
-
 ```{r}
 #| echo: false
 #| label: fig-prior-pred-cereals-altitude
@@ -5225,12 +4155,14 @@ simplehist(rbern(1000,
                     rnorm(1e4, 0, 1.5)+rnorm(1e4, 0, 1.5)*sample(bot_altitude$site_altitude/1000, size=1e4, replace=T)
     )
                   ),
-           xlab="Taxa", 
-  main="Prior Predictive Simulation: Altitude",
+           xlab="Present", 
+  main="Prior Predictive Simulation",
            col=rangi2)
 ```
 
 ### Cereals
+
+As planned, we concentrated on modelling the presence of particular types of cereal at varying elevations and chronological phases. This decision was influenced by our interest in economically significant plants and the fact that certain cereal species, such as rye, are more resilient to low temperatures. This makes elevation a crucial factor in farming strategies. The models are classified based on chronology and varying elevations, while acknowledging the significance of certain cultural factors such as geographical area and context type. However, these are not taken into account as having an excessive number of subsets with a relatively small dataset poses a risk. Therefore, we can examine the estimated patterns throughout the entire peninsula. Free-threshing wheats, which are likely the most cultivated cereals in Italy, demonstrate a robust presence in all four chronological phases at any altitude, with the likelihood of their occurrence gradually increasing towards the early middle ages. It is evident that there is no noticeable trend in the prediction curve, and there appears to be no correlation between site elevation and this cereal taxon. Whether it was cultivated everywhere or imported, it is impossible to determine with this dataset. However, the mere presence of this information remains significant. On the contrary, barley displays more compelling patterns unlike free-threshing wheats. During the Roman period, and particularly in the Late Roman era, there is a notable correlation between the presence of barley and a heightened elevation quota. If the estimated occurrence at sea level is approximately 0.4 (which is still a significant contribution), at around 1100-1200 MSL the prediction increases to a probability of 0.90. This correlation appears to remain strong during the early medieval period, with probabilities ranging from 0.70 (at sea level) to 1. The high probabilities also reflect the significance of this cereal in early medieval agriculture. Conversely, in the samples after the 11^th^ century, the curve seems to be flat, suggesting no correlation and exhibiting greater uncertainty in the data. Additionally, the small sample size is apparent in the graph, which terminates predictions at approximately 450 MSL due to a lack of available data beyond that altitude (refer to @fig-bot-sites-elevation). There is a chronological shift evident in the estimated probabilities for emmer, although during the Roman and Late Roman periods there is higher uncertainty due to wide HDIs, particularly at high elevations. The estimated means during these two phases imply no correlation, however their credible intervals allow for the possibility of positive or negative trends at higher elevations. In the early Middle Ages, the correlation between the increase in more rustic grains (particularly in the North where some sites are located at higher elevations, see @fig-topography-bot-waffle) and a higher probability of discovering emmer appears to be positive. The correlation remains only marginally positive in the subsequent phase. However, as previously mentioned, the model ceases predictions at 450 MSL. Similarly to emmer, the posterior predictive simulations for einkorn display significant ambiguity at any stage, particularly beyond 300 MSL. During the Roman period, emmer seems to have been present at greater frequencies in higher altitude sites, while the curves remain flat in subsequent phases, as indicated by the 0.50 HDI. The only visible change is the higher probabilities in the early medieval era. The model for rye produced some interesting results. During the Roman era, the chances of discovering rye on a particular site are minimal, with a slightly higher likelihood at greater elevations. In the later Roman period, the likelihood of identification even at sea level rises, displaying an upward trend on sites located at high elevations, albeit accompanied by greater ambiguity (owing to the limited number of locations at high altitudes). During the early medieval period, rye was found to have a higher probability of growth at sea level with a strong positive correlation to higher altitudes, where it became more established. The correlation was observed to be flat in post-11^th^ century samples. However, this data is unreliable as the HDI values are very large and should not be considered. It is more challenging to identify potential patterns in the graph of broomcorn and foxtail millets beyond the Roman phase. In the Roman era, millets were more likely to be found at sea level, with a mean probability of 0.35 and a 0.50 HDI indicating a 0.10-0.25 probability around 1200 MSL. While this particular phase shows a slightly negative trend, the overall probabilities of discovering millets increase in subsequent phases without any apparent correlation to altitude. Only in the post-11^th^ century samples, where the HDI is high, does the negative trend re-emerge. Regarding the final cereal evaluated, sorghum, its presence during the Roman and Late Roman periods is scarce, making it difficult to establish any correlation. During the early medieval period, its presence increases and, at sea level, the mean probability is approximately 0.20; however, this probability lessens as altitude increases (having an absolute low of 0 at 1200 MSL). Sorghum is more prevalent in 11^th^-century samples (mean = 0.40), nevertheless, uncertainty remains high. Although there are wide credible intervals, this phase still indicates a negative correlation. The uncertainty primarily stems from the small sample size rather than the variability in the observed data.
 
 ```{r}
 #| echo: false
@@ -5417,9 +4349,9 @@ m_cwheat_alt.plot <- as.data.frame(dat.CWheat_Altitude) %>%
         axis.title.x.top = element_blank()
   )+
     labs(
-       y="P (Common Wheat | 1)",
+       y="P (F-T Ws | 1)",
        x="Altitude (km)",
-       title="Common Wheat",
+       title="Free-Threshing Wheats",
        subtitle="Altitude"
        )+
   facet_wrap(~ factor(Chronology, levels=chrono_levels))
@@ -5641,6 +4573,16 @@ m_Sorghum_alt.plot <- as.data.frame(dat.Sorghum_Altitude) %>%
 
 ```{r}
 #| echo: false
+#| label: fig-altitude-bot-plots
+#| fig-cap: "Posterior distribution plots showing the presence of cereals in relation to different altitudes and stratified by chronological phase."
+#| fig-subcap: 
+#| - "Free-Threshing Wheats."
+#| - "Barley."
+#| - "Emmer."
+#| - "Einkorn."
+#| - "Rye."
+#| - "Foxtail and Broomcorn millet."
+#| - "Sorghum."
 
 m_cwheat_alt.plot
 m_Barley_alt.plot
@@ -5654,11 +4596,13 @@ m_Sorghum_alt.plot
 
 #### Community plot
 
+Upon evaluating the impact of elevation changes on each taxon, their posterior distributions have been plotted together on a graph. The x-axis, representing the inverse logit probability of occurrence, provides a user-friendly interpretation within the confines of a standard probability space bounded between 0 and 1. On the other hand, the y-axis unfurls the estimated slope parameter ($\beta$), a varying parameter of our model that has been multiplied with the altitude of each site. This graphical representation not only aids in visualising our findings but also facilitates the comprehensive evaluation of cereals presence. This approach allows to assess positive or negative correlations within our graph. Furthermore, the graph illuminates the substantial variability in estimating the probability of certain taxa being present, echoing the broad HDIs observed in earlier plots. The graph illustrates that the most significant correlations and variations occurred during the early medieval period. A discernible positive correlation emerges between higher sites and the presence of free-threshing wheat, barley, rye, and emmer. Contrarily, altitude exhibits a negative correlation with sorghum presence. As we transition to medieval samples from the 11^th^ century onwards, the narrative becomes nuanced, marked by high uncertainty: point clusters hover both above and below 0.
+
 ```{r}
 #| echo: false
 
 
-m_cwheat_alt.a <- as.data.frame(m_cwheat_alt.post) %>% mutate(Plant = "Common_Wheat")
+m_cwheat_alt.a <- as.data.frame(m_cwheat_alt.post) %>% mutate(Plant = "Free-Threshing Wheat")
 m_Barley_alt.a <- as.data.frame(m_Barley_alt.post) %>% mutate(Plant = "Barley")
 m_Emmer_alt.a <- as.data.frame(m_Emmer_alt.post) %>% mutate(Plant = "Emmer")
 m_Einkorn_alt.a <- as.data.frame(m_Einkorn_alt.post) %>% mutate(Plant = "Einkorn")
@@ -5730,10 +4674,10 @@ Cereals_Alt_post.plot <- ggplot(Cereals_Alt_post, aes(x = inv_logit(a), y = b, c
     sec.axis = dup_axis()
   ) +
   labs(
-    x = "Intercept",
-    y = "Slope",
+    x = expression(paste("Estimated probability (", alpha, ")")),
+    y = expression(paste("Altitude parameter (", beta, ")")),
     color = "Cereal",
-    title = "Model estimates: logit(p) = Intercept+Slope*Altitude",
+    title = "Cereals",
     subtitle = "Altitude"
   )+
   facet_grid(factor(Chronology, levels=chrono_levels)~., scales="free")
@@ -5744,12 +4688,30 @@ Cereals_Alt_post.plot <- ggplot(Cereals_Alt_post, aes(x = inv_logit(a), y = b, c
 #| echo: false
 #| fig-height: 10
 #| label: fig-cereals-alt
-#| fig-cap: "MCMC estimates for slope and intercept plotted in the logit scale. Negative slopes indicate a negative relationship between the plant occurrence and increasing altitude. Intercepts were kept as a baseline occurrence probability of the taxa. Taxa on the left of the graph are rarer, while taxa on the right are more common. It is important to notice that this graph represents the taxa response to elevation." 
+#| fig-cap: "MCMC estimates for intercept and slope (the latter plotted in the logit scale). Negative slopes indicate a negative relationship between the plant occurrence and increasing altitude. Intercepts were kept as a baseline occurrence probability of the taxa. Taxa on the left of the graph are rarer, while taxa on the right are more common. It is important to notice that this graph represents the taxa response to elevation." 
 
 Cereals_Alt_post.plot
 ```
 
 ### Legumes
+
+Instead of creating separate models for each type of legume, an individual model has been developed for several legumes since they can be grown under similar conditions. This model uses a Binomial distribution instead of a Bernoulli distribution, as the number of legumes under examination - lentil, pea, blue/red pea, chickpea, and vetches (common vetch, faba bean, *Vicia sp.*) - is fixed at 7. The model was built using a formula that slightly modifies the Bernoulli distribution: $$
+F_{i} \sim Binomial(7, \bar{p}_{i} )
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + \beta_{[ChrID]}\cdot Alt_{i}
+$$
+
+$$
+\alpha_{ChrID} \sim Normal(0,1.5)
+$$
+
+$$
+\beta_{ChrID} \sim Normal(0,1.5)
+$$
+
+The impact of altitude on the discovery of legumes appears to be mild, displaying a slight decreasing trend during the Roman era and a minor positive upturn in the Late Roman and early Medieval periods. Nonetheless, there is a more pronounced association in samples from the 11^th^ century, albeit restricted to 450 MSL, which prevents comprehensive analysis.
 
 ```{r}
 #| echo: false
@@ -5817,7 +4779,7 @@ m_Legumes_altitude.plot <- as.data.frame(dat.Legumes_Altitude) %>%
         axis.title.x.top = element_blank()
   )+
   labs(
-    y="P (Legumes | 1)",
+    y="P (Legumes | 7)",
     x="Altitude (km)",
     title="Legumes",
     subtitle="Altitude"
@@ -5828,12 +4790,16 @@ m_Legumes_altitude.plot <- as.data.frame(dat.Legumes_Altitude) %>%
 
 ```{r}
 #| echo: false
+#| label: fig-legumes-altitude-plot
+#| fig-cap: "Posterior distribution plots showing the presence of legumes in relation to different altitudes and stratified by chronological phase."
 
 m_Legumes_altitude.plot
 
 ```
 
-### Fruits
+### Grapes and olives
+
+The altitude models for fruits have solely focused on grapes and olives, the two cash crops of interest. Negative correlations with altitude were observed in both models. For grapes, the probabilities at sea level are similar in the Roman and Late Roman periods, exceeding 0.75. In subsequent phases, they fall slightly below 0.75. During the first two periods, the probabilities sharply decline upon reaching the 1200 MSL, while in the early medieval period, the decrease is less intense. It is important to note that these models only consider the presence of plant remains. It would be informative to observe the abundance of these remains at different elevations if a sufficiently robust dataset is available. The trend in the 11^th^ century samples does not exhibit any correlation; however, the prediction only extends up to 450 metres above sea level, which would not significantly impede vine cultivation. Similarly, the olive model shows a marked decrease in predicted probabilities at higher altitudes during the Roman and Late Roman periods. The early medieval dataset still shows a negative correlation, but with a higher uncertainty. For grapes, the medieval samples show no correlations because there are no observations at high altitudes. In fact, olive trees can thrive within the range of altitudes offered by this chronological phase (0-450 MSL).
 
 ```{r}
 #| echo: false
@@ -5912,16 +4878,14 @@ m_Grape_alt.plot <- as.data.frame(dat.Grape_Altitude) %>%
 
 ```
 
-#### Grape
-
 ```{r}
 #| echo: false
+#| label: fig-grape-altitude
+#| fig-cap: "Posterior distribution plots showing the presence of grapes in relation to different altitudes and stratified by chronological phase."
 
 m_Grape_alt.plot
 
 ```
-
-#### Olives
 
 ```{r}
 #| echo: false
@@ -5976,78 +4940,73 @@ m_Olive_altitude.plot <- as.data.frame(dat.Olive_altitude) %>%
 
 ```{r}
 #| echo: false
+#| label: fig-olive-altitude
+#| fig-cap: "Posterior distribution plots showing the presence of olives in relation to different altitudes and stratified by chronological phase."
+
 
 m_Olive_altitude.plot
 ```
 
-## Model comparisons
+## Model comparisons {style="text-align: justify;"}
+
+In the concluding remarks of @sec-sampling-posterior-diagnostics, the significance of model comparison when conducting Bayesian modelling was emphasised. So far, categorical predictors have predominantly been employed in models to draw different causal inferences, but numerical predictors are also usually utilised to evaluate the extent to which a predictor's presence improves the model's fitness. Indeed, adding further predictors can result in overfitting, leading to certain metrics (such as WAIC, pWAIC, etc.) penalising models with more predictors when comparing them. Farms can accommodate various animals in various climatic conditions, but plants are more vulnerable to external factors. Therefore, in addition to altitude, we included predictors such as average yearly precipitation and temperature. Different models have been developed, with various combinations of predictors, following the common procedure of starting with one predictor and progressively adding more. The aim is to determine whether some variables are more effective in predicting the presence of specific plants than others. For example, we can investigate whether the presence of free-threshing wheat in the sites is influenced more by the yearly rainfall, temperature, or altitude. These figures were derived from 1 km spatial resolution rasters using contemporary climatic data [@fickWorldClimNew1km2017]. While climatic fluctuations existed during the first millennium, these models are among the most accurate datasets obtainable.
 
 ### Precipitation
 
-#### Model specification and priors
-
-##### Model 1: Precipitation only
-
-The following model uses standardized mean annual precipitation values as a coefficient for the slope and weakly informative priors for both the intercept and the slope.
+The presence of plants in a particular region may be influenced by the amount of rainfall. Sorghum and millets are examples of cereals that are tolerant to drought, while olives are among the fruits that are particularly resistant. Our study aimed to investigate whether increased rainfall has an impact on the presence of certain plant species. To assess the efficacy of this variable in elucidating the presence of specific plant taxa in comparison to altitude, our approach involved constructing hierarchical models. The first Bernoulli model incorporated a varying effect for each chronology, following the previously established practice of introducing an index $[ChrID]$ to the intercept $\alpha$. Additionally, we incorporated a varying slope $bPrecip$---also contingent on the index $[ChrID]$---to capture the variability across different subsets. This slope is then multiplied by a constant $MeanAnnualPrecip_{i}$, representing the standardised mean annual precipitation for each site. Both $\alpha$ and $bPrecip$ were then assigned weak priors.
 
 $$
 P_{i} \sim Bernoulli(\bar{p}_{i})
 $$
 
 $$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bPrecip_{[ChrID]}\cdot MeanAnnualPrecip
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bPrecip_{[ChrID]}\cdot MeanAnnualPrecip_{i}
 $$
 
 $$
-\alpha_{ChrID} \sim Normal(0,1.3)
+\alpha_{[ChrID]} \sim Normal(0,1.3)
 $$
 
 $$
-bPrecip_{ChrID} \sim Normal(0,1.3)
+bPrecip_{[ChrID]} \sim Normal(0,1.3)
 $$
 
-##### Model 2: Altitude only
-
-The following model uses altitude values (in km) as a coefficient for the slope and weakly informative priors for both the intercept and the slope. It is the same model presented before.
-
-$$
-P_{i} \sim Bernoulli(\bar{p}_{i})
-$$
-
-$$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Altitude
-$$
-
-$$
-\alpha_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-bAlt_{ChrID} \sim Normal(0,1.3)
-$$
-
-##### Model 3: Altitude and Precipitation
-
-The following model uses altitude (in km) and standardized mean annual precipitation values as coefficients for the slope, and weakly informative priors for both the intercept and the slope.
+The second model was previously introduced in the altitude section of this chapter, but is being presented again for comparison purposes. This model utilises site altitude $Alt_{i}$ as its sole predictor, stratified by chronology:
 
 $$
 P_{i} \sim Bernoulli(\bar{p}_{i})
 $$
 
 $$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Altitude + bPrecip_{[ChrID]}\cdot MeanAnnualPrecip
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Alt_{i}
 $$
 
 $$
-\alpha_{ChrID} \sim Normal(0,1.3)
+\alpha_{[ChrID]} \sim Normal(0,1.3)
 $$
 
 $$
-bAlt_{ChrID} \sim Normal(0,1.3)
+bAlt_{[ChrID]} \sim Normal(0,1.3)
+$$ We subsequently include both altitude and mean annual precipitation in a third model to examine whether the addition of both predictors enhances the fit significantly:
+
+$$
+P_{i} \sim Bernoulli(\bar{p}_{i})
 $$
 
 $$
-bPrecip_{ChrID} \sim Normal(0,1.3)
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Alt_{i} + bPrecip_{[ChrID]}\cdot MeanAnnualPrecip_{i}
+$$
+
+$$
+\alpha_{[ChrID]} \sim Normal(0,1.3)
+$$
+
+$$
+bAlt_{[ChrID]} \sim Normal(0,1.3)
+$$
+
+$$
+bPrecip_{[ChrID]} \sim Normal(0,1.3)
 $$
 
 ```{r}
@@ -6096,17 +5055,13 @@ dat.CWheat_Precip = list(
 
 ```
 
-##### Prior predictive simulations
-
-We also want to make sure that the priors are weakly informative and are not deeply impacting the models.
-
 ```{r}
 #| echo: false
 #| label: fig-prior-pred-cereals-precip
-#| fig-cap: "Prior predictive simulation for the precipitation models used in this section."
+#| fig-cap: "Prior predictive simulations were conducted for the precipitation models employed in this section. As in previous models, both scenarios (present or absent) are equally plausible."
 #| fig-subcap: 
-#|  - "Single coefficient"
-#|  - "Two coefficients"
+#|  - "Single coefficient."
+#|  - "Two coefficients."
 #| layout-ncol: 2
 
 # Prior predictive simulation:
@@ -6117,8 +5072,8 @@ simplehist(rbern(1000,
                     rnorm(1e4, 0,1.3)*sample(bot_altitude_precip$Precip_Mean, size=1e4, replace=T)
     )
                   ),
-           xlab="Taxa", 
-  main="Prior Predictive Simulation: One coefficient",
+           xlab="Present", 
+  main="Prior Predictive Simulation: One predictor",
            col=rangi2)
 
 simplehist(rbern(1000, 
@@ -6130,13 +5085,11 @@ simplehist(rbern(1000,
                               size=1e4, replace=T)
     )
                   ),
-           xlab="Taxa", 
- main="Prior Predictive Simulation: Two coefficients",
+           xlab="Present", 
+ main="Prior Predictive Simulation: Two predictors",
            col=rangi2)
 
 ```
-
-#### Performance and comparisons
 
 ```{r}
 #| echo: false
@@ -6177,7 +5130,9 @@ saveRDS(m_CWheat_precip_alt, "stan_models/precipitation_models/m_CWheat_precip_a
 
 ```
 
-The comparison of the three models using the WAIC measure does not show a significant difference between the three models. Although for simplicity only the common wheat models are shown, repeated calculation for several other plants (including non cereal plants) did not show a significant impact of adding mean annual precipitation to the model.
+However, our findings suggest that including the average annual rainfall as a predictor did not have a significant impact on model fitness. When comparing the three models using the WAIC measure[^archaeobotany-3], no significant difference was observed:
+
+[^archaeobotany-3]: As a reminder, note that WAIC (and pWAIC) scores hold meaning only within the context of model comparison, with the aim being to favour the lowest score when significant differences exist between models. However, computing this score for a single model lacks significance as it serves purely as a relative measure within the framework of model comparison.
 
 ```{r}
 #| echo: false
@@ -6185,18 +5140,17 @@ m_Cwheat_precip <- readRDS("stan_models/precipitation_models/m_Cwheat_precip.rds
 m_CWheat_altitude <- readRDS("stan_models/precipitation_models/m_CWheat_altitude.rds")
 m_CWheat_precip_alt <- readRDS("stan_models/precipitation_models/m_Cwheat_precip_alt.rds")
 
-compare(m_Cwheat_precip, m_CWheat_altitude, m_CWheat_precip_alt, func = "WAIC")
+round(
+compare(m_Cwheat_precip, m_CWheat_altitude, m_CWheat_precip_alt, func = "WAIC"),
+2)
 ```
 
-```{r}
-# Test prior
-m_Cwheat_precip
-```
+Although we have only shown the free-threshing wheats models for simplicity, we have created models for various other plants, including non-cereal plants, and found no significant impact of mean annual precipitation on the model. It should be noted that our analysis employs presence/absence measures. While this variable may be beneficial in predicting crop output, it is not appropriate for this particular data conversion. As the disparities are negligible, selecting the optimal predictor is subjective and based on what we consider to be a more relevant factor in explaining historical agricultural phenomena. Therefore, we will rely on altitude.
 
 ```{r}
 #| echo: false
 #| label: fig-coef-prec-alt-wheat-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
+#| fig-cap: "Slope coefficients for the three models analysed are displayed. The numerical values indicate the chronological levels. Larger bars indicate greater credible intervals."
 #| fig-subcap: 
 #|  - "Precipitation coefficients"
 #|  - "Altitude coefficients"
@@ -6322,7 +5276,7 @@ m_Rye_precip.plot <- as.data.frame(dat.Rye_Precip) %>%
 
 ```
 
-## Temperature
+### Temperature
 
 ```{r}
 #| echo: false
@@ -6399,17 +5353,48 @@ dat.Grape_temperature = list(
 
 ```
 
-
-#### Model 1: Temperature only
-
-The following model uses mean annual temperature values as a coefficient for the slope and weakly informative priors for both the intercept and the slope.
+In contrast to the precipitation models, models that utilise the standardised mean annual temperatures as a predictor exhibited diverse results. For each plant that is known to be more vulnerable to extreme temperature conditions or valuable plants, three models were developed. The models' specifications remain identical to those presented in the preceding section. The first model utilised temperature ($MeanAnnualTemp_{i}$) as the sole predictor, stratified by chronology ($[ChrID]$):
 
 $$
 P_{i} \sim Bernoulli(\bar{p}_{i})
 $$
 
 $$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bTemp_{[ChrID]}\cdot MeanAnnualTemp
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bTemp_{[ChrID]}\cdot MeanAnnualTemp_{i}
+$$
+
+$$
+\alpha_{[ChrID]} \sim Normal(0,1.3)
+$$
+
+$$
+bTemp_{[ChrID]} \sim Normal(0,1.3)
+$$
+
+The second model is the altitude model that we have already presented before, and is used as a baseline for comparison:
+
+$$
+P_{i} \sim Bernoulli(\bar{p}_{i})
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Alt_{i}
+$$
+
+$$
+\alpha_{[ChrID]} \sim Normal(0,1.3)
+$$
+
+$$
+bAlt_{[ChrID]} \sim Normal(0,1.3)
+$$ Finally, the last model uses two predictors (in addition to chronology), namely site elevation and standardised mean annual temperature:
+
+$$
+P_{i} \sim Bernoulli(\bar{p}_{i})
+$$
+
+$$
+logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Alt_{i} + bTemp_{[ChrID]}\cdot MeanAnnualTemp_{i}
 $$
 
 $$
@@ -6417,113 +5402,16 @@ $$
 $$
 
 $$
-bTemp_{ChrID} \sim Normal(0,1.3)
+bAlt_{[ChrID]} \sim Normal(0,1.3)
 $$
 
 $$
-\phi \sim Exponential(1)
+bTemp_{[ChrID]} \sim Normal(0,1.3)
 $$
 
-#### Model 2: Altitude only
+Given that the models are identical to those created for the precipitation variable, we do not reproduce the prior predictive simulations.
 
-The following model uses altitude values (in km) as a coefficient for the slope and weakly informative priors for both the intercept and the slope. It is the same model presented before.
-
-$$
-P_{i} \sim Bernoulli(\bar{p}_{i})
-$$
-
-$$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Altitude
-$$
-
-$$
-\alpha_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-bAlt_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-\phi \sim Exponential(1)
-$$
-
-#### Model 3: Altitude and Temperature
-
-The following model uses altitude (in km) and standardized mean annual temperature values as coefficients for the slope, and weakly informative priors for both the intercept and the slope.
-
-$$
-P_{i} \sim Bernoulli(\bar{p}_{i})
-$$
-
-$$
-logit(\bar{p}_{i}) = \alpha_{[ChrID]} + bAlt_{[ChrID]}\cdot Altitude + bTemp_{[ChrID]}\cdot MeanAnnualTemp
-$$
-
-$$
-\alpha_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-bAlt_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-bTemp_{ChrID} \sim Normal(0,1.3)
-$$
-
-$$
-\phi \sim Exponential(1)
-$$
-
-#### Prior predictive simulations
-
-We also want to make sure that the priors are weakly informative and are not deeply impacting the models.
-
-```{r}
-#| echo: false
-#| label: fig-prior-pred-cereals-temperature
-#| fig-cap: "Prior predictive simulation for the temperature models used in this section."
-#| fig-subcap: 
-#|  - "Single coefficient"
-#|  - "Two coefficients"
-#| layout-ncol: 2
-
-# Prior predictive simulation:
-
-simplehist(rbern(1000, 
-                  inv_logit(
-                    rnorm(1e4, 0, 1.3)+
-                    rnorm(1e4, 0,1.3)*sample(bot_altitude_precip$Precip_Mean, size=1e4, replace=T)
-    )
-                  ),
-           xlab="Taxa", 
-  main="Prior Predictive Simulation: One coefficient",
-           col=rangi2)
-
-simplehist(rbern(1000, 
-                 inv_logit(
-                    rnorm(1e4, 0, 1.3) + 
-    rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$Precip_Mean, 
-                              size=1e4, replace=T)+
-    rnorm(1e4, 0, 1.3)*sample(bot_altitude_precip$site_altitude/1000, 
-                              size=1e4, replace=T)
-    )
-                  ),
-           xlab="Taxa", 
- main="Prior Predictive Simulation: Two coefficients",
-           col=rangi2)
-
-
-```
-
-### Performance and comparisons
-
-The creation of models for each plant is extremely time consuming, and for the purposes of this comparison I chose to compare only taxa that are known to be more sensitive to temperature and that have economic implications.
-
-#### Common wheat
-
-The comparison of the three models using the WAIC, although showing a slightly larger distance as opposed to the precipitation models, is still not significant enough to justify the introduction of another predictor in the model.
+The investigation into models for free-threshing wheat, rye, legumes, and grape indicates that incorporating an additional predictor does not appear to be warranted. The current models for each of these crops adequately capture the relevant dynamics and trends associated with their respective occurrences.
 
 ```{r}
 #| echo: false
@@ -6558,26 +5446,10 @@ saveRDS(m_CWheat_temperature_alt, "stan_models/precipitation_models/m_CWheat_tem
 m_Cwheat_temperature <- readRDS("stan_models/precipitation_models/m_Cwheat_temperature.rds")
 m_CWheat_temperature_alt <- readRDS("stan_models/precipitation_models/m_CWheat_temperature_alt.rds")
 
-compare(m_Cwheat_temperature, m_CWheat_altitude, m_CWheat_temperature_alt, func = "WAIC")
+round(
+compare(m_Cwheat_temperature, m_CWheat_altitude, m_CWheat_temperature_alt, func = "WAIC"),
+2)
 ```
-
-```{r}
-#| echo: false
-#| label: fig-coef-temp-alt-wheat-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
-#| fig-subcap: 
-#|  - "Temperature coefficients"
-#|  - "Altitude coefficients"
-#| layout-ncol: 2
-
-plot( coeftab(m_Cwheat_temperature,m_CWheat_altitude, m_CWheat_temperature_alt), par=5:8)
-plot( coeftab(m_Cwheat_temperature,m_CWheat_altitude, m_CWheat_temperature_alt), par=c(243:246) )
-
-```
-
-#### Rye
-
-The comparison of the three models using the WAIC is not significant enough to justify the introduction of another predictor in the model.
 
 ```{r}
 #| echo: false
@@ -6623,26 +5495,11 @@ m_Rye_temperature <- readRDS("stan_models/precipitation_models/m_Rye_temperature
 m_Rye_temperature_alt <- readRDS("stan_models/precipitation_models/m_Rye_temperature_alt.rds")
 m_Rye_altitude <- readRDS("stan_models/precipitation_models/m_Rye_altitude.rds")
 
-compare(m_Rye_temperature, m_Rye_altitude, m_Rye_temperature_alt, func = "WAIC")
-```
-
-```{r}
-#| echo: false
-#| label: fig-coef-temp-alt-Rye-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
-#| fig-subcap: 
-#|  - "Temperature coefficients"
-#|  - "Altitude coefficients"
-#| layout-ncol: 2
-
-plot( coeftab(m_Rye_temperature,m_Rye_altitude, m_Rye_temperature_alt), par=5:8)
-plot( coeftab(m_Rye_temperature,m_Rye_altitude, m_Rye_temperature_alt), par=c(243:246) )
+round(
+compare(m_Rye_temperature, m_Rye_altitude, m_Rye_temperature_alt, func = "WAIC"),
+2)
 
 ```
-
-#### Legumes
-
-The comparison of the three models using the WAIC is not significant enough to justify the introduction of another predictor in the model.
 
 ```{r}
 #| echo: false
@@ -6677,27 +5534,11 @@ saveRDS(m_Legumes_temperature_alt, "stan_models/precipitation_models/m_Legumes_t
 m_Legumes_temperature <- readRDS("stan_models/precipitation_models/m_Legumes_temperature.rds")
 m_Legumes_temperature_alt <- readRDS("stan_models/precipitation_models/m_Legumes_temperature_alt.rds")
 
-compare(m_Legumes_temperature, m_Legumes_altitude, m_Legumes_temperature_alt, func = "WAIC")
+round(
+compare(m_Legumes_temperature, m_Legumes_altitude, m_Legumes_temperature_alt, func = "WAIC"),
+2)
 
 ```
-
-```{r}
-#| echo: false
-#| label: fig-coef-temp-alt-Legumes-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
-#| fig-subcap: 
-#|  - "Temperature coefficients"
-#|  - "Altitude coefficients"
-#| layout-ncol: 2
-
-plot( coeftab(m_Legumes_temperature,m_Legumes_altitude, m_Legumes_temperature_alt), par=5:8)
-plot( coeftab(m_Legumes_temperature,m_Legumes_altitude, m_Legumes_temperature_alt), par=c(243:246) )
-
-```
-
-#### Grape
-
-The combination of temperature and altitude as predictors for grape occurrence did not produce any strong enough difference that would favour the use of a predictor in place of the other.
 
 ```{r}
 #| echo: false
@@ -6732,27 +5573,15 @@ saveRDS(m_Grape_temperature_alt, "stan_models/precipitation_models/m_Grape_tempe
 m_Grape_temperature <- readRDS("stan_models/precipitation_models/m_Grape_temperature.rds")
 m_Grape_temperature_alt <- readRDS("stan_models/precipitation_models/m_Grape_temperature_alt.rds")
 
-compare(m_Grape_temperature, m_grape_altitude, m_Grape_temperature_alt, func = "WAIC")
+round(
+compare(m_Grape_temperature, m_grape_altitude, m_Grape_temperature_alt, func = "WAIC"),
+2)
 
 ```
 
-```{r}
-#| echo: false
-#| label: fig-coef-temp-alt-Grape-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
-#| fig-subcap: 
-#|  - "Temperature coefficients"
-#|  - "Altitude coefficients"
-#| layout-ncol: 2
+However, the olive-related findings are noteworthy. After comparing the three models thoroughly, it is evident that choosing a model that includes both temperature and site elevation as explanatory factors proves beneficial, despite the additional predictor being penalized. The superiority of this model's fit, when compared to the other two, warrants closer scrutiny of the predicted probability of olive occurrence in relation to the standardized mean annual temperatures and site elevation (expressed in km). It is noteworthy that, in each chronology, there is minimal dispersion within the 0.50 HDIs.
 
-plot( coeftab(m_Grape_temperature,m_grape_altitude, m_Grape_temperature_alt), par=5:8)
-plot( coeftab(m_Grape_temperature,m_grape_altitude, m_Grape_temperature_alt), par=c(243:246) )
-
-```
-
-#### Olive
-
-If the model is applied to other types of plants, the situation changes. In the case of olives the prediction accuracy increases when the mean annual temperature and the altitudes are both slope coefficients.
+The temporal differences between these observations seem to remain stable until the 11^th^ century. Remarkably, locations with higher temperatures exhibit a greater propensity for either consuming or producing olives. On the contrary, sites located at higher elevations exhibit a lower likelihood of participating in the consumption or production of this specific plant.
 
 ```{r}
 #| echo: false
@@ -6798,13 +5627,15 @@ m_Olive_temperature <- readRDS("stan_models/precipitation_models/m_Olive_tempera
 m_Olive_temperature_alt <- readRDS("stan_models/precipitation_models/m_Olive_temperature_alt.rds")
 m_Olive_altitude <- readRDS("stan_models/precipitation_models/m_Olive_altitude.rds")
 
-compare(m_Olive_temperature, m_Olive_altitude, m_Olive_temperature_alt, func = "WAIC")
+round(
+compare(m_Olive_temperature, m_Olive_altitude, m_Olive_temperature_alt, func = "WAIC"),
+2)
 ```
 
 ```{r}
 #| echo: false
 #| label: fig-coef-temp-alt-olive-models
-#| fig-cap: "Slope coefficients for the three models under examination. The [numbers] indicate the chronological levels."
+#| fig-cap: "Slope coefficients for the three models analysed are displayed. The numerical values indicate the chronological levels. Larger bars indicate greater credible intervals."
 #| fig-subcap: 
 #|  - "Temperature coefficients"
 #|  - "Altitude coefficients"
@@ -6814,14 +5645,6 @@ plot( coeftab(m_Olive_temperature,m_Olive_altitude, m_Olive_temperature_alt), pa
 plot( coeftab(m_Olive_temperature,m_Olive_altitude, m_Olive_temperature_alt), par=c(243:246) )
 
 ```
-
-Given that the model which used temperature and altitude performed better than the individual slope models, it is worth it to look at the predicted olive occurrence probability plotted against:
-
--   the standardised mean annual temperatures.
-
--   elevation (km).
-
-The chronological differences seem to be consistent until the 11th century. Sites with higher temperatures have a higher likelihood of consuming/producing olives. Likewise, sites with higher altitudes have a reduced probability of consuming or producing the same plant.
 
 ```{r}
 #| echo: false
@@ -6877,9 +5700,9 @@ m_Olive_temperature.plot
 m_Olive_altitude.plot
 ```
 
+## Cereal proportions {style="text-align: justify;"}
 
-## Cereal proportions
-The computations on the archaeobotanical dataset that have been done so far are based on presence/absence values. The reasons relate to the numerous biases present in the samples, which skew the distributions. However, this approach does not allow to draw any quantitative conclusion. From a qualitative standpoint, it can be informative to see which sites are producing different results by calculating the ratio of single cereal taxa on the total of cereal grains found in a certain sample. For the sake of exploring the quantitative trends, keeping in mind that these results are heavily biased by outliers and sample sizes, summary tables grouped by chronology were produced. In particular, two tables are presented here. The first (@tbl-Cereals-Ratios-Means) takes into account missing values, so that if a particular taxon was not found in a sample the missing value was converted to 0. The second table (@tbl-Cereals-Ratios-Means-Pres-Only) calculates the means only based on true presences, and missing values are ignored from the computation. In addition to these two tables, a different approach has also been presented. Raw data has been converted into relative ranks, which assigns increasing ranks to the count values (excluding zeros) on a scale of 0 to 1, thus minimizing the impact of extreme outliers and reducing the effects of large differences in values. @tbl-Cereals-Ranks-ratios-means displays the means of the relative ranks, grouped by chronology. In all three approaches, the computations have been based only on totals of cereals attributed to a species. Although these tables allow some considerations on the proportions of cereals in the sites under investigation, it is important to remember that the results might be biased by the quality of the samples.  
+The computations on the archaeobotanical dataset that have been done so far are based on presence/absence values. The reasons relate to the numerous biases present in the samples, which skew the distributions. However, this approach does not allow to draw any quantitative conclusion. From a qualitative standpoint, it can be informative to see which sites are producing different results by calculating the ratio of single cereal taxa on the total of cereal grains found in a certain sample. For the sake of exploring the quantitative trends, keeping in mind that these results are heavily biased by outliers and sample sizes, summary tables grouped by chronology were produced. In particular, two tables are presented here. The first (@tbl-Cereals-Ratios-Means) takes into account missing values, so that if a particular taxon was not found in a sample the missing value was converted to 0. The second table (@tbl-Cereals-Ratios-Means-Pres-Only) calculates the means only based on true presences, and missing values are ignored from the computation. In addition to these two tables, a different approach has also been presented. Raw data has been converted into relative ranks, which assigns increasing ranks to the count values (excluding zeros) on a scale of 0 to 1, thus minimizing the impact of extreme outliers and reducing the effects of large differences in values. @tbl-Cereals-Ranks-ratios-means displays the means of the relative ranks, grouped by chronology. In all three approaches, the computations have been based only on totals of cereals attributed to a species. Although these tables allow some considerations on the proportions of cereals in the sites under investigation, it is important to remember that the results might be biased by the quality of the samples.
 
 ```{r}
 #| echo: false
@@ -7002,7 +5825,6 @@ Cereals_Ranks_ratios_means = cbind(Cereals_Ranks_ratios_means,
 ```
 
 ::: {.content-visible when-format="html"}
-
 ```{r}
 #| echo: false
 #| message: false
@@ -7050,110 +5872,3 @@ kable(Cereals_Ranks_ratios_means) %>%
 
 ```
 :::
-
-## To do:
-
-### Wine/Olive oil production in Italy
-
-Questions: Is there a decrease in the production of cash crops in Late Roman villas? In particular in central Italian villas.
-
-Available data:
-
--   Seed remains
-
--   Wine presses in Roman Italy (1st to 6th c. ca) -\> Dodd
-
--   Wine/Olive presses, dated but no info on wine/olive or size: http://oxrep.classics.ox.ac.uk/databases/olive_oil_and_wine_presses_database/
-
--   Dodd: "a notable increase in size from around the first century BCE." No quantitative data provided.
-
-### Fruit consumption
-
--   The domesticated and the wild
-
--   What fruits arrive on the Roman table?
-
--   Can we see a decreased consumption of figs during the LALIA in the north?
-
-## Test: Gaussian processes
-
-```{r}
-#| eval: false
-#| echo: false
-
-# 1. Load the dataset
-Bot_Sites_for_GPR <- Archaeobot_Condensed
-
-# 2. See which Chronology has more data
-table(Bot_Sites_for_GPR$Chronology)
-# It is the Roman. 
-
-# 3. Let's check for imbalances in macroregions
-table((subset(Bot_Sites_for_GPR, Chronology=="EMA"))$Macroregion)
-Bot_Sites_for_GPR<-subset(Bot_Sites_for_GPR, Chronology=="EMA" & Macroregion=="Northern Italy")
-# Central Italy has only 5 sites. N and S are kind of balanced
-# Decide later whether to remove C Italy
-
-library(geosphere)
-
-# I want an index so I know which sites are which
-Bot_Sites_for_GPR$Incremental_Index = 1:nrow(Bot_Sites_for_GPR)
-
-Bot_Sites_for_GPR_Coords <- data.frame(X= Bot_Sites_for_GPR$X, Y= Bot_Sites_for_GPR$Y, row.names = Bot_Sites_for_GPR$Incremental_Index)
-
-Bot_Sites_for_GPR_DistMatrix <- distm(Bot_Sites_for_GPR_Coords, fun = distHaversine)/1000
-Bot_Sites_for_GPR_DistMatrix <- round(Bot_Sites_for_GPR_DistMatrix,1)
-
-rownames(Bot_Sites_for_GPR_DistMatrix) <- Bot_Sites_for_GPR$Site
-colnames(Bot_Sites_for_GPR_DistMatrix) <- Bot_Sites_for_GPR$Site
-head(Bot_Sites_for_GPR_DistMatrix)
-
-# Ok distance matrix is ready
-# Now let's decide a covariation curve
-curve( exp(-1*x) , from=0 , to=4 , lty=2 )
-curve( exp(-1*x^2) , add=TRUE )
-
-names(Bot_Sites_for_GPR)
-
-Bot_Sites_for_GPR.EMA_MG <- subset(Minor_Grains, Chronology=="EMA" & Macroregion=="Northern Italy")
-Bot_Sites_for_GPR.EMA_MG$ID <- Bot_Sites_for_GPR$ID
-Bot_Sites_for_GPR.EMA_MG$Observation <- 1:nrow(Bot_Sites_for_GPR.EMA_MG)
-
-dat.Bot_Sites_for_GPR.EMA_MG <- list(
-    MG_Found = Bot_Sites_for_GPR.EMA_MG$Grain_Count, 
-    Tot_MG_Grains = Bot_Sites_for_GPR.EMA_MG$All_Grain_Count,
-    Observation=Bot_Sites_for_GPR.EMA_MG$Observation,
-    Dmat=Bot_Sites_for_GPR_DistMatrix)
-        
-        
-m14.8 <- ulam(
-    alist(
-        MG_Found ~ dbinom(7, p),
-        logit(p) <- Intercept * exp(Site[Observation]),
-        vector[42]:Site ~ multi_normal( 0 , SIGMA ),
-        matrix[42,42]:SIGMA <- cov_GPL2( Dmat , 
-                                         etasq , 
-                                         rhosq , 
-                                         0.01 ),
-        Intercept ~ dexp(1),
-        etasq ~ dexp( 2 ),
-        rhosq ~ dexp( 0.5 )
-    ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
-
-m14.8nc <- ulam(
-    alist(
-        MG_Found ~ dbinom(7, p),
-        logit(p) <- a*exp(Site[Observation]),
-        # non-centered Gaussian Process prior
-        transpars> vector[42]: Site <<- L_SIGMA * z,
-        vector[42]: z ~ normal( 0 , 1 ),
-        transpars> matrix[42,42]: L_SIGMA <<- cholesky_decompose( SIGMA ),
-        transpars> matrix[42,42]: SIGMA <- cov_GPL2( Dmat , 
-                                                     etasq , rhosq , 0.01 ),
-        a ~ dexp( 1 ),
-        etasq ~ dexp( 2 ),
-        rhosq ~ dexp( 0.5 )
- ), data=dat.Bot_Sites_for_GPR.EMA_MG , chains=4 , cores=4 , iter=2000 )
-
-
-```

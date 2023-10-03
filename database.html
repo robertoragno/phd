@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,14 +17,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +39,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,7 +77,8 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -88,11 +89,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./database.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -100,125 +106,132 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./literature_review.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></a>
+  <a href="./literature_review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Literature Review</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Materials</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Materials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./materials_archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
+  <a href="./materials_zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./database.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></a>
+  <a href="./database.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  <a href="./methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Methods</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Results</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Results</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></a>
+  <a href="./archaeobotany.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Archaeobotany</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./isotopes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Isotopes</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./integrating_bot_zoo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Integrating the evidence</span></a>
+  <a href="./zooarchaeology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Zooarchaeology</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Discussion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./conclusions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conclusions</span></a>
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">Sites bibliography</a>
+  <a href="./sites_references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sites bibliography</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./functions.html" class="sidebar-item-text sidebar-link">Custom functions</a>
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Custom functions</span></a>
   </div>
 </li>
       </ul>
@@ -226,20 +239,21 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">5.1</span>  Introduction</a></li>
-  <li><a href="#databases-in-archaeology" id="toc-databases-in-archaeology" class="nav-link" data-scroll-target="#databases-in-archaeology"><span class="toc-section-number">5.2</span>  Databases in archaeology</a></li>
-  <li><a href="#sec-environm-db" id="toc-sec-environm-db" class="nav-link" data-scroll-target="#sec-environm-db"><span class="toc-section-number">5.3</span>  Creating an Environmental Archaeology database</a></li>
-  <li><a href="#database-storing-procedures" id="toc-database-storing-procedures" class="nav-link" data-scroll-target="#database-storing-procedures"><span class="toc-section-number">5.4</span>  Database storing procedures</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#databases-in-archaeology" id="toc-databases-in-archaeology" class="nav-link" data-scroll-target="#databases-in-archaeology"><span class="header-section-number">5.2</span> Databases in archaeology</a></li>
+  <li><a href="#sec-environm-db" id="toc-sec-environm-db" class="nav-link" data-scroll-target="#sec-environm-db"><span class="header-section-number">5.3</span> Creating an Environmental Archaeology database</a></li>
+  <li><a href="#database-storing-procedures" id="toc-database-storing-procedures" class="nav-link" data-scroll-target="#database-storing-procedures"><span class="header-section-number">5.4</span> Database storing procedures</a>
   <ul class="collapse">
-  <li><a href="#general-tables" id="toc-general-tables" class="nav-link" data-scroll-target="#general-tables"><span class="toc-section-number">5.4.1</span>  General tables</a></li>
-  <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany"><span class="toc-section-number">5.4.2</span>  Archaeobotany</a></li>
-  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology"><span class="toc-section-number">5.4.3</span>  Zooarchaeology</a></li>
+  <li><a href="#general-tables" id="toc-general-tables" class="nav-link" data-scroll-target="#general-tables"><span class="header-section-number">5.4.1</span> General tables</a></li>
+  <li><a href="#archaeobotany" id="toc-archaeobotany" class="nav-link" data-scroll-target="#archaeobotany"><span class="header-section-number">5.4.2</span> Archaeobotany</a></li>
+  <li><a href="#zooarchaeology" id="toc-zooarchaeology" class="nav-link" data-scroll-target="#zooarchaeology"><span class="header-section-number">5.4.3</span> Zooarchaeology</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -249,7 +263,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-database" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></h1>
+<h1 class="title"><span id="sec-database" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The database</span></span></h1>
 </div>
 
 
@@ -264,17 +278,17 @@ div.csl-indent {
 
 </header>
 
-<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
-Page under construction
+<div class="callout-title-container flex-fill">
+Page under construction.
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>Important: REMOVE tables with weights</p>
 </div>
 </div>
 <section id="introduction" class="level2" style="text-align:justify;" data-number="5.1">
@@ -318,23 +332,20 @@ Page under construction
 <li><p><code>plant_remains</code></p></li>
 <li><p><code>faunal_remains</code></p></li>
 </ul>
-<p>Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The tables <code>faunal_chrono_weights</code> and <code>plants_chrono_weights</code> contain the automated calculation of the samples weights (refer to <span class="quarto-unresolved-ref">?sec-chrono-fuzziness</span>). The <a href="#fig-db-schema">Figure&nbsp;<span>5.1</span></a> shows the schema with the complete list of tables in the database.</p>
+<p>Each entry in the samples tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. The <a href="#fig-db-schema">Figure&nbsp;<span>5.1</span></a> shows the schema with the complete list of tables in the database.</p>
 <div id="fig-db-schema" class="quarto-figure quarto-figure-center anchored" style="text-align:center;">
 <figure class="figure">
 <p><img src="images/DB_Structure.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;5.1: Schema of the database, with the table <code>site_list</code> at the core.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;5.1: Schema of the database, with the table <code>site_list</code> at the core.</figcaption>
 </figure>
 </div>
 <p>The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1<sup>st</sup> millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in <a href="#fig-publication-type-counts">Figure&nbsp;<span>5.2</span></a>.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-publication-type-counts" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="database_files/figure-html/fig-publication-type-counts-1.png" class="img-fluid figure-img" width="480"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;5.2: Count of the publication types in the database.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;5.2: Count of the publication types in the database.</figcaption>
 </figure>
 </div>
 </div>
@@ -679,8 +690,8 @@ Page under construction
 <table class="table">
 <caption>Table&nbsp;5.6: Macroregions of Italy.</caption>
 <colgroup>
-<col style="width: 9%">
-<col style="width: 90%">
+<col style="width: 18%">
+<col style="width: 81%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -816,14 +827,14 @@ Page under construction
 </tbody>
 </table>
 </div>
-<p>For further information concerning the division of the dataset into larger chronologies, see <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>.</p>
+<p>For further information concerning the division of the dataset into larger chronologies, see <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.1</span></a>.</p>
 </section>
 </section>
 <section id="archaeobotany" class="level3" data-number="5.4.2">
 <h3 data-number="5.4.2" class="anchored" data-anchor-id="archaeobotany"><span class="header-section-number">5.4.2</span> Archaeobotany</h3>
 <section id="macroremains" class="level4" data-number="5.4.2.1">
 <h4 data-number="5.4.2.1" class="anchored" data-anchor-id="macroremains"><span class="header-section-number">5.4.2.1</span> Macroremains</h4>
-<p>The process of data collection from edited publications (see <a href="#fig-publication-type-counts">Figure&nbsp;<span>5.2</span></a> for the publication types) did not present major problems in taxa comparability. The names of the plants were in fact matching across publications. However, in some cases authors could only identify the seeds’ species (<em>e.g.&nbsp;Avena sp.</em>), or it was not possible to properly identify the taxa (<em>e.g.&nbsp;Cerealia und.</em>). Specific taxa are indeed hard to identify without other elements of the plants; for this reason some taxa have been merged together in one column of the database. For instance, <em>Triticum aestivum</em> and <em>Triticum durum</em> are recorded together. Seed counts have been reported in the species column when an author reported a taxon rarely reported in other publications, rather than creating a new column for that taxon. For instance, <em>Prunus armeniaca</em> is reported in the column <em>Prunus sp.</em> In this case, the name of the identified taxon can be accessed through the <code>extra_notes</code> field.</p>
+<p>The process of data collection from edited publications (see <a href="#fig-publication-type-counts">Figure&nbsp;<span>5.2</span></a> for the publication types) did not present major problems in taxa comparability. The names of the plants were in fact matching across publications. However, in some cases authors could only identify the seeds’ species (<em>e.g.&nbsp;Avena sp.</em>), or it was not possible to properly identify the taxa (<em>e.g.&nbsp;Cerealia und.</em>). Specific taxa are indeed hard to identify without other elements of the plants; for this reason some taxa have been merged together in one column of the database. For instance, <em>Triticum aestivum</em> and <em>Triticum durum</em> are recorded together. Seed counts have been reported in the species column when an author reported a taxon rarely reported in other publications, rather than creating a new column for that taxon. For instance, <em>Prunus armeniaca</em> is reported in the column <em>Prunus sp.</em> In this case, the name of the identified taxon can be accessed through the <code>extra_notes</code> field. More information on the nomenclature used in this research can be found in the <a href="materials_archaeobotany.html"><span>Chapter&nbsp;3</span></a>.</p>
 <section id="table-plant_remains" class="level5" data-number="5.4.2.1.1">
 <h5 data-number="5.4.2.1.1" class="anchored" data-anchor-id="table-plant_remains"><span class="header-section-number">5.4.2.1.1</span> Table: <code>plant_remains</code></h5>
 <p>The plant remains have been stored in the master table <code>plant_remains</code>. This is the main table that contains the absolute counts for each sample and it is linked to other tables, to locate the sample at site and chronological level. The fields included in the table are:</p>
@@ -895,7 +906,7 @@ Page under construction
 <li><p><code>sample_id</code>: foreign key (linked to the table <code>plant_remains</code>), where the <code>sample_id</code> is the field <code>uuid</code>.</p></li>
 <li><p><code>sample_period</code>: foreign key (linked to the table <code>Periodization</code>), where the <code>sample_period</code> is the field <code>id</code>.</p></li>
 </ul>
-<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>).</p>
+<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.1</span></a>).</p>
 </section>
 <section id="table-plants_chrono_weights" class="level5" data-number="5.4.2.1.4">
 <h5 data-number="5.4.2.1.4" class="anchored" data-anchor-id="table-plants_chrono_weights"><span class="header-section-number">5.4.2.1.4</span> Table: <code>plants_chrono_weights</code></h5>
@@ -968,7 +979,7 @@ Page under construction
 <li><p><code>sample_period</code>: foreign key (linked to the table <code>Periodization</code>), where the <code>sample_period</code> is the field <code>id</code>.</p></li>
 <li><p><code>chrono_unique_id</code>: an incremental unique primary key. It was necessary to have a distinct unique key as samples can range between two chronologies.</p></li>
 </ul>
-<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a>).</p>
+<p>Information concerning the way the chronology is attributed to the sample can be found in the methodology chapter (<a href="methods.html#sec-data-collection"><span>Section&nbsp;6.1</span></a>).</p>
 </section>
 <section id="table-faunal_chrono_weights" class="level4" data-number="5.4.3.4">
 <h4 data-number="5.4.3.4" class="anchored" data-anchor-id="table-faunal_chrono_weights"><span class="header-section-number">5.4.3.4</span> Table: <code>faunal_chrono_weights</code></h4>
@@ -980,23 +991,23 @@ Page under construction
 <p>Information concerning the way the weight is calculated can be found in the methodology chapter.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-boscatoPropostaDiDatabase2007" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-boscatoPropostaDiDatabase2007" class="csl-entry" role="listitem">
 Boscato, P., Fronza, V., Salvadori, F., 2007. Proposta di un database per i reperti faunistici. In: Fiore, I., Malerba, G., Chilardi, S. (Eds.), Atti Del 3 <span>Convegno Nazionale</span> Di <span>Archeozoologia</span>. <span>Siracusa</span> 3-5 <span>Novembre</span> 2000. <span>Istituto Poligrafico e Zecca dello Stato</span>, <span>Roma</span>, pp. 1–14.
 </div>
-<div id="ref-figueraDatabaseManagementDati2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-figueraDatabaseManagementDati2018" class="csl-entry" role="listitem">
 Figuera, M., 2018. <span>Database management e dati archeologici: standardizzazione e applicazione della logica fuzzy alla gestione delle fonti e delle attribuzioni tipologiche</span>. Archeologia e Calcolatori 29, 143–160.
 </div>
-<div id="ref-gattigliaDatabasesArchaeology2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-gattigliaDatabasesArchaeology2018" class="csl-entry" role="listitem">
 Gattiglia, G., 2018. <a href="https://doi.org/10.1002/9781119188230.saseas0147">Databases in <span>Archaeology</span></a>. In: López Varela, S.L. (Ed.), The <span>Encyclopedia</span> of <span>Archaeological Sciences</span>. <span>John Wiley &amp; Sons, Inc.</span>, <span>Hoboken, NJ, USA</span>, pp. 1–4.
 </div>
-<div id="ref-mercuriPollenMacroremainsHolocene2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mercuriPollenMacroremainsHolocene2015" class="csl-entry" role="listitem">
 Mercuri, A.M., Allevato, E., Arobba, D., Bandini Mazzanti, M., Bosi, G., Caramiello, R., Castiglioni, E., Carra, M.L., Celant, A., Costantini, L., Di Pasquale, G., Fiorentino, G., Florenzano, A., Guido, M., Marchesini, M., Mariotti Lippi, M., Marvelli, S., Miola, A., Montanari, C., Nisbet, R., Peña-Chocarro, L., Perego, R., Ravazzi, C., Rottoli, M., Sadori, L., Ucchesu, M., Rinaldi, R., 2015. Pollen and macroremains from <span>Holocene</span> archaeological sites: <span>A</span> dataset for the understanding of the bio-cultural diversity of the <span>Italian</span> landscape. Review of Palaeobotany and Palynology 218, 250–266.
 </div>
-<div id="ref-niccolucciARIADNEplusAvventuraContinua2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-niccolucciARIADNEplusAvventuraContinua2020" class="csl-entry" role="listitem">
 Niccolucci, F., 2020. <span>ARIADNEplus</span>: <span>L</span>’avventura continua. DigItalia 2, 88–95.
 </div>
-<div id="ref-richardsArchivingArchaeologicalData2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-richardsArchivingArchaeologicalData2021" class="csl-entry" role="listitem">
 Richards, J.D., 2021. Archiving <span>Archaeological Data</span> in the <span>United Kingdom</span>. Internet Archaeology 58.
 </div>
 </div>
@@ -1006,7 +1017,7 @@ Richards, J.D., 2021. Archiving <span>Archaeological Data</span> in the <span>Un
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>See <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.2</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See <a href="methods.html#sec-data-collection"><span>Section&nbsp;6.1</span></a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>If the site is very large and the samples were numerous (e.g.&nbsp;Pompeii, Rome), the sites were recorded with different IDs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
@@ -1039,9 +1050,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1106,6 +1131,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1160,7 +1271,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-      <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
   </div>
 </footer>
 
