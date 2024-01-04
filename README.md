@@ -1,4 +1,4 @@
-# Peasants, Agriculture, and Environment in the 1st Millennium CE Italian Countryside: A Bayesian approach
+# Peasants, Agriculture, and Environment in the 1st Millennium CE Italian Countryside: A Bayesian approach
 
 ## Abstract
 This research aims to diachronically trace the patterns of subsistence, economy, and environmental change in relation to regional patterns of Italian peasantry in the 1st millennium CE. Scholarly debate on the dynamics of human-nature interaction in Italy during the transition from Late Antiquity to the early Middle Ages still leaves today some open questions. Were the former Roman economic structures and farming practices completely abandoned or did they find continuity during this turbulent time? Which agricultural strategies did peasants develop to cope with political, demographic and climatic change? 
@@ -8,4 +8,10 @@ The early Middle Ages mark a period of fundamental change when different geograp
 The results show indeed higher degrees of regionalisation in agricultural strategies during the EMA. My dissertation will contextualize these findings against textual sources to assess how people used the Italian agricultural landscape, and suggest which agents were responsible for changes. I argue that the discourse on northern Italian/French early medieval production has heavily influenced interpretations of the agrarian economies of the rest of the peninsula.
 
 ## Repository Structure
-This repository contains the files that were used to generate the online version of the dissertation. 
+This repository contains the files that were used to generate the online version of the dissertation. In particular:
+- `/Quarto files`: Contains the .qmd file used to generate the HTML version of the thesis, and all the scripts used to perform the statistics on the datasets.
+- `/Quarto files/archaeobotany.qmd`: This .qmd file contains (besides the textual output) the statistics on the archaeobotanical dataset.
+- `/Quarto files/zooarchaeology.qmd`: This .qmd file contains (besides the textual output) the statistics on the zooarchaeological dataset.
+- `/Quarto files/Database export`: Contains the datasets as queried from the database.
+
+
