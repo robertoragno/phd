@@ -14,4 +14,9 @@ This repository contains the files that were used to generate the online version
 - `/Quarto files/zooarchaeology.qmd`: This .qmd file contains (besides the textual output) the statistics on the zooarchaeological dataset.
 - `/Quarto files/Database export`: Contains the datasets as queried from the database.
 
+## Tools
+To run these scripts, you need to have R installed on your system. The Quarto .qmd files were generated using RStudio.
 
+## Contact
+- Email: roberto.ragno@uniba.it
+- Twitter: [@ragno_roberto](https://twitter.com/ragno_roberto)
