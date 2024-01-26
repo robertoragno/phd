@@ -1,12 +1,11 @@
 # Zooarchaeology {#sec-materials-zoo}
 
-## Introduction {style="text-align:justify"}
-
 This chapter provides an overview of the zooarchaeological materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. In addition to discussing general aspects of the discipline, this chapter also provides a more detailed examination of the specific data available for this research project, which have been stored in the database. The storing procedures are described in @sec-database.
 
 The objective of zooarchaeology is to recover, identify, and document animal remains from excavated archaeological sites to reconstruct the relationship between humans and other animals, as well as farming practices and food patterns. The name of the discipline has been debated since its origins, with the first reference to its practitioners being "zoologico-archaeologists". Mirroring the anthropological perspective of studying animal remains to gain insights into human behaviour, the discipline is widely referred as "zooarchaeology" especially in the Americas. The term "archaeozoology" is preferred by practitioners who emphasise the biological nature of faunal remains; especially in Africa and Eurasia. Italian scholars refer to the discipline as *archeozoologia*, reflecting this tradition. More alternatives are also available, including "ethnozoology", "paleoethnozoology" and "osteoarchaeology" [@clutton-brockArchaeozoology2017; @reitzZooarchaeology2008, pp. 4-5]. Because this thesis deals with humans' relationship with animals for economic and historical purposes, the term "zooarchaeology" will be used throughout this volume. The importance of archaeology in making inferences about historical environmental questions has already been emphasized in @sec-materials-bot; as with archaeobotany, although textual sources can be useful in answering historical questions, zooarchaeology is essential for verifying and complicating our understanding of the past. Zooarchaeology studies both vertebrate and invertebrate remains. Depending on the research questions, a zooarchaeologist may focus on domestic/wild animals, on a single species, on a specimen (*i.e.*, a single bone) at different scales ranging from a stratigraphic unit to an entire region [@lymanRelativeAbundancesSkeletal1994]. The recovery methods for animal bones include *in situ* examination, screening with sieves, and flotation techniques. All these techniques have already been outlined in @sec-materials-bot. However, it is important to address again the underlying challenges. Visual collection tends to favour larger bones, potentially leading to the loss of smaller finds if not properly sieved. In contrast, flotation proves particularly useful for the recovery of remains such as fish, birds, and mollusca. For instance, fish otoliths, which are structures found in the inner ears of fish, can be challenging to visually identify and are often successfully recovered through flotation. In @fig-screening-flotation-reitz2008, the impact of screening and flotation techniques on the recovery of fish vertebrae from the Kings Bay site, located on the Atlantic coast of Georgia, United States, is illustrated.
 
-![Influence of screening and flotation techniques on the recovery of fish vertebrae at the Kings Bay site on the Atlantic coast of Georgia, United States. Image after [@reitzZooarchaeology2008, p. 149]](images/Reitz%202008%20p%20149.png){#fig-screening-flotation-reitz2008 fig-align="center" width="400"}
+![Influence of screening and flotation techniques on the recovery of fish vertebrae at the Kings Bay site on the Atlantic coast of Georgia, United States. Image after [@reitzZooarchaeology2008, p. 149]](images/Reitz_2008_p149.png){#fig-screening-flotation-reitz2008 fig-align="center" width="400"}
+
 
 ## Sampling {style="text-align:justify"}
 
@@ -75,7 +74,7 @@ NISP_Tot_Sizes = data.frame(
 )
 
 NISP_Tot_Sizes = t(NISP_Tot_Sizes)
-colnames(NISP_Tot_Sizes) = c("Total NISP", "Total NISP of pigs/cattle/caprine")
+colnames(NISP_Tot_Sizes) = c("Total NISP", "Total NISP of pigs/cattle/sheep/goats")
 
 # Nisp Sizes by Chronology
 NISP_Sizes_ZOO = Zooarch_materials %>%
@@ -85,7 +84,7 @@ NISP_Sizes_ZOO = Zooarch_materials %>%
   arrange(factor(Chronology, levels = c("R", "LR", "EMA", "Ma")))
 
 NISP_Sizes_ZOO$Chronology = c("Roman", "Late Roman", "Early Medieval", "11th c.")
-names(NISP_Sizes_ZOO) = c("Chronology", "Total NISP", "Total NISP of pigs/cattle/caprine")
+names(NISP_Sizes_ZOO) = c("Chronology", "Total NISP", "Total NISP of pigs/cattle/sheep/goats")
 
 
 ```
@@ -387,6 +386,7 @@ italy_zoo_map <- leaflet(data = italy) %>%
 ::: {.content-visible when-format="html"}
 ```{r}
 #| echo: false
+#| label: fig-zoo-chrono-map
 #| fig-cap: "The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend on the right. **Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
 
 italy_zoo_map
@@ -394,11 +394,8 @@ italy_zoo_map
 ```
 :::
 
-::: {.content-visible when-format="pdf"}
-Insert a map here
-:::
+The zooarchaeological data available for this project consists in 465 samples with faunal remains collected from a total of 228 sites dated between the 1^st^ century BCE to the 11^th^ century CE (@fig-zoo-chrono-map). The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The number of samples for each phase is detailed in @tbl-Zoo-Sample-Sizes, with samples that span more chronologies repeated. As explained in the methods section, some samples were dated between two chronologies, and the entry had to be repeated twice. @tbl-Zoo-NISP-Sizes reports the total NISP count of the samples in the database, with and without the repetition. @tbl-Zoo-NISP-Sizes-by-Chronology shows instead the NISP count of samples divided by chronology. The group sizes in the dataset do not present significant class imbalance issues, particularly for the Roman, Late Roman, and Early Medieval phases. However, the 11^th^ century phase has the smallest group size. This smaller size can be attributed to the fact that it represents the upper boundary of the research period under investigation. From what concerns spatial dispersion, there is no discernible geographical pattern in the distribution of zooarchaeological samples, although certain regions lack a substantial amount of data. Notably, central Italian regions such as Umbria and Marche are among those with limited representation in the dataset. In contrast, there is a concentration of samples specifically related to the Roman and Late Roman chronologies in the city of Rome and Ostia. The uneven distribution of samples in different regions and the concentrated presence of samples in Rome and Ostia are addressed separately in the results section. This section includes an analysis of the effect of Rome on the urban statistical models, examining how the abundance of samples from these locations may impact the overall findings and interpretations.
 
-The zooarchaeological data available for this project consists in 465 samples with faunal remains collected from a total of 228 sites dated between the 1^st^ century BCE to the 11^th^ century CE. The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The number of samples for each phase is detailed in @tbl-Zoo-Sample-Sizes, with samples that span more chronologies repeated. As explained in the methods section, some samples were dated between two chronologies, and the entry had to be repeated twice. @tbl-Zoo-NISP-Sizes reports the total NISP count of the samples in the database, with and without the repetition. @tbl-Zoo-NISP-Sizes-by-Chronology shows instead the NISP count of samples divided by chronology. The group sizes in the dataset do not present significant class imbalance issues, particularly for the Roman, Late Roman, and Early Medieval phases. However, the 11^th^ century phase has the smallest group size. This smaller size can be attributed to the fact that it represents the upper boundary of the research period under investigation. From what concerns spatial dispersion, there is no discernible geographical pattern in the distribution of zooarchaeological samples, although certain regions lack a substantial amount of data. Notably, central Italian regions such as Umbria and Marche are among those with limited representation in the dataset. In contrast, there is a concentration of samples specifically related to the Roman and Late Roman chronologies in the city of Rome and Ostia. The uneven distribution of samples in different regions and the concentrated presence of samples in Rome and Ostia are addressed separately in the results section. This section includes an analysis of the effect of Rome on the urban statistical models, examining how the abundance of samples from these locations may impact the overall findings and interpretations.
 
 ```{r}
 #| echo: false
@@ -481,3 +478,14 @@ ggplot(Zoo_Topography_Samples, aes(fill = factor(
        title = "Topographical distribution")
 
 ```
+
+## Notes on nomenclature
+
+The names of the faunal species used in this study adhere to the conventional Linnean nomenclature provided in @gentryNamingWildAnimal2004. To ensure comparability, the dataset encompasses most of the common species encountered in excavations. Specific models have been developed for the primary domesticated species - *Sus scrofa* (pigs), *Bos taurus* (cattle), *Ovis aries* (sheep), and *Capra hircus* (goats). Sheep and goats are difficult to distinguish unless specific bones (or the whole skeleton) are found in archaeological excavations, and are therefore modelled together [@zederAssessingReliabilityCriteria2010; @halsteadSortingSheepGoats2002; @prummelGuideDistinctionSpecies1986]. In the analyses, these animals are collectively referred to taxonomically as `caprine`, aligning with the nomenclature used in other studies [@mackinnonRoleCaprinesRoman2002; @albarellaReviewAnimalBone2019; @salvadoriTransitionLateAntiquity2019; @trentacosteIsotopicInsightsLivestock2023; @trentacostePreRomanImprovementsAgricultural2018].
+
+For statistical analyses of rarer species, these have been grouped as follows:
+
+-   Domestic fowl: *Gallus gallus* (chicken), *Anser anser* (goose).
+-   Wild game animals: *Sus scrofa ferus* (wild boar), *Cervus elaphus* (red deer), *Dama dama* (fallow deer), *Capreolus capreolus* (roe deer), other *Cervidae*, *Lepus sp.* (lagomorphs), *Glis glis* (dormouse), and various wild birds.
+
+Other species included in the database but not modeled due to their rarity, inedibility, lack of economic significance, or uncertain identification include *Canis familiaris* (dog), *Equus asinus* (donkey), *Equus caballus* (horse), *Ursus arctos* (bear), *Vulpes vulpes* (fox), and others. As previously discussed, fish and birds are notably underrepresented in excavation reports. Molluscs, often not recorded or not differentiated between terrestrial and marine species in older excavations, are more specifically identified in recent excavations. These instances have typically been documented in the `extra_notes` column with their total count in the `mollusca` column.

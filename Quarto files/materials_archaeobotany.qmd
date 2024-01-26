@@ -1,6 +1,4 @@
-# Archaeobotany {#sec-materials-bot}
-
-## Introduction {style="text-align:justify"}
+# Archaeobotany {#sec-materials-bot style="text-align:justify"}
 
 This chapter provides an overview of the archaeobotanical materials used for this research project. Literature review provided an historical overview of the discipline, while this chapter discusses the goals, types, and preservation modes of the remains. In addition to discussing general aspects of the discipline, this chapter also provides a more detailed examination of the specific data available for this research project, which have been stored in the database. The database storing procedures are described in @sec-database.
 
@@ -10,13 +8,13 @@ The objective of archaeobotany is to recover, identify, and document plant remai
 
 Macroremains such as seeds, nutshells, fruit pips, and charcoal (wood preserved after carbonisation) are visible to the naked eye (\> 0.25 mm). It is possible to recover macrofossils---*in situ*, by screening using sieves, and by flotation. *In situ* collection is possibly the most problematic, as it relies on the experience of the excavator and favours larger finds. In addition, light conditions and the colour of the soil might influence the ability to visualise seeds and charcoal remains. A solution to this problem is to use screening techniques, and choosing an appropriate mesh size can limit the bias for underrepresented taxa (*e.g.* particularly small seeds). Often, sieves of different mesh sizes are used at the same time for the purpose of eliminating as much soil as possible from the soil sample. In addition to dry screening, archaeologists also use wet screening. Wet screening refers to the practice of pouring water onto the sieve. It differs from wet sieving, which requires the submersion of seeds in a bucket with water that is gently agitated. In any case, adding water to the sieve can be counter-productive, as wetting might destroy the seeds if they are charred [@whiteRecoveringMacrobotanicalRemains2014]. One of the most common types of recovery is by flotation, which encompasses several techniques, each based on the principle that water is denser than charred material. Flotation can be either manual or machine-assisted. The former refers to wet sieving, where seeds are submerged in water and the ones that float are recovered using a mesh. Tools and machines have been also developed for flotation, including the hand-pump (which does not require electricity) and other machine-assisted tools (see @fig-flotation-machine-pantanello) that use water pressure and aeration to separate the seeds from soil. Flotation also allows the recovery of other small-sized archaeological material, including fish and bird bones, and mollusca [@jarmanRetrievalPlantRemains1972; @williamsFlotationSiraf1973; @turneyEnvironmentalArchaeologyTheoretical2005, p. 125]. After separating the seeds from the soil, seeds can be identified and quantified. For the identification, researchers use fossil reference collections and photographs [@turneyEnvironmentalArchaeologyTheoretical2005].
 
-![Example of a flotation machine. In the image, the so-called 'Siraf' type flotation machine, used at Pantanello (Basilicata). Image after @costantiniArchaeobotanicalInvestigationsPantanello2018 [p. 373].](images/flotation_machine_Pantanello_after%20Costantini%20and%20Costantini%20B%202018.png){#fig-flotation-machine-pantanello fig-align="center" width="800"}
+![Example of a flotation machine. In the image, the so-called 'Siraf' type flotation machine, used at Pantanello (Basilicata). Image after @costantiniArchaeobotanicalInvestigationsPantanello2018 [p. 373].](images/flotation_machine_Pantanello_after_Costantini_Costantini_b_2018.png){#fig-flotation-machine-pantanello fig-align="center" width="65%"}
 
 ### Sampling {style="text-align:justify"}
 
 A sample is a smaller subset of elements from a *population*. In statistics, a population is the entire set of elements which we can draw inferences from. Often, it is not possible to know how large is the population, which is then called *universe*. Whether consciously or not, archaeology has always dealt with sampling. Much of the archaeological record has been lost or destroyed in time, and what we are able to study is a smaller portion of what once was present [@drennanStatisticsArchaeologistsCommonsense2010, p. 80]. If we consider the entire statistical population what is currently available to the archaeologist, it would be possible to sample for instance each bucket of soil excavated and count the total number of seeds found. This will certainly provide the most accurate information, although it is almost never possible in real life situations. Common constraints are time, funding, number of excavators, etc. It is then up to the archaeologist to decide how to collect samples, which will be biased by definition since they will not reflect reality. Why bother with sampling then? Archaeobotanical macroremains can be smaller than 1 mm and sampling can provide more information than collecting seeds with the naked eye (*i.e.* no sampling) [@ortonSamplingArchaeology2000, p. 148]. Moreover, an effective and robust sampling strategy can limit bias as far as possible and try to return meaningful samples. Depending on the context, resources and individual decisions, several possibilities are available---interval sampling, probabilistic sampling, judgemental sampling, total sampling, or no sampling at all [@jonesSamplingPalaeoethnobotany1991]. The first, interval (or systematic) sampling, consists in sampling at regular intervals. The intervals can be defined in space (samples evenly spaced out in a grid), in time (sampling every tot. minutes or every $n$-th bucket), or in the laboratory using a riffle box (a machine designed to divide samples). One drawback of this method is that the regularity in sampling might correspond to a regular pattern in the data, which may bias the results. Probabilistic sampling is a method often advocated for, but rarely used. This type of sample has the advantage of allowing the researcher to draw statistical inferences on the data collected, for instance to calculate the margin of error and confidence intervals. The simplest form of probabilistic sampling is random sampling, for example randomly choosing to sample a square from a grid or a bucket from a series of buckets. Another approach to random sampling is cluster sampling, which requires a prior division of the sampling population into clusters (*e.g.* by context, area, etc.) and then randomly select some of these clusters during excavation [@ortonSamplingArchaeology2000]. One of the problems that may arise from random and cluster sampling approaches is that of spatial autocorrelation. As Waldo @tobler1970 puts it:
 
-> The first law of geography: Everything is related to everything else, but near things are more related than distant things.
+> "The first law of geography: Everything is related to everything else, but near things are more related than distant things."
 
 Other forms of sampling include judgemental sampling, a feature based approach and total (or blanket) sampling which consists in taking a certain amount of soil from each excavated context. Both methods will be discussed more in detail below. Finally, an excavation can have no sampling at all. Most of the archaeobotanical samples with macroremains recorded in the database were collected using different types of visual sampling, not always made explicit by the authors. Visual sampling occurs when archaeologists can visually see or expect (*i.e.* judgemental sampling) macroremains in the feature they are excavating. Common features from which samples are usually collected include---pits, hearths, filled anforae, etc. But "how can one argue that the contents of a pit reflect activities involving food specific to that context, if one has not examined samples from floor deposits into which the pit was dug, or the deposits overlying it?" [@pearsallPaleoethnobotanyHandbookProcedures2015a, p. 75]. @lennstromInterpretationContextSampling1995 lament "feature biases" in many archaeological excavations, as paleobotanists are often called after archaeologists have already recovered materials from specific site features. The authors call for a general misconception in the goal of archaeobotany---to collect as many macroremains as possible. This strategy is, in fact, not very informative about the relationships between plant remains and stratigraphic units, and the general deposition patterns in the site. For instance, @jonesCropStorageAssiros1986 were able to reconstruct the functions of structures and the methods of crop storage at Assiros, northern Greece, through a thorough extensive sampling. @pearsallPaleoethnobotanyHandbookProcedures2015a [p.74] recommends a "blanket sampling" strategy, which consists in collecting samples for flotation from each stratigraphical unit. The advantages of blanket sampling are manifold:
 
@@ -32,18 +30,18 @@ In addition to choosing the most efficient sampling strategy, sample size is als
 
 There are several ways in which seeds can be preserved, among them charring (or carbonisation), mineralisation, waterlogging, desiccation, metal oxide preservation and as imprints in ceramics [@fullerArchaeobotany2014]. This section will focus only on grain preservation, excluding wood remains, as anthracological data (charred wood) has not been recorded on the database. The mode of preservation has a strong effect on the species of plants that can be found in the archaeological level. Cereals and nuts have higher chances of being preserved by charring, while fruit pips, herbs and spices are most common in waterlogged sediments. Nuts, fibrous and oil-rich plants are also equally preserved under water. Desiccation greatly preserves several parts of a plant, although it occurs very rarely [@veenArchaeobotanyArchaeologyHumanPlant2018, p. 71]. These factors influence the representation of plants in the archaeological context, and one must be aware that the most identified taxa may represent the plants that had the best chance of being preserved. The most represented taxa therefore do not necessarily coincide with the most numerous or used plants at the site being investigated [@pearsallPaleoethnobotanyHandbookProcedures2015a, p. 42]. @fig-pres-mode-species-livarda and @fig-vanderveen2013-preservation-mode show how different preservation methods affect the representation of a taxon.
 
-![Preservation mode of species with more than five occurrences in northwestern Europe in the Roman period \[`c`= charred, `m` = mineralised, `w` = waterlogged, `u` = unknown\]. Image after @livardaInvestigatingRomanDiet2018.](images/Livarda%202018.png){#fig-pres-mode-species-livarda fig-align="center" width="700"}
+![Preservation mode of species with more than five occurrences in northwestern Europe in the Roman period \[`c`= charred, `m` = mineralised, `w` = waterlogged, `u` = unknown\]. Image after @livardaInvestigatingRomanDiet2018.](images/Livarda_2018.png){#fig-pres-mode-species-livarda fig-align="center" width="100%"}
 
-![Preservation mode of three plant groups in medieval Britain \[black = charred, white = waterlogged, grey = mineralised\]. Image after @veenArchaeobotanyMedievalBritain2013.](images/Van%20Der%20Veen%20et%20al%202013.png){#fig-vanderveen2013-preservation-mode fig-align="center" width="400"}
+![Preservation mode of three plant groups in medieval Britain \[black = charred, white = waterlogged, grey = mineralised\]. Image after @veenArchaeobotanyMedievalBritain2013.](images/Van_Der_Veen_et_al_2013.png){#fig-vanderveen2013-preservation-mode fig-align="center" width="300"}
 
 A final comment must be made on the state of preservation of botanical macrofossils. Regardless of how the seeds have been preserved from deposition to the time of excavation, the state of preservation of individual seeds may also be affected by mechanical actions such as fragmentation or erosion. Indeed, it is not uncommon for an archaeologist to find seeds that are only partially intact.
 
 ::: {#fig-jones-et-al-sparganium layout-ncol="2"}
-![Fragmentation](images/SparganiumErectumFragm_afterJones%20et%20al%202007.png){#fig-macrofossil-fragmentation width="250" height="295"}
+![Fragmentation](images/SparganiumErectumFragm_afterJones_et_al_2007.png){#fig-macrofossil-fragmentation width="250" height="295"}
 
-![Erosion](images/SparganiumErectumErosion_afterJones%20et%20al%202007.png){#fig-macrofossil-erosion width="250"}
+![Erosion](images/SparganiumErectumErosion_afterJones_et_al_2007.png){#fig-macrofossil-erosion width="250"}
 
-Several stages of fragmentation and erosion of seeds of *Sparganium erectum*. Image after @jones2007 [p. 79]
+Several stages of fragmentation and erosion of seeds of *Sparganium erectum*. Image after @jones2007 [p. 79].
 :::
 
 #### Charring
@@ -54,7 +52,7 @@ Carbonisation is the most common way of finding seeds when excavating an archaeo
 
 Mineralisation is a natural process that leads to the replacement of organic material with inorganic material. Through phosphatisation, soft tissue is replaced by calcium-phosphate minerals that preserve the morphology of the seed [@murphyMineralizationMacrobotanicalRemains2014]. Mineralisation can also occur because some plants are particularly mineral-rich, and the phenomenon takes place prior to deposition. This is known as biomineralisation [@messager2010]. For instance, mineralised seeds can be found in latrines or cesspits [@veenArchaeobotanyMedievalBritain2013, p. 164].
 
-![Examples of charred and mineralised seeds from Herculaneum. Image after @rowanBioarchaeologicalPreservationNonelite2017.](images/Rowan%202017%20p%2012.png){#fig-charred-seeds-rowan-2017 fig-align="center" width="700"}
+![Examples of charred and mineralised seeds from Herculaneum. Image after @rowanBioarchaeologicalPreservationNonelite2017.](images/Rowan_2017_p12.png){#fig-charred-seeds-rowan-2017 fig-align="center" width="100%"}
 
 #### Waterlogging
 
@@ -73,20 +71,14 @@ Plant material can be preserved if found in proximity to metals. Metal oxides wh
 The imprints of seeds and plants on the wet clay can help the investigator recognise the morphology of the seed and identify the plant, however the organic material is not preserved and the marks on the pottery are the only visible remains [@schepers2022].
 
 ::: {#fig-ceramic-imprints-pantanello layout-ncol="2"}
-![Cereal chaff and straw in a fired clay fragment from Pantanello (Basilicata).](images/Costantini%20and%20Costantini%20B%202018%20p%20375.png){#fig-ceramic-imprints-pantanello-a width="400"}
+![Cereal chaff and straw in a fired clay fragment from Pantanello (Basilicata).](images/Costantini_Costantini_B_2018_p375.png){#fig-ceramic-imprints-pantanello-a width="350"}
 
-![Two-row barley triplet against a fresh triplet from reference collection.](images/Costantini_and_Costantini_B_2018_p_386.png){#fig-ceramic-imprints-pantanello-b width="200"}
+![Two-row barley triplet against a fresh triplet from reference collection.](images/Costantini_and_Costantini_B_2018_p_386.png){#fig-ceramic-imprints-pantanello-b width="177"}
 
 Examples of ceramic imprints. Images after @costantiniArchaeobotanicalInvestigationsPantanello2018 [pp. 375-386].
 :::
 
 ## Case studies {style="text-align:justify;"}
-
-::: callout-important
-## Section in progress {style="text-align:justify;"}
-
-In the PDF version, include a general map (all chronologies) or time slice maps.
-:::
 
 ::: {.content-visible when-format="html"}
 The following map shows the sites under investigation, divided by chronology. Please select the desired chronology (or chronologies) from the legend at the top-right of the map. Every point on the map is clickable to access reference, total seed counts, preservation mode and other details.
@@ -267,7 +259,7 @@ italy_bot_map <- leaflet(data=italy) %>%
 
 ```{r}
 #| echo: false
-#| label: fig-archaeobot-map
+#| label: fig-bot-chrono-map
 #| fig-cap: "**Legend**: `R` = Roman, `LR` = Late Roman, `EMA` = Early Middle Ages, `Ma` = 11th c. onwards "
 
 italy_bot_map
@@ -275,7 +267,7 @@ italy_bot_map
 ```
 :::
 
-The archaeobotanical data available for this project consists in 190 samples with macroremains collected from a total of 120 sites dated between the 1^st^ century BCE to the 11^th^ century CE. The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The samples chronological distribution is detailed in @tbl-Bot-Sample-Sizes.
+The archaeobotanical data available for this project consists in 190 samples with macroremains collected from a total of 120 sites dated between the 1^st^ century BCE to the 11^th^ century CE. The geographical and chronological distribution of the samples varies greatly, with some areas or chronological phases that are better represented in the database. The samples chronological distribution is detailed in @tbl-Bot-Sample-Sizes and @fig-bot-chrono-map.
 
 ```{r}
 #| echo: false
@@ -296,7 +288,7 @@ kable(Sample_Sizes_By_Phase) %>% kable_minimal()
 
 ```
 
-Most of the excavations lacked forms of probabilistic or total sampling strategies and instead used visual sampling, which occurs when archaeologists can see or expect to find macroremains in the feature they are excavating. Common features from which samples are collected include pits, hearths, and filled anforae. The pitfalls of this type of sampling have already been outlined in this chapter. In addition to differences in sampling strategies, recovery techniques also differed between reports, which can lead to some taxa being underrepresented. It was not possible to quantify how many sites used flotation or dry sieving, as this information was lacking, especially from older reports. On the other hand, the mode of preservation has been indicated in most cases, with charring being the most common. The list of samples that included the preservation mode in their reports is listed in @tbl-Bot-Preservation-Counts.
+Most of the excavations lacked forms of probabilistic or total sampling strategies and instead used visual sampling, which occurs when archaeologists can see or expect to find macroremains in the feature they are excavating. Common features from which samples are collected include pits, hearths, and filled *anforae*. The pitfalls of this type of sampling have already been outlined in this chapter. In addition to differences in sampling strategies, recovery techniques also differed between reports, which can lead to some taxa being underrepresented. It was not possible to quantify how many sites used flotation or dry sieving, as this information was lacking, especially from older reports. On the other hand, the mode of preservation has been indicated in most cases, with charring being the most common. The list of samples that included the preservation mode in their reports is listed in @tbl-Bot-Preservation-Counts.
 
 ```{r}
 #| echo: false
@@ -393,3 +385,19 @@ ggplot(Plants_Topography_Samples, aes(fill = factor(
        title = "Topographical distribution")
 
 ```
+
+## Notes on nomenclature {style="text-align: justify"}
+
+The botanical species names used in this research adhere to the conventional nomenclature provided by @zoharyDomesticationPlantsOld2012. In the dataset, the species that were considered were the most common among all excavations, so that plants could be comparable.
+
+### Cereals
+
+Arguably, the most commonly discovered grains in Italian archaeological excavations are free-threshing wheats (*Triticum aestivum/durum*). They are listed as a single column because distinguishing between hard wheat and bread wheat is challenging without the rachis [@roushannafasGeometricMorphometricAnalysis2023]. Although notably an important cereal, *Triticum spelta* has not been included as it was only sporadically recorded. Whenever it was present, it was categorised under the *Cerealia und.* column, which also comprises other grains belonging to the *Triticum* group that could not be identified further by the authors. Occurrences of *Avena sp.* have been recorded whenever found in excavation reports, including the counts of cultivated oats (*Avena sativa*). This species is challenging to identify as caryopses alone are insufficient, and it is prevalent in Italy as a weed that grows alongside cereal fields. Consequently, although *Avena sp.* is in the database, limited inferences can be drawn regarding this taxon.
+
+### Legumes
+
+Similar to cereals, the *Leguminosae* column contains pulses that authors were unable to assign to a species. The *Vicia* genus is a sizable family of *Fabaceae*, and some of its members are cultivated. The database lists *Vicia faba* and *Vicia sativa* as separate columns due to their frequent occurrence in excavations. Other *Vicia* types that could not be identified or were only occasionally identified (such as *Vicia ervilia*) were listed under the *Vicia sp.* column. The column Lathyrus cicera/sativus (grass pea) contains two species that are difficult to identify below genus level and whose previous identifications have proved unreliable [@tarongiWhichPulseIt2023].
+
+### Fruits and nuts
+
+A wide variety of fruit species were recorded in the dataset. As with other plants, some counts have been reported in a single column because they were more difficult to identify below genus level, or because they were very sporadic and in danger of being under-represented in the overall quantifications. This is the case, for example, of *Prunus sp*. The dataset reports separate column for five *Prunus* species: *P. persica* (peach), *P. domestica* (plum), *P. cerasus* (sour cherry), *P. avium* (wild cherry), and *P. spinosa* (blackthorn). Other species that were rare or nuts that could be attributed to a Prunus species were reported in the column *Prunus sp*. It was not possible in this research to model the occurrence of each fruit species, and models were built for macrocategories as 'Nuts', 'Common domestic fruits', and 'Less common fruits'. The latter is comprehensive of mostly wild fruits, berries, and less common domestic fruits: *P. cerasus* (sour cherry), *Cornus mas* (cornelian cherry), *P. avium* (wild cherry), *Sambucus nigra* (elderberry), *P. spinosa* (blackthorn), *Rubus fruticosus* (blackberry), *Sorbus sp.*, and *Fragaria vesca* (strawberry).

@@ -2,13 +2,12 @@
 always_allow_html: true
 ---
 
-# Overview {.unnumbered style="text-align:justify;"}
+# Abstract {.unnumbered style="text-align:justify;"}
 
-This research aims to diachronically trace the patterns of subsistence, economy, and environmental change in relation to regional patterns of Italian peasantry in the 1^st^ millennium CE. Scholarly debate on the dynamics of human-nature interaction in Italy during the transition from Late Antiquity to the early Middle Ages still leaves today some open questions. Were the former Roman economic structures and farming practices completely abandoned or did they find continuity during this turbulent time? Which agricultural strategies did peasants develop to cope with political, demographic and climatic change? Past work on agricultural production has been based upon literary sources and field surveys which identify boundaries; a multi-source archaeological study is absent from the discourse. Drawing on environmental proxies, such as animal and plant remains, this project uses data from \>309 sites [^index-1] (190 botanical and 466 faunal samples[^index-2]) and a Bayesian approach to multilevel modelling. In particular, beta-binomial models are applied to account for overdispersion and class imbalance in the datasets and to provide credible results of plants and animal occurrences. Specific emphasis is placed on evaluating agricultural strategies during the shift from the Roman Empire to the politically fragmented landscape of early medieval Italy, to assess the role of political organization, economy, culture, and environment in the configuration of agricultural regimes and animal/plant husbandry selection. The integration of different sources is fundamental to casting new light on peasants' lifeways, which may be obscured in the textual records, privileging elite contexts and high-status transactions. The Early Middle Ages mark a period of fundamental change when different geographical regions (and potentially micro-regions) developed their own political and economic frameworks for agricultural production. Bioarchaeological evidence can help visualise the landscape in which these changes were taking place, as archive collections of samples are subjected to new analyses in a holistic context, through the database I have constructed. For example, one can analyse differences in diet and production between elite, religious, urban and rural sites, and conduct regional pattern analysis. Preliminary results show indeed higher degrees of regionalization in agricultural strategies during the EMA. My dissertation will contextualize these findings against textual sources to assess how people used the Italian agricultural landscape, and suggest which agents were responsible for changes. I argue that the discourse on Northern Italian/French early Medieval production has heavily influenced interpretations of the agrarian economies of the rest of the peninsula.
+This dissertation explores the subsistence methods, economic systems and environmental adaptations of Italian peasant communities in the 1^st^ millennium CE, with a particular focus on the transitional period from the Roman Empire to the early medieval era. Existing work on agricultural production in this period has been based on literary sources and field surveys, or has focused on individual sites or regional collections, while a multi-source archaeological study is absent from the discourse. This dissertation addresses this gap by using environmental proxies, reconstructing the historical agricultural landscape through the occurrence patterns of plants and animals in legacy data. To this end, 190 botanical and 466 faunal assemblages from 309 sites[^index-1] are quantitatively analysed within a Bayesian framework, using multilevel binomial and beta-binomial models to account for overdispersion and class imbalance in the datasets. The results reveal a strong trend towards regionalisation in agricultural strategies during the early medieval period. In addition, these findings expose variations in agricultural techniques and dietary patterns across Roman settlements, shedding light on the extent to which Roman agricultural and economic frameworks persisted or changed during the early medieval transition, and the adaptive agricultural strategies adopted by farmers. The quantitative analytical findings of this dissertation are also contextualised alongside wider historical sources, archaeological evidence, and current debate, allowing for a bottom-up understanding of the agricultural regimes in question. This work represents the first attempt to use temporally and geographically diverse bioarchaeological data to visualise the Italian agricultural landscape across the *longue durée.* By systematising the data in an open database, this dissertation also represents an effort at quantitative knowledge sharing in archaeology. Overall, these novel perspectives on human-nature interaction allow scholars to methodologically, theoretically and empirically evaluate agricultural strategies during the transition from the Roman Empire to the politically fragmented landscape of the early medieval Italian peninsula.
 
-[^index-1]: Last update: February 2023.
+[^index-1]: Last update: January 2024.
 
-[^index-2]: Pollen tbd.
 
 # Database status
 
@@ -102,15 +101,12 @@ italy_map <- leaflet(data=italy) %>%
 ```{r}
 #| echo: false
 #| label: fig-db-status-map
-#| fig-cap: "**Legend**: `bot` = Archaeobotanical remains, `zoo` = Zooarchaeological remains, `poll` = Pollen remains. If the codes are combined, more than one type of data is available for the same context and chronology."
+#| fig-cap: "**Legend**: `bot` = Archaeobotanical remains, `zoo` = Zooarchaeological remains, `poll` = Pollen remains. If the codes are combined, more than one type of data is available for the same context and chronology. Pollen is only included as a reference."
 
 italy_map
 ```
 :::
 
-::: {.content-visible when-format="pdf"}
-The map below shows the distribution of the samples used for this project.
-:::
 
 ## Counts
 
@@ -141,9 +137,8 @@ db_status_recap.sitetype.plot <- ggplot(db_status_recap.sitetype, aes(x=Count, y
 
 ```
 
-The graphs below (@fig-db-status-counts) provide counts of the (a) sample types[^index-3] and (b) site types in the database.
+The graphs below (@fig-db-status-counts) provide counts of the (a) assemblage types and (b) site types in the database.
 
-[^index-3]: Pollen tbd.
 
 ```{r}
 #| echo: false

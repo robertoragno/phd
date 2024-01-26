@@ -3,12 +3,12 @@
 This section contains the list of custom functions that have been written to prepare, handle and visualize the data exported from the database.
 
 ## Libraries
-```{r}
+
+```{r message=FALSE}
 # Import libraries
 library(tidyverse)
 library(stringr)
 ```
-
 
 ## Archaeobotany
 
@@ -275,7 +275,6 @@ Medians_Chrono_Zoo <- function(x, Chrono) {
 
 ```
 
-
 ### zooarch_tables_general() {#sec-fun-zooarch-tables-general}
 
 This function has one argument: a dataframe of the exported condensed table of faunal remains from the database (`Zooarch_Condensed.csv`). It is a table of animals exported with their common English name, columns with context information. Some of the columns are the sum of different columns, with the `SQL` function `COALESCE()`. For instance, the column `Edible Wild Mammals` is the sum of values for red deer, roe deer, hare, wild boar.
@@ -316,7 +315,6 @@ zooarch_tables_general <- function(x) {
 ```
 
 ### zooarch_tables_general
-Explain
 
 ```{r}
 #| code-fold: true

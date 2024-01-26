@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -91,6 +110,10 @@ ul.task-list li input[type="checkbox"] {
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Peasants, Agriculture, and Environment in the 1<sup>st</sup> Millennium CE Italian Countryside: A Bayesian approach</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/robertoragno/phd" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://twitter.com/ragno_roberto" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -103,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
+ <span class="menu-text">Abstract</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -230,7 +253,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
 </div>
 
 
@@ -245,25 +268,18 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="callout callout-style-simple callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Page under construction
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
-<p>Define what we mean by peasant. See Prata and Tente 2023</p>
-<p>Aims and research questions</p>
-<p>Research method</p>
-<p>structure of the thesis</p>
+<p>This research seeks to explore the dynamics of human-nature interaction in Italy during the first millennium CE. How did the agrarian practices differ in the Roman period between smaller and larger farms? When did the first moment of discontinuity in these practices occur? Were the Roman economic structures and farming practices completely abandoned or did they find continuity during the turbulent transition to the early medieval period? Which agricultural strategies did peasants develop to cope with political, demographic and climatic change?</p>
+<p>Despite the increasing study of plant and animal remains from archaeological excavations, a comprehensive synthesis of data on the Italian landscape during the 1<sup>st</sup> millennium CE does not yet exist. Much of the existing synthetic work focuses on specific, smaller areas or distinct chronologies within the peninsula, limiting the potential for broader comparative analysis across different regions. This study addresses this gap by providing the first available reconstruction of the Italian farming landscape of the 1<sup>st</sup> millennium CE, based on legacy carpological and zooarchaeological data. By integrating various types of information, it becomes possible to reconstruct the complex interactions between humans and nature during this period.</p>
+<p>This study focuses on 190 archaeobotanical assemblages and 466 zooarchaeological assemblages from a total of 309 sites, providing information for the period between the 1<sup>st</sup> century BCE and the 11<sup>th</sup> century CE. The selected temporal boundaries are framed by significant historical events: the late 1<sup>st</sup> century BCE marks the onset of the Roman imperial phase, while the 11<sup>th</sup> century aligns with the phenomenon of <em>incastellamento</em> (the creation of castles and reorganisation of rural territories) and the medieval agricultural revival <span class="citation" data-cites="toubertStructuresLatiumMedieval1973">(described in <a href="references.html#ref-toubertStructuresLatiumMedieval1973" role="doc-biblioref">Toubert, 1973</a>)</span>. This re-evaluation of plant and faunal remains datasets has led to a fresh assessment of transitional crop and animal husbandry practices, shedding light on the agricultural dynamics of a critical period in Italian history.</p>
+<p>The approach used in this assessment is statistical modelling, specifically within a Bayesian framework, of plant and animal remains. Seeds, caryopses and bones are useful proxies for agricultural reconstructions that can be modelled to examine our historical assumptions. In particular, Bayesian multilevel modelling has been used to account for overdispersion and class imbalance in the datasets, providing estimates in the form of probabilities. When analysing datasets with assemblages that are subject to sampling bias, a rigorous approach to data analysis is required to avoid overly confident interpretations. In this respect, a major advantage of Bayesian modelling is its explicit ability to incorporate uncertainty into the estimation process. This approach is more intuitive than a frequentist perspective in the sense that estimates are accompanied by credible intervals that provide a range of values within which the true parameter value lies. This research seeks to identify the most common domesticated plants/animals and wild resources during the first millennium and to estimate their probability of occurrence. The aim is to evaluate the role of these resources in Italian sites, in order to assess possible explanations for peasant agricultural choices in terms of diet and economy.</p>
+<p>Chapter 2 provides an overview of the main debates surrounding (i) the agrarian economy during the first millennium CE, (ii) previous research on Italian bioarchaeology, diet, and climate reconstructions, and (iii) statistical research in archaeology. Chapters 3 and 4 present the materials used for the statistical analyses, as well as sampling and preservation issues. Chapter 5 describes the structure of the database created to store the raw data. Chapter 6 outlines the methodology used in this study, while Chapters 7 and 8 present the research findings. Chapter 9 discusses the results and presents hypothetical scenarios for the reconstruction of the historical Italian landscape. The conclusions of this thesis are presented in Chapter 10.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-toubertStructuresLatiumMedieval1973" class="csl-entry" role="listitem">
+Toubert, P., 1973. <span>Les structures du Latium médiéval: le Latium méridional et la Sabine du IXe à la fin du XIIe siècle</span>. <span>École française de Rome</span>, <span>Roma</span>.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -502,7 +518,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Abstract</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -1,4 +1,24 @@
-# References {.unnumbered style="text-align:justify"}
+# References {.unnumbered}
 
-::: {#refs style="text-align:justify"}
+## Primary sources {style="padding-left: 0.55em; text-indent:-0.55em;"}
+
+**Cassiod.**, *Var.* = Cassiodorus, S., Hodgkin, T. (trans.), 1886. The Letters Of Cassiodorus: Being A Condensed Translation Of The Variae Epistolae Of Magnus Aurelius Cassiodorus Senator. London H. Frowde.
+
+**Cato**, *Agr.* = Cato, M.P., Ventura, F. (ed.), 2012. Liber de agri cultura. Famiglia Ventura, Reggio Calabria.
+
+**Columella**, *Rust.* = Columella, L.I.M., Hash, A.B. (ed.), 2010. On agriculture: in three volumes. 1: I - IV, Reprinted. ed, The Loeb classical library. Harvard Univ. Press, Cambridge (Mass.).
+
+**Mart.**, *Ep.* = Martial, Bohn, H.G. (ed.), 1897. The epigrams of Martial, Bohn’s classical library. George Bell and Sons, London.
+
+**Plin.** *Ep.* = Pliny the Younger, Stout, S.E. (ed.), 1962. Epistulae: a critical edition. Indiana University Press, Bloomington.
+
+**Plin.** *HN* = Pliny the Elder, Rackham, H. (ed.), 1950. Pliny Natural History: Volume V. Loeb Classical Library, Cambridge (Mass.).
+
+**Theop.**, *Hist. Pl.* = Theophrastus, Hort, A. (ed.), 1980. Enquiry Into Plants and Minor Works on Odours and Weather Signs, The Loeb classical library. Harvard University Press, Cambridge (Mass.).
+
+**Varro**, *Rust* = Varro, M.T., Hooper, W.D. (ed.), Ash, H.B. (ed.), 1934. On Agriculture, Loeb Classical Library. Harvard University Press, Cambridge (Mass.).
+
+
+## Secondary sources
+::: {#refs}
 :::

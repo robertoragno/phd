@@ -14,6 +14,11 @@ book:
 
   sidebar:
     style: floating
+    tools:
+      - icon: github
+        href: https://github.com/robertoragno/phd
+      - icon: twitter
+        href: https://twitter.com/ragno_roberto
   search: 
     location: navbar
     type: textbox
@@ -47,9 +52,7 @@ format:
   html:
     theme: cosmo
     callout-appearance: simple
-  pdf:
-    documentclass: scrreprt
-    prefer-html: true
+    cover-image: images/phd_cover.png
 
 editor: visual
 
