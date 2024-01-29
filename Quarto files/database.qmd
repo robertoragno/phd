@@ -239,7 +239,7 @@ The table macroregions_join is a joining table of the tables regions and macrore
 The macroregions have been divided as in @tbl-macroregions-db-join.
 
 | Macroregion name | Regions                                                                                                                                                                         |
-|------------------|------------------------------------------------------|
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Northern Italy   | \(5\) Emilia-Romagna, (6) Friuli-Venezia Giulia, (8) Liguria, (9) Lombardia, (12) Piemonte, (15) Trentino-Alto Adige/Südtirol, (17) Valle d'Aosta, (18) Veneto, (19) San Marino |
 | Central Italy    | \(7\) Lazio, (10) Marche, (14) Toscana, (16) Umbria                                                                                                                             |
 | Southern Italy   | \(1\) Abruzzo, (2) Basilicata, (3) Campania, (4) Calabria, (11) Molise, (13) Puglia                                                                                             |
