@@ -26,22 +26,28 @@ book:
     center: "Roberto Ragno, PhD Candidate, Dipartimento di Ricerca e Innovazione Umanistica, Università di Bari Aldo Moro"
   chapters:
     - index.qmd
-    - intro.qmd
-    - literature_review.qmd
-    - part: "Materials"
+    - part: "Introduction"
+      chapters:
+        - intro.qmd
+        - literature_review.qmd
+    - part: "Materials and Methods"
       chapters:
         - materials_archaeobotany.qmd
         - materials_zooarchaeology.qmd
-    - database.qmd
-    - methods.qmd
+        - database.qmd
+        - methods.qmd
     - part: "Results"
       chapters:
         - archaeobotany.qmd
         - zooarchaeology.qmd
-    - discussion.qmd
-    - conclusions.qmd
-    - sites_references.qmd
-    - references.qmd
+    - part: "Discussion and Conclusions"
+      chapters:
+        - discussion.qmd
+        - conclusions.qmd
+    - part: "Bibliography"
+      chapters:
+        - sites_references.qmd
+        - references.qmd
   appendices:
       - functions.qmd
 

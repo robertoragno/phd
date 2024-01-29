@@ -2,7 +2,7 @@
 always_allow_html: true
 ---
 
-# Zooarchaeology
+# Zooarchaeology {#sec-zooarchaeology style="text-align:justify;"}
 
 ```{r}
 #| echo: false
