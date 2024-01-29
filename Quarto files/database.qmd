@@ -27,7 +27,7 @@ The database was structured with the creation of 21 tables. The table `site_list
 
 : Example of two assemblages retrieved from the same location.
 
-Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID[^database-2]. In addition to the reference to the assemblages table, the table `site_list` also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The assemblages are organized in three tables, depending on the type of remain that has to be recorded in the database:
+Since the table is context based, each site has been provided with an unique ID, so that if the site has been sampled in different areas the database can be still queried using the site ID[^database-2]. In addition to the reference to the assemblages table, the table `site_list` also contains references to child tables with information about: site type, geography, altitude, coordinates, and region. The assemblages are organised in three tables, depending on the type of remain that has to be recorded in the database:
 
 [^database-2]: If the site is very large and the assemblages were numerous (e.g. Pompeii, Rome), the sites were recorded with different IDs.
 
@@ -37,9 +37,7 @@ Since the table is context based, each site has been provided with an unique ID,
 
 Each entry in the assemblages tables contains information about chronology, sampling type and notes, reference to the publication, reference to the main site, and the raw data. @fig-db-schema shows the schema with the complete list of tables in the database.
 
-
 ![Schema of the database, with the table `site_list` at the core.](images/DB_Structure.png){#fig-db-schema fig-pos="p" width="105%"}
-
 
 The data was stored in the database after a thorough bibliographical research of the excavated sites (with a chronology pertaining to the 1^st^ millennium CE) where environmental analyses have been undertaken. As in most of the cases the material was retrieved from physical publications, not digitised, the process of data entry was manual and could not be automatised. A list of the publication types where data was retrieved from can be visualised in @fig-publication-type-counts.
 
@@ -241,7 +239,7 @@ The table macroregions_join is a joining table of the tables regions and macrore
 The macroregions have been divided as in @tbl-macroregions-db-join.
 
 | Macroregion name | Regions                                                                                                                                                                         |
-|----------------|--------------------------------------------------------|
+|------------------|------------------------------------------------------|
 | Northern Italy   | \(5\) Emilia-Romagna, (6) Friuli-Venezia Giulia, (8) Liguria, (9) Lombardia, (12) Piemonte, (15) Trentino-Alto Adige/Südtirol, (17) Valle d'Aosta, (18) Veneto, (19) San Marino |
 | Central Italy    | \(7\) Lazio, (10) Marche, (14) Toscana, (16) Umbria                                                                                                                             |
 | Southern Italy   | \(1\) Abruzzo, (2) Basilicata, (3) Campania, (4) Calabria, (11) Molise, (13) Puglia                                                                                             |

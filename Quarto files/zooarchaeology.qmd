@@ -230,8 +230,7 @@ $$
 
 $$
 \phi_{[Century]} \sim Exponential(1) + 2
-$$ 
-The prior distributions selected for the model are weakly informative. Specifically, the prior chosen for the intercept $\alpha$ is a normal distribution with a mean of 0 and a standard deviation of 1.5. Given that $logit(\bar{p}) = \alpha$ is modelled using the logit link, a mean of 0 corresponds to a probability of 0.50 on the logit scale. With a standard deviation of 1.5, the prior is flat and only slightly informative.
+$$ The prior distributions selected for the model are weakly informative. Specifically, the prior chosen for the intercept $\alpha$ is a normal distribution with a mean of 0 and a standard deviation of 1.5. Given that $logit(\bar{p}) = \alpha$ is modelled using the logit link, a mean of 0 corresponds to a probability of 0.50 on the logit scale. With a standard deviation of 1.5, the prior is flat and only slightly informative.
 
 As for the shape parameter $\phi$, the prior was selected to ensure that the parameter was at least 2, which corresponds to a flat distribution. This value (2) was then added to an exponential distribution with rate 1 to produce a weakly informative prior.
 
@@ -279,7 +278,6 @@ Cattle, on the other hand, exhibit different trends, with a HDI interval in the 
 The modelled probability of occurrence of sheep/goats reveals a negative trend (below the average of 0.28) from the 1^st^ to the 3^rd^ century CE. The probability of occurrence then increases around the 4^th^/5^th^ centuries up to the 6^th^/7^th^ centuries, with HDIs stable around the mean from the 8^th^ to the 11^th^ century. The edible wild animals that were included in the analysis are *Sus scrofa ferus* (boar), *Cervus elaphus* (red deer), *Dama dama* (fallow deer), *Capreolus capreolus* (roe deer), *Lepus sp.* (hare), *Glis glis* (dormouse), and unspecified birds. The domestic fowl species that were analysed are *Gallus g.* (chicken) and *Anser A*. (goose). The predicted probabilities for edible wild animals and domestic poultry show relatively stable trends throughout the period analysed, with HDI means consistently below 0.10. Domestic fowl HDIs remain below the millennium mean of 0.06 from the 1^st^ century BCE to the 2^nd^ century CE, and then increase steadily from the 3^rd^ century to remain around the mean until the 7^th^ century. From the 7^th^ to the 11^th^ century, the HDIs remain positive, but with a much larger credible interval. Similarly, wild animals' HDIs are positive in the 1^st^ century BCE and remain stable around the millennium average (0.05) until the 6^th^ century CE, after which they also show a slight increase until the 11^th^ century.
 
 In addition to plotting the probabilities of occurrence extracted by the posterior distributions, the distributions of the precision parameter $\phi$ are plotted for samples in each century. Each line is plotted with two probability intervals 0.65 (shorter thicker line) and 0.99 (longer thinner line). The probability density functions are also added to the top of the bar.
-
 
 ```{r}
 #| message: false
@@ -1178,7 +1176,7 @@ As previously noted, pig remains are consistently the most frequently found type
 
 Urban sites are the most common category, where the probability of finding pig remains follows patterns similar to the chronological trends presented earlier. During the Roman phase, the probability of finding pig remains in urban contexts is very high compared to other animals or categories, with a mean probability of almost 0.5. The consumption of pork in cities appears to have decreased during the late Roman and early medieval phase, with similar credible intervals, only to increase again in the 11^th^ century. Although the precision ($\phi$) in urban contexts is slightly below the across-contexts mean of 5, the curves are not too dispersed, at least in the Roman and late Roman periods, and we can be confident in these results. On the other hand, the 95% HDIs for pigs in rural contexts are lower than those in urban contexts during the Roman and late Roman periods. In the early medieval phase, the mean probabilities are comparable to urban contexts, with both categories having a mean of around 0.31, which then increases to 0.37 in the 11^th^ century (0.39 in urban contexts). In general, while the decline in pig presence appears to be significant in urban areas, rural contexts exhibit only a slight increase.
 
-Rural villas have been analysed separately from other rural sites due to their potential implications for the production and consumption of meat, given their status as elite sites. Although the sample size is not large enough to provide highly confident posterior predictions, the results suggest that pork was likely an important component of the diet in these sites, with a mean of approximately 0.4 in the Roman period and an increase in the late Roman phase. However, the early medieval phase is characterized by greater uncertainty, as the sample size is reduced and rural estates often changed function or were abandoned. The credible interval for this period ranges from 0.25 to 0.62. The suggested increase in pigs NISP in the late Roman period will be discussed further later (@sec-discussion), as the historical debate might provide helpful hypotheses. It is worth noting that there is no sample from the 11^th^ century for rural villas, which is why that line is not included in the graph.
+Rural villas have been analysed separately from other rural sites due to their potential implications for the production and consumption of meat, given their status as elite sites. Although the sample size is not large enough to provide highly confident posterior predictions, the results suggest that pork was likely an important component of the diet in these sites, with a mean of approximately 0.4 in the Roman period and an increase in the late Roman phase. However, the early medieval phase is characterised by greater uncertainty, as the sample size is reduced and rural estates often changed function or were abandoned. The credible interval for this period ranges from 0.25 to 0.62. The suggested increase in pigs NISP in the late Roman period will be discussed further later (@sec-discussion), as the historical debate might provide helpful hypotheses. It is worth noting that there is no sample from the 11^th^ century for rural villas, which is why that line is not included in the graph.
 
 Fortified sites were also large consumers of pork, with the probabilities of occurrence sticking around the mean value and a minor increase in the early medieval-medieval periods. However, there are no significant changes in trends to observe. The probabilities of occurrence in the late Roman phase are not so trustworthy as the credible interval is large. It is worth noting that there is no Roman posterior prediction on the graph because there were not fortified Roman sites in the sample except for one, the *castrum* of Ostia [@mackinnon2014], which has not been included in the observed data for this model as it was one single sample. The *castrum* had a 71.9% NISP proportion of pigs, out of a sample of 121 total NISP. The religious category has fewer observations than the site types presented before, and the credible intervals are wider. The Roman and late Roman religious sites mostly include temples such as the temples C and D of Grumentum, the Demetra temple in Macchia delle Valli, the Mithraeum of Crypta Balbi, and more. In the medieval phases, religious sites are mostly monasteries including the well-studied ones of Monte Gelato, Farfa, San Salvo, S. Giulia of Brescia, and San Vincenzo al Volturno. The range of credible intervals can span probabilities of 0.40, so we must be cautious in our considerations. If we look at the mean of the HDIs, a precise pattern does not emerge. However, in every chronology, the probability of occurrence of pig's NISP is over the across-contexts average of 0.41.
 
@@ -1929,7 +1927,6 @@ The trends in religious sites show similarities to those in villas, with mean pr
 
 The final category consists of only one site, the Flavium amphitheater. The probability of occurrence of cattle NISP remains in this category is relatively low and does not follow the same patterns as urban sites. There is a small decrease in the late Roman period and a potentially uncertain increase in the early medieval phase. However, the 50% HDI probabilities are consistently below the across-contexts mean.
 
-
 ```{r}
 #| echo: false
 #| message: false
@@ -2561,7 +2558,6 @@ Cattle_a_RomeUrban.diffplot
 
 ```
 
-
 ### Sheep/Goats
 
 Among the contexts analysed, the probability of finding sheep/goats remains is the second highest with a mean of 0.29, following pig remains. In Roman and late Roman urban sites sheep/goats probabilities are below the mean, although there is a positive trend until the early Middle Ages. The medieval phases (6^th^ to 11^th^ century) show mean probabilities of 0.31. Rural sites exhibit a decreasing trend, with the 0.50 HDIs always above mean. However, even with this decreasing trend, the probabilities in rural sites are still higher than those in urban sites. In the Roman period, the sheep/goats probability of occurrence is particularly high (0.35) in rural sites and decreases in the following phases, until the 11^th^ century, when there is a strong increase in sheep/goats probabilities (associated with more uncertainty and variability).
@@ -3187,7 +3183,6 @@ Caprine_a_RomeUrban.diffplot
 
 ```
 
-
 ### Edible W. Animals
 
 The trends in edible wild animals are similar between urban and rural sites, with mean probabilities below the average of 0.07 during the Roman and late Roman periods. The means for urban sites are around 0.03, while those for rural sites are approximately 0.05. In the early medieval period, both urban and rural sites show a small increase, with probabilities of 0.05 and 0.06, respectively. In the medieval period, the 50% HDIs are above the mean for both urban and rural sites, reaching a peak of 0.11 in rural areas. However, caution is required for the 11^th^ century, as the credible interval is larger and the mean precision ($\bar{\phi}$) is low, indicating increased variability.
@@ -3645,7 +3640,6 @@ WMammals_BB_phi.plot <- WMammals_BB_Merge_phi %>%
 
 ```
 
-
 ```{r}
 #| echo: false
 #| fig-height: 10
@@ -3752,7 +3746,7 @@ ggplot(Animals_by_SiteType_fit_comm,
 
 ## Macroregion {style="text-align:justify;"}
 
-We aim to investigate whether there are differences in the relative amount of NISP data among southern, central, and northern Italy during various chronological periods. Building upon the methods utilized in @sec-bot-res-macroregion, we construct a DAG that highlights the necessity of blocking by `Chronology` and stratifying by `Macroregion`, in a similar manner to the previous analysis.
+We aim to investigate whether there are differences in the relative amount of NISP data among southern, central, and northern Italy during various chronological periods. Building upon the methods utilised in @sec-bot-res-macroregion, we construct a DAG that highlights the necessity of blocking by `Chronology` and stratifying by `Macroregion`, in a similar manner to the previous analysis.
 
 ```{r}
 #| echo: false
@@ -4734,7 +4728,6 @@ WMammals_Reg_phi.plot <- WMammals_Reg.fit_phi %>%
 
 ```
 
-
 ```{r}
 #| echo: false
 #| fig-height: 5
@@ -5110,7 +5103,6 @@ Pigs_Geo_phi.plot
 ```
 
 ### Cattle
-
 
 In this model, the overall predicted probabilities of cattle are consistently lower than those of other animals, with an average of 0.25. However, mountain sites show a higher mean probability for cattle compared to other geographical features. On the coasts, there is a chronological increase in cattle probabilities, with a mean value going above the overall mean in the 11^th^ century, albeit with higher uncertainty due to the fewer available sites. Conversely, on hills and plains, the probabilities of cattle increase only slightly.
 
@@ -5607,7 +5599,6 @@ Caprine_Geo_phi.plot <- Caprine_Geo.fit_phi %>%
   facet_grid(Geography ~ ., scales="free")
 ```
 
-
 ```{r}
 #| echo: false
 #| fig-height: 7
@@ -5632,7 +5623,6 @@ Caprine_Geo_phi.plot
 
 
 ```
-
 
 ### Edible W. Animals
 
