@@ -1,6 +1,8 @@
 # Peasants, Agriculture, and Environment in the 1st Millennium CE Italian Countryside: A Bayesian approach
 
 Detailed documentation of this repository is provided in the web version of this thesis, which can be accessed at: https://robertoragno.github.io/phd/
+
+
 The website provides interactive maps of [archaeobotanical](https://robertoragno.github.io/phd/materials_archaeobotany.html) and [zooarchaeological](https://robertoragno.github.io/phd/materials_zooarchaeology.html) data from continental Italy dating to the 1st millennium CE, together with [bibliographical references](https://robertoragno.github.io/phd/sites_references.html), the [criteria used to create the database](https://robertoragno.github.io/phd/database.html), and archaeological and historical interpretations of the trends. The datasets are openly available for reuse in .CSV format. 
 
 ## Abstract
