@@ -2,6 +2,17 @@
 always_allow_html: true
 ---
 
+::: {.callout-important style="text-align:justify;"}
+The text contained in the pages of this website represents the last version of my doctoral thesis before revision. Although the content has not changed drastically since the last update, the revised version should be easier to read. 
+
+The text has now been published and is available in [open access](https://edipuglia.it/catalogo/peasants-agricultureand-environment-in-the-1st-millennium-ce-italian-countryside-pdf/).
+
+If you are interested in the archaeobotanical dataset, you can also access it here:
+
+
+Ragno, R. (2025) ‘Archaeobotanical Data from the Italian Peninsula in the 1st Millennium CE’, Journal of Open Archaeology Data, 13, p. 2. Available at: [https://doi.org/10.5334/joad.147](https://doi.org/10.5334/joad.147).
+:::
+
 # Abstract {.unnumbered style="text-align:justify;"}
 
 This dissertation explores the subsistence methods, economic systems and environmental adaptations of Italian peasant communities in the 1^st^ millennium CE, with a particular focus on the transitional period from the Roman Empire to the early medieval era. Existing work on agricultural production in this period has been based on literary sources and field surveys, or has focused on individual sites or regional collections, while a multi-source archaeological study is absent from the discourse. This dissertation addresses this gap by using environmental proxies, reconstructing the historical agricultural landscape through the occurrence patterns of plants and animals in legacy data. To this end, 190 botanical and 466 faunal assemblages from 309 sites[^index-1] are quantitatively analysed within a Bayesian framework, using multilevel binomial and beta-binomial models to account for overdispersion and class imbalance in the datasets. The results reveal a strong trend towards regionalisation in agricultural strategies during the early medieval period. In addition, these findings expose variations in agricultural techniques and dietary patterns across Roman settlements, shedding light on the extent to which Roman agricultural and economic frameworks persisted or changed during the early medieval transition, and the adaptive agricultural strategies adopted by farmers. The quantitative analytical findings of this dissertation are also contextualised alongside wider historical sources, archaeological evidence, and current debate, allowing for a bottom-up understanding of the agricultural regimes in question. This work represents the first attempt to use temporally and geographically diverse bioarchaeological data to visualise the Italian agricultural landscape across the *longue durée.* By systematising the data in an open database, this dissertation also represents an effort at quantitative knowledge sharing in archaeology. Overall, these novel perspectives on human-nature interaction allow scholars to methodologically, theoretically and empirically evaluate agricultural strategies during the transition from the Roman Empire to the politically fragmented landscape of the early medieval Italian peninsula.
